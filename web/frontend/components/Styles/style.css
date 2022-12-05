@@ -1,0 +1,20 @@
+#markBtn {
+    display: flex;
+    justify-content: end;
+}
+#markBtn > div{
+    margin: auto 0px;
+    margin-right: 1rem;
+}
+.scriptDescription > span:hover{
+    cursor: pointer;
+}
+.scriptDescription > span{
+    margin: 0;
+    margin-left: 1rem;
+}
+.scriptDescription{
+    display: flex;
+    justify-items: flex-end;
+    align-items: end;
+}
