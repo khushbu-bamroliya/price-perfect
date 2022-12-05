@@ -16,5 +16,8 @@
     "@shopify/cli": "3.24.1",
     "mongoose": "^6.7.5"
   },
+  "engines": {
+    "node": "^16.13.0"
+  },
   "author": "jashp"
 }
