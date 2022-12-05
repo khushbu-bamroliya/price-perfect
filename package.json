@@ -4,6 +4,7 @@
   "main": "web/index.js",
   "license": "UNLICENSED",
   "scripts": {
+    "start" : "node web/index.js",
     "shopify": "shopify",
     "build": "shopify app build",
     "dev": "shopify app dev",
@@ -17,7 +18,7 @@
     "mongoose": "^6.7.5"
   },
   "engines": {
-    "node": "^16.13.0", 
+    "node": "^16.14.2", 
     "npm": "^8.1.0"
   },
   "author": "jashp"

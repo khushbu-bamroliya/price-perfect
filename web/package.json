@@ -9,8 +9,7 @@
   },
   "type": "module",
   "engines": {
-    "node": "^16.13.0", 
-    "npm": "^8.1.0"
+    "node": ">=14.13.1"
   },
   "dependencies": {
     "@shopify/shopify-api": "^5.0.0",
