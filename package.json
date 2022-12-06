@@ -16,5 +16,9 @@
     "@shopify/app": "3.10.0",
     "@shopify/cli": "3.10.0"
   },
+  "engines": {
+    "node": "^16.13.0", 
+    "npm": "^8.1.0"
+  },
   "author": "nidhi"
 }
