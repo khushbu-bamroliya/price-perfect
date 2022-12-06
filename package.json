@@ -1,10 +1,9 @@
 {
-  "name": "teat-react-app",
+  "name": "aws-test-price-testing",
   "version": "1.0.0",
   "main": "web/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node web/index.js",
     "shopify": "shopify",
     "build": "shopify app build",
     "dev": "shopify app dev",
@@ -13,12 +12,8 @@
     "deploy": "shopify app deploy"
   },
   "dependencies": {
-    "@shopify/app": "3.12.0",
-    "@shopify/cli": "3.12.0"
+    "@shopify/app": "3.25.0",
+    "@shopify/cli": "3.25.0"
   },
-  "engines": {
-    "node": "^16.13.0", 
-    "npm": "^8.1.0"
-  },
-  "author": "nidhi"
+  "author": "jashp"
 }
