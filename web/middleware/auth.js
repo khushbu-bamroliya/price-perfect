@@ -30,17 +30,9 @@ export default function applyAuthMiddleware(
         // To register the GDPR topics, please set the appropriate webhook endpoint in the
         // 'GDPR mandatory webhooks' section of 'App setup' in the Partners Dashboard.
         if (!response.success && !gdprTopics.includes(topic)) {
-          if (response.result.errors) {
-            console.log(
-              `Failed to register ${topic} webhook: ${response.result.errors[0].message}`
-            );
-          } else {
-            console.log(
-              `Failed to register ${topic} webhook: ${
-                JSON.stringify(response.result.data, undefined, 2)
-              }`
-            );
-          }
+          console.log(
+            `Failed to register ${topic} webhook: ${response.result.errors[0].message}`
+          );
         }
       });
 

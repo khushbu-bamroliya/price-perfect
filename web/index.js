@@ -18,8 +18,8 @@ const USE_ONLINE_TOKENS = false;
 const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT, 10);
 
 // TODO: There should be provided by env vars
-const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
-const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
+const DEV_INDEX_PATH = `${process.cwd()}/web/frontend/`;
+const PROD_INDEX_PATH = `${process.cwd()}/web/frontend/dist/`;
 
 const DB_PATH = `${process.cwd()}/database.sqlite`;
 
@@ -32,16 +32,8 @@ Shopify.Context.initialize({
   API_VERSION: LATEST_API_VERSION,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  // See note below regarding using CustomSessionStorage with this template.
   SESSION_STORAGE: new Shopify.Session.SQLiteSessionStorage(DB_PATH),
-  ...(process.env.SHOP_CUSTOM_DOMAIN && {CUSTOM_SHOP_DOMAINS: [process.env.SHOP_CUSTOM_DOMAIN]}),
 });
-
-// NOTE: If you choose to implement your own storage strategy using
-// Shopify.Session.CustomSessionStorage, you MUST implement the optional
-// findSessionsByShopCallback and deleteSessionsCallback methods.  These are
-// required for the app_installations.js component in this template to
-// work properly.
 
 Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
   path: "/api/webhooks",
@@ -69,8 +61,8 @@ const BILLING_SETTINGS = {
 // https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks
 setupGDPRWebHooks("/api/webhooks");
 
-// export for test use only
-export async function createServer(
+// export for test use only. 
+export async function createServer( 
   root = process.cwd(),
   isProd = process.env.NODE_ENV === "production",
   billingSettings = BILLING_SETTINGS
@@ -172,6 +164,7 @@ export async function createServer(
   }
 
   app.use("/*", async (req, res, next) => {
+
     if (typeof req.query.shop !== "string") {
       res.status(500);
       return res.send("No shop provided");
@@ -180,7 +173,7 @@ export async function createServer(
     const shop = Shopify.Utils.sanitizeShop(req.query.shop);
     const appInstalled = await AppInstallations.includes(shop);
 
-    if (!appInstalled && !req.originalUrl.match(/^\/exitiframe/i)) {
+    if (!appInstalled) {
       return redirectToAuth(req, res, app);
     }
 
