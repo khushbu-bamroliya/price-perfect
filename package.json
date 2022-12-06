@@ -15,5 +15,6 @@
     "@shopify/app": "3.25.0",
     "@shopify/cli": "3.25.0"
   },
+  "engines": { "node" : ">=10 <11" },
   "author": "jashp"
 }
