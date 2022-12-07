@@ -1,10 +1,9 @@
 {
-  "name": "teat-react-app",
+  "name": "samplecli3",
   "version": "1.0.0",
   "main": "web/index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node web/index.js",
     "shopify": "shopify",
     "build": "shopify app build",
     "dev": "shopify app dev",
@@ -13,9 +12,8 @@
     "deploy": "shopify app deploy"
   },
   "dependencies": {
-    "@shopify/app": "3.10.0",
-    "@shopify/cli": "3.10.0"
+    "@shopify/app": "3.24.1",
+    "@shopify/cli": "3.24.1"
   },
-  "engines": { "node" : "14.16.0" },
-  "author": "nidhi"
+  "author": "umang"
 }
