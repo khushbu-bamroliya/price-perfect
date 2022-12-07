@@ -30,5 +30,5 @@
     "prettier": "^2.6.0",
     "vi-fetch": "^0.6.1"
   },
-  "engines": { "node" : ">=10 <11" }
+  "engines": { "node" : "14.16.0" }
 }

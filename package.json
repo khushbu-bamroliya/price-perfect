@@ -16,6 +16,6 @@
     "@shopify/app": "3.10.0",
     "@shopify/cli": "3.10.0"
   },
-  "engines": { "node" : ">=10 <11" },
+  "engines": { "node" : "14.16.0" },
   "author": "nidhi"
 }
