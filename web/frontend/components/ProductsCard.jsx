@@ -29,6 +29,7 @@ export function ProductsCard() {
     },
   });
 
+  //lala
   const toastMarkup = toastProps.content && !isRefetchingCount && (
     <Toast {...toastProps} onDismiss={() => setToastProps(emptyToastProps)} />
   );
