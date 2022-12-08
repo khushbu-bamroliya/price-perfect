@@ -12,6 +12,9 @@
     "node" : "16.13.0",
     "npm" :  "8.1.0"
   },
+  "overrides": {
+    "node-gyp": "node_modules/node-gyp"
+  },
   "dependencies": {
     "@shopify/shopify-api": "^5.0.0",
     "compression": "^1.7.4",

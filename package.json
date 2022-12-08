@@ -15,6 +15,9 @@
     "@shopify/app": "3.24.1",
     "@shopify/cli": "3.24.1"
   },
+  "overrides": {
+    "keytar": "node_modules/keytar"
+  },
   "engines": {
     "node" : "16.13.0",
     "npm" :  "8.1.0"
