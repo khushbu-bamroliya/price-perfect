@@ -1,26 +1,18 @@
 {
-  "name": "samplecli3",
+  "name": "demo-app",
   "version": "1.0.0",
-  "main": "web/index.js",
-  "license": "UNLICENSED",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "shopify": "shopify",
-    "build": "shopify app build",
-    "dev": "shopify app dev",
-    "info": "shopify app info",
-    "generate": "shopify app generate",
-    "deploy": "shopify app deploy"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "build": "cd client && npm install && npm run build"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@shopify/app": "3.24.1",
-    "@shopify/cli": "3.24.1"
-  },
-  "overrides": {
-    "keytar": "node_modules/keytar"
-  },
-  "engines": {
-    "node" : "16.13.0",
-    "npm" :  "8.1.0"
-  },
-  "author": "umang"
+    "express": "^4.18.1"
+  }
 }
