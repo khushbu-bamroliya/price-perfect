@@ -3,7 +3,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start":"npm run serve",
+    "start":"node index.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "serve": "cross-env NODE_ENV=production node -r dotenv/config index.js"
   },
