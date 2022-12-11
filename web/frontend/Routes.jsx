@@ -1,6 +1,4 @@
 import { Routes as ReactRouterRoutes, Route } from "react-router-dom";
-import Faq from "./components/Faq.jsx";
-import Support from "./pages/Support.jsx";
 
 /**
  * File-based routing.
@@ -28,7 +26,6 @@ export default function Routes({ pages }) {
     <ReactRouterRoutes>
       {routeComponents}
       <Route path="*" element={<NotFound />} />
-      <Route path="/support" element={<Support />}/>
     </ReactRouterRoutes>
   );
 }

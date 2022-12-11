@@ -1,4 +1,21 @@
-# Shopify App Template - Node
+# HSA Discount Shopify App
+
+## Running locally
+
+```
+npm install
+npm run dev
+```
+
+then login with this shopify account: [creds](https://github.com/steven4354/hsa-discount-cart/issues/8)
+
+feel free to create new development stores in the above account
+
+## Development Store setup
+
+For the development stores, make sure you enable development preview and also enable checkout extension UI. If any questions, ping Steven.
+
+## Shopify App Template - Node
 
 This is a template for building a [Shopify app](https://shopify.dev/apps/getting-started) using Node and React. It contains the basics for building a Shopify app.
 
@@ -136,9 +153,10 @@ You do not need to build the backend.
 
 ## Hosting
 
-When you're ready to set up your app in production, you can follow [our deployment documentation](https://shopify.dev/apps/deployment/web) to host your app on a cloud provider like [Heroku](https://www.heroku.com/) or [Fly.io](https://fly.io/).
+The following pages document the basic steps to host and deploy your application to a few popular cloud providers:
 
-When you reach the step for [setting up environment variables](https://shopify.dev/apps/deployment/web#set-env-vars), you also need to set the variable `NODE_ENV=production`.
+- [fly.io](/web/docs/fly-io.md)
+- [Heroku](/web/docs/heroku.md)
 
 ## Some things to watch out for
 
@@ -205,24 +223,16 @@ To do that, you can [install the `cloudflared` CLI tool](https://developers.clou
 # Note that you can also use a different port
 cloudflared tunnel --url http://localhost:3000
 ```
-Out of the logs produced by cloudflare you will notice a https URL where the domain ends with `trycloudflare.com`. This is your tunnel URL. You need to copy this URL as you will need it in the next step.
-```shell
-2022-11-11T19:57:55Z INF Requesting new quick Tunnel on trycloudflare.com...
-2022-11-11T19:57:58Z INF +--------------------------------------------------------------------------------------------+
-2022-11-11T19:57:58Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
-2022-11-11T19:57:58Z INF |  https://randomly-generated-hostname.trycloudflare.com                                     |
-2022-11-11T19:57:58Z INF +--------------------------------------------------------------------------------------------+
-```
 
-Below you would replace `randomly-generated-hostname` with what you have copied from the terminal. In a different terminal window, navigate to your app's root and with the URL from above you would call:
+In a different terminal window, navigate to your app's root and call:
 
 ```shell
 # Using yarn
-yarn dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+yarn dev --tunnel-url https://tunnel-url:3000
 # or using npm
-npm run dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+npm run dev --tunnel-url https://tunnel-url:3000
 # or using pnpm
-pnpm dev --tunnel-url https://randomly-generated-hostname.trycloudflare.com:3000
+pnpm dev --tunnel-url https://tunnel-url:3000
 ```
 
 ## Developer resources

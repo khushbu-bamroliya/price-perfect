@@ -1,10 +1,13 @@
 // @ts-check
 import { join } from "path";
 import { readFileSync } from "fs";
+import * as dotenv from 'dotenv';
+dotenv.config()
+
 import express from "express";
 import cookieParser from "cookie-parser";
 import { Shopify, LATEST_API_VERSION } from "@shopify/shopify-api";
-import dotenv from 'dotenv';
+
 import applyAuthMiddleware from "./middleware/auth.js";
 import verifyRequest from "./middleware/verify-request.js";
 import { setupGDPRWebHooks } from "./gdpr.js";
@@ -12,20 +15,15 @@ import productCreator from "./helpers/product-creator.js";
 import redirectToAuth from "./helpers/redirect-to-auth.js";
 import { BillingInterval } from "./helpers/ensure-billing.js";
 import { AppInstallations } from "./app_installations.js";
-import connectDatabase from "./mongoDB/connection/connect.js";
-import { newCredentials } from "./mongoDB/controllers/credentialController.js";
-import { Shop } from "@shopify/shopify-api/dist/rest-resources/2022-10/shop.js";
+//import  routers  from "./routers/router.js";
 
 const USE_ONLINE_TOKENS = false;
-dotenv.config();
-connectDatabase();
-const PORT = parseInt(process.env.BACKEND_PORT || process.env.PORT, 10);
+
+const PORT = process.env.PORT;
 
 // TODO: There should be provided by env vars
 const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
 const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
-
-const DB_PATH = process.env.DB_URL;
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
@@ -36,16 +34,9 @@ Shopify.Context.initialize({
   API_VERSION: LATEST_API_VERSION,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  // See note below regarding using CustomSessionStorage with this template.
-  SESSION_STORAGE: new Shopify.Session.MongoDBSessionStorage(DB_PATH),
-  ...(process.env.SHOP_CUSTOM_DOMAIN && {CUSTOM_SHOP_DOMAINS: [process.env.SHOP_CUSTOM_DOMAIN]}),
+  SESSION_STORAGE: new Shopify.Session.MongoDBSessionStorage(process.env.DB_PATH),
 });
 
-// NOTE: If you choose to implement your own storage strategy using
-// Shopify.Session.CustomSessionStorage, you MUST implement the optional
-// findSessionsByShopCallback and deleteSessionsCallback methods.  These are
-// required for the app_installations.js component in this template to
-// work properly.
 
 Shopify.Webhooks.Registry.addHandler("APP_UNINSTALLED", {
   path: "/api/webhooks",
@@ -83,8 +74,9 @@ export async function createServer(
 
   app.set("use-online-tokens", USE_ONLINE_TOKENS);
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
-  app.use(express.json());
-  
+
+  // app.use(routers);
+
   applyAuthMiddleware(app, {
     billing: billingSettings,
   });
@@ -113,9 +105,42 @@ export async function createServer(
     })
   );
 
+  app.get("/api/products/count", async (req, res) => {
+    const session = await Shopify.Utils.loadCurrentSession(
+      req,
+      res,
+      app.get("use-online-tokens")
+    );
+    const { Product } = await import(
+      `@shopify/shopify-api/dist/rest-resources/${Shopify.Context.API_VERSION}/index.js`
+    );
+
+    const countData = await Product.count({ session });
+    res.status(200).send(countData);
+  });
+
+  app.get("/api/products/create", async (req, res) => {
+    const session = await Shopify.Utils.loadCurrentSession(
+      req,
+      res,
+      app.get("use-online-tokens")
+    );
+    let status = 200;
+    let error = null;
+
+    try {
+      await productCreator(session);
+    } catch (e) {
+      console.log(`Failed to process products/create: ${e.message}`);
+      status = 500;
+      error = e.message;
+    }
+    res.status(status).send({ success: status === 200, error });
+  });
+
   // All endpoints after this point will have access to a request.body
   // attribute, as a result of the express.json() middleware
-
+  app.use(express.json());
 
   app.use((req, res, next) => {
     const shop = Shopify.Utils.sanitizeShop(req.query.shop);
@@ -144,6 +169,7 @@ export async function createServer(
   }
 
   app.use("/*", async (req, res, next) => {
+
     if (typeof req.query.shop !== "string") {
       res.status(500);
       return res.send("No shop provided");
@@ -152,7 +178,7 @@ export async function createServer(
     const shop = Shopify.Utils.sanitizeShop(req.query.shop);
     const appInstalled = await AppInstallations.includes(shop);
 
-    if (!appInstalled && !req.originalUrl.match(/^\/exitiframe/i)) {
+    if (!appInstalled) {
       return redirectToAuth(req, res, app);
     }
 
@@ -176,5 +202,6 @@ export async function createServer(
   return { app };
 }
 
-//connect to the server
-createServer().then(({ app }) => app.listen(PORT));
+createServer().then(({ app }) => app.listen(PORT,()=>{
+  console.log("Server started on port",PORT);
+}));

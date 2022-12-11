@@ -1,10 +1,8 @@
 import { Shopify } from "@shopify/shopify-api";
 import { gdprTopics } from "@shopify/shopify-api/dist/webhooks/registry.js";
 
-import {Shop} from '@shopify/shopify-api/dist/rest-resources/2022-10/index.js';
 import ensureBilling from "../helpers/ensure-billing.js";
 import redirectToAuth from "../helpers/redirect-to-auth.js";
-import { newCredentials } from "../mongoDB/controllers/credentialController.js";
 
 export default function applyAuthMiddleware(
   app,
@@ -22,10 +20,6 @@ export default function applyAuthMiddleware(
         req.query
       );
 
-      const shopDAta = await Shop.all({ session });
-      newCredentials(shopDAta[0], session);
-
-
       const responses = await Shopify.Webhooks.Registry.registerAll({
         shop: session.shop,
         accessToken: session.accessToken,
@@ -36,17 +30,9 @@ export default function applyAuthMiddleware(
         // To register the GDPR topics, please set the appropriate webhook endpoint in the
         // 'GDPR mandatory webhooks' section of 'App setup' in the Partners Dashboard.
         if (!response.success && !gdprTopics.includes(topic)) {
-          if (response.result.errors) {
-            console.log(
-              `Failed to register ${topic} webhook: ${response.result.errors[0].message}`
-            );
-          } else {
-            console.log(
-              `Failed to register ${topic} webhook: ${
-                JSON.stringify(response.result.data, undefined, 2)
-              }`
-            );
-          }
+          console.log(
+            `Failed to register ${topic} webhook: ${response.result.errors[0].message}`
+          );
         }
       });
 
