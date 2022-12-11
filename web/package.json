@@ -4,6 +4,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start":"node index.js",
+    "build": "cd frontend && npm install && npm run build",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "serve": "cross-env NODE_ENV=production node -r dotenv/config index.js"
   },
