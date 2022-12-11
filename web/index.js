@@ -34,7 +34,7 @@ Shopify.Context.initialize({
   API_VERSION: LATEST_API_VERSION,
   IS_EMBEDDED_APP: true,
   // This should be replaced with your preferred storage strategy
-  SESSION_STORAGE: new Shopify.Session.MongoDBSessionStorage(process.env.DB_PATH),
+  SESSION_STORAGE: new Shopify.Session.MongoDBSessionStorage(`${process.env.DB_PATH}`),
 });
 
 
