@@ -22,8 +22,8 @@ const USE_ONLINE_TOKENS = false;
 const PORT = process.env.PORT;
 
 // TODO: There should be provided by env vars
-const DEV_INDEX_PATH = `${process.cwd()}/web/frontend/`;
-const PROD_INDEX_PATH = `${process.cwd()}/web/frontend/dist/`;
+const DEV_INDEX_PATH = `${process.cwd()}/frontend/`;
+const PROD_INDEX_PATH = `${process.cwd()}/frontend/dist/`;
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
