@@ -24,6 +24,8 @@ export function AppBridgeProvider({ children }) {
     [navigate]
   );
 
+  const apiKey = 'd53f798c2609a33772145823e94789cb';
+
   const routerConfig = useMemo(
     () => ({ history, location }),
     [history, location]
@@ -43,13 +45,13 @@ export function AppBridgeProvider({ children }) {
 
     return {
       host,
-      apiKey: process.env.SHOPIFY_API_KEY,
+      apiKey: (process.env.SHOPIFY_API_KEY || apiKey),
       forceRedirect: true,
     };
   });
 
-  if (!process.env.SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !process.env.SHOPIFY_API_KEY
+  if (!(process.env.SHOPIFY_API_KEY || apiKey) || !appBridgeConfig.host) {
+    const bannerProps = !(process.env.SHOPIFY_API_KEY || apiKey)
       ? {
           title: "Missing Shopify API Key",
           children: (
