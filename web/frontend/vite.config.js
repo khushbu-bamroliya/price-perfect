@@ -4,8 +4,6 @@ import { fileURLToPath } from "url";
 import https from "https";
 import react from "@vitejs/plugin-react";
 
-console.log(process.env.SHOPIFY_API_KEY);
-
 if (
   process.env.npm_lifecycle_event === "build" &&
   //!process.env.CI &&
