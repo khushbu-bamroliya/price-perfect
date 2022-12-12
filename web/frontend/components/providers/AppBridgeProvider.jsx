@@ -40,21 +40,21 @@ export function AppBridgeProvider({ children }) {
       window.__SHOPIFY_DEV_HOST;
 
     window.__SHOPIFY_DEV_HOST = host;
-    console.log(process.env.SHOPIFY_API_KEY,'process.env.SHOPIFY_API_KEY');
+    console.log(env.VITE_SHOPIFY_API_KEY,'process.env.VITE_SHOPIFY_API_KEY');
     return {
       host,
-      apiKey: process.env.SHOPIFY_API_KEY,
+      apiKey: process.env.VITE_SHOPIFY_API_KEY,
       forceRedirect: true,
     };
   });
 
-  if (!process.env.SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !process.env.SHOPIFY_API_KEY
+  if (!process.env.VITE_SHOPIFY_API_KEY || !appBridgeConfig.host) {
+    const bannerProps = !process.env.VITE_SHOPIFY_API_KEY
       ? {
           title: "Missing Shopify API Key",
           children: (
             <>
-              Your app is running without the SHOPIFY_API_KEY environment
+              Your app is running without the VITE_SHOPIFY_API_KEY environment
               variable. Please ensure that it is set when running or building
               your React app.
             </>
