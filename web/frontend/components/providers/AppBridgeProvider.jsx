@@ -40,6 +40,10 @@ export function AppBridgeProvider({ children }) {
       window.__SHOPIFY_DEV_HOST;
 
     window.__SHOPIFY_DEV_HOST = host;
+    
+    console.log(process?.env?.SHOPIFY_API_KEY,'umi1');
+    console.log(process?.env?.VITE_SHOPIFY_API_KEY,'umi2');
+
     console.log(process.env.SHOPIFY_API_KEY || process.env.VITE_SHOPIFY_API_KEY,'hello process.env.VITE_SHOPIFY_API_KEY');
     return {
       host,
