@@ -24,7 +24,7 @@ export function AppBridgeProvider({ children }) {
     [navigate]
   );
 
-  console.log(import.meta?.env?.SHOPIFY_API_KEY);
+  console.log(import.meta?.env?.VITE_SHOPIFY_API_KEY);
 
   const apiKey = 'd53f798c2609a33772145823e94789cb';
 
