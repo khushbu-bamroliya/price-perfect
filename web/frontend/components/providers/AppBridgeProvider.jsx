@@ -24,7 +24,7 @@ export function AppBridgeProvider({ children }) {
     [navigate]
   );
 
-  const apiKey = 'd53f798c2609a33772145823e94789cb';
+  const apiKey = '';
 
   const routerConfig = useMemo(
     () => ({ history, location }),
