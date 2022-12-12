@@ -40,16 +40,16 @@ export function AppBridgeProvider({ children }) {
       window.__SHOPIFY_DEV_HOST;
 
     window.__SHOPIFY_DEV_HOST = host;
-    console.log(process.env.VITE_SHOPIFY_API_KEY,'hello process.env.VITE_SHOPIFY_API_KEY');
+    console.log(process.env.SHOPIFY_API_KEY || process.env.VITE_SHOPIFY_API_KEY,'hello process.env.VITE_SHOPIFY_API_KEY');
     return {
       host,
-      apiKey: process.env.VITE_SHOPIFY_API_KEY,
+      apiKey: (process.env.SHOPIFY_API_KEY || process.env.VITE_SHOPIFY_API_KEY),
       forceRedirect: true,
     };
   });
 
-  if (!process.env.VITE_SHOPIFY_API_KEY || !appBridgeConfig.host) {
-    const bannerProps = !process.env.VITE_SHOPIFY_API_KEY
+  if (!(process.env.SHOPIFY_API_KEY || process.env.VITE_SHOPIFY_API_KEY) || !appBridgeConfig.host) {
+    const bannerProps = !(process.env.SHOPIFY_API_KEY || process.env.VITE_SHOPIFY_API_KEY)
       ? {
           title: "Missing Shopify API Key",
           children: (
