@@ -6,7 +6,7 @@ import react from "@vitejs/plugin-react";
 
 if (
   process.env.npm_lifecycle_event === "build" &&
-  //!process.env.CI &&
+  !process.env.CI &&
   !process.env.SHOPIFY_API_KEY
 ) {
   console.warn(
