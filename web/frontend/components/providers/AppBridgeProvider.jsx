@@ -24,7 +24,9 @@ export function AppBridgeProvider({ children }) {
     [navigate]
   );
 
-  const apiKey = '';
+  console.log(import?.meta?.env?.SHOPIFY_API_KEY);
+
+  const apiKey = 'd53f798c2609a33772145823e94789cb';
 
   const routerConfig = useMemo(
     () => ({ history, location }),
