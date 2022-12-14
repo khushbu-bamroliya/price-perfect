@@ -1,0 +1,228 @@
+.welcomePage {
+    /* width: 100%;
+    height: 100vh; */
+    display: flex;
+    width: 1440px;
+    height: 1024px;
+
+    /* background: #FFFFFF; */
+    border-radius: 30px;
+}
+.welcomeContent > span {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #8492A7;
+}
+.welcomeContent > h4 {
+
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 41px;
+
+    color: #151515;
+}
+.welcomeContent > div {
+    margin: 34px 0;
+}
+.welcomeContent {
+    display: flex;
+    flex-direction: column;
+    max-width: 670px;
+    padding: 0;
+    margin: 94px;
+
+}
+.welcomeBlock2 > div {
+    /* margin: 94px; */
+    box-shadow: none;
+}
+.welcomeBlock2 {
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
+    height: 100vh;
+    height: 1024px;
+    box-shadow: none;
+    border-radius: 0px 30px 30px 0px !important;
+}
+.welcomeInputs > div > div > input{
+    font-family: 'PT Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 17px;
+}
+.welcomeInputs > div > div {
+    width: 482px;
+    height: 45px;
+    left: 0;
+    margin: 8px 0 14px;
+
+}
+.welcomeInputs {
+
+    margin-top: 34px;
+}
+.welcomeInputs > span,
+.RememberMe > span,
+.noAccount > span {
+
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    margin-top: 12px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #536780;
+}
+.RememberMe > span > svg {
+    box-sizing: border-box;
+
+    /* position: absolute; */
+    width: 17px;
+    height: 17px;
+    /* left: 479px;
+    top: 552px;
+     */
+    border: 1px solid #D4DCE8;
+    border-radius: 5px;
+}
+.RememberMe > .MuiCheckbox-root > input {
+    box-sizing: border-box;
+    width: 17px;
+    height: 17px;
+    /* left: 790px; */
+    /* top: 552px; */
+
+    border: 1px solid #D4DCE8;
+    border-radius: 5px;
+}
+.SignInBtn {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 8px;
+    width: 482px;
+    height: 45px;
+    left: 0;
+    margin: 0;
+}
+.googleSignInBtn > img {
+    width: 22px;
+    height: 22px;
+
+    margin-right: 12px;
+
+}
+.googleSignInBtn > span {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #536780;
+}
+.googleSignInBtn {
+
+    border: 1px solid #D4DCE8 !important;
+    border-radius: 5px !important;
+    /* max-width: 482px; */
+    height: 45px;
+    left: 0;
+    margin: 12px 0 0;
+    width: 482px;
+}
+.noAccount > a{
+    font-family: 'PT Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+margin-left: 4px;
+text-decoration: none;
+margin-top: 12px;
+background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+}
+.noAccount {
+    display: flex;
+    justify-content: center;
+}
+.welcomeBlock1 > div {
+    height: 100vh;
+    height: 1024px;
+    background: #FBF8FD !important;
+    box-shadow: none;
+}
+.welcomeBlock1 {
+    background: #FBF8FD !important;
+    border-radius: 30px 0px 0px 30px !important;
+    box-shadow: none;
+}
+.MuiCard-root{
+    box-shadow: none !important;
+}
+.welcomeBlock1Content {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    height: 100%;
+    box-shadow: none;
+}
+.btnStack {
+    margin: 0;
+}
+.logo {
+    position: absolute;
+    float: left;
+    margin: 70.73px 80px;
+}
+
+
+
+
+
+
+.WelcomeBackBlock1{
+margin: 174px 385px;
+box-shadow: none;
+}
+.WelcomeBack{
+    background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
+    border-radius: 30px;
+    width: 1440px;
+height: 1024px;
+border-radius: 30px !important;
+}
+.WelcomeBackLogo{
+    position: absolute;
+    margin: 67px 80px !important;
+}
+.copyRight{
+    margin: 15px 24px;
+    font-family: 'PT Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+
+color: #B6BEC7;
+}
