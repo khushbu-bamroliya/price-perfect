@@ -4,8 +4,23 @@ import "./style.css"
 import google from "../Component/Images/google (1).png";
 import card1Img from "../Component/Images/Group-45.png";
 import logo from "../Component/Images/Group 48.png";
+import axios from 'axios';
 
 export default function WelcomePage () {
+
+    const lala = async () => {
+        console.log("====>");
+        try {
+            const config = {
+
+            }
+                const data =  await axios.get("/product/GetAllShopifyProduct", config)
+                console.log("Dtata", data);
+            
+        } catch (error) {
+            console.log("Error: " + error);
+        }
+}
     return (
         <>
             <div className="welcomePage">
@@ -49,10 +64,12 @@ export default function WelcomePage () {
                             <div className="noAccount">
                                 <Typography variant='p'>Don’t have an account?</Typography>
                                 <Link href="#" underline="always">
-                                    {'Sign In'}
+                                    {'Sign up'}
                                 </Link>
                             </div>
                         </CardContent>
+
+                        <Button onClick={lala}>Jash2222</Button>
                     </Card>
                 </Card>
             </div>

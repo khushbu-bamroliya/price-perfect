@@ -13,13 +13,13 @@ module.exports = {
     new Promise(async (resolve, reject) => {
       try {
         const response = await axios({
-          url:`https://${shop}/admin/oauth/access_token`,
+          url: `https://${shop}/admin/oauth/access_token`,
           method: "POST",
           // headers: {
           //   "X-Shopify-Access-Token": client_secret,
           // },
           responseType: "json",
-          data:{
+          data: {
             client_id,
             client_secret,
             code,
@@ -32,25 +32,25 @@ module.exports = {
         return reject(error);
       }
     }),
-    GetApiRest:(url, client_secret) =>
-      new Promise(async (resolve, reject) => {
-        try {
-          const response = await axios({
-            url,
-            method: "GET",
-            headers: {
-              "X-Shopify-Access-Token": client_secret,
-            },
-            responseType: "json",
-          });
-    
-          resolve(response.data);
-        } catch (error) {
-          console.log("error in get api rest", error);
-          reject(error);
-        }
+  GetApiRest: (url, client_secret) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios({
+          url,
+          method: "GET",
+          headers: {
+            "X-Shopify-Access-Token": client_secret,
+          },
+          responseType: "json",
+        });
+        console.log("response Access token", response.data)
+        resolve(response.data);
+      } catch (error) {
+        console.log("error in get api rest", error);
+        reject(error);
+      }
     }),
-    PostApiRest:(url, client_secret, data) =>
+  PostApiRest: (url, client_secret, data) =>
     new Promise(async (resolve, reject) => {
       try {
         const response = await axios({
@@ -62,11 +62,32 @@ module.exports = {
           responseType: "json",
           data,
         });
-  
+
         resolve(response.data);
       } catch (error) {
         console.log("error in post api rest", error);
         reject(error);
       }
-  })
+    }),
+
+  callGraphql: (shop, token, query) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios({
+          url: `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/products.json`,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Shopify-Access-Token": token,
+          },
+          responseType: "json",
+          data: query,
+        });
+
+        resolve(response.data);
+      } catch (error) {
+        console.log("error in post api rest", error);
+        reject(error);
+      }
+    }),
 };

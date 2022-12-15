@@ -18,7 +18,15 @@ const app = express();
 
 const { connectDB } = require("./db/connect");
 const { GetApiRest, PostApiRest, getAccessToken } = require('./controllers/shopify_api');
-const { readFileSync } = require('fs');
+
+const router = express.Router();
+
+const ApiRoutes = require("./routers/router.js")
+
+console.log("routerrouter")
+
+
+
 
 //webhook apis
 // app.post(
@@ -246,10 +254,7 @@ app.get('/auth/callback', validateHmac, async (req, res) => {
 
 // Handle GET requests to /api route
 app.get("/api", (req, res) => {
-  
-// frontend serve 
-  const index = path.join(__dirname, "index.js");
-  res.sendFile(index);
+  res.json({ message: "Hello from server!" });	
 });
 
 app.get('/', async (req, res) => {
@@ -281,6 +286,7 @@ app.get('/', async (req, res) => {
 });
 
 
+router.use('/product', ApiRoutes)
 
 // All other GET requests not handled before will return our React app
 // app.get('*', (req, res) => {
