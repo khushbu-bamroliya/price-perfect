@@ -128,7 +128,17 @@ const shopSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
-});
+  createdAt: {
+    type: Number,
+    trim: true,
+  },
+  updatedAt: {
+    type: Number,
+    trim: true,
+  },
+},
+{ timestamps: { currentTime: () => new Date().getTime() } }
+);
 
 const Shop = mongoose.model("shop", shopSchema);
 
