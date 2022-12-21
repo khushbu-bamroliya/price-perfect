@@ -10,7 +10,7 @@
 }
 
 .welcomeContent>span {
-    font-family: 'PT Sans';
+    /* font-family: 'PT Sans'; */
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -19,9 +19,15 @@
     color: #8492A7;
 }
 
+.forgetPass{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .welcomeContent>h4 {
 
-    font-family: 'PT Sans';
+    /* font-family: 'PT Sans'; */
     font-style: normal;
     font-weight: 700;
     font-size: 34px;
@@ -59,7 +65,7 @@
 }
 
 .welcomeInputs>div>div>input {
-    font-family: 'PT Sans';
+    /* font-family: 'PT Sans'; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -83,7 +89,7 @@
 .RememberMe>span,
 .noAccount>span {
 
-    font-family: 'PT Sans';
+    /* font-family: 'PT Sans'; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -929,4 +935,588 @@ top: 153px; */
     color: #151515;
     margin-left: 36px;
     margin-top: 48px;
+}
+
+/* sign up page css */
+
+.alldetails {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+  }
+  .signupimages {
+    width: 50% !important;
+    background-color: #FBF8FD;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  .signupdetails {
+    width: 50%;
+    padding: 110px 77px 50px 77px;
+  }
+  .accountText {
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    margin: 6px 0;
+    color: #8492A7;
+  }
+  .signText {
+    margin: 20px 0 6px 0;
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 41px;
+    color: #151515;
+  }
+  .firstnamediv {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: calc(50% - 4px);
+  }
+  .firstnamediv label {
+    margin-bottom: 8px;
+    color: #536780;
+  }
+  .lastnamediv {
+    display: flex;
+    width: 48%;
+    flex-direction: column;
+  }
+  .userdetailsmaindiv {
+    display: flex;
+    justify-content: space-between;
+    margin: 21px 0 12px 0;
+  }
+  .emailnamediv {
+    margin: 0 0 12px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .passwordnamediv {
+    margin: 0 0 12px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .confirmpasswordnamediv {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 30px 0;
+  }
+  .createaccountdiv {
+    width: 100%;
+    margin: 0 0 14px 0 !important;
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 8px !important;
+    padding: 14px !important;
+  }
+  .createaccountwithgooglediv {
+    width: 100%;
+    border: 1px solid #D4DCE8 !important;
+    border-radius: 5px !important;
+    padding: 12px !important;
+  }
+  .createaccountwithgooglediv img {
+    margin-right: 12px;
+  }
+  .logmaindiv {
+    display: flex;
+    margin: 15px 0 0 0;
+    justify-content: center;
+  }
+  .checkaccountdiv {
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #B6BEC7;
+  }
+  .logintextdiv {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    margin: 0 0 0 10px !important;
+  }
+  .trynowtext {
+    margin: 60px 0 11px 0;
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: #151515;
+  }
+  .trynowextratext {
+    /* font-family: 'Product Sans'; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #8492A7;
+    text-align: center;
+  }
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  .trynowbtn {
+    position: relative;
+    color: black;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 13px 20px !important;
+    min-width: 268px !important;
+    margin-top: 30px !important;
+  }
+  .trynowbtn span {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+  }
+  .trynowbtn::after {
+    position: absolute;
+    content: "";
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+  .w-100 {
+    width: 100%;
+    max-width: 100%;
+  }
+  .mb-12 {
+    margin-bottom: 12px;
+  }
+  .mb-29 {
+    margin-bottom: 29px;
+  }
+  .priceperfactimg {
+    position: absolute;
+    top: 70px;
+    left: 80px;
+    display: flex;
+    align-items: center;
+  }
+  .priceperfactimg h3{
+    margin: 0 0 0 5px;
+  }
+  @media only screen and (max-width: 1024px) and (min-width: 992px) {
+    .signupimages{
+      width:55% !important;
+    }
+    .signupdetails{
+      width:45%;
+      padding: 50px 50px 30px 50px;
+    }
+  }
+  @media only screen and (max-width: 991px) and (min-width: 319px) {
+    .alldetails{
+      flex-wrap: wrap;
+      height: auto;
+    }
+    .signupimages{
+      width:100% !important;
+      height: auto;
+    }
+    .signupdetails{
+      width:100%;
+      padding: 15px;
+    }
+    .priceperfactimg{
+      top: 20px;
+      left: 30px;
+    }
+    .userdetailsmaindiv{
+      flex-wrap: wrap;
+      margin-bottom: 0;
+    }
+    .firstnamediv{
+      max-width:100%;
+      margin-bottom: 12px;
+    }
+    .createaccountwithgooglediv{
+      padding: 8px !important;
+    }
+    .createaccountwithgooglediv img{
+      margin-right: 4px;
+    }
+    .createaccountdiv{
+      margin-top: 12px !important;
+    }
+    .trynowtext{
+      margin-top: 30px;
+      font-size: 18px;
+      line-height: 22px;
+    }
+    .signText{
+      font-size: 26px;
+      line-height: 32px;
+    }
+  }
+  .text-trans{
+    text-transform: none !important;
+  }
+  .mb-12{
+    margin-bottom: 12px;
+  }
+  .mb-28{
+    margin-bottom: 28px;
+  }
+  .mb-34{
+    margin-bottom: 34px;
+  }
+  .mb-49{
+    margin-bottom: 49px;
+  }
+  .mb-41{
+    margin-bottom: 41px;
+  }
+  .flex{
+    display: flex;
+    flex-direction: column;
+  }
+  .result-wrapper{
+    border-bottom: 1px solid rgba(132, 146, 167, 0.3);
+    margin-bottom: 21px;
+  }
+  .wrapper{
+    display: flex;
+    align-items: center;
+    margin-bottom: 31px;
+  }
+  .wrapper span{
+    margin-left: 24px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 26px;
+    color: #536780;
+  }
+  .daily-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .daily-wrapper span{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    color: #536780;
+  }
+  .daily-wrapper div{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FE6E98;  
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Home dashboard page css is here */
+
+.homeDashboard-main,
+.createTestPage-main,
+.yourTests-main,
+.createTestStep2-main {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+.homeDashboard,
+.createTestPage,
+.yourTestsPage,
+.createTestStep2 {
+    box-shadow: none !important;
+    padding: 25px;
+    background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
+    margin: auto;
+}
+.dashboardBlock {
+    margin-top: 48px;
+}
+.dashboardTitle {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #151515;
+}
+.dailyStats > div {
+    width: 28%;
+    background: #FFFFFF !important;
+    border-radius: 14px;
+    box-shadow: none;
+    padding: 24px;
+    margin: 0 15px;
+}
+.dailyStatsBlock1 > div > div {
+    width: 50px;
+    height: 50px;
+    background: #F9F8FE;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dailyStatsBlock1 > div > img {
+    width: 30.13px;
+    height: 25.9px;
+}
+.dailyStatsBlock1 > div > span > span {
+    color: #F42272;
+}
+.dailyStatsBlock1 > div {
+    display: flex;
+    align-items: center;
+}
+.dailyStatsBlock1 > div > span {
+    height: 27px;
+    margin-left: 22px;
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    /* identical to box height */
+    color: #536780;
+
+}
+
+.dailyStats > div {
+    margin: 24px 14px 0;
+
+}
+.dailyStats {
+    display: flex;
+    margin: 0 -15px;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+@media screen and (max-width:1120px) {
+    .NavRight > span,
+    .NavRight > img {
+        display: none !important;
+    }
+    .testAnalytics,
+    .yourTests {
+        margin: 0 !important;
+        width: 100% !important;
+        height: 414px;
+    }
+    .yourTests {
+        margin-top: 24px !important;
+    }
+    .analyticsSection {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap !important;
+    }
+    .dailyStats > div {
+        margin: 24px 14px 0;
+        width: 40%;
+    }
+    .dailyStats {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+@media screen and (max-width:820px) {
+    .dailyStats > div {
+        margin: 24px 14px 0;
+        width: 100%;
+
+    }
+
+}
+.dailyStatsBlock1 {
+    display: flex;
+    justify-content: space-between;
+
+}
+.dailyStatsBlock2-sub2 > div {
+    display: flex;
+}
+.dailyStatsBlock2 > hr {
+    height: 78px !important;
+    border: 1px solid #E9E9E9;
+    margin: 0;
+}
+.dailyStatsBlock2 {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.moreIcon > img:hover {
+    cursor: pointer;
+}
+.moreIcon > img {
+    width: 24px;
+    height: 24px;
+}
+.dailyStatsBlock2-sub1 {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 63px;
+    /* identical to box height */
+    color: #F42272;
+
+}
+.dailyStatsBlock2-sub2 > div > img {
+    width: 22px;
+    height: 22px;
+    margin: auto;
+}
+.dailyStatsBlock2-sub2 > span {
+    width: 82px;
+    height: 17px;
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    color: #8492A7;
+
+}
+.dailyStatsBlock2-sub2 > div {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    text-align: right;
+    color: #1BC78A;
+}
+.downArrow {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    text-align: right;
+
+    color: #F42254;
+}
+.revenue > h4 {
+    color: #151515 !important;
+}
+.changeRevenue > h4 {
+    color: #1BC78A !important;
+}
+.analyticsSection > div {
+    background: #FFFFFF;
+    border-radius: 14px;
+    box-shadow: none;
+    padding: 25px;
+}
+
+.analyticsSection > div > div > span {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #151515;
+}
+.analyticsSection {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.testAnalytics {
+    margin-right: 12px;
+    width: 766px;
+    height: 414px;
+}
+.yourTests {
+    margin-left: 12px;
+    width: 589px;
+    height: 414px;
+}
+.analyticsBtnGroup > button > img {
+    margin-right: 8px;
+}
+.analyticsBtnGroup > button {
+    height: 15px;
+
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+    text-align: right;
+    color: #B6BEC7 !important;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.analyticsBtnGroup {
+    box-shadow: none !important;
+    display: flex;
+    flex-wrap: wrap;
+}
+@media screen and (max-width: 425px) {
+    .dailyStatsBlock2-sub1 > h4 {
+        border-bottom: 0.5px solid #E9E9E9;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        margin-top: 15px;
+    }
+    .dailyStatsBlock2-sub1 {
+        width: 100%;
+        text-align: center;
+    }
+    .dailyStatsBlock2 > hr {
+        display: none !important;
+    }
+}
+
+/* Home dashboard page css is ended */
+
+#scrollresult, .signupdetails a{
+  text-decoration: none;
 }

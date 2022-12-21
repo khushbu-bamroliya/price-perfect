@@ -1,32 +1,52 @@
-// const crypto = require('crypto');
-//const nonce = require('nonce')();
-// const request = require('request-promise');
-// const querystring = require('querystring');
-const cookie = require('cookie');
+//env config
 require('dotenv').config()
 
 const express = require('express');
+const app = express();
 const path = require('path');
 const PORT = process.env.PORT || 8081;
 
+
+//shopify configs
 const validateHmac = require("./middlewares/validateHmac");
 const AuthHelper = require("./helpers/index");
-// const shopifyRestApi = require("./controllers/shopify_api");
+
+//shop model
 const Shop = require("./models/Shop");
 
-const app = express();
+//ab test config
+const abtest = require('easy-abtest');
 
+//Google auth configs
+const expressSession = require("express-session");
+const passport = require("passport");
+const initializingPassport = require('./middlewares/passport');
+initializingPassport(passport);
+app.use(
+  expressSession({
+    secret: "thisismysecretexpresssessionsodontlook",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
+//jwt
+const { encodeJWT } = require("./controllers/utils");
+
+//db connection
 const { connectDB } = require("./db/connect");
+
+//shopify apis
 const { GetApiRest, PostApiRest, getAccessToken } = require('./controllers/shopify_api');
 
+//router config
 const router = express.Router();
-
-const ApiRoutes = require("./routers/router.js")
-
-console.log("routerrouter")
-
-
-
+const ApiRoutes = require("./routers/router.js");
 
 //webhook apis
 // app.post(
@@ -248,41 +268,130 @@ app.get('/auth/callback', validateHmac, async (req, res) => {
   }
 });
 
+//google apis
+// const isLoggedIn = (req, res, next) => {
+//   if (req.user) {
+//       next();
+//   } else {
+//       res.sendStatus(401);
+//   }
+// }
+
+app.get("/google/auth/failed", (req, res) => {
+  res.send("Login Failed");
+});
+
+app.get('/google/auth',
+  passport.authenticate('google', {
+      scope:
+          ['email', 'profile']
+  }
+));
+
+
+app.get("/google/callback", (req, res) => {
+  passport.authenticate("google", async function (err, user, info) {
+    if (err) {
+      console.log("hi1", err);
+    }
+    if (!user) {
+      return res.redirect("/google/auth/failed");
+    }
+      if (user) {
+        const token = await encodeJWT(
+          user.googleId,
+          process.env.JWT_EXP
+        );
+        res.cookie("token", token);
+        console.log('here1');
+        // res.redirect("/");
+        // return res;
+      }
+  })(req, res);
+  (req, res) => {
+    res.redirect("/google/auth/failed");
+  };
+});
+
+app.get("/google/logout", (req, res) => {
+  req.logout(() => {});
+  res.send(req.user);
+});
+
+
+  //ab test
+  let options = {
+    enabled: true,
+    name: 'experiment-ID-here',
+    buckets: [
+      {variant: 0, weight: 0.33},
+      {variant: 1, weight: 0.33},
+      {variant: 2, weight: 0.33}
+    ]
+  }
+
+  // app.use(abtest(options));
 
 // Have Node serve the files for our built React app
 //app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
 // Handle GET requests to /api route
-app.get("/api", (req, res) => {
-  res.json({ message: "Hello from server!" });	
+app.get("/api", abtest(options),(req, res) => {
+
+
+console.log(req.session.test.bucket,'req.session.test.bucket');
+
+  if (req.session.test.bucket == 0) {
+    res.json({ message: "Hello from server 0" });	
+  } else if (req.session.test.bucket == 1) {
+    res.json({ message: "Hello from server 1" });	
+  } else if (req.session.test.bucket == 2) {
+    res.json({ message: "Hello from server 2" });	
+  } 
 });
+
+app.get("/api2", abtest(options),(req, res) => {
+
+
+  console.log(req.session.test.bucket,'req.session.test.bucket');
+  
+    if (req.session.test.bucket == 0) {
+      res.json({ message: "Hello from server 0" });	
+    } else if (req.session.test.bucket == 1) {
+      res.json({ message: "Hello from server 1" });	
+    } else if (req.session.test.bucket == 2) {
+      res.json({ message: "Hello from server 2" });	
+    } 
+  });
 
 app.get('/', async (req, res) => {
   console.log(req.query,'/ route');
   const {shop, hmac, host, timestamp} = req.query;
 
-  const shopGet = await Shop.findOne({ shop }).select(["shop","app_status"]);
-
-  if(shopGet && shopGet.app_status && shopGet.app_status == "installed")
+  if(shop)
   {
-    console.log("embedurl");
-    // res.redirect(
-    //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
-    // );
+    const shopGet = await Shop.findOne({ shop }).select(["shop","app_status"]);
+    if(shopGet && shopGet.app_status && shopGet.app_status == "installed")
+    {
+      console.log("embedurl");
+      // res.redirect(
+      //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
+      // );
+        
+      // Create a buffer from the string
+      // let bufferObj = Buffer.from(host, "base64");
       
-    // Create a buffer from the string
-    // let bufferObj = Buffer.from(host, "base64");
-    
-    // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
-
-    // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
-    app.use(express.static(path.resolve(__dirname, 'frontend/build')));
-    res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
+      // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
+  
+      // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
+      app.use(express.static(path.resolve(__dirname, 'frontend/build')));
+      res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
+    }
+    else 
+    {
+      res.redirect(`/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`);
+    } 
   }
-  else 
-  {
-    res.redirect(`/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`);
-  } 
 });
 
 
