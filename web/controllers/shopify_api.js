@@ -6,6 +6,7 @@ module.exports = {
       baseURL: `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}`,
       headers: {
         "X-Shopify-Access-Token": access_token,
+        "Accept-Encoding": "gzip,deflate,compress"
       },
     });
   },
@@ -15,9 +16,9 @@ module.exports = {
         const response = await axios({
           url: `https://${shop}/admin/oauth/access_token`,
           method: "POST",
-          // headers: {
-          //   "X-Shopify-Access-Token": client_secret,
-          // },
+          headers: {
+            "Accept-Encoding": "gzip,deflate,compress"
+          },
           responseType: "json",
           data: {
             client_id,
@@ -40,6 +41,7 @@ module.exports = {
           method: "GET",
           headers: {
             "X-Shopify-Access-Token": client_secret,
+            "Accept-Encoding": "gzip,deflate,compress"
           },
           responseType: "json",
         });
@@ -58,6 +60,7 @@ module.exports = {
           method: "POST",
           headers: {
             "X-Shopify-Access-Token": client_secret,
+            "Accept-Encoding": "gzip,deflate,compress"
           },
           responseType: "json",
           data,
@@ -70,23 +73,24 @@ module.exports = {
       }
     }),
 
-  callGraphql: (shop, token, query) =>
+    PostApiGraphql: (shop, client_secret, data) =>
     new Promise(async (resolve, reject) => {
       try {
         const response = await axios({
-          url: `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/products.json`,
+          url: `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/graphql.json`,
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "X-Shopify-Access-Token": token,
+            "X-Shopify-Access-Token": client_secret,
+            "Content-Type": "application/graphql",
+            "Accept-Encoding": "gzip,deflate,compress"
           },
           responseType: "json",
-          data: query,
+          data,
         });
 
         resolve(response.data);
       } catch (error) {
-        console.log("error in post api rest", error);
+        console.log("error in post api graphql", error);
         reject(error);
       }
     }),

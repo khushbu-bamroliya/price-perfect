@@ -1,46 +1,166 @@
-import { BottomNavigation, BottomNavigationAction, Card, Typography } from '@mui/material';
-import React from 'react'
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import logo from "../../src/Component/Images/Group 48.png"
-// import "../../Styles/MUI_CSS/Nav.css"
-import arrowDown from "../../src/Component/Images/arrow-down.png"
-import avatar from "../../src/Component/Images/image.png"
-import home from "../../src/Component/Images/home.png"
-import note from "../../src/Component/Images/note-favorite.png"
-import { useState } from 'react';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import logo from "./Images/Group 48.png";
+import homeIcon from "./Images/home.png"
+import YourTestIcon from "./Images/task-square.png"
+import CreateTestIcon from "./Images/note-favorite.png"
+import avatarIcon from "./Images/image.png"
+import arrowDown from "./Images/arrow-down.png"
+import moreIcon from "./Images/more.png"
+import { NavLink, useNavigate } from 'react-router-dom';
+
+
 
 const Navbar = () => {
-    const [value, setValue] = useState(0);
+    const navigate = useNavigate()
+    const pages = [
+          <div className='navIcons'> <NavLink to="/"><img src={homeIcon} alt="" /> <span>Home</span></NavLink> </div>,
+        <div className='navIcons'> <NavLink to="/yourtests"> <img src={YourTestIcon} alt="" /> <span>Your Tests</span></NavLink></div>,
+          <div className='navIcons'><NavLink to="/createtest"><img src={CreateTestIcon} alt="" /> <span>Create Test</span></NavLink> </div>,
+
+    ];
+    const settings = [
+
+    <Button> <NavLink to="/profile">Profile</NavLink> </Button>,
+    <Button> <NavLink to="/managetest">View/Manage Test</NavLink> </Button>,
+        
+    ];
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        // navigate('/profile')
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+// if (window.location.href.indexOf('/createtest')) {
+//     console.log("Hello");
+// }
+    if (window.location.href.includes("createtest")) {
+        console.log("Match found");
+    }
+    console.log(
+        'jhgjhg', window.location.href.indexOf('/createtest')
+    );
     return (
         <>
-            <Card className='navMain'>
-                <div className='navBlock1'>
+            <div className="navbar">
+                <AppBar position="static">
+                    <Container maxWidth="xl">
+                        <Toolbar disableGutters>
+                            {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+                            <img className='logo' src={logo} alt="" />
+                        
 
-                    <img src={logo} alt="" />
-                </div>
-                <BottomNavigation
-                    showLabels
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
-                    }}
-                    className="navBlock2"
-                >
-                    <BottomNavigationAction label=<div className='menuItem menuColor'><img src={home}/><span>Home</span></div> />
-                    <BottomNavigationAction label=<div className='menuItem'><img src={note}/><span>Your Tests</span></div> />
-                    <BottomNavigationAction label=<div className='menuItem'><img src={note}/><span>Create Test</span></div>  />
-                </BottomNavigation>
+                            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleOpenNavMenu}
+                                    color="inherit"
+                                >
+                                    {/* <MenuIcon /> */}
+                                    <img className='moreIconNav' src={moreIcon} alt="" />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorElNav}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    open={Boolean(anchorElNav)}
+                                    onClose={handleCloseNavMenu}
+                                    sx={{
+                                        display: { xs: 'block', md: 'none' },
+                                    }}
+                                >
+                                    {pages.map((page) => (
+                                        <MenuItem onClick={handleCloseNavMenu}>
+                                            <Typography textAlign="center">{page}</Typography>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Box>
+                        
+                            <Box className='NavCenterBtn' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: "center" } }}>
+                                {pages.map((page) => (
+                                    <Button
 
-                <div className='navBlock3'>
-                    <div>
-                        <img src={avatar} alt="" />
-                    </div>
-                    <Typography variant='p'>Alexander</Typography>
-                    <img src={arrowDown} alt="" />
-                </div>
-            </Card>
+                                        onClick={handleCloseNavMenu}
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                        
+                                    >
+                                        {page}
+                                    </Button>
+                                ))}
+                            </Box>
+
+                            <Box sx={{ flexGrow: 0 }} className="navRightBlock">
+                                <Tooltip title="Open settings">
+                                    <IconButton  className='NavRight' onClick={handleOpenUserMenu}>
+                                        <Avatar className='avaratIcon' alt="Remy Sharp" src={avatarIcon} />
+                                        <Typography variant='p'>Alaxander</Typography>
+                                        <img src={arrowDown} alt="" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    {settings.map((setting) => (
+                                        <MenuItem onClick={handleCloseUserMenu}>
+                                            <Typography textAlign="center">{setting}</Typography>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Box>
+                        </Toolbar>
+                    </Container>
+                </AppBar>
+            </div>
         </>
     )
 }
