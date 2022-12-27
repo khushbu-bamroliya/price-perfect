@@ -1,9 +1,9 @@
 const express = require("express");
 
-const { GetAllShopifyProduct } = require("../api/GetallproductApi.js");
+const { allProducts } = require("../api/products.js");
 
 const router = express.Router();
 
-router.post("/get-products", verifyUser, Products.allProducts);
+router.post("/get-products", allProducts);
 
 module.exports = router;
