@@ -1,6 +1,5 @@
-import react from 'react';
 import loginImage from './Images/Group-45.png'
-import { Link, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import googleImages from './Images/google (1).png'
 import priceperfectimg from './Images/priceperfectimg.png';
 import { NavLink } from "react-router-dom"
@@ -29,12 +28,13 @@ export default function SignUp() {
 
                 <div className="signupimages">
                     <div className='priceperfactimg'>
-                        <img src={priceperfectimg} width='100%' />
+                        <img src={priceperfectimg} width='100%' alt=""/>
                         <h3 className=''>PricePerfect</h3>
                     </div>
                     <img
                         src={loginImage}
                         width='100%'
+                        alt=""
                     />
                 </div>
 
@@ -81,7 +81,7 @@ export default function SignUp() {
                     <Button variant="contained" className='createaccountdiv'>Create Account</Button>
 
                     <Button variant="outlined" className='createaccountwithgooglediv'>
-                        <img src={googleImages} className></img>
+                        <img src={googleImages} alt=""></img>
                         Create Account with Google
                     </Button>
 
@@ -114,10 +114,10 @@ export default function SignUp() {
 
                 <div className="signupimages">
                     <div className='priceperfactimg'>
-                        <img src={priceperfectimg} width='100%' />
+                        <img src={priceperfectimg} width='100%' alt=""/>
                         <h3>PricePerfect</h3>
                     </div>
-                    <img src={loginImage} width='100%' />
+                    <img src={loginImage} width='100%' alt=""/>
                 </div>
 
                 <div className='signupdetails'>
@@ -151,10 +151,10 @@ export default function SignUp() {
             <div className='alldetails hide_revenue_div' id='scrollresult'>
                 <div className="signupimages">
                     <div className='priceperfactimg'>
-                        <img src={priceperfectimg} width='100%' />
+                        <img src={priceperfectimg} width='100%' alt=""/>
                         <h3 className=''>PricePerfect</h3>
                     </div>
-                    <img src={loginImage} width='100%' />
+                    <img src={loginImage} width='100%' alt=""/>
                 </div>
 
                 <div className='signupdetails'>
@@ -164,11 +164,11 @@ export default function SignUp() {
                     </div>
                     <div className='result-wrapper'>
                         <div className='wrapper'>
-                            <img src={ResultRevenueLogo} />
+                            <img src={ResultRevenueLogo} alt=""/>
                             <span>Your revenue is expected to increase by ×% to Sxxx per day</span>
                         </div>
                         <div className='wrapper'>
-                            <img src={ResultRevenueLogo} />
+                            <img src={ResultRevenueLogo} alt=""/>
                             <span>That is Sxxx per month in additional revenue and Sxxx per year!</span>
                         </div>
                     </div>

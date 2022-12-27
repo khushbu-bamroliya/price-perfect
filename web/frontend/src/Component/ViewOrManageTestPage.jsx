@@ -5,7 +5,6 @@ import dummyProductImage from "./Images/home-trophy.png"
 import LinkIcon from "./Images/link-2.png"
 import { DataGrid } from '@mui/x-data-grid'
 import EyeIcon from "./Images/eye.png"
-import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
 const ViewOrManageTestPage = () => {
     const rows = [
@@ -120,7 +119,7 @@ const ViewOrManageTestPage = () => {
                                 </div>
                                 <div className='viewormanage-testItemData'>
                                     <Typography variant='h5'>Cat Socks Test </Typography>
-                                    <Button>Copy Link <img src={LinkIcon} /></Button>
+                                    <Button>Copy Link <img src={LinkIcon} alt=""/></Button>
                                     <div>
                                         <div className='viewormanage-status'>
                                             <Typography variant='p'>Status</Typography>

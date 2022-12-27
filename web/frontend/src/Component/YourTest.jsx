@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, CardContent, Chip, TextField, Typography } from '@mui/material'
+import { Autocomplete, Card, CardContent, Chip, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Navbar from './Navbar'
 // import "../../Styles/MUI_CSS/CreateTest.css"
@@ -33,7 +33,7 @@ const YourTest = () => {
 
                         <div className='tableImages'>
                             <div>
-                                <img src={avatar} alt='' />
+                                <img src={avatar} alt="" />
                             </div>
                         </div>
                         <p className='productID'>

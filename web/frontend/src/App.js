@@ -5,7 +5,6 @@ import CreateTestStep2 from './Component/CreateTestStep2';
 import HomeDashboard from './Component/HomeDashboard';
 import ReviewTestPage from './Component/ReviewTestPage';
 import SignUp from './Component/SignUp';
-import Signup from './Component/SignUp'
 import ViewOrManageTestPage from './Component/ViewOrManageTestPage';
 import WelcomePage from './Component/WelcomePage';
 import YourProfile from './Component/YourProfile';

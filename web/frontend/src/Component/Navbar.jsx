@@ -6,13 +6,11 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import logo from "./Images/Group 48.png";
 import homeIcon from "./Images/home.png"
 import YourTestIcon from "./Images/task-square.png"
@@ -20,12 +18,11 @@ import CreateTestIcon from "./Images/note-favorite.png"
 import avatarIcon from "./Images/image.png"
 import arrowDown from "./Images/arrow-down.png"
 import moreIcon from "./Images/more.png"
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 
 const Navbar = () => {
-    const navigate = useNavigate()
     const pages = [
           <div className='navIcons'> <NavLink to="/"><img src={homeIcon} alt="" /> <span>Home</span></NavLink> </div>,
         <div className='navIcons'> <NavLink to="/yourtests"> <img src={YourTestIcon} alt="" /> <span>Your Tests</span></NavLink></div>,

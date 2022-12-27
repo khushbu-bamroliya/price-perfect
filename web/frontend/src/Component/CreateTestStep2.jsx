@@ -4,10 +4,6 @@ import React from 'react'
 import Navbar from './Navbar'
 import closeIcon from "./Images/close-circle.png"
 import { DataGrid } from '@mui/x-data-grid';
-import avatar from "./Images/image.png"
-import EyeIcon from "./Images/eye.png"
-import LinkIcon from "./Images/link-2.png"
-import TrashIcon from "./Images/trash.png"
 import { useNavigate } from 'react-router-dom';
 const CreateTestStep2 = () => {
     const navigate = useNavigate()
