@@ -1,36 +1,42 @@
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import CreateTestStep1 from './Component/CreateTestStep1';
-import CreateTestStep2 from './Component/CreateTestStep2';
-import HomeDashboard from './Component/HomeDashboard';
-import ReviewTestPage from './Component/ReviewTestPage';
-import SignUp from './Component/SignUp';
-import Signup from './Component/SignUp'
-import ViewOrManageTestPage from './Component/ViewOrManageTestPage';
-import WelcomePage from './Component/WelcomePage';
-import YourProfile from './Component/YourProfile';
-import YourTests from './Component/YourTests';
+// import React from "react";
+// import logo from "./logo.svg";
+// import "./App.css";
+// import Pricetest from "./Component/Pricetest";
 
-function App() {
+// export default function App() {
+
+//   return (
+//     <div>
+//       <Pricetest />
+//     </div>
+//   );
+// }
+
+
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Pricetest from "./Component/Pricetest";
+import YourTest from "./Component/YourTest";
+import { Route, Routes } from "react-router-dom";
+import WelcomeBack from "./Component/WelcomeBack";
+import CreateTest from "./Component/CreateTest";
+import CreateTestPage2 from "./Component/CreateTestPage2";
+
+
+export default function App() {
+
   return (
     <div>
-      <Routes>
-
-      <Route element={<WelcomePage />} path='/'/>
-        <Route element={<SignUp />} path='/signup'/>
-        <Route element={<HomeDashboard /> } path='/homeDashboard' />
-
-
-        <Route element={<CreateTestStep1/>} path="/createtest"/>
-        <Route element={<CreateTestStep2/>} path="/createtest2"/>
-        {/* <Route element={<HomeDashboard/>} path="/"/> */}
-        <Route element={<YourTests/>} path="/yourtests"/>
-        <Route element={<ReviewTestPage/>} path="/reviewtest"/>
-        <Route element={<YourProfile/>} path="/profile"/>
-        <Route element={<ViewOrManageTestPage/>} path="/managetest"/>
-      </Routes>
+      {/* <Routes> */}
+        {/* <Route exact path="/test" element={<Test/> } /> */}
+        {/* <Route exact path="/createtest" element={<CreateTest/> }  />
+      </Routes> */}
+      <Pricetest />
+      <YourTest />
+      <WelcomeBack />
+      <CreateTest />
+      <CreateTestPage2 />
     </div>
   );
 }
-
-export default App;
