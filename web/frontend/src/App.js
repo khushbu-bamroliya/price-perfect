@@ -1,5 +1,6 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import { useEffect } from 'react';
 import CreateTestStep1 from './Component/CreateTestStep1';
 import CreateTestStep2 from './Component/CreateTestStep2';
 import HomeDashboard from './Component/HomeDashboard';
@@ -9,8 +10,15 @@ import ViewOrManageTestPage from './Component/ViewOrManageTestPage';
 import WelcomePage from './Component/WelcomePage';
 import YourProfile from './Component/YourProfile';
 import YourTests from './Component/YourTests';
+import { getUser } from "./controller/handleGoogleSignIn"
 
 function App() {
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    getUser("token", navigate)
+  },[])
+
   return (
     <div>
       <Routes>
@@ -21,7 +29,7 @@ function App() {
 
 
         <Route element={<CreateTestStep1/>} path="/createtest"/>
-        <Route element={<CreateTestStep2/>} path="/createtest2"/>
+        <Route element={<CreateTestStep2/>} path="/createtest2/:id"/>
         {/* <Route element={<HomeDashboard/>} path="/"/> */}
         <Route element={<YourTests/>} path="/yourtests"/>
         <Route element={<ReviewTestPage/>} path="/reviewtest"/>

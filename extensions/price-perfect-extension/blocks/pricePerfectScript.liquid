@@ -1,0 +1,16 @@
+<script>
+console.log('test script');
+
+fetch('http://localhost:8081/api')
+	.then(response => response.json())
+	.then(data => console.log(data))
+	.catch(err => console.error(err));
+  
+</script>
+{% schema %}
+  {
+    "name": "App Embed",
+    "target": "body",
+    "settings": []
+  }
+{% endschema %}

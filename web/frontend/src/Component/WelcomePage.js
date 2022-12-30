@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
   CardContent,
   Checkbox,
   FormControlLabel,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -14,9 +15,16 @@ import {
 import google from "../Component/Images/google (1).png";
 import card1Img from "../Component/Images/Group-45.png";
 import logo from "../Component/Images/Group 48.png";
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
+import { getUser, handleGoogleSignIn } from "../controller/handleGoogleSignIn";
 
 export default function WelcomePage() {
+  const navigate = useNavigate()     
+
+  useEffect(() => {
+    getUser("token", navigate);
+  },[])
+
   return (
     <>
       <div className="welcomePage">
@@ -55,7 +63,7 @@ export default function WelcomePage() {
 
                 <Stack spacing={2} direction="column" className='btnStack'>
                   <Button variant="contained" className='SignInBtn'>Sign in</Button>
-                  <Button variant="outlined" className='googleSignInBtn'><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></Button>
+                  <Button  variant="outlined" className='googleSignInBtn'  onClick={() =>  handleGoogleSignIn()}><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></Button>
                 </Stack>
               </span>
 

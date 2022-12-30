@@ -1,5 +1,5 @@
 //shopify apis
-const { PostApiGraphql } = require('../controllers/shopify_api');
+const { PostApiGraphql, PostApiRest, DemoGrapqlApi } = require('../controllers/shopify_api');
 const Shop = require("../models/Shop");
 const Product = require("../models/Product");
 const _ = require("lodash");
@@ -10,112 +10,111 @@ const in_array = (array, id) => {
     });
   }
 
-const allProducts = async (ctx) => {
+  const allProducts = async (req, res) => {
     try {
-      const { shop } = req.headers;
-
+     
       var access_token = "";
-
-      if(shop){
-        access_token = await Shop.findOne({shop}).select(['access_token']);
+      const shop = process.env.SHOP
+      if (shop) {
+  
+        const shopData = await Shop.findOne({ shop }).select(['access_token']);
+        access_token = shopData.access_token
       }
-
+  
       const {
         search,
-        endCursor,
+        // endCursor,
         hasNextPage,
         hasPreviousPage,
       } = req.body;
-
-      console.log(req.body, "request.body");
+      const endCursor = null
+      console.log(req.body, "search");
       let query;
-
+     
       async function recursion_products(endCursor) {
         if (endCursor != "") {
-          console.log("cursor not blank", endCursor);
+         
           query = `query products{
-            products(first :20 ${
-              //search ? ",query:title:*" + search + "*" : "" //old
-              search ? ',query:"title:*' + search + '*"' : "" //new
-            },after:"${endCursor}"){ 
-                edges { 
+              products(first: 10, ${search ? ',query:"title:*' + search + '*"' : "" } ,  after: ${endCursor}){ 
+                  edges { 
+                    cursor 
+                    node { 
+                            id 
+                            title
+                            handle
+                            description
+                              featuredImage{ 
+                                url 
+                              } 
+                              variants(first:1){
+                                edges{
+                                  node{
+                                    price
+                                  }
+                                }
+                              }
+                          } 
+                        } 
+                        pageInfo { 
+                          hasNextPage 
+                          hasPreviousPage 
+                        } 
+                }
+              }
+          `;
+        } else {
+          console.log("first time and searching");
+          query = `query products{
+                products(first :10 ${search ? ',query:"title:*' + search + '*"' : ""
+            }){ 
+                  edges { 
                   cursor 
                   node { 
                           id 
                           title
                           handle
+                          description
                             featuredImage{ 
-                              originalSrc 
+                              url 
                             } 
                             variants(first:1){
                               edges{
                                 node{
+                                  id
                                   price
                                 }
                               }
                             }
+        
                         } 
                       } 
                       pageInfo { 
                         hasNextPage 
                         hasPreviousPage 
                       } 
-              }
-            }
-        `;
-        } else {
-          console.log("first time and searching");
-          query = `query products{
-              products(first :20${
-                search ? ',query:"title:*' + search + '*"' : ""
-              }){ 
-                edges { 
-                cursor 
-                node { 
-                        id 
-                        title
-                        handle
-                          featuredImage{ 
-                            originalSrc 
-                          } 
-                          variants(first:1){
-                            edges{
-                              node{
-                                id
-                                price
-                              }
-                            }
-                          }
-      
-                      } 
                     } 
-                    pageInfo { 
-                      hasNextPage 
-                      hasPreviousPage 
-                    } 
-                  } 
-              }
-          `;
+                }
+            `;
         }
-
-        console.log("Query", query);
-
+  
+        // console.log("Query", query);
+  
         let ans1 = await getWithPagination(
           shop,
           access_token,
           query,
           "products"
         );
-
+        console.log("ans1", ans1);
         let responseData = _.get(ans1.data, "products");
         let temp_var = [];
-        let ans = ans1.data.products.edges;
-
+        let ans = ans1.products.edges;
+  
         var products = [];
         var endCursorFromApi = "";
         var hasNextPageFromApi = "";
         var hasPreviousPageFromApi = "";
-
+  
         if (ans && Array.isArray(ans) && ans.length > 0) {
           if (
             ans1 &&
@@ -130,38 +129,38 @@ const allProducts = async (ctx) => {
               ans1.data.products.pageInfo &&
               ans1.data.products.pageInfo.hasPreviousPage;
           }
-
+  
           var tempArr1 = [];
-          var tempArr2 = [];
-
+  
           for (let index = 0; index < ans.length; index++) {
             if (index + 1 == ans.length) {
               endCursorFromApi = ans[index].cursor;
             }
-
+  
             //create arr for Db
             const node = ans[index] && ans[index].node && ans[index].node;
-
+  
             if (node) {
               if (node.id) {
                 tempArr1.push(node.id);
               }
-
+  
               products = [
                 ...products,
                 {
                   id: node.id ? node.id : "",
                   image:
-                    node.featuredImage && node.featuredImage.originalSrc
-                      ? node.featuredImage.originalSrc
+                    node.featuredImage && node.featuredImage.url
+                      ? node.featuredImage.url
                       : "",
                   title: node.title ? node.title : "",
+                  description:node.description ? node.description : "-",
                   variant_title: "",
                   price:
                     node.variants &&
-                    node.variants.edges &&
-                    node.variants.edges[0] &&
-                    node.variants.edges[0].node.price
+                      node.variants.edges &&
+                      node.variants.edges[0] &&
+                      node.variants.edges[0].node.price
                       ? node.variants.edges[0].node.price
                       : "",
                   cursor: ans[index].cursor,
@@ -173,15 +172,13 @@ const allProducts = async (ctx) => {
               ];
             }
           }
-
+  
           //match temp1 arr products with DB
           const getDbProducts = await Product.find({
             shop,
             productId: { $in: tempArr1 },
           });
-
-          // console.log(getDbProducts, 'getDbProducts');
-
+  
           if (getDbProducts && getDbProducts.length > 0) {
             var pro = products.filter(function (value) {
               console.log(
@@ -193,9 +190,7 @@ const allProducts = async (ctx) => {
           } else {
             var pro = products;
           }
-
-          //console.log(pro.length, 'pro length');
-
+  
           if (pro.length == 0) {
             //call again
             return await recursion_products(endCursorFromApi);
@@ -210,15 +205,19 @@ const allProducts = async (ctx) => {
           }
         }
       }
-
+  
       //call first time
       const resProducts = await recursion_products(endCursor);
-      return res.status(200).send(resProducts);
+      console.log("resProducts: " + resProducts);
+    
+         res.status(200).send(resProducts);
+        
+    
     } catch (error) {
       console.log("error", error);
       return res.status(500).send("Internal server error!!");
     }
-};
+  };
 
 const getWithPagination = async (shop, token, query, name, value, cursor) => {
     return new Promise(async (resolve, reject) => {
@@ -230,9 +229,8 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
           !(
             response &&
             response.data &&
-            response.data.data &&
-            _.get(response.data.data, name) &&
-            _.get(response.data.data, name).edges
+            _.get(response.data, name) &&
+            _.get(response.data, name).edges
           )
         ) {
           return reject(
@@ -248,6 +246,69 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
     });
 };
 
+const getVariants= async (req, res) => {
+
+  console.log("==>1")
+  // const { shop, access_token } = ctx.state;
+
+  const { productId } = req.body;
+  console.log("==>2", req.body)
+
+  let shop = "rx-stage-store-2.myshopify.com";
+  let access_token = "shpua_f797062e7955012f8d1871efc1a8f938"
+
+  console.log("==>3")
+  try {
+    let query = `query product {
+        product(id: "${productId}") {
+          id
+          title
+          handle
+          variants(first: 100) {
+            edges {
+              node {
+                id
+                title
+                price
+                compareAtPrice
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    let ans1 = await PostApiGraphql(shop, access_token, query);
+
+    var products = [];
+
+    if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
+      for(let resProduct of ans1.data.product.variants.edges){
+        const info = resProduct.node;
+        products.push({
+          // id: resProduct.id,
+          // title: resProduct.title,
+          variant_id: info.id,
+          variant_title: info.title,
+          variant_price: info.price,
+          variant_compare_price:info.compareAtPrice
+        })
+      }
+
+      console.log("New Array", products)
+
+      res.status(200).json({
+        data: products,
+        success: true,
+        status: 200
+      })
+    } 
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 module.exports = {
-    allProducts
+    allProducts,
+    getVariants
 }

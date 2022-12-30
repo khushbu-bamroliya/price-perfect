@@ -3,8 +3,11 @@ require('dotenv').config()
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 const path = require('path');
 const PORT = process.env.PORT || 8081;
+const bodyParser = require('body-parser')
 
 
 //shopify configs
@@ -22,6 +25,11 @@ const expressSession = require("express-session");
 const passport = require("passport");
 const initializingPassport = require('./middlewares/passport');
 initializingPassport(passport);
+// app.use(express.urlencoded({extended: true})); 
+// app.use(express.json()); 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use(
   expressSession({
     secret: "thisismysecretexpresssessionsodontlook",
@@ -36,7 +44,7 @@ app.use(passport.session());
 
 
 //jwt
-const { encodeJWT } = require("./controllers/utils");
+const { encodeJWT, decodeJWT } = require("./controllers/utils");
 
 //db connection
 const { connectDB } = require("./db/connect");
@@ -47,6 +55,7 @@ const { GetApiRest, PostApiRest, getAccessToken } = require('./controllers/shopi
 //router config
 const router = express.Router();
 const ApiRoutes = require("./routers/router.js");
+
 
 //webhook apis
 // app.post(
@@ -303,7 +312,7 @@ app.get("/google/callback", (req, res) => {
         );
         res.cookie("token", token);
         console.log('here1');
-        res.redirect("/");
+        res.redirect("/homeDashboard");
         return res;
       }
   })(req, res);
@@ -335,7 +344,7 @@ app.get("/google/logout", (req, res) => {
 //app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
 // Handle GET requests to /api route
-router.use('/api', ApiRoutes)
+app.use('/api', ApiRoutes)
 
 app.get("/api", abtest(options),(req, res) => {
 
@@ -351,21 +360,7 @@ console.log(req.session.test.bucket,'req.session.test.bucket');
   } 
 });
 
-app.get("/api2", abtest(options),(req, res) => {
-
-
-  console.log(req.session.test.bucket,'req.session.test.bucket');
-  
-    if (req.session.test.bucket == 0) {
-      res.json({ message: "Hello from server 0" });	
-    } else if (req.session.test.bucket == 1) {
-      res.json({ message: "Hello from server 1" });	
-    } else if (req.session.test.bucket == 2) {
-      res.json({ message: "Hello from server 2" });	
-    } 
-  });
-
-app.use(express.static(path.resolve(__dirname, 'frontend/build')));
+// app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
 app.get('/', async (req, res) => {
   console.log(req.query,'/ route');
@@ -387,7 +382,6 @@ app.get('/', async (req, res) => {
       // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
   
       // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
-      
       res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
     }
     else 
@@ -395,6 +389,15 @@ app.get('/', async (req, res) => {
       res.redirect(`/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`);
     } 
   }
+  else{
+    res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
+  }
+});
+
+app.use(express.static(path.resolve(__dirname, 'frontend/build')));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
 });
 
 
