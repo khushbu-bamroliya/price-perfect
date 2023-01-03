@@ -5,6 +5,5 @@ ENV SHOPIFY_API_KEY=$SHOPIFY_API_KEY
 EXPOSE 8081
 WORKDIR /app
 COPY web .
-RUN npm install --force
-RUN npm run build
+RUN npm install
 CMD ["npm", "run", "start"]
