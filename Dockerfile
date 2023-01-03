@@ -6,4 +6,5 @@ EXPOSE 8081
 WORKDIR /app
 COPY web .
 RUN npm install
+RUN cd frontend && npm install
 CMD ["npm", "run", "start"]
