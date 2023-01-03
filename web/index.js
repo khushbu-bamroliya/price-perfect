@@ -22,6 +22,13 @@ const abtest = require('easy-abtest');
 
 //Google auth configs
 const expressSession = require("express-session");
+app.use(
+  expressSession({
+    secret: "thisismysecretexpresssessionsodontlook",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 const passport = require("passport");
 const initializingPassport = require('./middlewares/passport');
 initializingPassport(passport);
@@ -30,13 +37,7 @@ initializingPassport(passport);
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use(
-  expressSession({
-    secret: "thisismysecretexpresssessionsodontlook",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
