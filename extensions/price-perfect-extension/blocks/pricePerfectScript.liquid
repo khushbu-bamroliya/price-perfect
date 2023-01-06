@@ -1,12 +1,168 @@
 <script>
-console.log('test script');
+      {% if(template.name == "product") %}
+         {% if product.tags contains 'price_perfect_duplicate' %}     
+            console.log("Duplicate product");
+            const isDup = true;
+           {% for tag in product.tags %}
+              {% if tag contains 'handle|' %}
+                  {% assign handle = tag | split: "|" | last %}
+                  console.log("{{handle}}");
+                  window.location.href="{{handle}}";
+              {% endif %}
+          {% endfor %}
+           
+         {% endif %}
+      {% endif %}
 
-fetch('http://localhost:8081/api')
-	.then(response => response.json())
-	.then(data => console.log(data))
-	.catch(err => console.error(err));
-  
-</script>
+
+
+function getTargetButtonFromEvent(target) {
+    if (!target) {
+      return null;
+    } else if (target.tagName == "BUTTON") {
+      return target;
+    } else if (target.closest("button")) {
+      return target.closest("button");
+    } else {
+      return null;
+    }
+  }
+const main = ()=>{
+    //let secondClick=false;
+    document.body.addEventListener(
+        "click",
+        function (e) {
+          const add_to_cart_target = getTargetButtonFromEvent(e.target);
+          const closest_form = add_to_cart_target.closest("form");
+          if (
+            add_to_cart_target &&
+            (add_to_cart_target.getAttribute("data-testid") == "Checkout-button" || add_to_cart_target.getAttribute("data-testid") != "Checkout-button") &&
+            closest_form &&
+            closest_form.getAttribute("action") == "/cart/add"
+          ) {
+            //if (!secondClick) {
+              e.stopPropagation();
+              e.preventDefault();
+              alert("Clicked");
+              //secondClick=true;
+              console.log(isDup,'isDup1');
+              if(!isDup){
+                console.log(isDup,'isDup');
+                e.target.click();
+              } else {
+                window.location.href="{{handle}}";
+              }
+            // } else {
+            //   secondClick = false;
+            // }
+          }
+        },
+        true
+      );
+}
+
+main()
+      
+
+      window.addEventListener('DOMContentLoaded', (event) => {
+          console.log('DOM fully loaded and parsed');
+        
+        // document.querySelector('[name="add"]').addEventListener('click', function(event){
+        //     event.preventDefault();
+        //     console.log("add to card blocked");
+        // });
+        
+          var priceDivs = document.querySelectorAll('.pricePerfectPrice');
+          var comaparePriceDivs = document.querySelectorAll('.pricePerfectComparePrice');
+
+          var productsArr = [];
+          var variantsArr = [];
+          for(var i = 0; i < priceDivs.length; i++)
+          {
+             productsArr.push("gid://shopify/Product/"+priceDivs[i].getAttribute('data-product-id'));
+          }
+
+        productsArr = productsArr.filter(function (value, index, array) { 
+          return array.indexOf(value) === index;
+        });
+
+        console.log(productsArr,'productsArr');
+
+        fetch('http://localhost:8081/abtest', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({experiment:localStorage.getItem('abTest') ? localStorage.getItem('abTest') : "",productsArr:productsArr })
+          }).then(res => res.json())
+          .then(res => {
+            if(res)
+            {
+            const resArr = res;
+            console.log(res);
+           
+            var pricePerfectJson = {};
+            var pricePerfectJsonNew = {};
+            
+            if(localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '')
+            {
+               pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+               console.log('get localstorage',pricePerfectJson);
+            }
+            
+            for(var i = 0; i < priceDivs.length; i++)
+            {
+                if(res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice)
+                {
+                  // console.log(priceDivs[i]?.getAttribute('data-variant-id'),pricePerfectJson);
+                  console.log('test 1',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+                  console.log('test 2',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+                   if(pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))])
+                   {
+                     priceDivs[i].innerHTML = pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice;
+                   }
+                   else 
+                   {
+                     priceDivs[i].innerHTML = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice;
+                     
+                     pricePerfectJsonNew[Number(priceDivs[i].getAttribute('data-variant-id'))] = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))];
+                     Object.assign(pricePerfectJson, pricePerfectJsonNew);
+                   }
+                }
+                else 
+                {
+                  priceDivs[i].innerHTML = priceDivs[i]?.getAttribute('data-price');
+                }
+            }
+            for(var j=0; j < comaparePriceDivs.length; j++)
+              {
+                if(res[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice)
+                {
+                  if(pricePerfectJson[Number(comaparePriceDivs[i]?.getAttribute('data-variant-id'))])
+                  {
+                    comaparePriceDivs[j].innerHTML = pricePerfectJson[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice;
+                  }
+                  else 
+                  {
+                    comaparePriceDivs[j].innerHTML = res[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice;
+                  }
+                }
+                else 
+                {
+                   comaparePriceDivs[j].innerHTML = comaparePriceDivs[j]?.getAttribute('data-compare-price');
+                }
+              }
+
+            localStorage.setItem("pricePerfectJson", JSON.stringify(pricePerfectJson));
+
+        
+            }
+          })
+          .catch(err => console.error(err));
+      });
+ 
+    </script>
 {% schema %}
   {
     "name": "App Embed",

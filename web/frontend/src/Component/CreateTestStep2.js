@@ -1,4 +1,4 @@
-import { Button, Card, Modal, Slider, TextField, Typography } from '@mui/material'
+import { Button, Card, Modal, Slider, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system';
 import React from 'react'
 import Navbar from './Navbar'
@@ -22,19 +22,32 @@ const CreateTestStep2 = () => {
         boxShadow: 24,
         p: 4,
     };
-
-    const { id } = useParams();
-
+    // var variantPriceData;
+    // var variantCompareAtPriceData;
+    const { id, title } = useParams();
+    var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
 
-    const [value, setValue] = useState(30);
+    const [variantPriceData, setVariantPriceData] = useState("")
+    const [variantCompareAtPriceData, setVariantCompareAtPriceData] = useState();
+    let [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
+    const [productVariants, setProductsVariants] = useState([])
+    const [testIdState, setTestIdState] = useState();
+    const [displayFinalVariantsArray, setDisplayFinalVariantsArray] = useState([]);
+
+
+    const [pricePercent, setPricePercent] = useState("11");
+    const [percentIncDec, setPercentIncDec] = useState("")
+
+    const [value, setValue] = useState(10);
     const [hideShowBtns, setHideShowBtns] = useState("none")
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    console.log("range slider value:", value)
     // configs of configure test 
     const [openConfigureTest1, setOpenConfigureTest1] = useState(false);
     const handleOpenConfigureTest1 = () => setOpenConfigureTest1(true);
@@ -53,29 +66,81 @@ const CreateTestStep2 = () => {
 
     // configs of edit test button
     const [openEditTest, setOpenEditTest] = useState(false);
-    const handleOpenEditTest = () => { setOpenEditTest(true); setOpenConfigureTest1(false) };
+    const handleOpenEditTest = (testId) => {
+        setTestIdState(testId)
+        setOpenEditTest(true);
+        setOpenConfigureTest1(false)
+        const singleTest = displayTestCasesArray.find(item => item.testId === testId)
+
+    };
+    console.log("setTestIdState", testIdState);
     const handleCloseEditTest = () => setOpenEditTest(false);
 
 
     // configs of edit test button
     const [openControlSettings, setOpenControlSettings] = useState(false);
-    const handleOpenControlSettings = () => { setOpenControlSettings(true); setOpenConfigureTest1(false) };
+    const handleOpenControlSettings = () => {
+        setOpenControlSettings(true); setOpenConfigureTest1(false)
+
+        // const disp = objectToBeSent.testCases && objectToBeSent.testCases.map(i => i?.variants.map((j) => displayFinalVariantsArray.push({
+        //     id: j.id,
+        //     abVariantComparePrice:j.abVariantComparePrice,
+        //     abVariantPrice:j.abVariantPrice,
+        //     productId:j.productId,
+        //     variantComparePrice:j.variantComparePrice,
+        //     variantPrice:j.variantPrice,
+        //     variantTitle:j.variantTitle
+        // })))
+
+    };
     const handleCloseControlSettings = () => setOpenControlSettings(false);
 
+    let testId = 0;
+    console.log("displayTestCasesArray", displayTestCasesArray)
+    const totalTests = displayTestCasesArray && displayTestCasesArray.length;
+    console.log("Total number of tests", totalTests)
+
+    // displayTestCasesArray.push({
+    //     testId:displayTestCasesArray.length+1,
+    //     id: productVariants[0].id,
+    //     abVariantPrice: productVariants[0].abVariantPrice,
+    //     abVariantComparePrice: productVariants[0].abVariantComparePrice,
+    //     productId:productVariants[0].productId,
+    //     variantComparePrice:productVariants[0].variantComparePrice,
+    //     variantPrice:productVariants[0].variantPrice,
+    //     variantTitle:productVariants[0].variantTitle,
+    // })
 
     const onConfirm = () => {
         setHideShowBtns("flex")
         handleCloseManualModal() || handleCloseByPercentageModal()
-    }
-    const onConfirmEdit = () => {
 
-        handleCloseEditTest() || handleCloseControlSettings()
-        navigate("/reviewtest")
+        displayTestCasesArray.push({
+            testId: displayTestCasesArray.length + 1,
+            id: displayTestCasesArray.length + 1,
+
+            variants: productVariants
+        })
+
+
     }
-    // const onConfirmControlSettings = () => {
-    //     setHideShowBtns("flex")
-    //     handleCloseControlSettings()
-    // }
+
+    const objectToBeSent = {
+        trafficSplit: value / totalTests,
+        testCases: displayTestCasesArray,
+        "productId": `gid://shopify/Product/${id}`,
+    }
+
+    console.log("Object to be sent", objectToBeSent);
+    console.log("Split by percentage", value / totalTests);
+    console.log("displayFinalVariantsArray", displayFinalVariantsArray && displayFinalVariantsArray);
+
+    const onConfirmEdit = () => {
+        handleCloseEditTest() || handleCloseControlSettings()
+        // const object = displayTestCasesArray.findIndex(obj => obj.testId === editVariantId);
+
+    }
+
     function btns() {
         return (<div className='afterConfirmBtns' style={{ display: hideShowBtns }}>
             <Button onClick={handleOpenControlSettings} className='afterConfirmControlBtn'>Control</Button>
@@ -87,42 +152,34 @@ const CreateTestStep2 = () => {
     }
 
     const rows = [
-        { id: 1, price: '$5600 ', title: 'Jon --', compareAtPrice: "$4000" },
-        { id: 2, price: '$5600 ', title: 'Cersei', compareAtPrice: "$4000" },
-        { id: 3, price: '$5600 ', title: 'Jaime', compareAtPrice: "$4000" },
-        { id: 4, price: '$5600 ', title: 'Arya', compareAtPrice: "$4000" },
-        { id: 5, price: '$5600 ', title: 'Daenerys', compareAtPrice: "$4000" },
-        { id: 6, price: '$5600 ', title: "null", compareAtPrice: "$4000" },
-        { id: 7, price: '$5600 ', title: 'Ferrara', compareAtPrice: "$4000" },
-        { id: 8, price: '$5600 ', title: 'Rossini', compareAtPrice: "$4000" },
-        { id: 9, price: '$5600 ', title: 'Harvey', compareAtPrice: "$4000" },
+        displayTestCasesArray.map(i =>
+            [
+                {
+                    id: i.testId,
+                    variantTitle: i.variants.map((j) => {
+                        return j.variantTitle
+                    }),
+                    abVariantPrice: i.variants.map((j) => {
+                        return j.abVariantPrice
+                    }),
+                    abVariantComparePrice: i.variants.map((j) => {
+                        return j.abVariantComparePrice
+                    }),
+
+                }
+            ]
+
+        )
     ];
 
     const rowssss = [
         { id: 1, price: '$5600 ', title: 'Jon --', compareAtPrice: "$4000" },
         { id: 2, price: '$5600 ', title: 'Cersei', compareAtPrice: "$4000" },
     ];
-
-    // useEffect(() => {
-
-    //     let data = "8067482550551"
-
-    //     fetch(getApiUrl + '/api/get-variants', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Accept': 'application/json, text/plain, */*',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: data
-    //     })
-    //     .then(res => console.log("res", res.json()))
-    //     .catch((error)=> console.log("Error", error))
-    // })
-
+    var apiRes;
     const handleVariants = async () => {
 
 
-        console.log("ID from useParams", id);
         let data = {
             productId: `gid://shopify/Product/${id}`
         }
@@ -137,126 +194,130 @@ const CreateTestStep2 = () => {
         })
             .then(async (res) => {
 
-                const apiRes = await res.json()
+                apiRes = await res.json()
+                console.log(apiRes.data);
+
+                const updatedArray = apiRes.data.map((item, index) => {
+
+
+
+                    return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
+
+
+
+                    return item;
+
+                })
+
+                setVariantPriceData(apiRes.data[0].variantPrice)
+                setVariantCompareAtPriceData(apiRes.data[0].variantComparePrice)
+                setProductsVariants(updatedArray)
                 setVariantRes(apiRes)
             })
             .catch((error) => console.log("Error", error))
     }
+    const cellEditStopManualModal = (params, event) => {
 
-    useEffect(() => {
-        handleVariants()
-    }, [])
+        const objectIndex = productVariants?.findIndex((obj) => obj.id === params.row.id)
 
-    console.log("variantRes", variantRes.data)
-
-    const lala = [];
-
-    variantRes && variantRes?.data?.forEach((item) => {
-        lala.push({
-            id: item.variant_id,
-            title: item.variant_title,
-            variantPrice: item.variant_price,
-            variantComparePrice: item.variant_compare_price
-        })
-    })
-
-    console.log("lala", lala)
-
-    // const columns = [
-    //     {
-    //         field: 'title',  // get res field name
-    //         headerName: 'Title',
-    //         width: 250,
-    //         sortable: false,
-    //         flex: 0.5,
-    //         renderCell: (params) => {
+        const ObjKeyExists = Object.hasOwn(productVariants[objectIndex], params.field)
+        if (ObjKeyExists) {
 
 
-    //             return (
-    //                 <>
-    //                     <p className='productID'>
-    //                         {/* {params.row.title} */}
-    //                     </p>
-    //                 </>
-    //             )
-    //         }
-    //     },
+            const updatedArray = productVariants?.map((item, index) => {
+                console.log("item", item);
+                if (index === objectIndex) {
+                    // setEditVariantId(item.testId)
+                    if (params.field === "abVariantComparePrice") {
 
+                        return { ...item, "abVariantComparePrice": event.target.value }
+                    }
+                    if (params.field === "abVariantPrice") {
 
-    //     {
-    //         field: 'price',
-    //         headerName: 'Price',
-    //         width: 500,
-    //         sortable: false,
-    //         flex: 0.2,
-    //         renderCell: (params) => {
-    //             return (
-    //                 <>
-    //                     <TextField />
-    //                 </>
-    //             )
-    //         }
-    //     },
-    //     {
-    //         field: 'compareAtPrice',
-    //         headerName: 'Compare at price',
-    //         width: 250,
-    //         sortable: false,
-    //         flex: 0.3,
-    //         renderCell: (params) => {
-    //             return (
-    //                 <>
-    //                     <TextField />
-    //                 </>
-    //             )
-    //         }
+                        return { ...item, "abVariantPrice": event.target.value }
 
-    //     },
+                    }
+                }
+
+                return item;
+
+            })
+            setProductsVariants(updatedArray)
+            console.log("Updated array cellEditStopManualModal", updatedArray);
+        }
+    }
+    console.log("Variants res =====>", variantRes && variantRes.data);
 
 
 
-    //     // {
-    //     //     field: 'fullName',
-    //     //     headerName: 'Full name',
-    //     //     description: 'This column has a value getter and is not sortable.',
-    //     //     sortable: false,
-    //     //     width: 250,
-    //     //     type: 'number',
-    //     //     valueGetter: (params) => console.log("params", params)
-    //     //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-    //     // },
-    // ];
+    // productVariants && productVariants?.forEach((item) => {
+    //     originalVariantArray.push({
+    //         id: item.variant_id,
+    //         title: item.variantTitle,
+    //         variantPrice: item.variantPrice,
+    //         variantComparePrice: item.variantComparePrice
+    //     })
+    // })
+    console.log("productVariants", productVariants && productVariants);
 
 
-    const columnsLala = [
+
+    const originalVariantColumn = [
         // { field: "id", headerName: "Emp ID", minWidth: 120, flex: 1 },
-        { field: "title", headerName: "Emp Name", minWidth: 80, flex: 1, editable: true },
-        { field: "variantPrice", headerName: "Address", minWidth: 120, flex: 1, editable: true },
-        { field: "variantComparePrice", headerName: "Post", minWidth: 100, flex: 1, editable: true },
+        {
+            field: "variantTitle",
+            headerName: "Title",
+            minWidth: 80,
+            flex: 1,
+            editable: true,
+        },
+        {
+            field: "abVariantPrice",
+            headerName: "Price",
+            minWidth: 120,
+            flex: 1,
+            editable: true,
+
+        },
+        {
+            field: "abVariantComparePrice",
+            headerName: "CompareAtPrice",
+            minWidth: 100,
+            flex: 1,
+            editable: true,
+
+        },
     ];
 
-
     const controlcolumns = [
+
         {
-            field: 'title',
+            field: 'variantTitle',
             headerName: 'Title',
             width: 250,
             sortable: false,
             flex: 0.5,
+
             renderCell: (params) => {
-                return (
+                return (<>
                     <>
-                        <p className='productID'>
-                            {params.row.title}
-                        </p>
+                        {params.row.variants.map((role, index) => (
+                            <>
+
+                                <>{role.variantTitle}</><br />
+                            </>
+                        ))}
                     </>
-                )
+                </>)
+
+
+
             }
         },
 
 
         {
-            field: 'price',
+            field: 'abVariantPrice',
             headerName: 'Price',
             width: 500,
             sortable: false,
@@ -264,13 +325,16 @@ const CreateTestStep2 = () => {
             renderCell: (params) => {
                 return (
                     <>
-                        {params.row.price}
+                        {params.row.variants.map((role, index) => (
+                            <>{role.abVariantPrice}<br /></>
+                        ))}
                     </>
                 )
             }
+
         },
         {
-            field: 'compareAtPrice',
+            field: 'abVariantComparePrice',
             headerName: 'Compare at price',
             width: 250,
             sortable: false,
@@ -278,7 +342,9 @@ const CreateTestStep2 = () => {
             renderCell: (params) => {
                 return (
                     <>
-                        {params.row.compareAtPrice}
+                        {params.row.variants.map((role, index) => (
+                            <>{role.abVariantComparePrice}<br /></>
+                        ))}
                     </>
                 )
             }
@@ -294,10 +360,115 @@ const CreateTestStep2 = () => {
         //     sortable: false,
         //     width: 250,
         //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
         //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
         // },
     ];
+
+
+    console.log("New Array updated of productVariants", productVariants);
+    const reviewAndLaunchBtnFunc = () => {
+
+
+
+        let duplicateProdictData = {
+            'productId': id,
+            'productTitle': title
+        }
+
+        fetch(getApiUrl + '/api/createDuplicateProduct', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(duplicateProdictData)
+        })
+            .then(async (res) => {
+                // console.log("Duplicate product id: " + res.data.productDuplicate.newProduct.id);
+            
+                const apiRes = await res.json()
+                console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
+                const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
+                const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node ||  apiRes.data.data.productDuplicate.newProduct.variants.nodes
+                let data = {
+                    "trafficSplit": objectToBeSent.trafficSplit,
+                    "testCases": objectToBeSent.testCases,
+                    "productId": objectToBeSent.productId,
+                    duplicateProductId,
+                    duplicateVariants
+
+                }
+
+                fetch(getApiUrl + '/api/createTestCase', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(async (res2) => {
+
+                        const apiRes = await res2.json()
+                        console.log("Data sent:", apiRes);
+
+
+
+
+                    })
+                    .catch((error) => console.log("Error", error))
+
+            })
+            .catch((error) => console.log("Error", error))
+
+        navigate('/reviewtest');
+    }
+    const percentagePrices = [
+        "2%", "3%", "5%", "10%", "Another Amount"
+    ]
+
+    console.log("pricePercent", pricePercent);
+    const onConfirmByPercentage = () => {
+        console.log("percentIncDec", percentIncDec);
+        console.log("Hello", variantRes);
+        const updatedArray = variantRes && variantRes?.data.map(item => {
+            console.log("original productVariants from percentage", variantRes);
+
+            const variantPriceTemp = (item.variantPrice / 100) * pricePercent.replace('%', '')
+            const variantComparePriceTemp = (item.variantComparePrice / 100) * pricePercent.replace('%', '')
+            console.log("variantPriceTemp", variantPriceTemp);
+            console.log("calculated variant price temp", variantComparePriceTemp);
+            if (percentIncDec === "+") {
+
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) + variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) + variantComparePriceTemp)
+                // console.log("final number is:", final);
+                console.log("final number is temp2:", variantPriceTempFinal);
+                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
+            } else {
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) - variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) - variantComparePriceTemp)
+                // console.log("final number is:", final);
+                console.log("final number is temp2:", variantPriceTempFinal);
+                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
+
+            }
+            return item
+        })
+        console.log("Hello again", updatedArray);
+        setProductsVariants(updatedArray)
+        displayTestCasesArray.push({
+            testId: displayTestCasesArray.length + 1,
+            id: displayTestCasesArray.length + 1,
+
+            variants: updatedArray
+        })
+        handleCloseByPercentageModal()
+    }
+    useEffect(() => {
+        handleVariants()
+    }, [])
+
     return (
         <>
             <Card className='createTestStep2'>
@@ -307,13 +478,29 @@ const CreateTestStep2 = () => {
                         <Typography variant='h4'>Create Test</Typography>
                         <Typography variant='p'>1. Select your prices to test</Typography><br />
                         {/* <><ol><li> Select your prices to test</li></ol></> */}
+                        <span  >
+                            <div onClick={handleOpenControlSettings}>
 
+                                <p>variantPriceData:{variantPriceData}</p>
+                                <p>variantCompareAtPriceData:{variantCompareAtPriceData}</p><br />
+                            </div>
+                            {displayTestCasesArray && displayTestCasesArray.map((item) => (<>
+                                <div onClick={() => handleOpenEditTest(item.testId)}>
+
+                                    <p>variantPriceData:{item.variants[0].abVariantPrice}</p>
+                                    <p>variantCompareAtPriceData:{item.variants[0].abVariantComparePrice}</p><br />
+                                </div>
+                            </>))}
+                        </span><br />
+                        <Button onClick={handleOpenConfigureTest1}>
+                            Add Test
+                        </Button><br />
                         <Typography variant='p'> 2. Set your traffic split </Typography>
-                        <Slider className="trafficSlider" aria-label="Volume" value={value} onChange={handleChange} />
-                        <Typography variant='p' className='trafficSplitInfo'>10% of visiting traffic will be split evenly between your 3 tests. The remaining 90% will be sent to the control.</Typography>
+                        <Slider className="trafficSlider" min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
-                            {btns()}
-                            <Button onClick={handleOpenConfigureTest1} style={{ display: hideShowBtns === "flex" && "none" }} className='step2completed'>Review & Launch</Button>
+                            {/* {btns()} */}
+                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Review & Launch</Button>
 
                             {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
                         </div>
@@ -355,9 +542,6 @@ const CreateTestStep2 = () => {
                 </Box>
             </Modal>
 
-
-
-
             {/* set price manually modal  */}
             <Modal
                 open={openManualModal}
@@ -373,29 +557,16 @@ const CreateTestStep2 = () => {
                     <Typography id="modal-modal-description" variant='p'>
                         Set the price and compare at prices for each of your variants below
                     </Typography>
-                    {/* <div className='setManuallyBlock'>
-                        <Typography variant='p'>Gif here showing setting prices manually</Typography>
-                        <Button>Set Prices Manually</Button>
-                    </div>
-                    <div className='setAutoBlock'>
-                        <Typography variant='p'>Gif here showing setting prices by percentage</Typography>
-
-                        <div className='btn_adjust'>
-
-                            <p>Adjust by Percentage</p>
-                            <Button></Button>
-                        </div>
-
-                    </div> */}
 
                     <Card className='manualModalTable'>
                         <div style={{ height: '100%', width: '100%' }}>
                             <DataGrid
-                                rows={lala}
-                                columns={columnsLala}
+                                rows={productVariants}
+                                columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
                                 disableColumnMenu
+                                onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
                             />
                         </div>
                     </Card>
@@ -425,8 +596,8 @@ const CreateTestStep2 = () => {
                     <div className='byPercentageDirection'>
                         <Typography variant='h5'>Which direction do you want to adjust pricing? </Typography>
                         <div className='inc-dec-btn-group'>
-                            <Button>Decrease Price </Button>
-                            <div className='increasePriceBtn'>
+                            <Button onClick={() => setPercentIncDec('-')} >Decrease Price </Button>
+                            <div className='increasePriceBtn' onClick={() => setPercentIncDec('+')} >
 
                                 <p>Increase Price</p>
                                 <Button>Increase Price</Button>
@@ -437,26 +608,14 @@ const CreateTestStep2 = () => {
                             <Typography variant='h5'>By how much? </Typography>
                         </span>
                         <div className='percentageBtnGroup'>
-                            <div>
-                                <p>2%</p>
-                                <Button>2%</Button>
-                            </div>
-                            <div>
-                                <p>3%</p>
-                                <Button>3%</Button>
-                            </div>
-                            <div>
-                                <p>5%</p>
-                                <Button>5%</Button>
-                            </div>
-                            <div>
-                                <p>10%</p>
-                                <Button>10%</Button>
-                            </div>
-                            <div>
-                                <p>Other Amount</p>
-                                <Button>Other Amount</Button>
-                            </div>
+                            {percentagePrices.map(i => (<>
+
+                                <div>
+                                    <p>{i}</p>
+                                    <Button onClick={() => setPricePercent(i)} >{i}</Button>
+                                </div>
+                            </>))}
+
                             {/* <Button>3&</Button>
                             <Button>5%</Button>
                             <Button>10%</Button>
@@ -465,7 +624,7 @@ const CreateTestStep2 = () => {
                     </div>
 
                     <div className='confirmBtn'>
-                        <Button onClick={onConfirm}>Confirm</Button>
+                        <Button onClick={onConfirmByPercentage}>Confirm</Button>
                     </div>
                 </Box>
             </Modal>
@@ -491,11 +650,12 @@ const CreateTestStep2 = () => {
                     <div className='controlTable'>
                         <div style={{ height: '100%', }}>
                             <DataGrid
-                                rows={rows}
-                                columns={controlcolumns}
+                                rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
+                                columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
                                 disableColumnMenu
+                                onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
                             />
                         </div>
                     </div>
@@ -523,16 +683,48 @@ const CreateTestStep2 = () => {
                     <Typography id="modal-modal-description" variant='p'>
                         Here are the current settings for this product on your store, They cannot be changed within PricePerfect. The prices below will be used as the control for your testing
                     </Typography>
-                    <div className='controlTable'>
-                        <div style={{ height: '100%', }}>
+                    <div className='controlTable' style={{ overflowY: 'auto' }}>
+                        {/* <div style={{ height: '100%', }}>
                             <DataGrid
-                                rows={rows}
+                                rows={displayTestCasesArray && displayTestCasesArray}
                                 columns={controlcolumns}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
                                 disableColumnMenu
                             />
-                        </div>
+                        </div> */}
+
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Title</TableCell>
+                                    <TableCell>Price</TableCell>
+                                    <TableCell>Compare at Price</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {displayTestCasesArray && displayTestCasesArray.map((row) => (
+                                    <TableRow
+                                        key={row.testId}
+                                    >
+
+                                        <TableCell align="right">{row.variants.map((i) => (<>
+                                            <>{i.variantTitle}</><br />
+                                        </>))
+                                        }</TableCell>
+                                        <TableCell align="right">{row.variants.map((i) => (<>
+                                            <>{i.variantPrice}</><br />
+                                        </>))
+                                        }</TableCell>
+                                        <TableCell align="right">{row.variants.map((i) => (<>
+                                            <>{i.variantComparePrice}</><br />
+                                        </>))
+                                        }</TableCell>
+
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </div>
 
                     <div className='confirmBtn'>
