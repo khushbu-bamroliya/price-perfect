@@ -1,8 +1,9 @@
 const express = require("express");
 
-const { allProducts, getVariants } = require("../api/products.js");
+const { allProducts, getVariants, createDuplicateProduct } = require("../api/products.js");
 const { SignUpUserDetails } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
+const { createTestCaseApi } = require("../api/createTest")
 
 const router = express.Router();
 
@@ -16,5 +17,11 @@ router.post("/signupdetails", SignUpUserDetails)
 router.post("/get-variants", getVariants)
 
 router.get("/googleuser/:token", googleUserFound );
+
+// create duplicate product
+router.post("/createDuplicateProduct", createDuplicateProduct);
+
+//create test case api
+router.post("/createTestCase", createTestCaseApi)
 
 module.exports = router;

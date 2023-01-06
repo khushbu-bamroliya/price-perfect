@@ -3,7 +3,7 @@ import React from 'react'
 import statIcon1 from "./Images/Clock.png"
 import statIcon2 from "./Images/Activity.png"
 import statIcon3 from "./Images/Graph.png"
-import moreIcon from "./Images/more.png"
+import moreIcon from "./Images/more.svg"
 import arrowUp from "./Images/arrow-up.png"
 import arrowDown from "./Images/arrow-down 2.png"
 import TestAnalyticsIcon1 from "./Images/Frame 26.png"

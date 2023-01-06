@@ -17,14 +17,19 @@ import YourTestIcon from "./Images/task-square.png"
 import CreateTestIcon from "./Images/note-favorite.png"
 import avatarIcon from "./Images/image.png"
 import arrowDown from "./Images/arrow-down.png"
-import moreIcon from "./Images/more.png"
+import moreIcon from "./Images/more.svg"
 import { NavLink } from 'react-router-dom';
 
 
 
 const Navbar = () => {
     const pages = [
-          <div className='navIcons'> <NavLink to="/"><img src={homeIcon} alt="" /> <span>Home</span></NavLink> </div>,
+          <div className='navIcons'>
+                <NavLink to="/homeDashboard">
+                    <img src={homeIcon} alt="" />
+                    <span>Home</span>
+                </NavLink> 
+            </div>,
         <div className='navIcons'> <NavLink to="/yourtests"> <img src={YourTestIcon} alt="" /> <span>Your Tests</span></NavLink></div>,
           <div className='navIcons'><NavLink to="/createtest"><img src={CreateTestIcon} alt="" /> <span>Create Test</span></NavLink> </div>,
 
@@ -66,10 +71,10 @@ const Navbar = () => {
         <>
             <div className="navbar">
                 <AppBar position="static">
-                    <Container maxWidth="xl">
-                        <Toolbar disableGutters>
+                    <Container maxWidth="xl" sx={{padding:"21px 24px",}}>
+                        <Toolbar disableGutters sx={{minHeight:"unset !important",}}>
                             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-                            <img className='logo' src={logo} alt="" />
+                            {/* <img className='logo' src={logo} alt="" /> */}
                         
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -113,10 +118,8 @@ const Navbar = () => {
                             <Box className='NavCenterBtn' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: "center" } }}>
                                 {pages.map((page) => (
                                     <Button
-
                                         onClick={handleCloseNavMenu}
                                         sx={{ my: 2, color: 'white', display: 'block' }}
-                                        
                                     >
                                         {page}
                                     </Button>
@@ -124,9 +127,9 @@ const Navbar = () => {
                             </Box>
 
                             <Box sx={{ flexGrow: 0 }} className="navRightBlock">
-                                <Tooltip title="Open settings">
+                                <Tooltip title="Open settings" sx={{padding:0}}>
                                     <IconButton  className='NavRight' onClick={handleOpenUserMenu}>
-                                        <Avatar className='avaratIcon' alt="Remy Sharp" src={avatarIcon} />
+                                        <Avatar className='avaratIcon' alt="Remy Sharp" src={avatarIcon} sx={{width:"38px", height:"38px",}} />
                                         <Typography variant='p'>Alaxander</Typography>
                                         <img src={arrowDown} alt="" />
                                     </IconButton>
@@ -162,4 +165,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Navbar;

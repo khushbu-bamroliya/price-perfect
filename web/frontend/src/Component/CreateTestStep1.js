@@ -15,18 +15,11 @@ const CreateTestPage = () => {
     const [productsData, setProductsData] = useState();
     const [searchProduct, setSearchProduct] = useState("");
 
+    //Pagination
 
-    // const rows = [
-    //     { id: 1, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Jon', action: 35, price: "56 USD" },
-    //     { id: 2, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Cersei', action: 42, price: "56 USD" },
-    //     { id: 3, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Jaime', action: 45, price: "56 USD" },
-    //     { id: 4, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Arya', action: 16, price: "56 USD" },
-    //     { id: 5, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Daenerys', action: null, price: "56 USD" },
-    //     { id: 6, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: null, action: 150, price: "56 USD" },
-    //     { id: 7, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Ferrara', action: 44, price: "56 USD" },
-    //     { id: 8, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Rossini', action: 36, price: "56 USD" },
-    //     { id: 9, images: "#987546", Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', Product: 'Harvey', action: 65, price: "56 USD" },
-    // ];
+    const [nextPageCursor, setNextPageCursor] = useState(null);
+    const [prevPageCursor, setPrevPageCursor] = useState(null);
+
     const rows = []
     productsData &&
         productsData.products.forEach((item) => {
@@ -39,10 +32,12 @@ const CreateTestPage = () => {
             });
         });
 
-    const createTestStep1Completed = (id) => {
+    const createTestStep1Completed = (id, title) => {
         const productId = id.split('/').pop();
+        console.log("title link", title);
+        const productTitle = title.split('/').pop();
         console.log("productId: " + productId);
-        navigate(`/createtest2/${productId}`)
+        navigate(`/createtest2/${productId}/${productTitle}`)
     }
     const columns = [
         {
@@ -90,7 +85,7 @@ const CreateTestPage = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id)} />
+                        <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id, params.row.title)} />
                     </div>
                 )
             }
@@ -106,10 +101,16 @@ const CreateTestPage = () => {
         //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
         // },
     ];
-    const getAllProductsApi = async () => {
-        const sendBody = {
-            search: `${searchProduct}`
-        }
+
+    const sendBody = {
+        search: `${searchProduct}`,
+        hasNextPageCursor: nextPageCursor,
+        hasPreviousPageCursor:prevPageCursor
+    
+    }
+
+    const getAllProductsApi = async (sendBody) => {
+    
         const config = {
             method: "POST",
             credentials: "same-origin",
@@ -133,13 +134,21 @@ const CreateTestPage = () => {
 
     }
     // setAllProducts(products);
-    console.log("All products", productsData && productsData.products)
-
+    
+    const nextPageFunc = () => {
+        console.log("nextPageFunc");
+        setNextPageCursor(productsData && productsData.endCursorFromApi)
+        setPrevPageCursor(null)
+        // getAllProductsApi(sendBody);
+    }
+    const prevPageFunc = () => {
+        console.log("prevPageFunc");
+        setPrevPageCursor(productsData && productsData.startCursorFromApi)
+        setNextPageCursor(null)
+    }
     useEffect(() => {
-
-
-        getAllProductsApi()
-    }, [searchProduct])
+        getAllProductsApi(sendBody)
+    }, [searchProduct, nextPageCursor, prevPageCursor])
     return (
         <>
             <Card className='createTestPage'>
@@ -176,7 +185,8 @@ const CreateTestPage = () => {
                                 className='scrollProductDisplayTable'
                             />
                         </div>
-                        {/* <Pagination count={1} variant="outlined"  /> */}
+                        <Button onClick={prevPageFunc} disabled={productsData && productsData.hasPreviousPageFromApi === true? false : true}>&lt;</Button>
+                        <Button onClick={nextPageFunc} disabled={productsData && productsData.hasNextPageFromApi === true? false : true}>&gt;</Button>
                     </Card>
                 </div>
             </Card>

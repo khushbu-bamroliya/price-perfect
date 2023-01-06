@@ -5,37 +5,37 @@ const Product = require("../models/Product");
 const _ = require("lodash");
 
 const in_array = (array, id) => {
-    return array.some(function (item) {
-      return item.productId === id;
-    });
-  }
+  return array.some(function (item) {
+    return item.productId === id;
+  });
+}
 
-  const allProducts = async (req, res) => {
-    try {
-     
-      var access_token = "";
-      const shop = process.env.SHOP
-      if (shop) {
-  
-        const shopData = await Shop.findOne({ shop }).select(['access_token']);
-        access_token = shopData.access_token
-      }
-  
-      const {
-        search,
-        // endCursor,
-        hasNextPage,
-        hasPreviousPage,
-      } = req.body;
-      const endCursor = null
-      console.log(req.body, "search");
-      let query;
-     
-      async function recursion_products(endCursor) {
-        if (endCursor != "") {
-         
-          query = `query products{
-              products(first: 10, ${search ? ',query:"title:*' + search + '*"' : "" } ,  after: ${endCursor}){ 
+const allProducts = async (req, res) => {
+  try {
+
+    var access_token = "";
+    const shop = process.env.SHOP
+    if (shop) {
+
+      const shopData = await Shop.findOne({ shop }).select(['access_token']);
+      access_token = shopData.access_token
+    }
+
+    const {
+      search,
+      // endCursor,
+      hasNextPage,
+      hasPreviousPage,
+    } = req.body;
+    const endCursor = null
+    console.log(req.body, "search");
+    let query;
+
+    async function recursion_products(endCursor) {
+      if (endCursor != "") {
+
+        query = `query products{
+              products(first: 10, ${search ? ',query:"title:*' + search + '*"' : ""} ,  after: ${endCursor}){ 
                   edges { 
                     cursor 
                     node { 
@@ -62,11 +62,11 @@ const in_array = (array, id) => {
                 }
               }
           `;
-        } else {
-          console.log("first time and searching");
-          query = `query products{
+      } else {
+        console.log("first time and searching");
+        query = `query products{
                 products(first :10 ${search ? ',query:"title:*' + search + '*"' : ""
-            }){ 
+          }){ 
                   edges { 
                   cursor 
                   node { 
@@ -95,158 +95,158 @@ const in_array = (array, id) => {
                     } 
                 }
             `;
-        }
-  
-        // console.log("Query", query);
-  
-        let ans1 = await getWithPagination(
-          shop,
-          access_token,
-          query,
-          "products"
-        );
-        console.log("ans1", ans1);
-        let responseData = _.get(ans1.data, "products");
-        let temp_var = [];
-        let ans = ans1.products.edges;
-  
-        var products = [];
-        var endCursorFromApi = "";
-        var hasNextPageFromApi = "";
-        var hasPreviousPageFromApi = "";
-  
-        if (ans && Array.isArray(ans) && ans.length > 0) {
-          if (
-            ans1 &&
-            ans1.data &&
-            ans1.data.products &&
-            ans1.data.products.pageInfo
-          ) {
-            hasNextPageFromApi =
-              ans1.data.products.pageInfo &&
-              ans1.data.products.pageInfo.hasNextPage;
-            hasPreviousPageFromApi =
-              ans1.data.products.pageInfo &&
-              ans1.data.products.pageInfo.hasPreviousPage;
-          }
-  
-          var tempArr1 = [];
-  
-          for (let index = 0; index < ans.length; index++) {
-            if (index + 1 == ans.length) {
-              endCursorFromApi = ans[index].cursor;
-            }
-  
-            //create arr for Db
-            const node = ans[index] && ans[index].node && ans[index].node;
-  
-            if (node) {
-              if (node.id) {
-                tempArr1.push(node.id);
-              }
-  
-              products = [
-                ...products,
-                {
-                  id: node.id ? node.id : "",
-                  image:
-                    node.featuredImage && node.featuredImage.url
-                      ? node.featuredImage.url
-                      : "",
-                  title: node.title ? node.title : "",
-                  description:node.description ? node.description : "-",
-                  variant_title: "",
-                  price:
-                    node.variants &&
-                      node.variants.edges &&
-                      node.variants.edges[0] &&
-                      node.variants.edges[0].node.price
-                      ? node.variants.edges[0].node.price
-                      : "",
-                  cursor: ans[index].cursor,
-                  productId: node.id ? node.id : "",
-                  handle: node.handle
-                    ? `https://${shop}/products/${node.handle}`
-                    : "",
-                },
-              ];
-            }
-          }
-  
-          //match temp1 arr products with DB
-          const getDbProducts = await Product.find({
-            shop,
-            productId: { $in: tempArr1 },
-          });
-  
-          if (getDbProducts && getDbProducts.length > 0) {
-            var pro = products.filter(function (value) {
-              console.log(
-                "in_array(getDbProducts,value.id)",
-                in_array(getDbProducts, value.id)
-              );
-              return in_array(getDbProducts, value.id) == false;
-            });
-          } else {
-            var pro = products;
-          }
-  
-          if (pro.length == 0) {
-            //call again
-            return await recursion_products(endCursorFromApi);
-          } else {
-            var finalAns = {
-              products: pro,
-              endCursorFromApi,
-              hasNextPageFromApi,
-              hasPreviousPageFromApi,
-            };
-            return finalAns;
-          }
-        }
       }
-  
-      //call first time
-      const resProducts = await recursion_products(endCursor);
-      console.log("resProducts: " + resProducts);
-    
-         res.status(200).send(resProducts);
-        
-    
-    } catch (error) {
-      console.log("error", error);
-      return res.status(500).send("Internal server error!!");
-    }
-  };
 
-const getWithPagination = async (shop, token, query, name, value, cursor) => {
-    return new Promise(async (resolve, reject) => {
-      try {
+      // console.log("Query", query);
 
-        const response = await PostApiGraphql(shop, token, query);
-  
+      let ans1 = await getWithPagination(
+        shop,
+        access_token,
+        query,
+        "products"
+      );
+      console.log("ans1", ans1);
+      let responseData = _.get(ans1.data, "products");
+      let temp_var = [];
+      let ans = ans1.products.edges;
+
+      var products = [];
+      var endCursorFromApi = "";
+      var hasNextPageFromApi = "";
+      var hasPreviousPageFromApi = "";
+
+      if (ans && Array.isArray(ans) && ans.length > 0) {
         if (
-          !(
-            response &&
-            response.data &&
-            _.get(response.data, name) &&
-            _.get(response.data, name).edges
-          )
+          ans1 &&
+          ans1.data &&
+          ans1.data.products &&
+          ans1.data.products.pageInfo
         ) {
-          return reject(
-            "Not got Response data, pass name and edge properly in query!"
-          );
+          hasNextPageFromApi =
+            ans1.data.products.pageInfo &&
+            ans1.data.products.pageInfo.hasNextPage;
+          hasPreviousPageFromApi =
+            ans1.data.products.pageInfo &&
+            ans1.data.products.pageInfo.hasPreviousPage;
         }
-  
-        return resolve(response.data);
-      } catch (error) {
-        console.log("Error: ", error);
-        return reject(error);
+
+        var tempArr1 = [];
+
+        for (let index = 0; index < ans.length; index++) {
+          if (index + 1 == ans.length) {
+            endCursorFromApi = ans[index].cursor;
+          }
+
+          //create arr for Db
+          const node = ans[index] && ans[index].node && ans[index].node;
+
+          if (node) {
+            if (node.id) {
+              tempArr1.push(node.id);
+            }
+
+            products = [
+              ...products,
+              {
+                id: node.id ? node.id : "",
+                image:
+                  node.featuredImage && node.featuredImage.url
+                    ? node.featuredImage.url
+                    : "",
+                title: node.title ? node.title : "",
+                description: node.description ? node.description : "-",
+                variant_title: "",
+                price:
+                  node.variants &&
+                    node.variants.edges &&
+                    node.variants.edges[0] &&
+                    node.variants.edges[0].node.price
+                    ? node.variants.edges[0].node.price
+                    : "",
+                cursor: ans[index].cursor,
+                productId: node.id ? node.id : "",
+                handle: node.handle
+                  ? `https://${shop}/products/${node.handle}`
+                  : "",
+              },
+            ];
+          }
+        }
+
+        //match temp1 arr products with DB
+        const getDbProducts = await Product.find({
+          shop,
+          productId: { $in: tempArr1 },
+        });
+
+        if (getDbProducts && getDbProducts.length > 0) {
+          var pro = products.filter(function (value) {
+            console.log(
+              "in_array(getDbProducts,value.id)",
+              in_array(getDbProducts, value.id)
+            );
+            return in_array(getDbProducts, value.id) == false;
+          });
+        } else {
+          var pro = products;
+        }
+
+        if (pro.length == 0) {
+          //call again
+          return await recursion_products(endCursorFromApi);
+        } else {
+          var finalAns = {
+            products: pro,
+            endCursorFromApi,
+            hasNextPageFromApi,
+            hasPreviousPageFromApi,
+          };
+          return finalAns;
+        }
       }
-    });
+    }
+
+    //call first time
+    const resProducts = await recursion_products(endCursor);
+    console.log("resProducts: " + resProducts);
+
+    res.status(200).send(resProducts);
+
+
+  } catch (error) {
+    console.log("error", error);
+    return res.status(500).send("Internal server error!!");
+  }
 };
 
-const getVariants= async (req, res) => {
+const getWithPagination = async (shop, token, query, name, value, cursor) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+
+      const response = await PostApiGraphql(shop, token, query);
+
+      if (
+        !(
+          response &&
+          response.data &&
+          _.get(response.data, name) &&
+          _.get(response.data, name).edges
+        )
+      ) {
+        return reject(
+          "Not got Response data, pass name and edge properly in query!"
+        );
+      }
+
+      return resolve(response.data);
+    } catch (error) {
+      console.log("Error: ", error);
+      return reject(error);
+    }
+  });
+};
+
+const getVariants = async (req, res) => {
 
   console.log("==>1")
   // const { shop, access_token } = ctx.state;
@@ -283,15 +283,15 @@ const getVariants= async (req, res) => {
     var products = [];
 
     if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
-      for(let resProduct of ans1.data.product.variants.edges){
+      for (let resProduct of ans1.data.product.variants.edges) {
         const info = resProduct.node;
         products.push({
           // id: resProduct.id,
           // title: resProduct.title,
-          variant_id: info.id,
-          variant_title: info.title,
-          variant_price: info.price,
-          variant_compare_price:info.compareAtPrice
+          id: info.id,
+          variantTitle: info.title,
+          variantPrice: info.price,
+          variantComparePrice: info.compareAtPrice
         })
       }
 
@@ -302,13 +302,93 @@ const getVariants= async (req, res) => {
         success: true,
         status: 200
       })
-    } 
+    }
   } catch (error) {
     console.log("error", error);
   }
 };
 
+
+const createDuplicateProduct = async (req, res) => {
+  try {
+
+    console.log("1")
+
+    const { productId, productTitle  } = req.body;
+    console.log("==>2", req.body)
+
+    let shop =process.env.SHOP;
+    let access_token = "shpua_f65e9729d6855c1093470f3efc42fffb"
+
+    console.log("==>3")
+
+    let query = `mutation {
+      productDuplicate(productId: "gid://shopify/Product/${productId}",
+        newTitle: "${productTitle}",
+        includeImages: true,
+        newStatus: ACTIVE) {
+        newProduct {
+          id
+          title
+          tags
+          vendor
+          productType
+          variants(first: 10) {
+            nodes {
+              id
+              title
+            }
+          }
+        }
+        imageJob {
+          id
+          done
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+    `;
+
+    let NewRes = await PostApiGraphql(shop, access_token, query);
+
+    console.log("NewRes", NewRes.data.productDuplicate.newProduct)
+
+    const duplicateProductId = NewRes.data.productDuplicate.newProduct.id
+    const originalProductTags = NewRes.data.productDuplicate.newProduct.tags
+
+    originalProductTags.push('New-code')
+
+    console.log("originalProductTags", originalProductTags)
+
+    let addTagsInDuplicateProduct = `mutation {
+      productUpdate(input: {id: "${duplicateProductId}", tags: "${originalProductTags}"}) { 
+        product {
+          id
+          title
+          tags
+        }
+      }
+    }
+    `
+    let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
+
+    console.log("TagRes", TagRes)
+
+    res.status(200).json({
+      data: NewRes,
+      success: true,
+      status: 200
+    })
+
+  } catch (error) {
+    console.log("Error for duplicate product", error);
+  }
+}
+
 module.exports = {
-    allProducts,
-    getVariants
+  allProducts,
+  getVariants, createDuplicateProduct
 }
