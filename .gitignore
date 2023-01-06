@@ -22,7 +22,7 @@ config/tunnel.pid
 dist/
 
 # build output
-build/
+#build/
 
 # extensions build output
 extensions/*/build
