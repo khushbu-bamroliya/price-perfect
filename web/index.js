@@ -458,11 +458,11 @@ app.post("/abtest", async (req, res) => {
     }
     console.log('-----------------',abTestArr);
     return res.status(200).send(newArr);
-  }
-  else 
-  {
-    return res.status(200);
-  }
+    }
+    else 
+    {
+      return res.status(200).send({});
+    }
     
 });
 

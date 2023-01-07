@@ -254,8 +254,15 @@ const getVariants = async (req, res) => {
   const { productId } = req.body;
   console.log("==>2", req.body)
 
-  let shop = "rx-stage-store-2.myshopify.com";
-  let access_token = "shpua_f797062e7955012f8d1871efc1a8f938"
+  var shop = process.env.SHOP;
+  var access_token;
+
+  const shopData = await Shop.findOne({shop}).select(["access_token"]);
+
+  if(shopData && shopData.access_token)
+  {
+    access_token = shopData.access_token;
+  }
 
   console.log("==>3")
   try {
@@ -317,8 +324,15 @@ const createDuplicateProduct = async (req, res) => {
     const { productId, productTitle  } = req.body;
     console.log("==>2", req.body)
 
-    let shop =process.env.SHOP;
-    let access_token = "shpua_f65e9729d6855c1093470f3efc42fffb"
+    var shop = process.env.SHOP;
+    var access_token;
+
+    const shopData = await Shop.findOne({shop}).select(["access_token"]);
+
+    if(shopData && shopData.access_token)
+    {
+      access_token = shopData.access_token;
+    }
 
     console.log("==>3")
 
