@@ -418,8 +418,8 @@ app.post("/abtest", async (req, res) => {
     {
       for(const getTestCase of getTestCases)
       {
-        var testPer = Number(getTestCase.trafficSplit);
-        var controlPer = parseInt(100 - testPer); //66 ans
+        var testPer = parseInt(Number(getTestCase.trafficSplit) / Number(getTestCase.testCases.length));
+        var controlPer = parseInt(100 - Number(getTestCase.trafficSplit));
       
       //console.log(getTestCase.testCases[0].variants.length);
       
@@ -436,12 +436,13 @@ app.post("/abtest", async (req, res) => {
           var variantComparePrice = getTestCase.testCases[j].variants[i].variantComparePrice;
           var abVariantPrice = getTestCase.testCases[j].variants[i].abVariantPrice;
           var abVariantComparePrice = getTestCase.testCases[j].variants[i].abVariantComparePrice;
+          var duplicateVariantId = getTestCase.duplicateVariants[j].id.split('gid://shopify/ProductVariant/')[1];
           
           if(j == 0)
           {
-            cases.push({ test: "control", pct: controlPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:abVariantPrice, abVariantComparePrice:abVariantComparePrice});
+            cases.push({ test: "control", pct: controlPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:variantPrice, abVariantComparePrice:variantComparePrice, duplicateVariantId:duplicateVariantId});
           }
-          cases.push({ test: getTestCase.testCases[j].testId, pct: testPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:abVariantPrice, abVariantComparePrice:abVariantComparePrice });
+          cases.push({ test: getTestCase.testCases[j].testId, pct: testPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:abVariantPrice, abVariantComparePrice:abVariantComparePrice, duplicateVariantId:duplicateVariantId });
           
           
           

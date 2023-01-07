@@ -730,7 +730,7 @@ const CreateTestStep2 = () => {
                     <div className='confirmBtn'>
                         <Button onClick={onConfirmEdit}>Confirm</Button>
                     </div>
-                </Box>
+                </Box> 
             </Modal>
 
 
