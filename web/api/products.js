@@ -319,10 +319,12 @@ const getVariants = async (req, res) => {
 const createDuplicateProduct = async (req, res) => {
   try {
 
-    console.log("1")
+    //console.log("1")
 
-    const { productId, productTitle  } = req.body;
-    console.log("==>2", req.body)
+    const { productId, productTitle, objectToBeSent, handle } = req.body;
+    //console.log("==>2", req.body)
+
+
 
     var shop = process.env.SHOP;
     var access_token;
@@ -335,8 +337,14 @@ const createDuplicateProduct = async (req, res) => {
     }
 
     console.log("==>3")
+    const duplicateProductId = [];
+    let originalProductTags = [];
+    let duplicateVariantsIds = [];
 
-    let query = `mutation {
+
+    for (let i = 0; i < objectToBeSent?.testCases.length; i++) {
+
+      var query = `mutation {
       productDuplicate(productId: "gid://shopify/Product/${productId}",
         newTitle: "${productTitle}",
         includeImages: true,
@@ -347,7 +355,7 @@ const createDuplicateProduct = async (req, res) => {
           tags
           vendor
           productType
-          variants(first: 10) {
+          variants(first: 100) {
             nodes {
               id
               title
@@ -365,34 +373,221 @@ const createDuplicateProduct = async (req, res) => {
       }
     }
     `;
+      let NewRes = await PostApiGraphql(shop, access_token, query);
 
-    let NewRes = await PostApiGraphql(shop, access_token, query);
+      let newMakeArr = NewRes.data.productDuplicate.newProduct.variants.nodes;
+      let duplicateVariantId = NewRes.data.productDuplicate.newProduct.id;
+      // console.log(newMakeArr); return false;
+      // console.log("NewRes", NewRes.data.productDuplicate.newProduct.variants.nodes)
+      duplicateProductId.push(NewRes.data.productDuplicate.newProduct.id)
+      console.log("duplicateProductId", duplicateProductId);
 
-    console.log("NewRes", NewRes.data.productDuplicate.newProduct)
 
-    const duplicateProductId = NewRes.data.productDuplicate.newProduct.id
-    const originalProductTags = NewRes.data.productDuplicate.newProduct.tags
+      // newMakeArr.map((i) => {
+      //   duplicateVariantsIds.push(i.id)
+      // })
 
-    originalProductTags.push('New-code')
+      NewRes?.data?.productDuplicate?.newProduct?.tags
+      console.log("variants array loop i=", i);
+
+      //new code
+
+      for (j = 0; j < newMakeArr.length; j++) {
+
+        console.log("j =", j, objectToBeSent?.testCases[i]);
+        console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
+        var query_var = '';
+
+        console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
+
+        if (objectToBeSent?.testCases[i].variants[j].abVariantComparePrice != null) {
+
+          // query_var = `
+          // mutation {
+          //   productUpdate(input: {
+          //     id: "${duplicateVariantId}",
+          //     tags: "jash",
+          //     variants:[{
+          //       id:"${newMakeArr[j].id}",
+          //       price:"${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
+          //       compareAtPrice: "${objectToBeSent?.testCases[i].variants[j].abVariantComparePrice}"
+          //     }]
+          //   }) { 
+          //     product {
+          //       id
+          //       title
+          //       tags
+          //       variants(first:100) {
+          //         edges {
+          //           node {
+          //             id
+          //             title
+          //             price
+          //             compareAtPrice
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // }`
+
+          query_var = `
+        mutation productVariantUpdate {
+          productVariantUpdate(
+          input: {
+            id: "${newMakeArr[j].id}",
+            price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
+            compareAtPrice: "${objectToBeSent?.testCases[i].variants[j].abVariantComparePrice}"
+          
+        }
+        ) {
+            productVariant {
+              id
+              title
+              inventoryPolicy
+              inventoryQuantity
+              price
+              compareAtPrice
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+        `
+
+        }
+        else {
+          // query_var = `
+          // mutation {
+          //   productUpdate(input: {
+          //     id: "${duplicateVariantId}",
+          //     tags: "jash",
+          //     variants:[{
+          //       id:"${newMakeArr[j].id}",
+          //       price:"${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
+          //     }]
+          //   }) { 
+          //     product {
+          //       id
+          //       title
+          //       tags
+          //       variants(first:100) {
+          //         edges {
+          //           node {
+          //             id
+          //             title
+          //             price
+          //             compareAtPrice
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // }`
+
+          query_var = `
+        mutation productVariantUpdate {
+          productVariantUpdate(
+          input: {
+            id: "${newMakeArr[j].id}",
+            price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
+          
+        }
+        ) {
+            productVariant {
+              id
+              title
+              inventoryPolicy
+              inventoryQuantity
+              price
+              compareAtPrice
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+        `
+        }
+
+        console.log(query_var, 'query_var');
+
+        const NewPriceAtDuplicateProduct = await PostApiGraphql(shop, access_token, query_var);
+
+
+        console.log("NewPriceAtDuplicateProduct", NewPriceAtDuplicateProduct)
+
+
+
+      }
+
+      //new code
+
+
+    }
+
+
+    originalProductTags.push(`price_perfect_duplicate | ${handle}`)
 
     console.log("originalProductTags", originalProductTags)
 
-    let addTagsInDuplicateProduct = `mutation {
-      productUpdate(input: {id: "${duplicateProductId}", tags: "${originalProductTags}"}) { 
-        product {
-          id
-          title
-          tags
+    console.log("duplicateVariantsIds", duplicateVariantsIds)
+
+
+    duplicateProductId.map(async (i) => {
+
+      let addTagsInDuplicateProduct = `mutation {
+          productUpdate(input: {id: "${i}", tags: "${originalProductTags}"}) { 
+            product {
+              id
+              title
+              tags
+            }
+          }
+        }
+        `
+      let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
+      console.log("TagRes", TagRes)
+    })
+
+
+    duplicateProductId.map(async (i) => {
+      const addMetaFieldQuery = `mutation{
+  productUpdate(input : {
+    id: "${i}",
+    metafields: [
+      {
+        namespace: "seo",
+        key: "hidden",
+        value: "1",
+        type: "single_line_text_field",
+      }
+    ]
+  } ) {
+    product {
+      metafields(first: 100) {
+        edges {
+          node {
+            namespace
+            key
+            value
+          }
         }
       }
     }
-    `
-    let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
+  }
+}
+`
 
-    console.log("TagRes", TagRes)
+      let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
+      console.log("metafieldResponse", metafieldResponse);
+    })
 
     res.status(200).json({
-      data: NewRes,
+      data: {duplicateProductId, originalProductTags, TagRes},
       success: true,
       status: 200
     })
@@ -402,7 +597,9 @@ const createDuplicateProduct = async (req, res) => {
   }
 }
 
+
 module.exports = {
   allProducts,
   getVariants, createDuplicateProduct
 }
+

@@ -1,8 +1,9 @@
 <script>
+     var isDup = false;
       {% if(template.name == "product") %}
          {% if product.tags contains 'price_perfect_duplicate' %}     
             console.log("Duplicate product");
-            const isDup = true;
+            isDup = true;
            {% for tag in product.tags %}
               {% if tag contains 'handle|' %}
                   {% assign handle = tag | split: "|" | last %}
@@ -15,7 +16,8 @@
       {% endif %}
 
 
-
+{% if template.name == 'product' %}
+  
 function getTargetButtonFromEvent(target) {
     if (!target) {
       return null;
@@ -28,40 +30,96 @@ function getTargetButtonFromEvent(target) {
     }
   }
 const main = ()=>{
-    //let secondClick=false;
+    let secondClick=false;
     document.body.addEventListener(
         "click",
-        function (e) {
+        async function (e) {
           const add_to_cart_target = getTargetButtonFromEvent(e.target);
-          const closest_form = add_to_cart_target.closest("form");
+          const closest_form = add_to_cart_target?.closest("form");
           if (
             add_to_cart_target &&
             (add_to_cart_target.getAttribute("data-testid") == "Checkout-button" || add_to_cart_target.getAttribute("data-testid") != "Checkout-button") &&
             closest_form &&
             closest_form.getAttribute("action") == "/cart/add"
           ) {
-            //if (!secondClick) {
+            if (!secondClick) {
               e.stopPropagation();
               e.preventDefault();
-              alert("Clicked");
-              //secondClick=true;
-              console.log(isDup,'isDup1');
-              if(!isDup){
+              //alert("Clicked");
+              secondClick=true;
+              //console.log(isDup,'isDup1');
+              if (isDup == false) {
                 console.log(isDup,'isDup');
+                //e.target.click();
+
+                var pricePerfectJson = {};
+                
+                if(localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '')
+                {
+                   pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+                }
+
+                 var formElements = document.querySelector('[action="/cart/add"]');
+                    var qty = 1;
+                    var addCartVariant = ""; 
+                    for (var i = 0, element; element = formElements[i++];) {
+                        if (element.type === "text" && element.name === "quantity")
+                        {
+                            qty = element.value;
+                            addCartvariant = element.id;
+                        }
+                    }
+
+                console.log(ShopifyAnalytics?.meta?.selectedVariantId,pricePerfectJson);
+
+                if(pricePerfectJson[ShopifyAnalytics?.meta?.selectedVariantId]?.duplicateVariantId)
+                {
+
+                //Add to cart duplciate product
+
+                  // await document.querySelector('[name=id]').value = ShopifyAnalytics?.meta?.selectedVariantId;
+                  // e.target.click();
+                  
+                fetch('/cart/add.js', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                   'items': [{
+                    'id': pricePerfectJson[ShopifyAnalytics?.meta?.selectedVariantId]?.duplicateVariantId,
+                    'quantity': qty
+                    }]
+                  })
+                }).then(res => res.json())
+                  .then(res => console.log(res));
+                }
+                else {
                 e.target.click();
-              } else {
+                } 
+              
+              } //if not duplciate ends
+              else {
                 window.location.href="{{handle}}";
               }
-            // } else {
-            //   secondClick = false;
-            // }
+            }//second click condition
+            else {
+              secondClick = false;
+            }
           }
         },
         true
       );
+
 }
 
-main()
+main();
+{% endif %}
+
+        var pricePerfectMoney = "{{ 0000 | money }}";
+        //var pricePerfectMoneyWithCurrency = "{{ 0000 | money_with_currency }}";
+
       
 
       window.addEventListener('DOMContentLoaded', (event) => {
@@ -73,7 +131,7 @@ main()
         // });
         
           var priceDivs = document.querySelectorAll('.pricePerfectPrice');
-          var comaparePriceDivs = document.querySelectorAll('.pricePerfectComparePrice');
+          var comparePriceDivs = document.querySelectorAll('.pricePerfectComparePrice');
 
           var productsArr = [];
           var variantsArr = [];
@@ -88,7 +146,7 @@ main()
 
         console.log(productsArr,'productsArr');
 
-        fetch('http://localhost:8081/abtest', {
+        fetch('https://liam-price-perfect-app.appmixo.in/abtest', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -97,14 +155,13 @@ main()
           body: JSON.stringify({experiment:localStorage.getItem('abTest') ? localStorage.getItem('abTest') : "",productsArr:productsArr })
           }).then(res => res.json())
           .then(res => {
-            if(res)
-            {
+
             const resArr = res;
             console.log(res);
            
             var pricePerfectJson = {};
             var pricePerfectJsonNew = {};
-            
+
             if(localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '')
             {
                pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
@@ -116,15 +173,17 @@ main()
                 if(res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice)
                 {
                   // console.log(priceDivs[i]?.getAttribute('data-variant-id'),pricePerfectJson);
-                  console.log('test 1',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
-                  console.log('test 2',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+                  
+                 
                    if(pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))])
                    {
-                     priceDivs[i].innerHTML = pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice;
+                     console.log(i,'test 1',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+                     priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
                    }
                    else 
                    {
-                     priceDivs[i].innerHTML = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice;
+                      console.log(i,'test 2',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+                     priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
                      
                      pricePerfectJsonNew[Number(priceDivs[i].getAttribute('data-variant-id'))] = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))];
                      Object.assign(pricePerfectJson, pricePerfectJsonNew);
@@ -132,32 +191,34 @@ main()
                 }
                 else 
                 {
-                  priceDivs[i].innerHTML = priceDivs[i]?.getAttribute('data-price');
+                  priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',priceDivs[i]?.getAttribute('data-price'));
                 }
             }
-            for(var j=0; j < comaparePriceDivs.length; j++)
+            for(var j=0; j < comparePriceDivs.length; j++)
               {
-                if(res[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice)
+                if(res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice)
                 {
-                  if(pricePerfectJson[Number(comaparePriceDivs[i]?.getAttribute('data-variant-id'))])
+                  if(pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))])
                   {
-                    comaparePriceDivs[j].innerHTML = pricePerfectJson[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice;
+                    console.log('compare test 1',pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
+                    comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
                   }
                   else 
                   {
-                    comaparePriceDivs[j].innerHTML = res[Number(comaparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice;
+                    console.log('compare test 2',res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
+                    comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
                   }
                 }
                 else 
                 {
-                   comaparePriceDivs[j].innerHTML = comaparePriceDivs[j]?.getAttribute('data-compare-price');
+                   comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',comparePriceDivs[j]?.getAttribute('data-compare-price'));
                 }
               }
 
+            console.log('set local after for loop',JSON.stringify(pricePerfectJson));
             localStorage.setItem("pricePerfectJson", JSON.stringify(pricePerfectJson));
+            console.log('get localstorage 2',JSON.parse(localStorage.getItem('pricePerfectJson')));
 
-        
-            }
           })
           .catch(err => console.error(err));
       });

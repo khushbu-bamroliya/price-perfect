@@ -29,16 +29,19 @@ const CreateTestPage = () => {
                 title: item.title,
                 description: item.description && item.description,
                 price: item.price,
+                handle:item.handle
             });
         });
 
-    const createTestStep1Completed = (id, title) => {
-        const productId = id.split('/').pop();
-        console.log("title link", title);
-        const productTitle = title.split('/').pop();
-        console.log("productId: " + productId);
-        navigate(`/createtest2/${productId}/${productTitle}`)
-    }
+        const createTestStep1Completed = (id, title, handle) => {
+            const productId = id.split('/').pop();
+            console.log("title link", title);
+            const productHandle = handle.split('/').pop();
+            console.log("title link", handle);
+            const productTitle = title.split('/').pop();
+            console.log("productId: " + productId);
+            navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`)
+        }
     const columns = [
         {
             field: 'images',
@@ -85,7 +88,7 @@ const CreateTestPage = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id, params.row.title)} />
+                         <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id, params.row.title,  params.row.handle)} />
                     </div>
                 )
             }

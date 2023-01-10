@@ -29,7 +29,7 @@ function App() {
         <Route element={<ForgotPassword />} path='/forgot-password'/>
         <Route element={<HomeDashboard /> } path='/homeDashboard' />
         <Route element={<CreateTestStep1/>} path="/createtest"/>
-        <Route element={<CreateTestStep2/>} path="/createtest2/:id/:title"/>
+        <Route element={<CreateTestStep2/>} path="/createtest2/:handle/:id/:title"/>
         <Route element={<YourTests/>} path="/yourtests"/>
         <Route element={<ReviewTestPage/>} path="/reviewtest"/>
         <Route element={<YourProfile/>} path="/profile"/>

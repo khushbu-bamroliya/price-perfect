@@ -7,8 +7,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
+import ArrowIcon from "./Images/arrow.png";
+import AddIcon from "./Images/add-square.png";
 
-const CreateTestStep2 = () => {
+const CreateTestStep2 = ({ objectSent }) => {
     const navigate = useNavigate()
     const style = {
         position: 'absolute',
@@ -24,7 +26,8 @@ const CreateTestStep2 = () => {
     };
     // var variantPriceData;
     // var variantCompareAtPriceData;
-    const { id, title } = useParams();
+    const { id, title, handle } = useParams();
+    
     var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
@@ -35,6 +38,7 @@ const CreateTestStep2 = () => {
     const [productVariants, setProductsVariants] = useState([])
     const [testIdState, setTestIdState] = useState();
     const [displayFinalVariantsArray, setDisplayFinalVariantsArray] = useState([]);
+
 
 
     const [pricePercent, setPricePercent] = useState("11");
@@ -50,7 +54,11 @@ const CreateTestStep2 = () => {
     console.log("range slider value:", value)
     // configs of configure test 
     const [openConfigureTest1, setOpenConfigureTest1] = useState(false);
-    const handleOpenConfigureTest1 = () => setOpenConfigureTest1(true);
+    const handleOpenConfigureTest1 = () => {
+
+        setOpenConfigureTest1(true)
+
+    };
     const handleCloseConfigureTest1 = () => setOpenConfigureTest1(false);
 
     // configs of clicking manual btn
@@ -72,9 +80,22 @@ const CreateTestStep2 = () => {
         setOpenConfigureTest1(false)
         const singleTest = displayTestCasesArray.find(item => item.testId === testId)
 
+        console.log("setTestIdState", testIdState);
+    }
+    const handleCloseEditTest = () => {
+        if (displayTestCasesArray) {
+            console.log("Change test");
+            displayTestCasesArray[testIdState - 1] = {
+                id: testIdState,
+                testId: testIdState,
+                variants: productVariants
+            }
+        }
+        // displayTestCasesArray && displayTestCasesArray[testIdState - 1].variants = productVariants
+        setOpenEditTest(false)
+
+
     };
-    console.log("setTestIdState", testIdState);
-    const handleCloseEditTest = () => setOpenEditTest(false);
 
 
     // configs of edit test button
@@ -129,6 +150,7 @@ const CreateTestStep2 = () => {
         trafficSplit: value / totalTests,
         testCases: displayTestCasesArray,
         "productId": `gid://shopify/Product/${id}`,
+        
     }
 
     console.log("Object to be sent", objectToBeSent);
@@ -195,7 +217,7 @@ const CreateTestStep2 = () => {
             .then(async (res) => {
 
                 apiRes = await res.json()
-                console.log(apiRes.data);
+                console.log("apiRes.data", apiRes.data);
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
@@ -367,12 +389,12 @@ const CreateTestStep2 = () => {
 
     console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
-
-
-
-        let duplicateProdictData = {
+        let duplicateProductData = {
             'productId': id,
-            'productTitle': title
+            'productTitle': title,
+            handle:handle,
+            objectToBeSent,
+        
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {
@@ -381,24 +403,25 @@ const CreateTestStep2 = () => {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(duplicateProdictData)
+            body: JSON.stringify(duplicateProductData)
         })
             .then(async (res) => {
                 // console.log("Duplicate product id: " + res.data.productDuplicate.newProduct.id);
-            
+
                 const apiRes = await res.json()
-                console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
-                const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
-                const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node ||  apiRes.data.data.productDuplicate.newProduct.variants.nodes
+                console.log("apiRes: " + JSON.stringify(apiRes));
+                // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
+                // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
+                // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
                 let data = {
                     "trafficSplit": objectToBeSent.trafficSplit,
                     "testCases": objectToBeSent.testCases,
                     "productId": objectToBeSent.productId,
-                    duplicateProductId,
-                    duplicateVariants
+                    // duplicateProductId,
+                    // duplicateVariants
 
                 }
-
+            
                 fetch(getApiUrl + '/api/createTestCase', {
                     method: 'POST',
                     headers: {
@@ -409,10 +432,10 @@ const CreateTestStep2 = () => {
                 })
                     .then(async (res2) => {
 
-                        const apiRes = await res2.json()
-                        console.log("Data sent:", apiRes);
-
-
+                        const apiRes2 = await res2.json()
+                        console.log("Data sent:", apiRes2);
+                        objectSent(apiRes)
+                        navigate(`/reviewtest`);
 
 
                     })
@@ -421,7 +444,7 @@ const CreateTestStep2 = () => {
             })
             .catch((error) => console.log("Error", error))
 
-        navigate('/reviewtest');
+        
     }
     const percentagePrices = [
         "2%", "3%", "5%", "10%", "Another Amount"
@@ -468,17 +491,18 @@ const CreateTestStep2 = () => {
     useEffect(() => {
         handleVariants()
     }, [])
-
+    const data = "Hello data passed"
     return (
         <>
             <Card className='createTestStep2'>
                 <div className='createTestStep2-main'>
                     <Navbar />
+                    {/* <Button onClick={() => objectSent(objectToBeSent)}>Test</Button> */}
                     <Card className='createTestStep2Block'>
                         <Typography variant='h4'>Create Test</Typography>
                         <Typography variant='p'>1. Select your prices to test</Typography><br />
                         {/* <><ol><li> Select your prices to test</li></ol></> */}
-                        <span  >
+                        {/* <span  >
                             <div onClick={handleOpenControlSettings}>
 
                                 <p>variantPriceData:{variantPriceData}</p>
@@ -494,9 +518,56 @@ const CreateTestStep2 = () => {
                         </span><br />
                         <Button onClick={handleOpenConfigureTest1}>
                             Add Test
-                        </Button><br />
+                        </Button><br /> */}
+
+
+                        <div className='add-test-wrapper'>
+                            <div className='control-wrapper' onClick={handleOpenControlSettings}>
+                                <div className='control-box'>
+                                    <div className='icon-wrapper'>
+                                        <img src={ArrowIcon} alt="" />
+                                    </div>
+                                    <span className='box-title'>Control</span>
+                                </div>
+                                <span className='box-price'>{variantCompareAtPriceData && <>${variantCompareAtPriceData}</>}</span>
+                                <span className='box-prices'>${variantPriceData}</span>
+                            </div>
+                            {displayTestCasesArray && displayTestCasesArray.map((item) => (<>
+
+                                <div className='control-wrapper' onClick={() => handleOpenEditTest(item.testId)}>
+                                    <div className='control-box'>
+                                        <div className='icon-wrapper'>
+                                            <img src={ArrowIcon} alt="" />
+                                        </div>
+                                        <span className='box-title'>Test {item.testId}</span>
+                                    </div>
+                                    <span className='box-price'> {variantCompareAtPriceData && <>${variantCompareAtPriceData}</>} - ${item.variants[0].abVariantComparePrice}</span>
+                                    <span className='box-prices'>${variantPriceData} - ${item.variants[0].abVariantPrice}</span>
+                                </div>
+                            </>))}
+
+                            <div className='add-wrapper' onClick={handleOpenConfigureTest1} style={{ display: displayTestCasesArray && displayTestCasesArray.length === 10 ? 'none' : 'flex' }} >
+                                <div className='add-icon'>
+                                    <img src={AddIcon} alt="" />
+                                </div>
+                                <span className='add-test'>Add Test</span>
+                            </div>
+                            {/* <div className='add-wrapper'>
+                                    <div className='add-icon'>
+                                        <img src={AddIcon} alt="" />
+                                    </div>
+                                    <span className='add-test'>Add Test</span>
+                                </div>
+                                <div className='add-wrapper'>
+                                    <div className='add-icon'>
+                                        <img src={AddIcon} alt="" />
+                                    </div>
+                                    <span className='add-test'>Add Test</span>
+                                </div> */}
+                        </div>
+
                         <Typography variant='p'> 2. Set your traffic split </Typography>
-                        <Slider className="trafficSlider" min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Slider className="trafficSlider" valueLabelDisplay='auto' min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
@@ -730,7 +801,7 @@ const CreateTestStep2 = () => {
                     <div className='confirmBtn'>
                         <Button onClick={onConfirmEdit}>Confirm</Button>
                     </div>
-                </Box> 
+                </Box>
             </Modal>
 
 

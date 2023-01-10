@@ -440,7 +440,7 @@ app.post("/abtest", async (req, res) => {
           
           if(j == 0)
           {
-            cases.push({ test: "control", pct: controlPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:variantPrice, abVariantComparePrice:variantComparePrice, duplicateVariantId:duplicateVariantId});
+            cases.push({ test: "control", pct: controlPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:variantPrice, abVariantComparePrice:variantComparePrice, duplicateVariantId:varId.split('gid://shopify/ProductVariant/')[1]});
           }
           cases.push({ test: getTestCase.testCases[j].testId, pct: testPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:abVariantPrice, abVariantComparePrice:abVariantComparePrice, duplicateVariantId:duplicateVariantId });
           
