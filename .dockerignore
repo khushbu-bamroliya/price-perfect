@@ -1,6 +1,6 @@
 web/node_modules
 web/frontend/node_modules
-#web/frontend/build
+web/frontend/build
 extensions/
 extensions/node_modules
 package.json

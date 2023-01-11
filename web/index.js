@@ -1,13 +1,14 @@
 //env config
-require("dotenv").config();
+require('dotenv').config()
 
-const express = require("express");
+const express = require('express');
 const app = express();
-const cors = require("cors");
+const cors = require('cors');
 app.use(cors());
-const path = require("path");
+const path = require('path');
 const PORT = process.env.PORT || 8081;
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser')
+
 
 //shopify configs
 const validateHmac = require("./middlewares/validateHmac");
@@ -16,49 +17,33 @@ const AuthHelper = require("./helpers/index");
 //shop model
 const Shop = require("./models/Shop");
 
-//creat test model
-const createTestModal = require("./models/createTestModal");
-
 //ab test config
-const abtest = require("easy-abtest");
+const abtest = require('easy-abtest');
 
 //Google auth configs
-const expressSession = require("express-session");
-app.use(
-  expressSession({
-    secret: "thisismysecretexpresssessionsodontlook",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-const passport = require("passport");
-const initializingPassport = require("./middlewares/passport");
-initializingPassport(passport);
-// app.use(express.urlencoded({extended: true}));
-// app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// const expressSession = require("express-session");
+ 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-//jwt
-const { encodeJWT, decodeJWT, abTest } = require("./controllers/utils");
+// app.use(
+//   expressSession({
+//     secret: "thisismysecretexpresssessionsodontlook",
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
 //db connection
 const { connectDB } = require("./db/connect");
 
 //shopify apis
-const {
-  GetApiRest,
-  PostApiRest,
-  getAccessToken,
-} = require("./controllers/shopify_api");
+const { GetApiRest, PostApiRest, getAccessToken } = require('./controllers/shopify_api');
 
 //router config
 const router = express.Router();
 const ApiRoutes = require("./routers/router.js");
-const { createTestCaseApi } = require("./api/createTest");
+
 
 //webhook apis
 // app.post(
@@ -128,30 +113,33 @@ const { createTestCaseApi } = require("./api/createTest");
 app.use(express.json());
 
 //shopify auth apis
-app.get("/auth", validateHmac, async (req, res) => {
+app.get('/auth', validateHmac, async (req, res) => {
   // Shop Name
-  const { shop } = req.query;
+  const {shop} = req.query;
   if (shop) {
+
     console.log("shop ->", shop);
-    //const state = nonce();
+     //const state = nonce();
 
-    const authUrl = AuthHelper.authUrl({
-      shop,
-      //state,
-      REDIRECT_URL: AuthHelper.generateRedirectUrl(req.baseUrl),
-      SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
-    });
+      const authUrl = AuthHelper.authUrl({
+        shop,
+        //state,
+        REDIRECT_URL: AuthHelper.generateRedirectUrl(
+          req.baseUrl
+        ),
+        SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
+      });
 
-    console.log("authUrl :- ", authUrl);
+      console.log("authUrl :- ", authUrl)
 
-    //res.cookie('state', shopState);
-    return res.redirect(authUrl);
+      //res.cookie('state', shopState);
+      return res.redirect(authUrl);
   } else {
-    return res.status(400).send('Missing "Shop Name" parameter!!');
+      return res.status(400).send('Missing "Shop Name" parameter!!');
   }
 });
 
-app.get("/auth/callback", validateHmac, async (req, res) => {
+app.get('/auth/callback', validateHmac, async (req, res) => {
   const { shop, host, code, shopState } = req.query;
 
   // console.log("req.query", req.query);
@@ -163,131 +151,117 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
   // }
 
   if (shop && host && code) {
+
+  try {
+
+    const checkRes = await getAccessToken(
+      process.env.SHOPIFY_API_KEY,
+      process.env.SHOPIFY_API_SECRET,
+      shop,
+      code
+    );
+
+    console.log("checkRes", checkRes);
+
+    const { access_token } = checkRes;
+
+    // const restClient = shopifyRestApi.getRestClient(shop, access_token);
+    // console.log("restClient", restClient);
+
+    // const responseShopData = await restClient.get("shop.json");
+
+
+
+    // console.log('responseShopData?.data',responseShopData?.data);
+
     try {
-      const checkRes = await getAccessToken(
-        process.env.SHOPIFY_API_KEY,
-        process.env.SHOPIFY_API_SECRET,
-        shop,
-        code
+      const responseShopData = await GetApiRest(`https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/shop.json`,access_token);
+
+      const responseShop = responseShopData && responseShopData?.shop;
+
+      console.log('responseShop',responseShop);
+
+      await Shop.findOneAndUpdate(
+        {
+          shop: shop,
+        },
+        {
+          shop: shop,
+          access_token: access_token,
+          phone: responseShop.phone,
+          name: responseShop.name,
+          country_code: responseShop.country_code,
+          country_name: responseShop.country_name,
+          access_scope: process.env.SCOPES.split(","),
+          timestamp: new Date().getTime(),
+          domain: responseShop.domain,
+          email: responseShop.email,
+          customer_email: responseShop.customer_email,
+          money_format: responseShop.money_format,
+          app_status: "installed",
+          currency: responseShop.currency,
+          timezone: responseShop.iana_timezone,
+          address1: responseShop.address1,
+          address2: responseShop.address2,
+          zip: responseShop.zip,
+          city: responseShop.city,
+          shop_owner: responseShop.shop_owner,
+          shop_plan:
+            responseShop && responseShop.plan_name && responseShop.plan_name,
+        },
+        {
+          upsert: true,
+        }
       );
 
-      console.log("checkRes", checkRes);
+      console.log("Shop Data inserted")
+      //insert shop data end
+    } catch (error) {
+      console.log("Shop insert error", error);
+    }
 
-      const { access_token } = checkRes;
-
-      // const restClient = shopifyRestApi.getRestClient(shop, access_token);
-      // console.log("restClient", restClient);
-
-      // const responseShopData = await restClient.get("shop.json");
-
-      // console.log('responseShopData?.data',responseShopData?.data);
-
-      try {
-        const responseShopData = await GetApiRest(
-          `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/shop.json`,
-          access_token
-        );
-
-        const responseShop = responseShopData && responseShopData?.shop;
-
-        console.log("responseShop", responseShop);
-
-        await Shop.findOneAndUpdate(
-          {
-            shop: shop,
-          },
-          {
-            shop: shop,
-            access_token: access_token,
-            phone: responseShop.phone,
-            name: responseShop.name,
-            country_code: responseShop.country_code,
-            country_name: responseShop.country_name,
-            access_scope: process.env.SCOPES.split(","),
-            timestamp: new Date().getTime(),
-            domain: responseShop.domain,
-            email: responseShop.email,
-            customer_email: responseShop.customer_email,
-            money_format: responseShop.money_format,
-            app_status: "installed",
-            currency: responseShop.currency,
-            timezone: responseShop.iana_timezone,
-            address1: responseShop.address1,
-            address2: responseShop.address2,
-            zip: responseShop.zip,
-            city: responseShop.city,
-            shop_owner: responseShop.shop_owner,
-            shop_plan:
-              responseShop && responseShop.plan_name && responseShop.plan_name,
-          },
-          {
-            upsert: true,
-          }
-        );
-
-        console.log("Shop Data inserted");
-        //insert shop data end
-      } catch (error) {
-        console.log("Shop insert error", error);
-      }
-
-      const registerShopWebhook = await PostApiRest(
-        `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
-        access_token,
-        {
+    const registerShopWebhook =  await PostApiRest(`https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`, access_token, {
           webhook: {
             topic: "shop/update",
             address: `${process.env.HOST}/hook/webhook`,
             format: "json",
           },
-        }
-      );
+    })
 
-      console.log(registerShopWebhook, "registerShopWebhook");
+    console.log(registerShopWebhook,'registerShopWebhook');
 
-      if (registerShopWebhook) {
-        console.log("register Shop webhook successfully registered...");
-      }
+    if(registerShopWebhook)
+    {
+      console.log("register Shop webhook successfully registered...")
+    }
 
-      const registerAppUninstallWebhook = await PostApiRest(
-        `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
-        access_token,
-        {
+    const registerAppUninstallWebhook =  await PostApiRest(`https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`, access_token, {
           webhook: {
             topic: "app/uninstalled",
             address: `${process.env.HOST}/hook/webhook`,
             format: "json",
           },
-        }
-      );
+    })
 
-      console.log(registerAppUninstallWebhook, "registerAppUninstallWebhook");
+    console.log(registerAppUninstallWebhook,'registerAppUninstallWebhook');
 
-      if (registerAppUninstallWebhook) {
-        console.log("Register app uninstall webhook successflly...");
-      }
-    } catch (error) {
-      console.log("Error trying to get access token", error);
+    if(registerAppUninstallWebhook)
+    {
+      console.log("Register app uninstall webhook successflly...")
     }
 
-    console.log(
-      "umi1->",
-      AuthHelper.embedAppUrl({
-        host,
-        SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
-        shop,
-      })
-    );
+  } catch (error) {
+    console.log("Error trying to get access token", error);
+  }
 
-    res.redirect(
-      AuthHelper.embedAppUrl({
-        host,
-        SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
-        shop,
-      })
-    );
+  console.log('umi1->',AuthHelper.embedAppUrl({ host, SHOPIFY_API_KEY:process.env.SHOPIFY_API_KEY, shop }));
+
+  res.redirect(
+    AuthHelper.embedAppUrl({ host, SHOPIFY_API_KEY:process.env.SHOPIFY_API_KEY, shop })
+  );
+
   } else {
-    res.status(400).send("Required parameters missing");
+      res.status(400).send('Required parameters missing');
   }
 });
 
@@ -300,208 +274,80 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
 //   }
 // }
 
-app.get("/google/auth/failed", (req, res) => {
-  res.send("Login Failed");
-});
 
-app.get(
-  "/google/auth",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-  })
-);
+  //ab test
+  let options = {
+    enabled: true,
+    name: 'experiment-ID-here',
+    buckets: [
+      {variant: 0, weight: 0.33},
+      {variant: 1, weight: 0.33},
+      {variant: 2, weight: 0.33}
+    ]
+  }
 
-app.get("/google/callback", (req, res) => {
-  passport.authenticate("google", async function (err, user, info) {
-    if (err) {
-      console.log("hi1", err);
-    }
-    if (!user) {
-      return res.redirect("/google/auth/failed");
-    }
-    if (user) {
-      const token = await encodeJWT(user.googleId);
-      res.cookie("token", token);
-      console.log("here1");
-      res.redirect("/homeDashboard");
-      return res;
-    }
-  })(req, res);
-  (req, res) => {
-    res.redirect("/google/auth/failed");
-  };
-});
-
-app.get("/google/logout", (req, res) => {
-  req.logout(() => {});
-  res.send(req.user);
-});
-
-//ab test
-let options = {
-  enabled: true,
-  name: "experiment-ID-here",
-  buckets: [
-    { variant: 0, weight: 0.33 },
-    { variant: 1, weight: 0.33 },
-    { variant: 2, weight: 0.33 },
-  ],
-};
-
-// app.use(abtest(options));
+  // app.use(abtest(options));
 
 // Have Node serve the files for our built React app
 //app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
 // Handle GET requests to /api route
-app.use("/api", ApiRoutes);
+app.use('/api', ApiRoutes)
 
-app.get("/api", abtest(options), (req, res) => {
-  console.log(req.session.test.bucket, "req.session.test.bucket");
+app.get("/api", abtest(options),(req, res) => {
+
+
+console.log(req.session.test.bucket,'req.session.test.bucket');
 
   if (req.session.test.bucket == 0) {
-    res.json({ message: "Hello from server 0" });
+    res.json({ message: "Hello from server 0" });	
   } else if (req.session.test.bucket == 1) {
-    res.json({ message: "Hello from server 1" });
+    res.json({ message: "Hello from server 1" });	
   } else if (req.session.test.bucket == 2) {
-    res.json({ message: "Hello from server 2" });
-  }
-});
-
-app.post("/abtest", async (req, res) => {
-  console.log("/abtest route");
-
-  //{"experiment":"",productsArr:"8055897555240","variantsArr":["44247576117544","44247576117544"]}
-
-  const { variantsArr, productsArr, experiment } = req.body;
-
-  var getTestCases = await createTestModal.find({productId:{$in:productsArr}});
-
-  console.log(getTestCases);
-    
-    // var getTestCases = {
-    //     trafficSplit: 34,
-    //     productId: "gid://shopify/Product/8055898374440",
-    //     testCases: [
-    //       {
-    //         testId: 1,
-    //         variants: [
-    //           {
-    //             id: "gid://shopify/ProductVariant/44247576117544",
-    //             variantTitle: "Default Title",
-    //             variantComparePrice: "1",
-    //             variantPrice: "59.33",
-    //             abVariantComparePrice: "11",
-    //             abVariantPrice: "1",
-    //             duplcateVarId:"",
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         testId: 2,
-    //         variants: [
-    //           {
-    //             id: "gid://shopify/ProductVariant/44247576117544",
-    //             variantTitle: "Default Title",
-    //             variantComparePrice: "4",
-    //             variantPrice: "59.33",
-    //             abVariantComparePrice: "22",
-    //             abVariantPrice: "2",
-    //             duplcateVarId:"",
-    //           },
-    //         ],
-    //       }
-    //     ],
-    //   };
-
-    if(getTestCases && getTestCases.length > 0)
-    {
-      for(const getTestCase of getTestCases)
-      {
-        var testPer = parseInt(Number(getTestCase.trafficSplit) / Number(getTestCase.testCases.length));
-        var controlPer = parseInt(100 - Number(getTestCase.trafficSplit));
-      
-      //console.log(getTestCase.testCases[0].variants.length);
-      
-      //var newArr = [];
-      var newArr = {};
-      
-      for(var i=0; i<getTestCase.testCases[0].variants.length;i++)
-      {
-        var cases = [];
-        for(var j=0; j<getTestCase.testCases.length;j++)
-        {
-          var varId = getTestCase.testCases[j].variants[i].id;
-          var variantPrice = getTestCase.testCases[j].variants[i].variantPrice;
-          var variantComparePrice = getTestCase.testCases[j].variants[i].variantComparePrice;
-          var abVariantPrice = getTestCase.testCases[j].variants[i].abVariantPrice;
-          var abVariantComparePrice = getTestCase.testCases[j].variants[i].abVariantComparePrice;
-          var duplicateVariantId = getTestCase.duplicateVariants[j].id.split('gid://shopify/ProductVariant/')[1];
-          
-          if(j == 0)
-          {
-            cases.push({ test: "control", pct: controlPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:variantPrice, abVariantComparePrice:variantComparePrice, duplicateVariantId:varId.split('gid://shopify/ProductVariant/')[1]});
-          }
-          cases.push({ test: getTestCase.testCases[j].testId, pct: testPer, varId:varId, variantPrice:variantPrice, variantComparePrice:variantComparePrice, abVariantPrice:abVariantPrice, abVariantComparePrice:abVariantComparePrice, duplicateVariantId:duplicateVariantId });
-          
-          
-          
-          //console.log('i=',i,'j=',j);
-          //console.log('getTestCase',getTestCase.testCases[j].variants[i].variantComparePrice);
-        }
-        console.log(varId,'is done now');
-        console.log('cases',cases);
-        var abTestArr = await abTest(cases);
-        // newArr.push({[varId.split('gid://shopify/ProductVariant/')[1]]:{abTestArr}});
-        newArr[varId.split('gid://shopify/ProductVariant/')[1]] = abTestArr;
-      }
-    }
-    console.log('-----------------',abTestArr);
-    return res.status(200).send(newArr);
-    }
-    else 
-    {
-      return res.status(200).send({});
-    }
-    
+    res.json({ message: "Hello from server 2" });	
+  } 
 });
 
 // app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
-app.get("/", async (req, res) => {
-  console.log(req.query, "/ route");
-  const { shop, hmac, host, timestamp } = req.query;
+app.get('/', async (req, res) => {
+  console.log(req.query,'/ route');
+  const {shop, hmac, host, timestamp} = req.query;
 
-  if (shop) {
-    const shopGet = await Shop.findOne({ shop }).select(["shop", "app_status"]);
-    if (shopGet && shopGet.app_status && shopGet.app_status == "installed") {
+  if(shop)
+  {
+    const shopGet = await Shop.findOne({ shop }).select(["shop","app_status"]);
+    if(shopGet && shopGet.app_status && shopGet.app_status == "installed")
+    {
       console.log("embedurl");
       // res.redirect(
       //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
       // );
-
+        
       // Create a buffer from the string
       // let bufferObj = Buffer.from(host, "base64");
-
+      
       // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
-
+  
       // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
-      res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
-    } else {
-      res.redirect(
-        `/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`
-      );
+      res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
     }
-  } else {
-    res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+    else 
+    {
+      res.redirect(`/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`);
+    } 
+  }
+  else{
+    res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
   }
 });
 
-app.use(express.static(path.resolve(__dirname, "frontend/build")));
+app.use(express.static(path.resolve(__dirname, 'frontend/build')));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+  res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
 });
+
 
 // All other GET requests not handled before will return our React app
 // app.get('*', (req, res) => {
@@ -514,3 +360,4 @@ connectDB().then(() => {
     console.log(`Server listening on http://localhost:${PORT}`);
   });
 });
+
