@@ -13,7 +13,7 @@ import YourTests from './Component/YourTests';
 import { getUser } from "./controller/handleGoogleSignIn"
 import ForgotPassword from "./Component/ForgotPassword"
 
-function App() {
+function App() { 
 
   const navigate = useNavigate();
   const [data, setData] = useState();
