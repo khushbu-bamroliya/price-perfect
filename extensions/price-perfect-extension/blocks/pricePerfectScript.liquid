@@ -1,6 +1,6 @@
 <script>
      var isDup = false;
-      {% if(template.name == "product") %}
+      {% if template.name == "product" %}
          {% if product.tags contains 'price_perfect_duplicate' %}     
             console.log("Duplicate product");
             isDup = true;
@@ -146,7 +146,7 @@ main();
 
         console.log(productsArr,'productsArr');
 
-        fetch('https://liam-price-perfect-app.appmixo.in/abtest', {
+        fetch('http://liam-price-perfect-app.appmixo.in/abtest', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, text/plain, */*',

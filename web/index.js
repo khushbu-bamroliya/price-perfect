@@ -436,7 +436,7 @@ app.post("/abtest", async (req, res) => {
           var variantComparePrice = getTestCase.testCases[j].variants[i].variantComparePrice;
           var abVariantPrice = getTestCase.testCases[j].variants[i].abVariantPrice;
           var abVariantComparePrice = getTestCase.testCases[j].variants[i].abVariantComparePrice;
-          var duplicateVariantId = getTestCase.duplicateVariants[j].id.split('gid://shopify/ProductVariant/')[1];
+          var duplicateVariantId = getTestCase.testCases[j].variants[i].duplicateVariant.split('gid://shopify/ProductVariant/')[1];
           
           if(j == 0)
           {
@@ -457,10 +457,23 @@ app.post("/abtest", async (req, res) => {
       }
     }
     console.log('-----------------',abTestArr);
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
     return res.status(200).send(newArr);
     }
     else 
     {
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+
+      
       return res.status(200).send({});
     }
     
