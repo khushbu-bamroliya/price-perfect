@@ -2642,7 +2642,23 @@ html {
     border-color: #D4DCE8;
     border-radius: 5px;
 }
-
+.increasePriceBtn.is-active p{
+    display: none;
+}
+.inc-dec-btn-group button{
+    text-transform:capitalize !important;
+    font-family: PT Sans !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: 19px !important;
+    letter-spacing: unset !important;
+}
+.increasePriceBtn.is-active>button{
+    opacity: 100%;
+    color: #fff;
+    text-transform:capitalize !important;
+}
 @media only screen and (max-width: 991px) and (min-width: 319px) {
     .welcomePage{
         flex-wrap: wrap;

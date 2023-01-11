@@ -7,7 +7,7 @@ import avatar from "./Images/image.png"
 import addTestCases from "./Images/add-square.png"
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const CreateTestPage = () => {
+const CreateTestPage = ({getProductImage}) => {
     const navigate = useNavigate();
 
 
@@ -33,13 +33,16 @@ const CreateTestPage = () => {
             });
         });
 
-        const createTestStep1Completed = (id, title, handle) => {
+        const createTestStep1Completed = (id, title, handle, imgSrc) => {
             const productId = id.split('/').pop();
             console.log("title link", title);
             const productHandle = handle.split('/').pop();
             console.log("title link", handle);
             const productTitle = title.split('/').pop();
             console.log("productId: " + productId);
+            getProductImage(imgSrc)
+            const productImgSrc = imgSrc
+        
             navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`)
         }
     const columns = [
@@ -50,6 +53,7 @@ const CreateTestPage = () => {
             sortable: false,
             flex: 0.3,
             renderCell: (params) => {
+                
                 return (
                     <>
                         <div className='tableImages'>
@@ -88,7 +92,7 @@ const CreateTestPage = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                         <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id, params.row.title,  params.row.handle)} />
+                         <img src={addTestCases} alt="" onClick={() => createTestStep1Completed(params.row.id, params.row.title,  params.row.handle,params.row.images)} />
                     </div>
                 )
             }

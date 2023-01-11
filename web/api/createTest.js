@@ -5,9 +5,9 @@ const createTestCaseApi = async (req, res) => {
 
         console.log("==>", req.body);
 
-        let { trafficSplit, productId,testCases, duplicateProductId,duplicateVariants } = req.body;
+        let { trafficSplit, productId,testCases, status } = req.body;
 
-        let createTestData = await createTestModal.create({trafficSplit, testCases, productId,duplicateProductId, duplicateVariants})
+        let createTestData = await createTestModal.create({trafficSplit, testCases, productId, status})
 
         if (!createTestData){
             return res.json("Create Test case error...!")

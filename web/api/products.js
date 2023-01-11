@@ -257,10 +257,9 @@ const getVariants = async (req, res) => {
   var shop = process.env.SHOP;
   var access_token;
 
-  const shopData = await Shop.findOne({shop}).select(["access_token"]);
+  const shopData = await Shop.findOne({ shop }).select(["access_token"]);
 
-  if(shopData && shopData.access_token)
-  {
+  if (shopData && shopData.access_token) {
     access_token = shopData.access_token;
   }
 
@@ -321,18 +320,19 @@ const createDuplicateProduct = async (req, res) => {
 
     //console.log("1")
 
-    const { productId, productTitle, objectToBeSent, handle } = req.body;
+    var { productId, productTitle, objectToBeSent, handle } = req.body;
     //console.log("==>2", req.body)
 
 
 
     var shop = process.env.SHOP;
     var access_token;
+    let newObjectToBeSent;
+    let objectToBeSentCreated = [];
+    let newDuplicateVariantsArray = [];
+    const shopData = await Shop.findOne({ shop }).select(["access_token"]);
 
-    const shopData = await Shop.findOne({shop}).select(["access_token"]);
-
-    if(shopData && shopData.access_token)
-    {
+    if (shopData && shopData.access_token) {
       access_token = shopData.access_token;
     }
 
@@ -343,6 +343,7 @@ const createDuplicateProduct = async (req, res) => {
 
 
     for (let i = 0; i < objectToBeSent?.testCases.length; i++) {
+
 
       var query = `mutation {
       productDuplicate(productId: "gid://shopify/Product/${productId}",
@@ -383,9 +384,10 @@ const createDuplicateProduct = async (req, res) => {
       console.log("duplicateProductId", duplicateProductId);
 
 
-      // newMakeArr.map((i) => {
-      //   duplicateVariantsIds.push(i.id)
-      // })
+
+      newMakeArr.map((i) => {
+        duplicateVariantsIds.push(i.id)
+      })
 
       NewRes?.data?.productDuplicate?.newProduct?.tags
       console.log("variants array loop i=", i);
@@ -396,9 +398,10 @@ const createDuplicateProduct = async (req, res) => {
 
         console.log("j =", j, objectToBeSent?.testCases[i]);
         console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
+
         var query_var = '';
 
-        console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
+        // console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
 
         if (objectToBeSent?.testCases[i].variants[j].abVariantComparePrice != null) {
 
@@ -448,6 +451,10 @@ const createDuplicateProduct = async (req, res) => {
               inventoryQuantity
               price
               compareAtPrice
+              product
+              {
+                id
+              }
             }
             userErrors {
               field
@@ -503,6 +510,10 @@ const createDuplicateProduct = async (req, res) => {
               inventoryQuantity
               price
               compareAtPrice
+              product
+              {
+                id
+              }
             }
             userErrors {
               field
@@ -513,24 +524,32 @@ const createDuplicateProduct = async (req, res) => {
         `
         }
 
-        console.log(query_var, 'query_var');
+        // console.log(query_var, 'query_var');
 
         const NewPriceAtDuplicateProduct = await PostApiGraphql(shop, access_token, query_var);
 
 
-        console.log("NewPriceAtDuplicateProduct", NewPriceAtDuplicateProduct)
+        objectToBeSent.testCases[i].variants[j].duplicateProductId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
+        objectToBeSent.testCases[i].variants[j].duplicateVariant = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
 
 
+        console.log("NewPriceAtDuplicateProduct33333", NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id)
 
+        newObjectToBeSent = { ...objectToBeSent.testCases[i].variants[j], "duplicateVariantId": newMakeArr[j].id }
+        console.log("newObjectToBeSent2222", newObjectToBeSent);
+        newDuplicateVariantsArray.push(newObjectToBeSent)
       }
-
+      console.log("newDuplicateVariantsArray", newDuplicateVariantsArray);
+      newObjectToBeSent = { ...objectToBeSent.testCases[i] }
+      objectToBeSentCreated.push(newObjectToBeSent)
+      console.log("newObjectToBeSent", newObjectToBeSent);
       //new code
 
 
     }
 
 
-    originalProductTags.push(`price_perfect_duplicate | ${handle}`)
+    originalProductTags.push('price_perfect_duplicate', `handle|${handle}`)
 
     console.log("originalProductTags", originalProductTags)
 
@@ -550,7 +569,7 @@ const createDuplicateProduct = async (req, res) => {
         }
         `
       let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
-      console.log("TagRes", TagRes)
+      // console.log("TagRes", TagRes)
     })
 
 
@@ -583,11 +602,11 @@ const createDuplicateProduct = async (req, res) => {
 `
 
       let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
-      console.log("metafieldResponse", metafieldResponse);
+      // console.log("metafieldResponse", metafieldResponse);
     })
-
+    console.log("objectToBeSentCreated", objectToBeSentCreated);
     res.status(200).json({
-      data: {duplicateProductId, originalProductTags, TagRes},
+      data: { duplicateProductId, originalProductTags, duplicateVariantsIds, objectToBeSent: objectToBeSentCreated },
       success: true,
       status: 200
     })

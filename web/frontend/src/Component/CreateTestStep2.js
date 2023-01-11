@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
 import ArrowIcon from "./Images/arrow.png";
 import AddIcon from "./Images/add-square.png";
-
+ 
 const CreateTestStep2 = ({ objectSent }) => {
     const navigate = useNavigate()
     const style = {
@@ -24,10 +24,8 @@ const CreateTestStep2 = ({ objectSent }) => {
         boxShadow: 24,
         p: 4,
     };
-    // var variantPriceData;
-    // var variantCompareAtPriceData;
-    const { id, title, handle } = useParams();
-    
+    const { id, title, handle ,imagesrc} = useParams();
+    console.log("image reference", imagesrc);
     var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
@@ -41,8 +39,8 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
 
-    const [pricePercent, setPricePercent] = useState("11");
-    const [percentIncDec, setPercentIncDec] = useState("")
+    const [pricePercent, setPricePercent] = useState("2%");
+    const [percentIncDec, setPercentIncDec] = useState("-")
 
     const [value, setValue] = useState(10);
     const [hideShowBtns, setHideShowBtns] = useState("none")
@@ -409,19 +407,20 @@ const CreateTestStep2 = ({ objectSent }) => {
                 // console.log("Duplicate product id: " + res.data.productDuplicate.newProduct.id);
 
                 const apiRes = await res.json()
-                console.log("apiRes: " + JSON.stringify(apiRes));
-                // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
-                // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
-                // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
+                console.log("apiRes: " + JSON.stringify(apiRes.data));
+                console.log("Data sent", apiRes.data);
+                const duplicateProductId = apiRes.data.duplicateProductId;
+                const duplicateVariants = apiRes.data.duplicateVariantsIds;
+                const objectToBeSentRes = apiRes.data.objectToBeSent;
                 let data = {
                     "trafficSplit": objectToBeSent.trafficSplit,
-                    "testCases": objectToBeSent.testCases,
+                    "testCases": objectToBeSentRes,
                     "productId": objectToBeSent.productId,
-                    // duplicateProductId,
-                    // duplicateVariants
+                    "status":"PENDING",
+                    objectToBeSentRes
 
                 }
-            
+            console.log("data", data);
                 fetch(getApiUrl + '/api/createTestCase', {
                     method: 'POST',
                     headers: {
@@ -434,7 +433,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                         const apiRes2 = await res2.json()
                         console.log("Data sent:", apiRes2);
-                        objectSent(apiRes)
+                        objectSent({apiRes2, controlData:variantRes.data, productTitle:title, productImage:imagesrc})
                         navigate(`/reviewtest`);
 
 
@@ -463,14 +462,14 @@ const CreateTestStep2 = ({ objectSent }) => {
             console.log("calculated variant price temp", variantComparePriceTemp);
             if (percentIncDec === "+") {
 
-                const variantPriceTempFinal = Math.round(Number(item.variantPrice) + variantPriceTemp)
-                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) + variantComparePriceTemp)
+                const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
+                const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
             } else {
-                const variantPriceTempFinal = Math.round(Number(item.variantPrice) - variantPriceTemp)
-                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) - variantComparePriceTemp)
+                const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
+                const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
@@ -667,9 +666,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <div className='byPercentageDirection'>
                         <Typography variant='h5'>Which direction do you want to adjust pricing? </Typography>
                         <div className='inc-dec-btn-group'>
-                            <Button onClick={() => setPercentIncDec('-')} >Decrease Price </Button>
-                            <div className='increasePriceBtn' onClick={() => setPercentIncDec('+')} >
-
+                            <div className={`increasePriceBtn ${percentIncDec === '-' && "is-active" } `} onClick={() => setPercentIncDec('-')} >
+                                <p>Decrease Price</p>
+                                <Button>Decrease Price</Button>
+                            </div>
+                            <div className={`increasePriceBtn ${percentIncDec === '+' && "is-active" } `} onClick={() => setPercentIncDec('+')} >
                                 <p>Increase Price</p>
                                 <Button>Increase Price</Button>
                             </div>
@@ -678,10 +679,11 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                             <Typography variant='h5'>By how much? </Typography>
                         </span>
-                        <div className='percentageBtnGroup'>
+                        <div className='inc-dec-btn-group'>
+                        {/* <div className='percentageBtnGroup '> */}
                             {percentagePrices.map(i => (<>
 
-                                <div>
+                                <div className={`increasePriceBtn ${pricePercent === i && "is-active"} `}>
                                     <p>{i}</p>
                                     <Button onClick={() => setPricePercent(i)} >{i}</Button>
                                 </div>

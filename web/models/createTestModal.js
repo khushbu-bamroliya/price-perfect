@@ -14,12 +14,8 @@ const createTestSchema = mongoose.Schema({
         type: Array,
         trim: true,
     },
-    duplicateProductId: {
+    status:{
         type: String,
-        trim: true
-    },
-    duplicateVariants: {
-        type: Array,
         trim: true,
     }
 });

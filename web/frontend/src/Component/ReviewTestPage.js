@@ -3,9 +3,12 @@ import React from 'react'
 import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 
-const ReviewTestPage = () => {
+const ReviewTestPage = ({created, productImage}) => {
+    console.log("Created on review page", created);
     return (
         <>
+        {created && (<>
+
             <Card className='reviewTest'>
                 <div className='reviewTest-main'>
                     <Navbar />
@@ -14,12 +17,12 @@ const ReviewTestPage = () => {
                         <div>
 
                             <div className='imageBlock'>
-                                <img src={dummyProductImage} alt="" />
+                                <img src={productImage} alt="product_image" />
                             </div>
                             <div className='reviewData'>
                                 <Typography variant='h4'>Review Test</Typography>
                                 <Typography variant='p'>Confirm test configuration</Typography>
-                                <Typography variant='h5'>Cat Socks</Typography>
+                                <Typography variant='h5'>{created.productTitle}</Typography>
                                 <div className='reviewMainData'>
                                     <div className='pricingDataReview'>
 
@@ -28,11 +31,11 @@ const ReviewTestPage = () => {
 
                                             <div>
                                                 <Typography variant='h5'>Control</Typography>
-                                                <Typography variant='p'>$10</Typography>
+                                                <Typography variant='p'>${created.controlData[0].variantPrice}</Typography>
                                             </div>
                                             <div>
                                                 <Typography variant='h5'>Variations</Typography>
-                                                <Typography variant='p'>$13, $17, $20 </Typography>
+                                                <Typography variant='p'>{created.apiRes2.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography>
                                             </div>
 
                                         </div>
@@ -41,14 +44,14 @@ const ReviewTestPage = () => {
                                         <Typography variant='p'>Product</Typography>
                                         <div>
 
-                                            <Typography variant='h5'>Cat Socks</Typography>
+                                            <Typography variant='h5'>{created.productTitle}</Typography>
                                         </div>
 
                                     </div>
                                     <div className='trafficSplitDataReview'>
                                         <Typography variant='p'>Traffic Split </Typography>
                                         <div>
-                                            <Typography variant='h5'>50/50</Typography>
+                                            <Typography variant='h5'>{created.apiRes2.data.trafficSplit}/{100-(created.apiRes2.data.trafficSplit*created.apiRes2.data.testCases.length)}</Typography>
                                         </div>
                                     </div>
 
@@ -69,6 +72,7 @@ const ReviewTestPage = () => {
                     </Card>
                 </div>
             </Card>
+        </>)}
         </>
     )
 }
