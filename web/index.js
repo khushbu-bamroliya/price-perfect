@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+
 app.use(cors());
 const path = require("path");
 const PORT = process.env.PORT || 8081;
@@ -38,6 +39,7 @@ initializingPassport(passport);
 // app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -47,6 +49,9 @@ const { encodeJWT, decodeJWT, abTest } = require("./controllers/utils");
 
 //db connection
 const { connectDB } = require("./db/connect");
+
+//email
+const nodemailer = require("nodemailer");
 
 //shopify apis
 const {
@@ -145,6 +150,8 @@ app.get("/auth", validateHmac, async (req, res) => {
     console.log("authUrl :- ", authUrl);
 
     //res.cookie('state', shopState);
+  
+    // res.cookie('shop', )
     return res.redirect(authUrl);
   } else {
     return res.status(400).send('Missing "Shop Name" parameter!!');
@@ -163,6 +170,9 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
   // }
 
   if (shop && host && code) {
+    console.log("shop:", shop);
+    console.log("encodedShop", encodedShop);
+    res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
     try {
       const checkRes = await getAccessToken(
         process.env.SHOPIFY_API_KEY,
@@ -312,6 +322,7 @@ app.get(
 );
 
 app.get("/google/callback", (req, res) => {
+  
   passport.authenticate("google", async function (err, user, info) {
     if (err) {
       console.log("hi1", err);
@@ -320,10 +331,12 @@ app.get("/google/callback", (req, res) => {
       return res.redirect("/google/auth/failed");
     }
     if (user) {
+    
       const token = await encodeJWT(user.googleId);
       res.cookie("token", token);
       console.log("here1");
-      res.redirect("/homeDashboard");
+      res.redirect(process.env.HOST+"/homeDashboard");
+      
       return res;
     }
   })(req, res);
@@ -456,38 +469,107 @@ app.post("/abtest", async (req, res) => {
         newArr[varId.split('gid://shopify/ProductVariant/')[1]] = abTestArr;
       }
     }
-    console.log('-----------------',abTestArr);
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    return res.status(200).send(newArr);
-    }
-    else 
-    {
-
+      console.log('-----------------',abTestArr);
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       res.setHeader('Access-Control-Allow-Credentials', true);
-
-      
+      return res.status(200).send(newArr);
+    }
+    else 
+    {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Allow-Credentials', true);
       return res.status(200).send({});
     }
     
 });
 
-// app.use(express.static(path.resolve(__dirname, 'frontend/build')));
+app.get("/sendmail", async(req, res) => {
+  // let transporter = nodemailer.createTransport({
+  //   host: process.env.SMTP_HOST,
+  //   port: process.env.SMTP_PORT,
+  //   //secure: process.env.SMTP_SECURE, // true for 465, false for other ports
+  //   //secureConnection: true, // TLS requires secureConnection to be false
+  //   auth: {
+  //     user: process.env.SMTP_USERNAME, // generated ethereal user
+  //     pass: process.env.SMTP_PASSWORD, // generated ethereal password
+  //   },
+  // });
+  // // send mail with defined transport object
+  // let info = await transporter.sendMail({
+  //   from: `Price Perfect <umang@vedaha.com>`, // sender address
+  //   to: "umangpattharwala@gmail.com", // list of receivers
+  //   subject: 'Sending Email using Node.js',
+  //   text: 'That was easy!'
+  // });
+  // console.log(info,'info');
+  
+});
+app.get("/api/inject", async(req, res) => {
+  const shop = process.env.SHOP;
+  var access_token = "";
+  const shopData = await Shop.findOne({ shop }).select(['access_token']);
+  if(shopData)
+  {
+    access_token = shopData.access_token;
+  }
+  try {
+    const resThemes = await GetApiRest(
+      `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/themes.json`,
+      access_token
+    );
+    if(resThemes && resThemes.themes && resThemes.themes.length >0)
+    {
+      //console.log(resThemes,'resThemes');
+      for(const theme of resThemes.themes)
+      {
+        if(theme.role === "main")
+        {
+          console.log(theme.id,'value');
+          const resAssets = await GetApiRest(
+            `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/themes/${theme.id}/assets.json`,
+            access_token
+          );
+          console.log(resAssets,'resAssets');
+          if(resAssets && resAssets.assets && resAssets.assets.length > 0)
+          {
+            for(const asset of resAssets.assets)
+            {
+              console.log(asset,"asset");
+              if(asset.key === "")
+              {
+
+              }
+            }
+          }
+          break;
+        }
+      }
+      
+    }
+  } catch (error) {
+    console.log("Error injecting div in theme",error);
+  }
+  
+  
+});
 
 app.get("/", async (req, res) => {
   console.log(req.query, "/ route");
   const { shop, hmac, host, timestamp } = req.query;
-
+  const encodedShop = await encodeJWT(shop)
   if (shop) {
+    console.log("shop:", shop);
+    console.log("encodedShop", encodedShop);
+    res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
     const shopGet = await Shop.findOne({ shop }).select(["shop", "app_status"]);
     if (shopGet && shopGet.app_status && shopGet.app_status == "installed") {
+      console.log("shop:", shop);
+      console.log("encodedShop", encodedShop);
+      res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
       console.log("embedurl");
       // res.redirect(
       //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
@@ -500,6 +582,7 @@ app.get("/", async (req, res) => {
 
       // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
       res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+      
     } else {
       res.redirect(
         `/auth?hmac=${hmac}&host=${host}&shop=${shop}&timestamp=${timestamp}`

@@ -7,9 +7,9 @@ import avatar from "./Images/image.png"
 import addTestCases from "./Images/add-square.png"
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const CreateTestPage = ({getProductImage}) => {
+const CreateTestPage = ({shop,getProductImage }) => {
     const navigate = useNavigate();
-
+console.log("shop from CreateTestPage", shop);
 
     // let products = {};
     const [productsData, setProductsData] = useState();
@@ -122,7 +122,8 @@ const CreateTestPage = ({getProductImage}) => {
             method: "POST",
             credentials: "same-origin",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': shop
             },
             body: JSON.stringify(sendBody)
 
@@ -154,6 +155,9 @@ const CreateTestPage = ({getProductImage}) => {
         setNextPageCursor(null)
     }
     useEffect(() => {
+        // if (!shop) {
+        //     navigate('/')
+        //   }
         getAllProductsApi(sendBody)
     }, [searchProduct, nextPageCursor, prevPageCursor])
     return (
@@ -170,11 +174,11 @@ const CreateTestPage = ({getProductImage}) => {
                             <div className='createTest-Block2'>
                                 <img src={searchIcon} alt="" />
                                 <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchProduct} onChange={(e) => setSearchProduct(e.target.value)} />
-                                <Button variant="outlined">
+                                {/* <Button variant="outlined">
                                     <NavLink to="/createtest2">
                                         Next
                                     </NavLink>
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
 

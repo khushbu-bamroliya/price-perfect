@@ -8,9 +8,10 @@ const googleUserFound = async (req, res) => {
         console.log("Decoded token: " + decoded.data);
         const user = await User.findOne({googleId:decoded.data});
         console.log("User is", user);
-        
+    
         res.send(user)
     } catch (error) {
+        res.redirect('/');
         console.log("Error", error);
     }
 }

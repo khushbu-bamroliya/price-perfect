@@ -8,6 +8,7 @@ import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
+import { NavLink } from 'react-router-dom';
 
 const YourTests = () => {
     const pages = ['Active', 'Upcoming', 'Ended', 'Paused'];
@@ -87,7 +88,7 @@ const YourTests = () => {
                 console.log("params: " + params);
                 return (
                     <div className='actionIcon'>
-                        <img src={EyeIcon} alt="" />
+                         <NavLink to="/managetest"><img src={EyeIcon} alt="" /></NavLink> 
                         <img src={LinkIcon} alt="" />
                         <img src={TrashIcon} alt="" />
                     </div>

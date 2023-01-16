@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Button, Card, TextField, Typography, CardContent } from '@mui/material';
 import googleImages from './Images/google (1).png';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ResultRevenueLogo from './Images/ResultRevenueLogo.png';
 import card1Img from "../Component/Images/Group-45.png";
 import logo from "../Component/Images/Group 48.png";
 import closeIcon from "../Component/Images/close-circle.png"
 export default function SignUp() {
-
+const navigate = useNavigate();
     const [toggle, setToggle] = useState(false);
     const [togglescrollresult, setToggleScrollresult] = useState(false);
 
@@ -28,6 +28,9 @@ export default function SignUp() {
             <Card className='welcomeBlock2 min-wi padding'>
                 <Card className='wrappers'>
                     <CardContent className='welcomeContent' sx={{padding:0}}>
+                    <div className='close-icon'>
+                                        <img onClick={() => navigate('/')} src={closeIcon} alt="" />
+                                    </div>
                     <div className='welcome-wrappers' id='scroll-up'>
                         <Typography variant='h4'>Forgot Password</Typography>
                         <Typography className='span' variant='p'>Enter your email, we will send you confirmation code</Typography>

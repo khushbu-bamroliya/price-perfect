@@ -13,9 +13,10 @@ import YourTests from './Component/YourTests';
 import { getUser } from "./controller/handleGoogleSignIn"
 import ForgotPassword from "./Component/ForgotPassword"
 
-function App() { 
+function App() {
 
   const navigate = useNavigate();
+
   const [data, setData] = useState();
   const [productImage, setProductImage] = useState();
   const objectSent = (childdata) => {
@@ -28,21 +29,25 @@ function App() {
   }
   console.log("data", data);
 
+const shop = document.cookie.match('(^|;)\\s*' + "shop" + '\\s*=\\s*([^;]+)')?.pop() || ''
+console.log("shop is: " + shop);
 
-  useEffect(() => {
-    getUser("token", navigate)
+useEffect(() => {
+  
+
+    getUser("token", navigate, shop)
   }, [])
 
   return (
     <div>
       <Routes>
 
-        <Route element={<WelcomePage />} path='/' />
+        <Route element={<WelcomePage shop={shop} />}  path='/' />
         <Route element={<SignUp />} path='/signup' />
         <Route element={<ForgotPassword />} path='/forgot-password' />
         <Route element={<HomeDashboard />} path='/homeDashboard' />
-        <Route element={<CreateTestStep1 getProductImage={getProductImage} />} path="/createtest" />
-        <Route element={<CreateTestStep2 objectSent={objectSent} />} path="/createtest2/:handle/:id/:title" />
+        <Route element={<CreateTestStep1 shop={shop} getProductImage={getProductImage} />} path="/createtest" />
+        <Route element={<CreateTestStep2 shop={shop} objectSent={objectSent} />} path="/createtest2/:handle/:id/:title" />
         <Route element={<YourTests />} path="/yourtests" />
         <Route element={<ReviewTestPage created={data} productImage={productImage}/>} path="/reviewtest" />
         <Route element={<YourProfile />} path="/profile" />

@@ -3,6 +3,9 @@ const { PostApiGraphql, PostApiRest, DemoGrapqlApi } = require('../controllers/s
 const Shop = require("../models/Shop");
 const Product = require("../models/Product");
 const _ = require("lodash");
+const createTestModal = require('../models/createTestModal');
+const { decodeJWT } = require('../controllers/utils');
+
 
 const in_array = (array, id) => {
   return array.some(function (item) {
@@ -12,9 +15,12 @@ const in_array = (array, id) => {
 
 const allProducts = async (req, res) => {
   try {
-
+    let {shop} = req.headers
+    shop = await decodeJWT(shop)
+    shop = shop.data
     var access_token = "";
-    const shop = process.env.SHOP
+    // const shop = process.env.SHOP
+  console.log("shop", shop);
     if (shop) {
 
       const shopData = await Shop.findOne({ shop }).select(['access_token']);
@@ -35,7 +41,7 @@ const allProducts = async (req, res) => {
       if (endCursor != "") {
 
         query = `query products{
-              products(first: 10, ${search ? ',query:"title:*' + search + '*"' : ""} ,  after: ${endCursor}){ 
+              products(first: 10, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"':'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor}){ 
                   edges { 
                     cursor 
                     node { 
@@ -62,6 +68,7 @@ const allProducts = async (req, res) => {
                 }
               }
           `;
+          console.log("query: " + query);
       } else {
         console.log("first time and searching");
         query = `query products{
@@ -250,11 +257,14 @@ const getVariants = async (req, res) => {
 
   console.log("==>1")
   // const { shop, access_token } = ctx.state;
+  let {shop} = req.headers
 
+  shop = await decodeJWT(shop)
+  shop = shop.data
   const { productId } = req.body;
   console.log("==>2", req.body)
 
-  var shop = process.env.SHOP;
+  // var shop = process.env.SHOP;
   var access_token;
 
   const shopData = await Shop.findOne({ shop }).select(["access_token"]);
@@ -320,12 +330,15 @@ const createDuplicateProduct = async (req, res) => {
 
     //console.log("1")
 
-    var { productId, productTitle, objectToBeSent, handle } = req.body;
+    var { productId, productTitle, objectToBeSent, handle,trafficSplit, fullProductId,testCases, status } = req.body;
     //console.log("==>2", req.body)
 
+    let {shop} = req.headers
 
+    shop = await decodeJWT(shop)
+    shop = shop.data
 
-    var shop = process.env.SHOP;
+    // var shop = process.env.SHOP;
     var access_token;
     let newObjectToBeSent;
     let objectToBeSentCreated = [];
@@ -530,7 +543,7 @@ const createDuplicateProduct = async (req, res) => {
 
 
         objectToBeSent.testCases[i].variants[j].duplicateProductId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
-        objectToBeSent.testCases[i].variants[j].duplicateVariant = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
+        objectToBeSent.testCases[i].variants[j].duplicateVariantId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
 
 
         console.log("NewPriceAtDuplicateProduct33333", NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id)
@@ -544,12 +557,10 @@ const createDuplicateProduct = async (req, res) => {
       objectToBeSentCreated.push(newObjectToBeSent)
       console.log("newObjectToBeSent", newObjectToBeSent);
       //new code
-
-
     }
 
 
-    originalProductTags.push('price_perfect_duplicate', `handle|${handle}`)
+    originalProductTags.push('price_perfect_duplicate', `handle | ${handle}`)
 
     console.log("originalProductTags", originalProductTags)
 
@@ -605,12 +616,28 @@ const createDuplicateProduct = async (req, res) => {
       // console.log("metafieldResponse", metafieldResponse);
     })
     console.log("objectToBeSentCreated", objectToBeSentCreated);
-    res.status(200).json({
-      data: { duplicateProductId, originalProductTags, duplicateVariantsIds, objectToBeSent: objectToBeSentCreated },
-      success: true,
-      status: 200
-    })
+    // res.status(200).json({
+    //   data: { duplicateProductId, originalProductTags, duplicateVariantsIds, objectToBeSent: objectToBeSentCreated },
+    //   success: true,
+    //   status: 200
+    // })
 
+    //Db API
+    console.log("==>22", req.body);
+
+        // let { trafficSplit, productId,testCases, status } = req.body;
+
+        let createTestData = await createTestModal.create({trafficSplit, testCases:objectToBeSentCreated, productId:fullProductId, status})
+
+        if (!createTestData){
+            return res.json("Create Test case error...!")
+        }
+
+            res.status(200).json({
+                data: createTestData,
+                success: true,
+                status: 200
+            })
   } catch (error) {
     console.log("Error for duplicate product", error);
   }
