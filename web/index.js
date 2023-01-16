@@ -335,7 +335,7 @@ app.get("/google/callback", (req, res) => {
       const token = await encodeJWT(user.googleId);
       res.cookie("token", token);
       console.log("here1");
-      res.redirect(process.env.HOST+"/homeDashboard");
+      res.redirect("/homeDashboard");
       
       return res;
     }
@@ -491,7 +491,7 @@ app.get("/sendmail", async(req, res) => {
   // let transporter = nodemailer.createTransport({
   //   host: process.env.SMTP_HOST,
   //   port: process.env.SMTP_PORT,
-  //   //secure: process.env.SMTP_SECURE, // true for 465, false for other ports
+  //   //secure: true, // true for 465, false for other ports
   //   //secureConnection: true, // TLS requires secureConnection to be false
   //   auth: {
   //     user: process.env.SMTP_USERNAME, // generated ethereal user
@@ -501,7 +501,7 @@ app.get("/sendmail", async(req, res) => {
   // // send mail with defined transport object
   // let info = await transporter.sendMail({
   //   from: `Price Perfect <umang@vedaha.com>`, // sender address
-  //   to: "umangpattharwala@gmail.com", // list of receivers
+  //   to: "umang@vedaha.com", // list of receivers
   //   subject: 'Sending Email using Node.js',
   //   text: 'That was easy!'
   // });
