@@ -15,7 +15,8 @@ const in_array = (array, id) => {
 
 const allProducts = async (req, res) => {
   try {
-    let {shop} = req.headers
+    //let {shop} = req.headers
+    var shop = process.env.SHOP;
     shop = await decodeJWT(shop)
     shop = shop.data
     var access_token = "";
@@ -257,7 +258,8 @@ const getVariants = async (req, res) => {
 
   console.log("==>1")
   // const { shop, access_token } = ctx.state;
-  let {shop} = req.headers
+  //let {shop} = req.headers
+  var shop = process.env.SHOP;
 
   shop = await decodeJWT(shop)
   shop = shop.data
@@ -333,7 +335,8 @@ const createDuplicateProduct = async (req, res) => {
     var { productId, productTitle, objectToBeSent, handle,trafficSplit, fullProductId,testCases, status } = req.body;
     //console.log("==>2", req.body)
 
-    let {shop} = req.headers
+    //let {shop} = req.headers
+    var shop = process.env.SHOP;
 
     shop = await decodeJWT(shop)
     shop = shop.data
