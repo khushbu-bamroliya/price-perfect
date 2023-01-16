@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Product Sans";
+    src: url("../public/ProductSansRegular.ttf");
+}
+
 .App {
     text-align: center;
 }
@@ -2237,7 +2242,7 @@ color: #151515;
 }
 
 .welcomeContent .welcome-wrappers h4 {
-    /* font-family: 'PT Sans'; */
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 34px;

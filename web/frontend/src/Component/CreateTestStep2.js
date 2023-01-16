@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
-import ArrowIcon from "./Images/arrow.png";
+import ArrowIcon from "./Images/Arrow.png";
 import AddIcon from "./Images/add-square.png";
 
 const CreateTestStep2 = ({ objectSent }) => {
