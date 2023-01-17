@@ -14,7 +14,7 @@ const ReviewTestPage = ({ created, productImage }) => {
     }
     return (
         <>
-            {location && (<>
+            {true && (<>
 
                 <Card className='reviewTest'>
                     <div className='reviewTest-main'>
@@ -29,7 +29,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>
                                     <Typography variant='p'>Confirm test configuration</Typography>
-                                    <Typography variant='h5'>{location.data.testCases[0].variants[0].variantTitle}</Typography>
+                                    <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
                                     <div className='reviewMainData'>
                                         <div className='pricingDataReview'>
 
@@ -38,7 +38,7 @@ const ReviewTestPage = ({ created, productImage }) => {
 
                                                 <div>
                                                     <Typography variant='h5'>Control</Typography>
-                                                    <Typography variant='p'>${location.data.testCases[0].variants[0].variantPrice}</Typography>
+                                                    <Typography variant='p'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
                                                 </div>
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
@@ -51,14 +51,14 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Product</Typography>
                                             <div>
 
-                                                <Typography variant='h5'>{location.data.testCases[0].variants[0].variantTitle}</Typography>
+                                                <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
                                             </div>
 
                                         </div>
                                         <div className='trafficSplitDataReview'>
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
-                                                <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography>
+                                                {/* <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography> */}
                                             </div>
                                         </div>
 

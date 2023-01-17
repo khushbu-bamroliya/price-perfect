@@ -800,7 +800,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div>
 
                     <div className='confirmBtn'>
-                        <Button onClick={onConfirmEdit}>Confirm</Button>
+                        <Button onClick={()=>onConfirmEdit}>Confirm</Button>
                     </div>
                 </Box>
             </Modal>

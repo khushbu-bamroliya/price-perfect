@@ -111,6 +111,7 @@
 
 .createTestStep2{
     height: 94.5vh;
+    overflow: auto !important;
 }
 .homeDashboard-main,
 .createTestPage-main,
