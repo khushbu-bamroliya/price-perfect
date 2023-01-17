@@ -3,16 +3,18 @@ import React from 'react'
 import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 import { useNavigate } from 'react-router-dom'
+import {useLocation} from 'react-router-dom';
 
 const ReviewTestPage = ({ created, productImage }) => {
-    console.log("Created on review page", created);
+    const location = useLocation();
+    console.log("Created on review page", created,location);
     const navigate = useNavigate();
     const launchTest = () => {
         navigate('/yourtests')
     }
     return (
         <>
-            {created && (<>
+            {location && (<>
 
                 <Card className='reviewTest'>
                     <div className='reviewTest-main'>
@@ -27,7 +29,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>
                                     <Typography variant='p'>Confirm test configuration</Typography>
-                                    <Typography variant='h5'>{created.productTitle}</Typography>
+                                    <Typography variant='h5'>{location.data.testCases[0].variants[0].variantTitle}</Typography>
                                     <div className='reviewMainData'>
                                         <div className='pricingDataReview'>
 
@@ -36,11 +38,11 @@ const ReviewTestPage = ({ created, productImage }) => {
 
                                                 <div>
                                                     <Typography variant='h5'>Control</Typography>
-                                                    <Typography variant='p'>${created.controlData[0].variantPrice}</Typography>
+                                                    <Typography variant='p'>${location.data.testCases[0].variants[0].variantPrice}</Typography>
                                                 </div>
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
-                                                    <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography>
+                                                    {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
                                                 </div>
 
                                             </div>
@@ -49,14 +51,14 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Product</Typography>
                                             <div>
 
-                                                <Typography variant='h5'>{created.productTitle}</Typography>
+                                                <Typography variant='h5'>{location.data.testCases[0].variants[0].variantTitle}</Typography>
                                             </div>
 
                                         </div>
                                         <div className='trafficSplitDataReview'>
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
-                                                <Typography variant='h5'>{created.apiRes.data.trafficSplit}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography>
+                                                <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography>
                                             </div>
                                         </div>
 
@@ -65,7 +67,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                         <Typography variant='p'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</Typography>
                                     </div> */}
                                     <div className='reviewAndLaunchBtns'>
-                                        <Button className='launchTestBtn' onClick={launchTest}>Launch</Button>
+                                        <Button className='launchTestBtn' onClick={()=>launchTest}>Launch</Button>
                                         {/* <div className='scheduleTestBtn'>
 
                                             <p>Schedule</p>

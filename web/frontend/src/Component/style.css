@@ -4,7 +4,7 @@
 }
 
 .welcomeContent>span {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -15,7 +15,7 @@
 
 .welcomeContent>h4 {
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 34px;
@@ -48,7 +48,7 @@
 }
 
 .welcomeInputs>div>div>input {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -71,7 +71,7 @@
 .RememberMe>span,
 .noAccount>span {
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -124,7 +124,7 @@
 }
 
 .googleSignInBtn>span {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -145,7 +145,7 @@
 }
 
 .noAccount>a {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -227,7 +227,7 @@
 
 .copyRight {
   margin: 15px 24px;
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -268,7 +268,7 @@
 
 }
 .navBlock3 > span {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -296,7 +296,7 @@
 }
 .menuItem > span{
 margin-left: 14px;
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 14px;
@@ -335,7 +335,7 @@ line-height: 17px;
   padding: 25px 25px 0;
 }
 .createTestTitle {
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 22px;
@@ -367,7 +367,7 @@ line-height: 17px;
 }
 .createTestBlock2 > div > div > input {
   padding-left: 43px;
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: italic;
   font-weight: 400;
   font-size: 16px;
@@ -402,7 +402,7 @@ line-height: 17px;
   margin: 28px;
 
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -438,7 +438,7 @@ height: 19px; */
   /* left: 1226px;
 top: 179px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -516,7 +516,7 @@ top: 167px; */
   /* left: 65px;
 top: 228px; */
   margin-left: 10px;
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -568,7 +568,7 @@ top: 284px; */
   /* left: 154px;
 top: 320px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 22px;
@@ -586,7 +586,7 @@ top: 320px; */
   /* left: 106px;
 top: 394px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 35px;
@@ -604,7 +604,7 @@ top: 394px; */
   /* left: 115px;
 top: 356px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 28px;
@@ -627,7 +627,7 @@ top: 356px; */
   /* left: 421px;
 top: 380px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -684,7 +684,7 @@ top: 284px; */
   /* left: 70px;
   top: 512px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -702,7 +702,7 @@ top: 284px; */
   /* left: 647px;
   top: 808px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
@@ -741,7 +741,7 @@ top: 795px; */
   /* width: 34px;
 height: 15px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -762,7 +762,7 @@ height: 15px; */
   /* width: 39px;
   height: 15px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -785,7 +785,7 @@ height: 15px; */
   /* left: 699px;
   top: 327px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -804,7 +804,7 @@ height: 15px; */
   /* width: 34px;
   height: 15px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -903,7 +903,7 @@ top: 323px; */
   /* left: 36px;
 top: 153px; */
 
-  font-family: 'PT Sans';
+  font-family: 'Product Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 20px;

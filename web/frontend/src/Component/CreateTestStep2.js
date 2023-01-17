@@ -435,7 +435,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                         const apiRes2 = await res2.json()
                         console.log("Data sent:", apiRes2);
                         objectSent(apiRes)
-                        navigate(`/reviewtest`);
+                        navigate(`/reviewtest`,apiRes);
 
 
                     })
@@ -447,7 +447,7 @@ const CreateTestStep2 = ({ objectSent }) => {
         
     }
     const percentagePrices = [
-        "2%", "3%", "5%", "10%", "Another Amount"
+        "2%", "3%", "5%", "10%"
     ]
 
     console.log("pricePercent", pricePercent);
@@ -571,7 +571,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
-                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Review & Launch</Button>
+                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Confirm</Button>
 
                             {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
                         </div>
@@ -667,9 +667,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <div className='byPercentageDirection'>
                         <Typography variant='h5'>Which direction do you want to adjust pricing? </Typography>
                         <div className='inc-dec-btn-group'>
-                            <Button onClick={() => setPercentIncDec('-')} >Decrease Price </Button>
-                            <div className='increasePriceBtn' onClick={() => setPercentIncDec('+')} >
-
+                            <div className={`increasePriceBtn ${percentIncDec === '-' && "is-active"} `} onClick={() => setPercentIncDec('-')} >
+                                <p>Decrease Price</p>
+                                <Button>Decrease Price</Button>
+                            </div>
+                            <div className={`increasePriceBtn ${percentIncDec === '+' && "is-active"} `} onClick={() => setPercentIncDec('+')} >
                                 <p>Increase Price</p>
                                 <Button>Increase Price</Button>
                             </div>
@@ -681,16 +683,15 @@ const CreateTestStep2 = ({ objectSent }) => {
                         <div className='percentageBtnGroup'>
                             {percentagePrices.map(i => (<>
 
-                                <div>
-                                    <p>{i}</p>
+                                <div className={`increasePriceBtn ${pricePercent === i && "is-active"} `}>
+
+<p>{i}</p>
                                     <Button onClick={() => setPricePercent(i)} >{i}</Button>
                                 </div>
                             </>))}
-
-                            {/* <Button>3&</Button>
-                            <Button>5%</Button>
-                            <Button>10%</Button>
-                            <Button>Other Amount</Button> */}
+                            <div className='anotherAmount'>
+                                <TextField type="number" placeholder='Another amount in %' onChange={(e)=>setPricePercent(e.target.value)}/>
+                            </div>
                         </div>
                     </div>
 

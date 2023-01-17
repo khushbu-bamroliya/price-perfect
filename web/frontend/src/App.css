@@ -60,7 +60,7 @@
     margin-left: 14px;
     margin-right: 16px;
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -74,7 +74,7 @@
 }
 .NavCenterBtn > button:active > div > a > span {
 
-    /* font-family: 'PT Sans';
+    /* font-family: 'Product Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -89,7 +89,7 @@
 }
 /* .NavCenterBtn > button:nth-child(1) > div > a > span {
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -134,7 +134,7 @@
     margin-top: 48px;
 }
 .dashboardTitle {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
@@ -169,7 +169,7 @@
 }
 .dailyStatsBlock1 > div > span {
     margin-left: 22px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 22px;
@@ -218,7 +218,7 @@
     height: 24px;
 }
 .dailyStatsBlock2-sub1 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 52px;
@@ -240,7 +240,7 @@
 .dailyStatsBlock2-sub2 > span {
     width: 82px;
     height: 17px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -250,7 +250,7 @@
 
 }
 .dailyStatsBlock2-sub2 > div {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -260,7 +260,7 @@
     margin-top: 8px;
 }
 .downArrow {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -283,7 +283,7 @@
 }
 
 .analyticsSection > div > div > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -311,7 +311,7 @@
 .analyticsBtnGroup > button {
     height: 15px;
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -350,7 +350,7 @@
 }
 .createTest-Block1 > span,
 .yourTest-Block1 > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -361,7 +361,7 @@
 .yourTest-Block1 > h5 {
     margin-top: 8px;
     margin-bottom: 4px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 22px;
@@ -390,7 +390,7 @@
     padding-left: 43px;
     background: #F9F8FE;
     border-radius: 10px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: italic;
     font-weight: 400;
     font-size: 16px;
@@ -430,7 +430,7 @@
 }
 
 .yourTest-Block3 > button {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     text-transform: capitalize;
     font-weight: 400;
@@ -452,7 +452,7 @@
 }
 .createTestStep2Block > ol {
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -465,7 +465,7 @@
 }
 .createTestStep2Block > span,
 .reviewTestBlock > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -475,7 +475,7 @@
 .createTestStep2Block > h4,
 .reviewTestBlock > h4 {
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 32px;
@@ -516,7 +516,7 @@
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px;
     margin: auto !important;
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal !important;
     font-weight: 700 !important;
     font-size: 16px !important;
@@ -532,7 +532,7 @@
 .byPercentage > h2,
 .editTest > h2,
 .controlSettings > h2 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 32px;
@@ -547,7 +547,7 @@
 .manualmodal > span,
 .byPercentage > span,
 .editTest > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -556,7 +556,7 @@
     width: max-content;
 }
 .controlSettings > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -596,7 +596,7 @@ margin-right: 18px;
     border-radius: 8px;
     padding: 13px 20px;
     text-transform: capitalize  !important;
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal !important;
     font-weight: 700 !important;
     font-size: 16px !important;
@@ -743,7 +743,7 @@ margin-right: 18px;
 
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -762,7 +762,7 @@ margin-right: 18px;
 }
 
 .byPercentageDirection > h5 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -773,7 +773,7 @@ margin-right: 18px;
     margin-bottom: 10px;
 }
 .byPercentageDirection > span > h5 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -808,7 +808,7 @@ margin-right: 18px;
 }
 .increasePriceBtn > p {
     position: absolute;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -828,7 +828,7 @@ margin-right: 18px;
 
 
 .inc-dec-btn-group > button {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -864,7 +864,7 @@ margin-right: 18px;
 
 .percentageBtnGroup > div > p, .deleteTest > p {
     position: absolute;
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal;
     font-weight: 400 !important;
     font-size: 14px !important;
@@ -875,18 +875,32 @@ margin-right: 18px;
     background-clip: text;
     text-fill-color: transparent;
 }
-.percentageBtnGroup > div , .deleteTest{
+.deleteTest{
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 3px 12px 0;
 }
+
+.percentageBtnGroup > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3px 12px 12px;
+}
+
 .percentageBtnGroup {
 
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.anotherAmount{
+    background: linear-gradient(100.47deg,rgba(255,143,210,.1) -24.72%,rgba(244,34,114,.1) 113.36%);
+    margin: 15px;
+    width: 35%;
 }
 
 .afterConfirmBtns {
@@ -913,7 +927,7 @@ margin-right: 18px;
 }
 .afterConfirmTesteditBtn > p {
     position: absolute;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -933,7 +947,7 @@ margin-right: 18px;
     height: 45px;
 
 
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal !important;
     text-transform: capitalize !important;
     font-weight: 700 !important;
@@ -983,7 +997,7 @@ margin-right: 18px;
     border-radius: 8px;
     text-transform: capitalize;
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -1025,7 +1039,7 @@ margin-right: 18px;
 
 }
 .reviewData > h5 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -1034,7 +1048,7 @@ margin-right: 18px;
     color: #536780;
 }
 .reviewData > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -1046,7 +1060,7 @@ margin-right: 18px;
 }
 .reviewData > h4 {
     margin-bottom: 10px;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     height: 39px;
     font-style: normal;
     font-weight: 400;
@@ -1103,7 +1117,7 @@ margin-right: 18px;
 .pricingDataReview > span,
 .productDataReview > span,
 .trafficSplitDataReview > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -1115,7 +1129,7 @@ margin-right: 18px;
 }
 .pricingDataReview > div > div > span,
 .trafficSplitDataReview > div > h5 {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     margin: 0 16px 0 8px;
     font-style: normal;
     font-weight: 400;
@@ -1132,7 +1146,7 @@ margin-right: 18px;
 .pricingDataReview > div > div > h5,
 .productDataReview > div > h5 {
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -1184,7 +1198,7 @@ margin-right: 18px;
     width: 81px;
     height: 45px;
 
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal !important;
     font-weight: 400 !important;
     font-size: 14px !important;
@@ -1213,7 +1227,7 @@ margin-right: 18px;
 }
 .scheduleTestBtn > p {
     position: absolute;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -1257,7 +1271,7 @@ margin-right: 18px;
     margin-top: 32px;
 }
 .userDetails > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -1272,7 +1286,7 @@ color: #536780;
 margin-bottom: 18px;
 }
 .userDetails > div > span{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -1282,7 +1296,7 @@ color: #8492A7;
 
 }
 .userDetails > h4{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 26px;
@@ -1310,7 +1324,7 @@ border-radius: 16px;
     align-items: center;
 }
 .onProfileStatistics > div  > span{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -1318,7 +1332,7 @@ border-radius: 16px;
     color: #536780;
 }
 .onProfileStatistics > div  > span > span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -1327,7 +1341,7 @@ border-radius: 16px;
 }
 .settings > h5{
 
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 20px;
@@ -1337,7 +1351,7 @@ color: #151515;
 
 }
 .MuiTabs-flexContainer > .Mui-selected{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -1354,7 +1368,7 @@ color: #151515;
 }
 .singleTab{
     
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 14px;
@@ -1389,7 +1403,7 @@ color: #8492A7;
     margin-bottom: 8px;
     margin-top: 24px;
     width: max-content;
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 14px;
@@ -1401,7 +1415,7 @@ color: #536780;
 
 }
 .profileInputField > div > input{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -1438,7 +1452,7 @@ color: #536780;
     height: 20px;
 }
 .dragAndDrop > label > div > p{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 14px;
@@ -1531,7 +1545,7 @@ border-radius: 10px;
 }
 .viewormanage-status > span, .viewormanage-product > span{
 
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -1543,7 +1557,7 @@ border-radius: 10px;
 .viewormanage-testAnalytics > div > button{
     width: 81px;
 height: 33px;
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 font-style: normal;
 font-weight: 700;
 font-size: 14px;
@@ -1572,7 +1586,7 @@ border-radius: 8px;
     flex-wrap: wrap;
 }
 .viewormanage-testAnalytics > div > h5{
-    font-family: 'PT Sans' !important;
+    font-family: 'Product Sans' !important;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -1587,7 +1601,7 @@ border-radius: 8px;
 border-radius: 8px;
 margin-top: 11px;
 margin-right: 5px;
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 text-transform: capitalize;
 font-style: normal;
 font-weight: 700;
@@ -1606,7 +1620,7 @@ color: #FFFFFF;
 
 }
 .viewormanage-testItemData > h5{
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
 font-style: normal;
 font-weight: 700;
 font-size: 30px;
@@ -1632,7 +1646,7 @@ color: #151515;
 .funnelBreakdown > h5{
     margin-left: 21px;
 
-font-family: 'PT Sans';
+font-family: 'Product Sans';
 font-style: normal;
 font-weight: 400;
 font-size: 16px;
@@ -2272,7 +2286,7 @@ color: #151515;
 }
 
 .welcomeInputs>div>div>input {
-    /* font-family: 'PT Sans'; */
+    /* font-family: 'Product Sans'; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2361,7 +2375,7 @@ color: #151515;
 }
 
 .googleSignInBtn>span {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2378,7 +2392,7 @@ color: #151515;
 }
 
 .noAccount>a {
-    font-family: 'PT Sans';
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2652,7 +2666,7 @@ html {
 }
 .inc-dec-btn-group button{
     text-transform:capitalize !important;
-    font-family: PT Sans !important;
+    font-family: Product Sans !important;
     font-size: 16px !important;
     font-style: normal !important;
     font-weight: 700 !important;
