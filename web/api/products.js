@@ -17,8 +17,8 @@ const allProducts = async (req, res) => {
   try {
     //let {shop} = req.headers
     var shop = process.env.SHOP;
-    shop = await decodeJWT(shop)
-    shop = shop.data
+    //shop = await decodeJWT(shop)
+    //shop = shop.data
     var access_token = "";
     // const shop = process.env.SHOP
   console.log("shop", shop);
@@ -261,8 +261,8 @@ const getVariants = async (req, res) => {
   //let {shop} = req.headers
   var shop = process.env.SHOP;
 
-  shop = await decodeJWT(shop)
-  shop = shop.data
+  //shop = await decodeJWT(shop)
+  //shop = shop.data
   const { productId } = req.body;
   console.log("==>2", req.body)
 
@@ -338,8 +338,8 @@ const createDuplicateProduct = async (req, res) => {
     //let {shop} = req.headers
     var shop = process.env.SHOP;
 
-    shop = await decodeJWT(shop)
-    shop = shop.data
+    //shop = await decodeJWT(shop)
+    //shop = shop.data
 
     // var shop = process.env.SHOP;
     var access_token;
