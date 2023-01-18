@@ -449,7 +449,7 @@ app.post("/abtest", async (req, res) => {
           var variantComparePrice = getTestCase.testCases[j].variants[i].variantComparePrice;
           var abVariantPrice = getTestCase.testCases[j].variants[i].abVariantPrice;
           var abVariantComparePrice = getTestCase.testCases[j].variants[i].abVariantComparePrice;
-          var duplicateVariantId = getTestCase.testCases[j].variants[i].duplicateVariant.split('gid://shopify/ProductVariant/')[1];
+          var duplicateVariantId = getTestCase.testCases[j].variants[i].duplicateVariantId.split('gid://shopify/ProductVariant/')[1];
           
           if(j == 0)
           {
@@ -562,15 +562,10 @@ app.get("/", async (req, res) => {
   const { shop, hmac, host, timestamp } = req.query;
   const encodedShop = await encodeJWT(shop)
   if (shop) {
-    console.log("shop:", shop);
-    console.log("encodedShop", encodedShop);
-    res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
+    res.cookie('shop', encodedShop)
     const shopGet = await Shop.findOne({ shop }).select(["shop", "app_status"]);
     if (shopGet && shopGet.app_status && shopGet.app_status == "installed") {
-      console.log("shop:", shop);
-      console.log("encodedShop", encodedShop);
-      res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
-      console.log("embedurl");
+      console.log("app open ma");
       // res.redirect(
       //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
       // );
@@ -589,7 +584,8 @@ app.get("/", async (req, res) => {
       );
     }
   } else {
-    res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+    res.status(200).send("Please open app from the Shopify admin panel.");
+    //res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
   }
 });
 

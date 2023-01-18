@@ -390,11 +390,11 @@ const CreateTestStep2 = ({ objectSent }) => {
     console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
         let duplicateProductData = {
+            "trafficSplit": objectToBeSent.trafficSplit,
             'productId': id,
             'productTitle': title,
             handle:handle,
             objectToBeSent,
-        
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {

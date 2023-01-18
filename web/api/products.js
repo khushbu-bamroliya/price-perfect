@@ -618,7 +618,7 @@ const createDuplicateProduct = async (req, res) => {
       let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
       // console.log("metafieldResponse", metafieldResponse);
     })
-    console.log("objectToBeSentCreated", objectToBeSentCreated);
+    console.log("objectToBeSentCreated", JSON.stringify(objectToBeSentCreated));
     // res.status(200).json({
     //   data: { duplicateProductId, originalProductTags, duplicateVariantsIds, objectToBeSent: objectToBeSentCreated },
     //   success: true,
@@ -630,7 +630,7 @@ const createDuplicateProduct = async (req, res) => {
 
         // let { trafficSplit, productId,testCases, status } = req.body;
 
-        let createTestData = await createTestModal.create({trafficSplit, testCases:objectToBeSentCreated, productId:fullProductId, status})
+        let createTestData = await createTestModal.create({trafficSplit, testCases:objectToBeSentCreated, productId:'gid://shopify/Product/'+productId, status})
 
         if (!createTestData){
             return res.json("Create Test case error...!")
