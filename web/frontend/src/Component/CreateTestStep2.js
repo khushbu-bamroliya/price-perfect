@@ -413,34 +413,34 @@ const CreateTestStep2 = ({ objectSent }) => {
                 // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
                 // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
                 // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
-                let data = {
-                    "trafficSplit": objectToBeSent.trafficSplit,
-                    "testCases": objectToBeSent.testCases,
-                    "productId": objectToBeSent.productId,
-                    // duplicateProductId,
-                    // duplicateVariants
+                // let data = {
+                //     "trafficSplit": objectToBeSent.trafficSplit,
+                //     "testCases": objectToBeSent.testCases,
+                //     "productId": objectToBeSent.productId,
+                //     // duplicateProductId,
+                //     // duplicateVariants
 
-                }
+                // }
             
-                fetch(getApiUrl + '/api/createTestCase', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(async (res2) => {
+                // fetch(getApiUrl + '/api/createTestCase', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Accept': 'application/json, text/plain, */*',
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify(data)
+                // })
+                //     .then(async (res2) => {
 
-                        const apiRes2 = await res2.json()
-                        console.log("Data sent:", apiRes2);
-                        objectSent(apiRes)
-                        navigate(`/reviewtest`,apiRes);
-
-
-                    })
-                    .catch((error) => console.log("Error", error))
-
+                //         const apiRes2 = await res2.json()
+                //         console.log("Data sent:", apiRes2);
+                        
+                        
+                    // })
+                    // .catch((error) => console.log("Error", error))
+                    
+                    objectSent(apiRes)
+                    navigate(`/reviewtest`,apiRes);
             })
             .catch((error) => console.log("Error", error))
 
@@ -463,14 +463,14 @@ const CreateTestStep2 = ({ objectSent }) => {
             console.log("calculated variant price temp", variantComparePriceTemp);
             if (percentIncDec === "+") {
 
-                const variantPriceTempFinal = Math.round(Number(item.variantPrice) + variantPriceTemp)
-                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) + variantComparePriceTemp)
+                const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
+                const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
             } else {
-                const variantPriceTempFinal = Math.round(Number(item.variantPrice) - variantPriceTemp)
-                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) - variantComparePriceTemp)
+                const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
+                const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
@@ -541,8 +541,8 @@ const CreateTestStep2 = ({ objectSent }) => {
                                         </div>
                                         <span className='box-title'>Test {item.testId}</span>
                                     </div>
-                                    <span className='box-price'> {variantCompareAtPriceData && <>${variantCompareAtPriceData}</>} - ${item.variants[0].abVariantComparePrice}</span>
-                                    <span className='box-prices'>${variantPriceData} - ${item.variants[0].abVariantPrice}</span>
+                                    <span className='box-price'> ${Math.min(...item.variants.map(j => j.abVariantComparePrice))} - ${Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span>
+                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
                                 </div>
                             </>))}
 

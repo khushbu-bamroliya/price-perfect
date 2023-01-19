@@ -7,7 +7,7 @@ import {useLocation} from 'react-router-dom';
 
 const ReviewTestPage = ({ created, productImage }) => {
     const location = useLocation();
-    console.log("Created on review page", created,location);
+    console.log("Created on review page", created,productImage);
     const navigate = useNavigate();
     const launchTest = () => {
         navigate('/yourtests')
@@ -29,7 +29,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>
                                     <Typography variant='p'>Confirm test configuration</Typography>
-                                    <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
+                                    {/* <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography> */}
+                                    <Typography variant='h5'>{created && created.handle }</Typography>
                                     <div className='reviewMainData'>
                                         <div className='pricingDataReview'>
 
@@ -38,11 +39,12 @@ const ReviewTestPage = ({ created, productImage }) => {
 
                                                 <div>
                                                     <Typography variant='h5'>Control</Typography>
-                                                    <Typography variant='p'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
+                                                    <Typography variant='p'>{created && created?.handle }</Typography>
                                                 </div>
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
                                                     {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
+                                                    <Typography variant='p'>{created && created.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography>
                                                 </div>
 
                                             </div>
@@ -51,7 +53,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Product</Typography>
                                             <div>
 
-                                                <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography>
+                                                <Typography variant='h5'>{created && created?.data?.testCases[0]?.variants[0]?.variantTitle }</Typography>
                                             </div>
 
                                         </div>
@@ -59,6 +61,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
                                                 {/* <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography> */}
+                                            {created && (<>    <Typography variant='h5'>{created.data.trafficSplit}/{100 - (created.data.trafficSplit * created.data.testCases.length)}</Typography></>)}
                                             </div>
                                         </div>
 

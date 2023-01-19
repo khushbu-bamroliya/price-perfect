@@ -638,6 +638,7 @@ const createDuplicateProduct = async (req, res) => {
 
             res.status(200).json({
                 data: createTestData,
+                handle,
                 success: true,
                 status: 200
             })
