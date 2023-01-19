@@ -1,5 +1,5 @@
 import { Box, Button, Card, IconButton, Menu, MenuItem, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import searchIcon from './Images/search-normal.png';
 import moreIcon from "./Images/more.png"
@@ -9,9 +9,13 @@ import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
 import { NavLink } from 'react-router-dom';
+import getApiUrl from "../controller/utils.js";
 
 const YourTests = () => {
     const pages = ['Active', 'Upcoming', 'Ended', 'Paused'];
+    const [] = useState();
+    const [allTests,setAllTests] = useState();
+    console.log("allTests",allTests);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -19,20 +23,21 @@ const YourTests = () => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+    const rows2 = []
     const rows = [
-        { id: 1, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD" },
-        { id: 2, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD" },
-        { id: 3, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD" },
-        { id: 4, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD" },
-        { id: 5, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD" },
-        { id: 6, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD" },
-        { id: 7, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD" },
-        { id: 8, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD" },
-        { id: 9, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD" },
+        { id: 1, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD",  },
+        { id: 2, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD",  },
+        { id: 3, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD",  },
+        { id: 4, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD",  },
+        { id: 5, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD",  },
+        { id: 6, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD",  },
+        { id: 7, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD",  },
+        { id: 8, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD",  },
+        { id: 9, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD",  },
     ];
     const columns = [
         {
-            field: 'images',
+            field: 'featuredImage',
             headerName: 'Product',
             width: 250,
             sortable: false,
@@ -42,11 +47,10 @@ const YourTests = () => {
                     <>
                         <div className='tableImages'>
                             <div>
-                                <img src={avatar} alt='' />
+                                <img src={params.row.featuredImage} alt='' />
                             </div>
                         </div>
                         <p className='productID'>
-                            {params.row.images}
                         </p>
                     </>
                 )
@@ -55,14 +59,14 @@ const YourTests = () => {
 
 
         {
-            field: 'Description',
+            field: 'product',
             headerName: 'Test',
             width: 500,
             sortable: false,
             flex: 0.3
         },
         {
-            field: 'price',
+            field: 'status',
             headerName: 'Status',
             width: 250,
             sortable: false,
@@ -85,10 +89,10 @@ const YourTests = () => {
             sortable: false,
             flex: 0.2,
             renderCell: (params) => {
-                console.log("params: " + params);
+                console.log("params: " + params.row.action);
                 return (
                     <div className='actionIcon'>
-                         <NavLink to="/managetest"><img src={EyeIcon} alt="" /></NavLink> 
+                         <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink> 
                         <img src={LinkIcon} alt="" />
                         <img src={TrashIcon} alt="" />
                     </div>
@@ -106,6 +110,116 @@ const YourTests = () => {
         //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
         // },
     ];
+    // const columns = [
+    //     {
+    //         field: 'images',
+    //         headerName: 'Product',
+    //         width: 250,
+    //         sortable: false,
+    //         flex: 0.3,
+    //         renderCell: (params) => {
+    //             return (
+    //                 <>
+    //                     <div className='tableImages'>
+    //                         <div>
+    //                             <img src={avatar} alt='' />
+    //                         </div>
+    //                     </div>
+    //                     <p className='productID'>
+    //                         {params.row.images}
+    //                     </p>
+    //                 </>
+    //             )
+    //         }
+    //     },
+
+
+    //     {
+    //         field: 'Description',
+    //         headerName: 'Test',
+    //         width: 500,
+    //         sortable: false,
+    //         flex: 0.3
+    //     },
+    //     {
+    //         field: 'price',
+    //         headerName: 'Status',
+    //         width: 250,
+    //         sortable: false,
+    //         flex: 0.2,
+
+    //     },
+    //     {
+    //         field: 'duration',
+    //         headerName: 'Duration',
+    //         width: 250,
+    //         sortable: false,
+    //         flex: 0.2,
+
+    //     },
+    //     {
+    //         field: 'action',
+    //         headerName: 'Action',
+    //         type: "number",
+    //         width: 150,
+    //         sortable: false,
+    //         flex: 0.2,
+    //         renderCell: (params) => {
+    //             console.log("params: " + params);
+    //             return (
+    //                 <div className='actionIcon'>
+    //                      <NavLink to="/managetest"><img src={EyeIcon} alt="" /></NavLink> 
+    //                     <img src={LinkIcon} alt="" />
+    //                     <img src={TrashIcon} alt="" />
+    //                 </div>
+    //             )
+    //         }
+    //     },
+    //     // {
+    //     //     field: 'fullName',
+    //     //     headerName: 'Full name',
+    //     //     description: 'This column has a value getter and is not sortable.',
+    //     //     sortable: false,
+    //     //     width: 250,
+    //     //     type: 'number',
+    //     //     valueGetter: (params) => console.log("params", params)
+    //     //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
+    //     // },
+    // ];
+    allTests && allTests.data.map((i) =>{
+        rows2.push({
+            id: i._id,
+            status:i.status,
+            duration:`${i.testCases[0].variants[0].variantPrice}USD`,
+            action:i._id,
+            product:i.productTitle,
+            featuredImage:i.featuredImage
+        })
+    }
+
+    )
+    const getAllTests = async () => {
+
+
+
+        fetch(getApiUrl + '/api/getTestCase', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(async (res) => {
+
+                const apiRes = await res.json()
+                console.log("apiRes.data", apiRes);
+                setAllTests(apiRes)
+            })
+            .catch((error) => console.log("Error", error))
+    }
+    useEffect(() => {
+        getAllTests()
+    },[])
     return (
         <>
             <Card className='yourTestsPage'>
@@ -176,13 +290,15 @@ const YourTests = () => {
                             </Box>
                         </div>
                         <div className='createTestTable' style={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                rows={rows}
+                            
+                                <DataGrid
+                                rows={rows2}
                                 columns={columns}
                                 pageSize={5}
                                 rowsPerPageOptions={[5]}
                                 disableColumnMenu
                             />
+                            
                         </div>
                     </Card>
                 </div>

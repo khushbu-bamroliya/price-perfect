@@ -21,7 +21,7 @@ const allProducts = async (req, res) => {
     //shop = shop.data
     var access_token = "";
     // const shop = process.env.SHOP
-  console.log("shop", shop);
+    console.log("shop", shop);
     if (shop) {
 
       const shopData = await Shop.findOne({ shop }).select(['access_token']);
@@ -42,7 +42,7 @@ const allProducts = async (req, res) => {
       if (endCursor != "") {
 
         query = `query products{
-              products(first: 10, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"':'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor}){ 
+              products(first: 10, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor}){ 
                   edges { 
                     cursor 
                     node { 
@@ -69,7 +69,7 @@ const allProducts = async (req, res) => {
                 }
               }
           `;
-          console.log("query: " + query);
+        console.log("query: " + query);
       } else {
         console.log("first time and searching");
         query = `query products{
@@ -282,6 +282,11 @@ const getVariants = async (req, res) => {
           id
           title
           handle
+          featuredImage {
+
+            src
+
+          }
           variants(first: 100) {
             edges {
               node {
@@ -289,6 +294,7 @@ const getVariants = async (req, res) => {
                 title
                 price
                 compareAtPrice
+              
               }
             }
           }
@@ -303,13 +309,16 @@ const getVariants = async (req, res) => {
     if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
       for (let resProduct of ans1.data.product.variants.edges) {
         const info = resProduct.node;
+
         products.push({
           // id: resProduct.id,
           // title: resProduct.title,
           id: info.id,
           variantTitle: info.title,
           variantPrice: info.price,
-          variantComparePrice: info.compareAtPrice
+          variantComparePrice: info.compareAtPrice,
+          featuredImage: ans1.data.product.featuredImage.src,
+          productTitle: ans1.data.product.title
         })
       }
 
@@ -332,7 +341,7 @@ const createDuplicateProduct = async (req, res) => {
 
     //console.log("1")
 
-    var { productId, productTitle, objectToBeSent, handle,trafficSplit, fullProductId,testCases, status } = req.body;
+    var { productId, productTitle,featuredImage,productPrice, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
     //console.log("==>2", req.body)
 
     //let {shop} = req.headers
@@ -628,20 +637,20 @@ const createDuplicateProduct = async (req, res) => {
     //Db API
     console.log("==>22", req.body);
 
-        // let { trafficSplit, productId,testCases, status } = req.body;
+    // let { trafficSplit, productId,testCases, status } = req.body;
 
-        let createTestData = await createTestModal.create({trafficSplit, testCases:objectToBeSentCreated, productId:'gid://shopify/Product/'+productId, status})
+    let createTestData = await createTestModal.create({ trafficSplit, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
 
-        if (!createTestData){
-            return res.json("Create Test case error...!")
-        }
+    if (!createTestData) {
+      return res.json("Create Test case error...!")
+    }
 
-            res.status(200).json({
-                data: createTestData,
-                handle,
-                success: true,
-                status: 200
-            })
+    res.status(200).json({
+      data: createTestData,
+      handle,
+      success: true,
+      status: 200
+    })
   } catch (error) {
     console.log("Error for duplicate product", error);
   }

@@ -51,7 +51,7 @@ useEffect(() => {
         <Route element={<YourTests />} path="/yourtests" />
         <Route element={<ReviewTestPage created={data} productImage={productImage}/>} path="/reviewtest" />
         <Route element={<YourProfile />} path="/profile" />
-        <Route element={<ViewOrManageTestPage />} path="/managetest" />
+        <Route element={<ViewOrManageTestPage />} path="/managetest/:id" />
       </Routes>
     </div>
   );

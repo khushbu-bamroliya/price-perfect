@@ -1,3 +1,4 @@
+const { decodeJWT } = require('../controllers/utils');
 const ProfileModal = require('../models/profileModal');
 
 const createProfile = async (req, res) => {
@@ -26,10 +27,15 @@ const createProfile = async (req, res) => {
 
 const getSingleProfile = async(req, res) => {
     try {
+        console.log("getSingleProfile ==>");
+        const {token} = req.params;
+        console.log("decodedProfileid",token);
+        const decodedProfile = await decodeJWT(token)
+        console.log("decodedProfile",decodedProfile);
 
         console.log("**** get single profile");
 
-        const fetchSingleData = await ProfileModal.findById(req.params.id)
+        const fetchSingleData = await ProfileModal.find({googleId:decodedProfile.data} )
 
         console.log("fetchSingleData", fetchSingleData)
 

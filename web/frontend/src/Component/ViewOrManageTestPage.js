@@ -1,12 +1,36 @@
 import { Button, Card, Chip, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 import LinkIcon from "./Images/link-2.png"
 import { DataGrid } from '@mui/x-data-grid'
 import EyeIcon from "./Images/eye.png"
 import TrashIcon from "./Images/trash.png"
+import { useParams } from 'react-router-dom'
+import getApiUrl from "../controller/utils.js";
+
 const ViewOrManageTestPage = () => {
+    const [singleTest, setSingleTest] = useState()
+    const {id} = useParams();
+    const getSingleTest = () => {
+    
+
+        fetch(getApiUrl + `/api/get-single-testcase/${id}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(async (res) => {
+
+                const apiRes = await res.json()
+                console.log("apiRes.data", apiRes);
+                setSingleTest(apiRes)
+            
+            })
+            .catch((error) => console.log("Error", error))
+    }
     const rows = [
         { id: 1, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ',revPerVisitor:"$203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "56 USD" },
         { id: 2, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ',revPerVisitor:"$203.34 ", initiateCheckout: 'Cersei', Purchases: 42, price: "56 USD" },
@@ -104,8 +128,13 @@ const ViewOrManageTestPage = () => {
         //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
         // },
     ];
+    useEffect(() => {
+        getSingleTest()
+    },[])
     return (
         <>
+        {singleTest && (<>
+
             <Card className='viewormanage'>
                 <div className='viewormanage-main'>
                     <Navbar />
@@ -115,19 +144,19 @@ const ViewOrManageTestPage = () => {
 
                             <Card className='viewormanage-testItem'>
                                 <div className='viewormanage-testItemImage'>
-                                    <img src={dummyProductImage} alt="" />
+                                    <img src={singleTest.data.featuredImage} alt="" />
                                 </div>
                                 <div className='viewormanage-testItemData'>
-                                    <Typography variant='h5'>Cat Socks Test </Typography>
+                                    <Typography variant='h5'>{singleTest.data.productTitle} </Typography>
                                     <Button>Copy Link <img src={LinkIcon} alt=""/></Button>
                                     <div>
                                         <div className='viewormanage-status'>
                                             <Typography variant='p'>Status</Typography>
-                                            <Chip label="Active" />
+                                         <Chip label={`${singleTest.data.status}`} /> 
                                         </div>
                                         <div className='viewormanage-product'>
                                             <Typography variant='p'>Product</Typography>
-                                            <Typography variant='p'>Cat Socks</Typography>
+                                            <Typography variant='p'>{singleTest.data.productTitle}</Typography>
 
                                         </div>
                                     </div>
@@ -141,11 +170,12 @@ const ViewOrManageTestPage = () => {
 
                                         <div>
                                             <Typography variant='h5'>Control</Typography>
-                                            <Typography variant='p'>$10</Typography>
+                                            <Typography variant='p'>${singleTest.data.productPrice}</Typography>
                                         </div>
                                         <div>
                                             <Typography variant='h5'>Variations</Typography>
-                                            <Typography variant='p'>$13, $17, $20 </Typography>
+                                            {singleTest.data.testCases.map(i => i.variants.map(j => (<Typography variant='p'>{j.abVariantPrice},</Typography>)))}
+                                        
                                         </div>
 
                                     </div>
@@ -154,14 +184,14 @@ const ViewOrManageTestPage = () => {
                                     <Typography variant='p'>Product</Typography>
                                     <div>
 
-                                        <Typography variant='h5'>Cat Socks</Typography>
+                                        <Typography variant='h5'>{singleTest.data.productTitle}</Typography>
                                     </div>
 
                                 </div>
                                 <div className='trafficSplitDataReview'>
                                     <Typography variant='p'>Traffic Split </Typography>
                                     <div>
-                                        <Typography variant='h5'>50/50</Typography>
+                                        <Typography variant='h5'>{singleTest.data.trafficSplit}</Typography>
                                     </div>
                                 </div>
 
@@ -196,6 +226,7 @@ const ViewOrManageTestPage = () => {
                     </Card>
                 </div>
             </Card>
+        </>)}
         </>
     )
 }

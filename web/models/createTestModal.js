@@ -17,6 +17,18 @@ const createTestSchema = mongoose.Schema({
     status:{
         type: String,
         trim: true,
+    },
+    featuredImage:{
+        type: String,
+        trim: true,
+    }, 
+    productTitle:{
+        type: String,
+        trim: true,
+    },
+    productPrice:{
+        type: String,
+        trim: true,
     }
 });
 

@@ -33,7 +33,7 @@ router.get("/getTestCase", getTestCase)
 
 router.post("/create-profile", createProfile)
 
-router.get("/getSingleProfile/:id", getSingleProfile)
+router.get("/getSingleProfile/:token", getSingleProfile)
 
 router.put("/update-profile/:id", getSingleProfileandUpdateById)
 

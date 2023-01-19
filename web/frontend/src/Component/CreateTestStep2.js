@@ -394,7 +394,10 @@ const CreateTestStep2 = ({ objectSent }) => {
             'productId': id,
             'productTitle': title,
             handle:handle,
+            "status": "pending",
             objectToBeSent,
+            featuredImage:variantRes.data[0].featuredImage,
+            productPrice:variantRes.data[0].variantPrice
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {
@@ -439,8 +442,8 @@ const CreateTestStep2 = ({ objectSent }) => {
                     // })
                     // .catch((error) => console.log("Error", error))
                     
-                    objectSent(apiRes)
-                    navigate(`/reviewtest`,apiRes);
+                    objectSent({apiRes, controlData: variantRes.data})
+                    navigate(`/reviewtest`);
             })
             .catch((error) => console.log("Error", error))
 
@@ -568,7 +571,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                         <Typography variant='p'> 2. Set your traffic split </Typography>
                         <Slider className="trafficSlider" valueLabelDisplay='auto' min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
-                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography>
+                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
                             <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Confirm</Button>
