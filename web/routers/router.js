@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { allProducts, getVariants, createDuplicateProduct } = require("../api/products.js");
-const { SignUpUserDetails } = require("../api/users")
+const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
     deleteTestCaseData,getSingleTestCase } = require("../api/createTest");
@@ -35,10 +35,12 @@ router.post("/create-profile", createProfile)
 
 router.get("/getSingleProfile/:token", getSingleProfile)
 
-router.put("/update-profile/:id", getSingleProfileandUpdateById)
+router.put("/update-profile/:token", getSingleProfileandUpdateById)
 
 router.delete("/deleteTestCase/:id", deleteTestCaseData)
 
 router.get("/get-single-testcase/:id", getSingleTestCase)
+
+router.get('/signin', manualSignIn);
 
 module.exports = router;

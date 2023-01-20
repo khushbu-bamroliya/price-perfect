@@ -15,6 +15,8 @@ const in_array = (array, id) => {
 
 const allProducts = async (req, res) => {
   try {
+    
+const item_per_page = 10;
     //let {shop} = req.headers
     var shop = process.env.SHOP;
     //shop = await decodeJWT(shop)
@@ -31,8 +33,8 @@ const allProducts = async (req, res) => {
     const {
       search,
       // endCursor,
-      hasNextPage,
-      hasPreviousPage,
+      hasNextPageCursor,
+      hasPreviousPageCursor,
     } = req.body;
     const endCursor = null
     console.log(req.body, "search");
@@ -40,9 +42,18 @@ const allProducts = async (req, res) => {
 
     async function recursion_products(endCursor) {
       if (endCursor != "") {
-
+        console.log("cursor not blank", endCursor);
+        let lastData;
+        let firstData;
+        if (hasPreviousPageCursor !== null) {
+          lastData = item_per_page;
+          firstData = null;
+        } else {
+          lastData = null;
+          firstData = item_per_page;
+        }
         query = `query products{
-              products(first: 10, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor}){ 
+              products(first: ${firstData}, last:${lastData}, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor} , before: ${JSON.stringify(hasPreviousPageCursor)}){ 
                   edges { 
                     cursor 
                     node { 
@@ -120,8 +131,9 @@ const allProducts = async (req, res) => {
 
       var products = [];
       var endCursorFromApi = "";
-      var hasNextPageFromApi = "";
-      var hasPreviousPageFromApi = "";
+      var hasNextPageFromApi = ans1.products.pageInfo.hasNextPage;
+      var hasPreviousPageFromApi = ans1.products.pageInfo.hasPreviousPage;
+      var startCursorFromApi = ans1.products.pageInfo.startCursor;
 
       if (ans && Array.isArray(ans) && ans.length > 0) {
         if (
@@ -139,6 +151,7 @@ const allProducts = async (req, res) => {
         }
 
         var tempArr1 = [];
+        var tempArr2 = [];
 
         for (let index = 0; index < ans.length; index++) {
           if (index + 1 == ans.length) {
@@ -215,7 +228,7 @@ const allProducts = async (req, res) => {
     }
 
     //call first time
-    const resProducts = await recursion_products(endCursor);
+    const resProducts = await recursion_products(JSON.stringify(hasNextPageCursor));
     console.log("resProducts: " + resProducts);
 
     res.status(200).send(resProducts);
@@ -317,7 +330,7 @@ const getVariants = async (req, res) => {
           variantTitle: info.title,
           variantPrice: info.price,
           variantComparePrice: info.compareAtPrice,
-          featuredImage: ans1.data.product.featuredImage.src,
+          featuredImage: ans1.data.product.featuredImage ? ans1.data.product.featuredImage.src: "",
           productTitle: ans1.data.product.title
         })
       }

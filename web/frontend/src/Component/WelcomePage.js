@@ -19,9 +19,34 @@ import { getUser, handleGoogleSignIn } from "../controller/handleGoogleSignIn";
 import Loader from "./Loader";
 
 
-export default function WelcomePage({shop}) {
+export default function WelcomePage({ shop }) {
   const navigate = useNavigate()
+  const initialValues = {
+    email: "",
+    password: "",
+}
+const [userData, setUserData] = useState(initialValues);
+
+console.log("userData", userData);
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({
+        ...userData,
+        [name]: value,
+    });
+};
   const [loader, setLoader] = useState(false);
+  const handleManualSignIn = () => {
+    fetch(`/api/signin?${new URLSearchParams({email: userData.email, password:userData.password})}`, {
+      method: 'GET',
+
+    })
+      .then(async (response) => {
+        console.log("response", await response.json())
+        navigate('/homeDashboard');
+      })
+      .catch(err => console.log(err))
+  }
   return (
     <>
       <div className="welcomePage">
@@ -42,11 +67,11 @@ export default function WelcomePage({shop}) {
                 <div>
                   <div className='welcomeInputs'>
                     <Typography variant='p'>Email</Typography>
-                    <TextField fullWidth id="fullWidth" placeholder='Enter your mail' />
+                    <TextField fullWidth id="fullWidth" placeholder='Enter your mail' name='email' value={userData.email} onChange={handleInputChange} />
                   </div>
                   <div className='welcomeInputs'>
                     <Typography variant='p'>Password</Typography>
-                    <TextField fullWidth id="fullWidth" placeholder='Enter your Password' />
+                    <TextField fullWidth id="fullWidth" placeholder='Enter your Password' name='password' value={userData.password} onChange={handleInputChange} />
                   </div>
                   <div className="forgetPass">
                     <FormControlLabel className='RememberMe label-remember' control={<Checkbox defaultChecked />} label="Remember for 30 days " />
@@ -56,8 +81,8 @@ export default function WelcomePage({shop}) {
               </div>
               <span className="mb-34">
                 <Stack spacing={2} direction="column" className='btnStack'>
-                  <Button variant="contained" className='SignInBtn' onClick={() => setLoader(true)}>{ loader ? <Loader/>: <> Sign in</>}</Button>
-                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoader, shop, navigate)}> {loader === true ? <Loader/> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>) } </Button>
+                  <Button variant="contained" className='SignInBtn' onClick={() => handleManualSignIn()}>Sign in</Button>
+                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoader, shop, navigate)}> {loader === true ? <Loader /> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>)} </Button>
                 </Stack>
               </span>
               <div className="noAccount sign-up">

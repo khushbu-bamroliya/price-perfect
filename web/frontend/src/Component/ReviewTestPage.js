@@ -61,7 +61,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
                                                 {/* <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography> */}
-                                            {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
+                                            {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
                                             </div>
                                         </div>
 

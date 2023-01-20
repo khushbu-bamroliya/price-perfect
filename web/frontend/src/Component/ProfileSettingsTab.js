@@ -1,83 +1,135 @@
 import { Button, TextField } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import dragAndDropIcon from './Images/dragAndDropIcon.png'
 import getApiUrl from "../controller/utils.js";
 
 const ProfileSettingsTab = () => {
-    // const getUser = () => {
+    const initialValues = {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        googleId: "",
+        country: "",
+        picture: "no file choosen"
+    }
+    const [userData, setUserData] = useState(initialValues);
 
-    //     var cookieArr = document.cookie.split(";");
+    console.log("userData", userData);
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUserData({
+            ...userData,
+            [name]: value,
+        });
+    };
+    const getUser = () => {
 
-    //     // Loop through the array elements
-    //     for (var i = 0; i < cookieArr.length; i++) {
-    //         var cookiePair = cookieArr[i].split("=");
+        var cookieArr = document.cookie.split(";");
 
-    //         /* Removing whitespace at the beginning of the cookie name
-    //         and compare it with the given string */
-    //         if ("token" == cookiePair[0].trim()) {
+        // Loop through the array elements
+        for (var i = 0; i < cookieArr.length; i++) {
+            var cookiePair = cookieArr[i].split("=");
 
-    //         }
-    //     }
-    //     console.log("updateUser()");
+            /* Removing whitespace at the beginning of the cookie name
+            and compare it with the given string */
+            if ("token" == cookiePair[0].trim()) {
+
+                fetch(getApiUrl + `/api/getSingleProfile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
+                    method: 'GET',
+
+                })
+                    .then(async (res) => {
+                        console.log("res profile: " + JSON.stringify(res));
+                        const apiRes = await res.json()
+                        setUserData(apiRes.data)
+                        console.log("apiRes.data", apiRes);
+
+                    })
+                    .catch((error) => console.log("Error", error))
+            }
+        }
+        console.log("updateUser()");
 
 
-    //     fetch(getApiUrl + `/api/getSingleProfile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"','')}`, {
-    //         method: 'GET',
+    }
+    const updateUser = () => {
+        var cookieArr = document.cookie.split(";");
+        for (var i = 0; i < cookieArr.length; i++) {
+            var cookiePair = cookieArr[i].split("=");
+            if ("token" == cookiePair[0].trim()) {
+                fetch(getApiUrl + `/api/update-profile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
+                    method: 'PUT',
+                    headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+                    body: JSON.stringify(userData)
+                })
+                    .then(async (res) => {
+                        console.log("res profile: " + JSON.stringify(res));
+                        const apiRes = await res.json()
+                        setUserData(apiRes.data)
+                        console.log("apiRes.data", apiRes);
 
-    //     })
-    //         .then(async (res) => {
-    //             console.log("res profile: " + JSON.stringify(res));
-    //             const apiRes = await res.json()
-    //             console.log("apiRes.data", apiRes);
+                    })
+                    .catch((error) => console.log("Error", error))
+            }
+        }
+        console.log("updateUser()");
 
-    //         })
-    //         .catch((error) => console.log("Error", error))
-    // }
+    }
 
-useEffect(() => {
-    // getUser()
-}, [])
+    useEffect(() => {
+        getUser()
+    }, [])
 
-return (
-    <>
-        <div className="profilesettingsTab">
-            <div className='profileInputsBlock1'>
-
-                <label className='profileInputs'>
-                    <p>First Name</p>
-                    <TextField placeholder='First name' className='profileInputField' />
-                </label>
-                <label className='profileInputs'>
-                    <p>Last Name</p>
-                    <TextField placeholder='Last name' className='profileInputField' />
-                </label>
-            </div>
-            <div className='profileInputsBlock2'>
-                <div className='mailandcountry'>
+    return (
+        <>
+            <div className="profilesettingsTab">
+                <div className='profileInputsBlock1'>
 
                     <label className='profileInputs'>
-                        <p>Email Address</p>
-                        <TextField placeholder='Your mail' className='profileInputField' />
+                        <p>First Name</p>
+                        <TextField placeholder='First name' name='firstName' value={userData.firstName} onChange={handleInputChange} className='profileInputField' />
                     </label>
                     <label className='profileInputs'>
-                        <p>Country</p>
-                        <TextField placeholder='United States' className='profileInputField' />
+                        <p>Last Name</p>
+                        <TextField placeholder='Last name' name='lastName' value={userData.lastName} onChange={handleInputChange} className='profileInputField' />
                     </label>
                 </div>
-                <div className='dragAndDrop'>
-                    <label>
-                        <p>Your Photo</p>
-                        <div>
-                            <img src={dragAndDropIcon} alt="" />
-                            <p>Click to upload, or drag and drop</p>
-                        </div>
-                    </label>
+                <div className='profileInputsBlock2'>
+                    <div className='mailandcountry'>
+
+                        <label className='profileInputs'>
+                            <p>Email Address</p>
+                            <TextField placeholder='Your mail' name='email' value={userData.email} onChange={handleInputChange} className='profileInputField' />
+                        </label>
+                        <label className='profileInputs'>
+                            <p>Country</p>
+                            <TextField placeholder='United States' name='country' value={userData.country} onChange={handleInputChange} className='profileInputField' />
+                        </label>
+                    </div>
+                    <div className='dragAndDrop'>
+                        <label>
+                            <p>Your Photo</p>
+                            <div>
+                                <input type="file"
+                                    // value={userData.picture}
+                                    name="picture"
+                                    onChange={handleInputChange}
+                                />
+                                <img src={dragAndDropIcon} alt="" />
+                                <p>Click to upload, or drag and drop</p>
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-        {/* <Button onClick={() => updateUser}>Save</Button> */}
-    </>
-)
+            <Button onClick={() => updateUser()}>Save</Button>
+        </>
+    )
 }
 
 export default ProfileSettingsTab

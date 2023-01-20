@@ -4,8 +4,9 @@ import Navbar from './Navbar';
 import searchIcon from './Images/search-normal.png';
 import { DataGrid } from '@mui/x-data-grid';
 import avatar from "./Images/image.png"
-import addTestCases from "./Images/add-square.png"
+import addTestCases from "./Images/add-circle.png"
 import { NavLink, useNavigate } from 'react-router-dom';
+import getApiUrl from "../controller/utils.js";
 
 const CreateTestPage = ({shop,getProductImage }) => {
     const navigate = useNavigate();
@@ -129,7 +130,7 @@ console.log("shop from CreateTestPage", shop);
 
         }
         // const data =    await fetch(`https://691b-2405-201-200c-6246-c0db-a72d-57f9-f6ea.in.ngrok.io/api/get-products`, config).then(async (res) => console.log("All products",await res.json())).catch((err) => console.log("Product error", err))
-        await fetch(`/api/get-products`, config)
+        await fetch(getApiUrl+`/api/get-products`, config)
             .then(async (res) => {
                 const products = await res.json();
 

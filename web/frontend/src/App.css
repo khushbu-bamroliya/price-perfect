@@ -3,18 +3,24 @@
     src: url("../public/ProductSansRegular.ttf");
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+
 .App {
     text-align: center;
 }
+
 /* Navbar css is here  */
 
 .navbar {
     width: 100%;
 }
+
 .moreIconNav {
     transform: rotate(90deg) !important;
 }
-.navbar > header {
+
+.navbar>header {
     background: #FFFFFF;
     border-radius: 14px;
     box-shadow: none;
@@ -23,6 +29,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .logo {
     width: 160px;
     height: 38px;
@@ -30,32 +37,39 @@
     left: 80px;
     top: 70px;
 }
-.avaratIcon > img {
+
+.avaratIcon>img {
     width: 38px;
     height: 38px;
 }
+
 .avaratIcon {
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
 }
 
-.NavCenterBtn > button {
+.NavCenterBtn>button {
     margin: 0 9px;
 }
-.NavCenterBtn > button > div > a {
+
+.NavCenterBtn>button>div>a {
+    font-family: Product Sans;
     color: #B6BEC7;
     text-decoration: none !important;
     display: flex;
     text-transform: capitalize;
     align-items: center;
 }
+
 .NavRight {
     border-radius: 0 !important;
 }
-.NavRight > img {
+
+.NavRight>img {
     width: 14px;
     height: 14px;
 }
-.NavRight > span {
+
+.NavRight>span {
 
     margin-left: 14px;
     margin-right: 16px;
@@ -69,10 +83,11 @@
     color: #000000;
 }
 
-.navIcons > a > img {
+.navIcons>a>img {
     margin-right: 12px;
 }
-.NavCenterBtn > button:active > div > a > span {
+
+.NavCenterBtn>button:active>div>a>span {
 
     /* font-family: 'Product Sans';
   font-style: normal;
@@ -87,6 +102,7 @@
     background-clip: text;
     text-fill-color: transparent;
 }
+
 /* .NavCenterBtn > button:nth-child(1) > div > a > span {
 
     font-family: 'Product Sans';
@@ -109,31 +125,39 @@
 
 /* Home dashboard page css is here */
 
-.createTestStep2{
+.createTestStep2 {
     height: 94.5vh;
     overflow: auto !important;
 }
+
 .homeDashboard-main,
 .createTestPage-main,
 .yourTests-main,
 .createTestStep2-main,
-.reviewTest-main, .profile-main , .viewormanage-main{
+.reviewTest-main,
+.profile-main,
+.viewormanage-main {
     max-width: 1440px;
     margin: 0 auto;
 }
+
 .homeDashboard,
 .createTestPage,
 .yourTestsPage,
 .createTestStep2,
-.reviewTest, .profile, .viewormanage {
+.reviewTest,
+.profile,
+.viewormanage {
     box-shadow: none !important;
     padding: 25px;
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     margin: auto;
 }
+
 .dashboardBlock {
     margin-top: 48px;
 }
+
 .dashboardTitle {
     font-family: 'Product Sans';
     font-style: normal;
@@ -143,7 +167,8 @@
 
     color: #151515;
 }
-.dailyStats > div {
+
+.dailyStats>div {
     width: 33.33%;
     background: #FFFFFF !important;
     border-radius: 14px;
@@ -151,7 +176,8 @@
     padding: 24px;
     margin: 0 15px;
 }
-.dailyStatsBlock1 > div > div {
+
+.dailyStatsBlock1>div>div {
     width: 50px;
     height: 50px;
     background: #F9F8FE;
@@ -161,14 +187,17 @@
     justify-content: center;
     align-items: center;
 }
-.dailyStatsBlock1 > div > span > span {
+
+.dailyStatsBlock1>div>span>span {
     color: #F42272;
 }
-.dailyStatsBlock1 > div {
+
+.dailyStatsBlock1>div {
     display: flex;
     align-items: center;
 }
-.dailyStatsBlock1 > div > span {
+
+.dailyStatsBlock1>div>span {
     margin-left: 22px;
     font-family: 'Product Sans';
     font-style: normal;
@@ -180,10 +209,11 @@
 
 }
 
-.dailyStats > div {
+.dailyStats>div {
     margin: 24px 14px 0;
 
 }
+
 .dailyStats {
     display: flex;
     margin: 0 -14px;
@@ -196,14 +226,17 @@
     justify-content: space-between;
 
 }
-.dailyStatsBlock2-sub2 > div {
+
+.dailyStatsBlock2-sub2>div {
     display: flex;
 }
-.dailyStatsBlock2 > hr {
+
+.dailyStatsBlock2>hr {
     height: 78px !important;
     border: 1px solid #E9E9E9;
     margin: 0;
 }
+
 .dailyStatsBlock2 {
     display: flex;
     justify-content: space-around;
@@ -211,13 +244,16 @@
     align-items: center;
     flex-wrap: wrap;
 }
-.moreIcon > img:hover {
+
+.moreIcon>img:hover {
     cursor: pointer;
 }
-.moreIcon > img {
+
+.moreIcon>img {
     width: 24px;
     height: 24px;
 }
+
 .dailyStatsBlock2-sub1 {
     font-family: 'Product Sans';
     font-style: normal;
@@ -227,18 +263,22 @@
     /* identical to box height */
     color: #F42272;
 }
-.dailyStatsBlock2-sub1 h4,.dailyStatsBlock2-sub2 > div h4{
-    font-size:unset;
+
+.dailyStatsBlock2-sub1 h4,
+.dailyStatsBlock2-sub2>div h4 {
+    font-size: unset;
     line-height: unset;
     letter-spacing: unset;
     font-weight: unset;
 }
-.dailyStatsBlock2-sub2 > div > img {
+
+.dailyStatsBlock2-sub2>div>img {
     width: 22px;
     height: 22px;
     margin: auto;
 }
-.dailyStatsBlock2-sub2 > span {
+
+.dailyStatsBlock2-sub2>span {
     width: 82px;
     height: 17px;
     font-family: 'Product Sans';
@@ -250,7 +290,8 @@
     color: #8492A7;
 
 }
-.dailyStatsBlock2-sub2 > div {
+
+.dailyStatsBlock2-sub2>div {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -260,6 +301,7 @@
     color: #1BC78A;
     margin-top: 8px;
 }
+
 .downArrow {
     font-family: 'Product Sans';
     font-style: normal;
@@ -270,20 +312,23 @@
 
     color: #F42254;
 }
-.revenue > h4 {
+
+.revenue>h4 {
     color: #151515 !important;
 }
-.changeRevenue > h4 {
+
+.changeRevenue>h4 {
     color: #1BC78A !important;
 }
-.analyticsSection > div {
+
+.analyticsSection>div {
     background: #FFFFFF;
     border-radius: 14px;
     box-shadow: none;
     padding: 25px;
 }
 
-.analyticsSection > div > div > span {
+.analyticsSection>div>div>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -291,25 +336,30 @@
     line-height: 19px;
     color: #151515;
 }
+
 .analyticsSection {
     margin-top: 24px;
     display: flex;
     flex-wrap: nowrap;
 }
+
 .testAnalytics {
     margin-right: 12px;
     width: 766px;
     height: 414px;
 }
+
 .yourTests {
     margin-left: 12px;
     width: 589px;
     height: 414px;
 }
-.analyticsBtnGroup > button > img {
+
+.analyticsBtnGroup>button>img {
     margin-right: 8px;
 }
-.analyticsBtnGroup > button {
+
+.analyticsBtnGroup>button {
     height: 15px;
 
     font-family: 'Product Sans';
@@ -325,6 +375,7 @@
     order: 1;
     flex-grow: 0;
 }
+
 .analyticsBtnGroup {
     box-shadow: none !important;
     display: flex;
@@ -334,12 +385,13 @@
 
 /* create test page css is here  */
 
-.createTestBlock > div,
-.yourTestBlock > div {
+.createTestBlock>div,
+.yourTestBlock>div {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
 }
+
 .createTestBlock,
 
 .yourTestBlock {
@@ -349,8 +401,9 @@
     border-radius: 14px !important;
 
 }
-.createTest-Block1 > span,
-.yourTest-Block1 > span {
+
+.createTest-Block1>span,
+.yourTest-Block1>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -358,8 +411,9 @@
     line-height: 19px;
     color: #8492A7;
 }
-.createTest-Block1 > h5,
-.yourTest-Block1 > h5 {
+
+.createTest-Block1>h5,
+.yourTest-Block1>h5 {
     margin-top: 8px;
     margin-bottom: 4px;
     font-family: 'Product Sans';
@@ -369,6 +423,7 @@
     line-height: 27px;
     color: #151515;
 }
+
 .createTest-Block2,
 .yourTest-Block2 {
     position: relative;
@@ -376,18 +431,22 @@
     display: flex;
     align-items: center;
 }
-.createTest-Block2 > div {
+
+.createTest-Block2>div {
     min-width: 411px;
 }
-.yourTest-Block2 > div {
+
+.yourTest-Block2>div {
     min-width: 224px;
 }
-.createTest-Block2 > div > div > fieldset,
-.yourTest-Block2 > div > div > fieldset {
+
+.createTest-Block2>div>div>fieldset,
+.yourTest-Block2>div>div>fieldset {
     border: 0 !important;
 }
-.createTest-Block2 > div > div > input,
-.yourTest-Block2 > div > div > input {
+
+.createTest-Block2>div>div>input,
+.yourTest-Block2>div>div>input {
     padding-left: 43px;
     background: #F9F8FE;
     border-radius: 10px;
@@ -399,7 +458,8 @@
     color: #8492A7;
     height: auto !important;
 }
-.createTest-Block2 > button {
+
+.createTest-Block2>button {
     padding: 14px 18px;
     gap: 10px;
     text-transform: capitalize;
@@ -414,8 +474,9 @@
     border: 1px solid #FF8FD2;
     margin-left: 14px;
 }
-.createTest-Block2 > img,
-.yourTest-Block2 > img {
+
+.createTest-Block2>img,
+.yourTest-Block2>img {
     width: 18px;
     height: 18px;
     position: absolute;
@@ -424,13 +485,14 @@
     top: 50%;
     transform: translate(13px, -50%);
 }
+
 .createTestTable {
     width: 100%;
     height: 100%;
     margin-top: 39px;
 }
 
-.yourTest-Block3 > button {
+.yourTest-Block3>button {
     font-family: 'Product Sans';
     font-style: normal;
     text-transform: capitalize;
@@ -441,17 +503,21 @@
     padding: 6px 10px;
     margin: auto 13.5px;
 }
+
 .yourTest-Block3 {
     display: flex;
     justify-content: center;
 }
-.actionIcon > img:hover {
+
+.actionIcon>img:hover {
     cursor: pointer;
 }
-.actionIcon > img {
+
+.actionIcon>img {
     margin: auto 10px;
 }
-.createTestStep2Block > ol {
+
+.createTestStep2Block>ol {
 
     font-family: 'Product Sans';
     font-style: normal;
@@ -464,8 +530,9 @@
     color: #8492A7;
 
 }
-.createTestStep2Block > span,
-.reviewTestBlock > span {
+
+.createTestStep2Block>span,
+.reviewTestBlock>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -473,8 +540,9 @@
     line-height: 22px;
     color: #8492A7;
 }
-.createTestStep2Block > h4,
-.reviewTestBlock > h4 {
+
+.createTestStep2Block>h4,
+.reviewTestBlock>h4 {
 
     font-family: 'Product Sans';
     font-style: normal;
@@ -486,13 +554,15 @@
     margin-bottom: 10px;
 
 }
-.createTestStep2Block > div,
-.reviewTestBlock > div {
+
+.createTestStep2Block>div,
+.reviewTestBlock>div {
     width: 100%;
     display: flex;
     margin-top: 170px;
     margin-bottom: 50px;
 }
+
 .createTestStep2Block,
 .reviewTestBlock {
     box-shadow: none !important;
@@ -500,9 +570,11 @@
     padding: 40px;
     border-radius: 14px !important;
 }
+
 .trafficSlider {
     color: #F73D89 !important;
 }
+
 .trafficSplitInfo {
     font-family: 'Inter';
     font-style: normal;
@@ -512,6 +584,7 @@
     letter-spacing: 0.01em;
     color: #8492A7;
 }
+
 .step2completed {
     /* Gradient */
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
@@ -528,11 +601,11 @@
     text-transform: capitalize !important;
 }
 
-.configureTest1 > h2,
-.manualmodal > h2,
-.byPercentage > h2,
-.editTest > h2,
-.controlSettings > h2 {
+.configureTest1>h2,
+.manualmodal>h2,
+.byPercentage>h2,
+.editTest>h2,
+.controlSettings>h2 {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -544,10 +617,11 @@
     color: #151515;
 
 }
-.configureTest1 > span,
-.manualmodal > span,
-.byPercentage > span,
-.editTest > span {
+
+.configureTest1>span,
+.manualmodal>span,
+.byPercentage>span,
+.editTest>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -556,7 +630,8 @@
     color: #8492A7;
     width: max-content;
 }
-.controlSettings > span {
+
+.controlSettings>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -569,6 +644,7 @@
     letter-spacing: 0.02em !important;
 
 }
+
 .configureTest1 {
     background: #FFFFFF;
     border: 0 !important;
@@ -582,21 +658,24 @@
 .closeBtn:hover {
     cursor: pointer;
 }
+
 .closeBtn {
     position: absolute;
     top: 20px;
     right: 20px;
 }
-.setManuallyBlock > button, .pauseTest {
+
+.setManuallyBlock>button,
+.pauseTest {
     margin-top: 13px;
     height: 45px;
-margin-right: 18px;
+    margin-right: 18px;
     /* Gradient */
     text-transform: capitalize;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px;
     padding: 13px 20px;
-    text-transform: capitalize  !important;
+    text-transform: capitalize !important;
     font-family: 'Product Sans' !important;
     font-style: normal !important;
     font-weight: 700 !important;
@@ -607,7 +686,7 @@ margin-right: 18px;
     color: #FFFFFF !important;
 }
 
-.setManuallyBlock > span {
+.setManuallyBlock>span {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -619,6 +698,7 @@ margin-right: 18px;
 
     color: #8492A7;
 }
+
 .setManuallyBlock {
     width: auto;
     height: 176px;
@@ -632,6 +712,7 @@ margin-right: 18px;
 }
 
 .setAutoBlock button {
+    font-family: 'Product Sans' !important;
     font-style: normal;
     font-weight: 700;
     font-size: 16px;
@@ -644,7 +725,13 @@ margin-right: 18px;
     position: relative;
     border-radius: 8px;
 }
+
 .setAutoBlock p {
+    font-family: 'Product Sans' !important;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
     position: absolute;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     -webkit-background-clip: text;
@@ -653,13 +740,15 @@ margin-right: 18px;
     text-fill-color: transparent;
 
 }
+
 .btn_adjust {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 12px;
 }
-.setAutoBlock > span {
+
+.setAutoBlock>span {
 
     font-family: 'Inter';
     font-style: normal;
@@ -672,6 +761,7 @@ margin-right: 18px;
 
     color: #8492A7;
 }
+
 .setAutoBlock {
     width: auto;
     height: 176px;
@@ -696,6 +786,7 @@ margin-right: 18px;
     border-radius: 14px;
     padding: 45px;
 }
+
 .editTest,
 .controlSettings {
     width: 45vw;
@@ -718,6 +809,7 @@ margin-right: 18px;
     padding: 45px !important;
     height: max-content !important;
 }
+
 .manualModalTable {
     width: 100%;
     /* height: 20vh; */
@@ -726,8 +818,9 @@ margin-right: 18px;
     box-shadow: none !important;
     height: 302px;
 }
-.manualmodal > div,
-.byPercentage > div {
+
+.manualmodal>div,
+.byPercentage>div {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -736,11 +829,13 @@ margin-right: 18px;
     margin-bottom: 33px;
     border-radius: 12px;
 }
-.manualmodal > div {
+
+.manualmodal>div {
     margin-bottom: 23px !important;
 }
-.manualmodal > div > button,
-.byPercentage > div > button {
+
+.manualmodal>div>button,
+.byPercentage>div>button {
 
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px;
@@ -755,14 +850,16 @@ margin-right: 18px;
     color: #FFFFFF;
 
 }
-.manualmodal > div > div {
+
+.manualmodal>div>div {
     margin: 0 14px !important;
 }
-.manualmodal > div {
+
+.manualmodal>div {
     padding: 15px 0;
 }
 
-.byPercentageDirection > h5 {
+.byPercentageDirection>h5 {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -773,7 +870,8 @@ margin-right: 18px;
     color: #151515;
     margin-bottom: 10px;
 }
-.byPercentageDirection > span > h5 {
+
+.byPercentageDirection>span>h5 {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -784,6 +882,7 @@ margin-right: 18px;
     color: #151515;
     margin: 25px 0;
 }
+
 .byPercentageDirection {
     /* position: absolute; */
     width: 100%;
@@ -796,7 +895,8 @@ margin-right: 18px;
     justify-content: center;
     align-items: center;
 }
-.increasePriceBtn > button {
+
+.increasePriceBtn>button {
     color: transparent;
     position: relative;
     /* width: 184px; */
@@ -807,7 +907,8 @@ margin-right: 18px;
     margin: 0 16px;
     padding: 13px 40px;
 }
-.increasePriceBtn > p {
+
+.increasePriceBtn>p {
     position: absolute;
     font-family: 'Product Sans';
     font-style: normal;
@@ -820,6 +921,7 @@ margin-right: 18px;
     background-clip: text;
     text-fill-color: transparent;
 }
+
 .increasePriceBtn {
     display: flex;
     justify-content: center;
@@ -828,7 +930,7 @@ margin-right: 18px;
 }
 
 
-.inc-dec-btn-group > button {
+.inc-dec-btn-group>button {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
@@ -842,6 +944,7 @@ margin-right: 18px;
     border-radius: 8px;
     margin: 0 16px;
 }
+
 .inc-dec-btn-group {
     display: flex;
     justify-content: center;
@@ -850,7 +953,8 @@ margin-right: 18px;
     margin: 28px 0;
 }
 
-.percentageBtnGroup > div > button, .deleteTest > button {
+.percentageBtnGroup>div>button,
+.deleteTest>button {
     color: transparent;
     position: relative;
     /* width: 55px; */
@@ -863,7 +967,8 @@ margin-right: 18px;
     border-radius: 8px;
 }
 
-.percentageBtnGroup > div > p, .deleteTest > p {
+.percentageBtnGroup>div>p,
+.deleteTest>p {
     position: absolute;
     font-family: 'Product Sans' !important;
     font-style: normal;
@@ -876,14 +981,15 @@ margin-right: 18px;
     background-clip: text;
     text-fill-color: transparent;
 }
-.deleteTest{
+
+.deleteTest {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 3px 12px 0;
 }
 
-.percentageBtnGroup > div {
+.percentageBtnGroup>div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -898,8 +1004,8 @@ margin-right: 18px;
     flex-wrap: wrap;
 }
 
-.anotherAmount{
-    background: linear-gradient(100.47deg,rgba(255,143,210,.1) -24.72%,rgba(244,34,114,.1) 113.36%);
+.anotherAmount {
+    background: linear-gradient(100.47deg, rgba(255, 143, 210, .1) -24.72%, rgba(244, 34, 114, .1) 113.36%);
     margin: 15px;
     width: 35%;
 }
@@ -911,6 +1017,7 @@ margin-right: 18px;
     align-items: center;
     margin: auto;
 }
+
 .afterConfirmTesteditBtn {
     display: flex;
     justify-content: center;
@@ -918,7 +1025,8 @@ margin-right: 18px;
 
     margin: 0 7px;
 }
-.afterConfirmTesteditBtn > button {
+
+.afterConfirmTesteditBtn>button {
     width: 112px;
     height: 45px;
     position: relative;
@@ -926,7 +1034,8 @@ margin-right: 18px;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     opacity: 0.1;
 }
-.afterConfirmTesteditBtn > p {
+
+.afterConfirmTesteditBtn>p {
     position: absolute;
     font-family: 'Product Sans';
     font-style: normal;
@@ -943,6 +1052,7 @@ margin-right: 18px;
     background-clip: text;
     text-fill-color: transparent;
 }
+
 .afterConfirmControlBtn {
     width: 112px;
     height: 45px;
@@ -965,6 +1075,7 @@ margin-right: 18px;
 
     margin: 0 7px !important;
 }
+
 .confirmBtn {
     width: 100%;
     display: flex;
@@ -972,11 +1083,12 @@ margin-right: 18px;
     margin: 0 0 12px !important;
 }
 
-.controlTable > div {
+.controlTable>div {
     /* margin: 0 15px; */
     margin: 0 15px;
     height: -webkit-fill-available !important;
 }
+
 .controlTable {
     width: 100%;
     /* height: 20vh; */
@@ -988,7 +1100,8 @@ margin-right: 18px;
     padding: 15px 0;
     margin-bottom: 35px;
 }
-.confirmBtn > button {
+
+.confirmBtn>button {
     width: 184px;
     height: 45px;
 
@@ -1012,22 +1125,25 @@ margin-right: 18px;
 
 /* Review test css from here  */
 
-.imageBlock > img {
+.imageBlock>img {
     width: 282px;
     height: 235px;
     margin: 100px 114px;
 }
-.reviewTestBlock > div {
+
+.reviewTestBlock>div {
     width: 100%;
     height: 100%;
     margin: 0;
     display: flex;
     /* flex-wrap: wrap; */
 }
+
 .reviewTestBlock {
     padding: 47px 40px;
 
 }
+
 .imageBlock {
     width: 40%;
     width: 510px;
@@ -1039,7 +1155,8 @@ margin-right: 18px;
     /* background-color: #1BC78A; */
 
 }
-.reviewData > h5 {
+
+.reviewData>h5 {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1048,7 +1165,8 @@ margin-right: 18px;
     margin-top: 34px;
     color: #536780;
 }
-.reviewData > span {
+
+.reviewData>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1059,7 +1177,8 @@ margin-right: 18px;
 
     color: #8492A7;
 }
-.reviewData > h4 {
+
+.reviewData>h4 {
     margin-bottom: 10px;
     font-family: 'Product Sans';
     height: 39px;
@@ -1072,6 +1191,7 @@ margin-right: 18px;
 
     color: #151515;
 }
+
 .reviewData {
     margin-left: 70px;
 }
@@ -1091,10 +1211,11 @@ margin-right: 18px;
 }
 
 
-.productDataReview > div {
+.productDataReview>div {
     margin-top: 6px;
 
 }
+
 .productDataReview {
     border: 1px solid #E9E9E9;
     border-top: 0;
@@ -1103,11 +1224,13 @@ margin-right: 18px;
     padding-right: 50px;
     margin: 22px 25px;
 }
+
 .reviewAndLaunchBtns {
     display: flex;
     margin-top: 76px;
 }
-.trafficSplitDataReview > div {
+
+.trafficSplitDataReview>div {
     margin-top: 6px;
 
 }
@@ -1115,9 +1238,10 @@ margin-right: 18px;
 .trafficSplitDataReview {
     margin: 22px 0;
 }
-.pricingDataReview > span,
-.productDataReview > span,
-.trafficSplitDataReview > span {
+
+.pricingDataReview>span,
+.productDataReview>span,
+.trafficSplitDataReview>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1128,8 +1252,9 @@ margin-right: 18px;
 
     color: #536780;
 }
-.pricingDataReview > div > div > span,
-.trafficSplitDataReview > div > h5 {
+
+.pricingDataReview>div>div>span,
+.trafficSplitDataReview>div>h5 {
     font-family: 'Product Sans';
     margin: 0 16px 0 8px;
     font-style: normal;
@@ -1141,11 +1266,13 @@ margin-right: 18px;
 
     color: #F42272;
 }
-.trafficSplitDataReview > div > h5 {
+
+.trafficSplitDataReview>div>h5 {
     margin: 6px 0 0;
 }
-.pricingDataReview > div > div > h5,
-.productDataReview > div > h5 {
+
+.pricingDataReview>div>div>h5,
+.productDataReview>div>h5 {
 
     font-family: 'Product Sans';
     font-style: normal;
@@ -1158,20 +1285,24 @@ margin-right: 18px;
     color: #8492A7;
 
 }
+
 .scheduleTestBtn {
     margin-left: 12px;
 }
-.pricingDataReview > div > div {
+
+.pricingDataReview>div>div {
     display: flex;
     align-items: center;
 }
-.pricingDataReview > div {
+
+.pricingDataReview>div {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 6px;
     flex-wrap: wrap;
 }
+
 .pricingDataReview {
     display: flex;
     flex-direction: column;
@@ -1179,10 +1310,12 @@ margin-right: 18px;
 
     margin: 22px 0;
 }
+
 .reviewTestText {
     max-width: 613px;
 }
-.reviewTestText > span {
+
+.reviewTestText>span {
 
     font-family: 'Inter';
     font-style: normal;
@@ -1195,6 +1328,7 @@ margin-right: 18px;
 
     color: #8492A7;
 }
+
 .launchTestBtn {
     width: 81px;
     height: 45px;
@@ -1212,12 +1346,14 @@ margin-right: 18px;
     border-radius: 8px;
 
 }
+
 .scheduleTestBtn {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.scheduleTestBtn > button {
+
+.scheduleTestBtn>button {
     position: relative;
     color: transparent;
     width: 93px;
@@ -1226,7 +1362,8 @@ margin-right: 18px;
     background: linear-gradient(100.47deg, rgba(255, 143, 210, 0.1) -24.72%, rgba(244, 34, 114, 0.1) 113.36%);
     border-radius: 8px;
 }
-.scheduleTestBtn > p {
+
+.scheduleTestBtn>p {
     position: absolute;
     font-family: 'Product Sans';
     font-style: normal;
@@ -1246,85 +1383,97 @@ margin-right: 18px;
 
 /* Your profile page css is here  */
 
-.profileBlock{
+.profileBlock {
     box-shadow: none !important;
     margin-top: 34px;
     padding: 24px;
     border-radius: 14px !important;
 }
-.settings{
+
+.settings {
     box-shadow: none !important;
     margin-top: 24px;
     padding: 44px;
     border-radius: 14px !important;
 }
-.ProfileBackgroundImg{
+
+.ProfileBackgroundImg {
     max-width: 100%;
     max-height: 165px;
     object-fit: contain;
     width: 100vw;
 
 }
-.profileData{
+
+.profileData {
     width: 100%;
     display: flex;
     justify-content: space-between;
     margin-top: 32px;
 }
-.userDetails > span {
+
+.userDetails>span {
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-/* or 150% */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    /* or 150% */
 
-letter-spacing: 0.02em;
+    letter-spacing: 0.02em;
 
-color: #536780;
+    color: #536780;
 }
-.userDetails > div {
-margin-bottom: 18px;
+
+.userDetails>div {
+    margin-bottom: 18px;
 }
-.userDetails > div > span{
+
+.userDetails>div>span {
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
 
-color: #8492A7;
+    color: #8492A7;
 
 }
-.userDetails > h4{
+
+.userDetails>h4 {
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 26px;
-line-height: 32px;
-/* identical to box height */
-margin-bottom: 6px;
-color: #151515;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 32px;
+    /* identical to box height */
+    margin-bottom: 6px;
+    color: #151515;
 }
-.userDetails{
+
+.userDetails {
     width: 70%;
 }
-.onProfileStatistics > div {
+
+.onProfileStatistics>div {
     width: 163px;
-height: 92px !important;
-margin:0 6px;
-border: 1px solid #E9E9E9;
-border-radius: 16px;
+    height: 92px !important;
+    margin: 0 6px;
+    border: 1px solid #E9E9E9;
+    border-radius: 16px;
 }
-.onProfileStatistics > div {
+
+.onProfileStatistics>div {
     /* padding: 18px; */
- }
+}
+
 .onProfileStatistics {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.onProfileStatistics > div  > span{
+
+.onProfileStatistics>div>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1332,7 +1481,8 @@ border-radius: 16px;
     line-height: 19px;
     color: #536780;
 }
-.onProfileStatistics > div  > span > span {
+
+.onProfileStatistics>div>span>span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1340,18 +1490,20 @@ border-radius: 16px;
     line-height: 19px;
     color: #F42272;
 }
-.settings > h5{
 
-font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 20px;
-line-height: 24px;
+.settings>h5 {
 
-color: #151515;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #151515;
 
 }
-.MuiTabs-flexContainer > .Mui-selected{
+
+.MuiTabs-flexContainer>.Mui-selected {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -1364,136 +1516,159 @@ color: #151515;
     background-clip: text;
     text-fill-color: transparent;
 }
-.MuiTabs-indicator{
+
+.MuiTabs-indicator {
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
 }
-.singleTab{
-    
-font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 17px;
-/* identical to box height */
-text-transform: capitalize !important;
 
-color: #8492A7;
+.singleTab {
+
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    text-transform: capitalize !important;
+
+    color: #8492A7;
 }
 
 
 /* Profile settings tab css is here  */
-.settingsTab{
+.settingsTab {
 
     border-bottom: 1px solid #E9E9E9 !important;
 }
-.profilesettingsTab{
+
+.profilesettingsTab {
     width: 100%;
     padding-top: 10px;
 }
-.profileInputs{
+
+.profileInputs {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-.profileInputsBlock1, .profileInputsBlock2{
+
+.profileInputsBlock1,
+.profileInputsBlock2 {
     display: flex;
     width: 100%;
 }
-.profileInputsBlock1 > label  > p, .profileInputsBlock2 > div > label > p{
+
+.profileInputsBlock1>label>p,
+.profileInputsBlock2>div>label>p {
     margin: 0;
     margin-bottom: 8px;
     margin-top: 24px;
     width: max-content;
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 17px;
-/* identical to box height */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
 
 
-color: #536780;
+    color: #536780;
 
 }
-.profileInputField > div > input{
+
+.profileInputField>div>input {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
 }
-.profileInputField > div {
+
+.profileInputField>div {
     height: 45px;
 }
-.mailandcountry{
+
+.mailandcountry {
     width: 100%;
     margin-right: 12px;
 }
-.dragAndDrop{
+
+.dragAndDrop {
     width: 100%;
     margin: 12px;
     margin-right: 0;
     margin-top: 0;
 }
-.profileInputsBlock1 > label:nth-child(1) {
+
+.profileInputsBlock1>label:nth-child(1) {
     /* margin: 12px; */
     margin-right: 12px;
     margin-top: 0;
 }
-.profileInputsBlock1 > label:nth-child(2) {
+
+.profileInputsBlock1>label:nth-child(2) {
     /* margin: 12px; */
     margin-left: 12px;
     margin-top: 0;
 }
-.profileInputsBlock2 > div{
+
+.profileInputsBlock2>div {
     width: 100%;
 }
-.dragAndDrop > label > div > img{
+
+.dragAndDrop>label>div>img {
     width: 20px;
     height: 20px;
 }
-.dragAndDrop > label > div > p{
-    font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 17px; 
-/* identical to box height */
-margin-top: 12px;
 
-color: #B6BEC7;
+.dragAndDrop>label>div>p {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    margin-top: 12px;
+
+    color: #B6BEC7;
 }
-.dragAndDrop > label >div{
+
+.dragAndDrop>label>div {
     width: 98%;
     /* height: 155px; */
     height: 139px;
     /* height: 100%; */
 
-border: 1px dashed #D4DCE8;
-border-radius: 5px;
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
+    border: 1px dashed #D4DCE8;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 
 
 /* View or manage test page css is here  */
-.viewormanageBlock{
+.viewormanageBlock {
     margin-top: 24px;
     display: flex;
 }
-.viewormanage-testData{
+
+.viewormanage-testData {
     width: 600px;
 }
-.viewormanage-pricingDataReview, .viewormanage-pricingDataReview > div{
+
+.viewormanage-pricingDataReview,
+.viewormanage-pricingDataReview>div {
     width: max-content;
 }
+
 .viewormanage-pricingDataReview {
     margin-left: 24px;
 }
-.viewormanage-productDataReview{
+
+.viewormanage-productDataReview {
     border: 1px solid #E9E9E9;
     border-top: 0;
     border-bottom: none;
@@ -1501,50 +1676,61 @@ flex-direction: column;
     padding-right: 25px;
     margin: 22px 25px !important;
 }
-.viewormanage-testData > div {
+
+.viewormanage-testData>div {
     box-shadow: none !important;
     border-radius: 14px !important;
     width: 100%;
 }
-.viewormanage-reviewData{
+
+.viewormanage-reviewData {
     width: 600px;
-height: 88px;
-display: flex;
-margin-top: 24px;
-/* box-shadow: none !important; */
+    height: 88px;
+    display: flex;
+    margin-top: 24px;
+    /* box-shadow: none !important; */
 }
-.viewormanage-testItem{
+
+.viewormanage-testItem {
     display: flex;
     min-width: 37.5rem !important;
 }
-.viewormanage-testItemImage > img{
+
+.viewormanage-testItemImage>img {
     width: 192px;
     height: 160px;
     padding: 24px 42px;
 
 }
-.viewormanage-testItemImage{
+
+.viewormanage-testItemImage {
     margin: 12px;
     background: #F9F8FE;
-border-radius: 10px;
+    border-radius: 10px;
 }
-.viewormanage-testItemData > div{
+
+.viewormanage-testItemData>div {
     display: flex;
     width: 100%;
     justify-content: space-around;
     margin-top: 12px;
 }
-.viewormanage-status, .viewormanage-product{
+
+.viewormanage-status,
+.viewormanage-product {
     display: flex;
     flex-direction: column;
 
 }
-.viewormanage-product > span:nth-child(2){
+
+.viewormanage-product>span:nth-child(2) {
 
     font-size: 16px !important;
     line-height: 19px !important;
 }
-.viewormanage-status > span, .viewormanage-product > span{
+
+.viewormanage-status>span,
+.viewormanage-product>span {
 
     font-family: 'Product Sans';
     font-style: normal;
@@ -1555,64 +1741,70 @@ border-radius: 10px;
     color: #536780;
     margin-top: 8px;
 }
-.viewormanage-testAnalytics > div > button{
-    width: 81px;
-height: 33px;
-font-family: 'Product Sans';
-font-style: normal;
-font-weight: 700;
-font-size: 14px;
-line-height: 17px;
-/* identical to box height */
 
-border-color: #FF8FD2 !important;
-background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-text-fill-color: transparent;
-border-radius: 8px;
+.viewormanage-testAnalytics>div>button {
+    width: 81px;
+    height: 33px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    border-color: #FF8FD2 !important;
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    border-radius: 8px;
 }
-.viewormanage-testAnalytics{
+
+.viewormanage-testAnalytics {
     width: 100%;
     box-shadow: none !important;
     margin-left: 24px;
     border-radius: 14px !important;
     padding: 23px 27px;
 }
-.viewormanage-testAnalytics > div{
+
+.viewormanage-testAnalytics>div {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 }
-.viewormanage-testAnalytics > div > h5{
+
+.viewormanage-testAnalytics>div>h5 {
     font-family: 'Product Sans' !important;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-    
+
     color: #151515;
-    
+
 }
-.viewormanage-testItemData > button{
+
+.viewormanage-testItemData>button {
     width: 100%;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
-border-radius: 8px;
-margin-top: 11px;
-margin-right: 5px;
-font-family: 'Product Sans';
-text-transform: capitalize;
-font-style: normal;
-font-weight: 700;
-font-size: 14px;
-line-height: 17px;
-text-align: center;
+    border-radius: 8px;
+    margin-top: 11px;
+    margin-right: 5px;
+    font-family: 'Product Sans';
+    text-transform: capitalize;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
 
-color: #FFFFFF;
+    color: #FFFFFF;
 }
-.viewormanage-testItemData{
+
+.viewormanage-testItemData {
     margin-left: 52px;
     margin-top: 42px;
     /* margin-right: 32px; */
@@ -1620,158 +1812,193 @@ color: #FFFFFF;
     margin-right: 32px;
 
 }
-.viewormanage-testItemData > h5{
-    font-family: 'Product Sans';
-font-style: normal;
-font-weight: 700;
-font-size: 30px;
-line-height: 36px;
 
-color: #151515;
+.viewormanage-testItemData>h5 {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+
+    color: #151515;
 }
-.viewormanageBtnGroup > button{
+
+.viewormanageBtnGroup>button {
     width: 100%;
-}   
-.viewormanageBtnGroup{
+}
+
+.viewormanageBtnGroup {
     display: flex;
     width: 100%;
     margin-top: 24px;
 }
-.deleteTest, .deleteTest > button{
+
+.deleteTest,
+.deleteTest>button {
     width: 100%;
     margin: 0;
 }
-.deleteTest{
+
+.deleteTest {
     margin-left: 18px;
 }
-.funnelBreakdown > h5{
+
+.funnelBreakdown>h5 {
     margin-left: 21px;
 
-font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
 
-color: #151515;
+    color: #151515;
 }
-.funnelBreakdown{
+
+.funnelBreakdown {
     margin-top: 24px;
     box-shadow: none !important;
     padding: 23px 12px;
     border-radius: 14px !important;
 }
-.funnelBreakdownTable{
+
+.funnelBreakdownTable {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 @media screen and (max-width:1120px) {
-    .viewormanage-testData{
+    .viewormanage-testData {
         width: 100%;
     }
 
-    .viewormanage-testAnalytics > div {
+    .viewormanage-testAnalytics>div {
         padding: 23px 27px;
     }
+
     .viewormanage-testAnalytics {
         margin: 0 !important;
         margin-top: 24px !important;
         padding: 0;
         min-height: 600px;
     }
-    .viewormanageBlock{
+
+    .viewormanageBlock {
         flex-direction: column !important;
-        
+
     }
-    .NavRight > span,
-    .NavRight > img {
+
+    .NavRight>span,
+    .NavRight>img {
         display: none !important;
     }
+
     .testAnalytics,
     .yourTests {
         margin: 0 !important;
         width: 100% !important;
         height: 414px;
     }
+
     .yourTests {
         margin-top: 24px !important;
     }
+
     .analyticsSection {
         margin-top: 24px;
         display: flex;
         flex-wrap: wrap !important;
     }
-    .dailyStats > div {
+
+    .dailyStats>div {
         margin: 24px 14px 0;
         width: 40%;
     }
+
     .dailyStats {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
 }
+
 @media screen and (max-width: 860px) {
     .configureTest1 {
         width: 75% !important;
         height: 75vh !important;
         overflow: auto;
     }
+
     .setAutoBlock {
         margin-bottom: 0 !important;
     }
 }
+
 @media screen and (max-width:930px) {
     .byPercentage {
         width: 75% !important;
     }
+
     .manualmodal {
         width: 80% !important;
         height: 60vh !important;
     }
 }
+
 @media screen and (max-width:965px) {
-    .reviewTestBlock > div {
+    .reviewTestBlock>div {
         flex-wrap: wrap;
     }
+
     .imageBlock,
-    .scheduleTestBtn > button {
+    .scheduleTestBtn>button {
         width: 100%;
     }
+
     .reviewData {
         margin: 20px 0 0;
         width: 100%;
     }
+
     .reviewAndLaunchBtns {
         margin-top: 10px;
     }
+
     .launchTestBtn,
     .scheduleTestBtn {
         width: 50%;
     }
 }
+
 @media screen and (max-width:820px) {
-    .dailyStats > div {
+    .dailyStats>div {
         margin: 24px 14px 0;
         width: 100%;
 
     }
+
     .byPercentage {
         height: 80vh !important;
     }
+
     .editTest,
     .controlSettings {
         width: 75vw !important;
     }
-    .profileData{
+
+    .profileData {
         flex-wrap: wrap;
     }
-    .onProfileStatistics, .onProfileStatistics > div{
+
+    .onProfileStatistics,
+    .onProfileStatistics>div {
         width: 100%;
     }
 
 }
+
 @media screen and (max-width: 745px) {
+
     .createTest-Block2,
     .yourTest-Block2 {
         width: 100%;
@@ -1779,90 +2006,115 @@ color: #151515;
         align-items: center !important;
         margin-top: 10px;
     }
+
     .editTest,
     .controlSettings {
         max-height: 80vh !important;
         overflow-y: auto;
     }
 }
+
 @media screen and (max-width: 645px) {
-    .viewormanage-testItem{
+    .viewormanage-testItem {
         flex-wrap: wrap;
         width: 100% !important;
         min-width: 0px !important;
     }
-    .viewormanage-testItemImage{
+
+    .viewormanage-testItemImage {
         margin: auto;
         margin-top: 20px;
-    
+
     }
 }
+
 @media screen and (max-width:594px) {
-    .inc-dec-btn-group > button,
-    .inc-dec-btn-group > div > button,
-    .inc-dec-btn-group > div,
-    .percentageBtnGroup > div,
-    .percentageBtnGroup > div > button {
+
+    .inc-dec-btn-group>button,
+    .inc-dec-btn-group>div>button,
+    .inc-dec-btn-group>div,
+    .percentageBtnGroup>div,
+    .percentageBtnGroup>div>button {
         width: 100%;
     }
+
     .byPercentageDirection {
         height: max-content !important;
         padding: 10px 0;
     }
-    .inc-dec-btn-group > div {
+
+    .inc-dec-btn-group>div {
         margin-top: 15px;
     }
-    .profileInputsBlock1, .profileInputsBlock2{
+
+    .profileInputsBlock1,
+    .profileInputsBlock2 {
         flex-wrap: wrap;
     }
-    .mailandcountry, .dragAndDrop, .profileInputs{
+
+    .mailandcountry,
+    .dragAndDrop,
+    .profileInputs {
         margin: 0 !important;
     }
 }
+
 @media screen and (max-width:560px) {
-    .createTest-Block2 > div,
-    .yourTest-Block2 > div {
+
+    .createTest-Block2>div,
+    .yourTest-Block2>div {
         min-width: 70%;
     }
 }
+
 @media screen and (max-width: 445px) {
-    .navRightBlock > button > span,
-    .navRightBlock > button > img {
+
+    .navRightBlock>button>span,
+    .navRightBlock>button>img {
         display: none;
     }
+
     .reviewAndLaunchBtns {
         display: flex;
         flex-direction: column !important;
     }
+
     .launchTestBtn {
         width: 100%;
     }
+
     .scheduleTestBtn {
         width: 100%;
         margin: 10px 0 0;
     }
-    .onProfileStatistics > div{
+
+    .onProfileStatistics>div {
         margin: 8px 0;
     }
-    .onProfileStatistics{
+
+    .onProfileStatistics {
         flex-wrap: wrap;
     }
 }
+
 @media screen and (max-width: 425px) {
-    .dailyStatsBlock2-sub1 > h4 {
+    .dailyStatsBlock2-sub1>h4 {
         border-bottom: 0.5px solid #E9E9E9;
         margin-bottom: 10px;
         padding-bottom: 10px;
         margin-top: 15px;
     }
+
     .dailyStatsBlock2-sub1 {
         width: 100%;
         text-align: center;
     }
-    .dailyStatsBlock2 > hr {
+
+    .dailyStatsBlock2>hr {
         display: none !important;
     }
 }
+
 @media screen and (max-width: 420px) {
     .configureTest1 {
         width: 65% !important;
@@ -1870,36 +2122,44 @@ color: #151515;
         overflow: auto;
         padding: 25px !important;
     }
+
     .setManuallyBlock,
     .setAutoBlock {
         padding: 10px;
     }
+
     .byPercentageDirection {
         height: max-content;
         padding: 10px 0;
     }
+
     .byPercentage {
         /* height: max-content !important; */
         /* padding: 10px 0px; */
         width: 70vw !important;
     }
+
     .manualmodal {
         width: 70% !important;
         height: 80vh !important;
     }
+
     .afterConfirmBtns {
         flex-direction: column;
     }
+
     .afterConfirmControlBtn,
     .afterConfirmTesteditBtn,
-    .afterConfirmTesteditBtn > button {
+    .afterConfirmTesteditBtn>button {
         width: 100%;
     }
+
     .afterConfirmTesteditBtn {
         margin-top: 15px;
     }
-    .createTestStep2Block > div,
-    .reviewTestBlock > div {
+
+    .createTestStep2Block>div,
+    .reviewTestBlock>div {
         margin-bottom: 0;
         margin-top: 15px;
     }
@@ -1916,19 +2176,22 @@ color: #151515;
     display: flex;
     align-items: center;
     height: 100vh;
-  }
-  .signupimages {
+}
+
+.signupimages {
     width: 50% !important;
     background-color: #FBF8FD;
     display: flex;
     align-items: center;
     height: 100%;
-  }
-  .signupdetails {
+}
+
+.signupdetails {
     width: 50%;
     padding: 110px 77px 50px 77px;
-  }
-  .accountText {
+}
+
+.accountText {
     /* font-family: 'Product Sans'; */
     font-style: normal;
     font-weight: 400;
@@ -1936,8 +2199,9 @@ color: #151515;
     line-height: 19px;
     margin: 6px 0;
     color: #8492A7;
-  }
-  .signText {
+}
+
+.signText {
     margin: 20px 0 6px 0;
     /* font-family: 'Product Sans'; */
     font-style: normal;
@@ -1945,51 +2209,67 @@ color: #151515;
     font-size: 34px;
     line-height: 41px;
     color: #151515;
-  }
-  .firstnamediv {
+}
+
+.firstnamediv {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: calc(50% - 4px);
-  }
-  .firstnamediv label {
+}
+
+.firstnamediv label {
     margin-bottom: 8px;
     color: #536780;
-  }
-  .lastnamediv {
+}
+
+.lastnamediv {
     display: flex;
     width: 48%;
     flex-direction: column;
-  }
-  .userdetailsmaindiv {
+}
+
+.userdetailsmaindiv {
     display: flex;
     justify-content: space-between;
     margin: 0 -4px;
-  }
-  .emailnamediv {
+}
+
+.emailnamediv {
     margin: 0 0 12px 0;
     display: flex;
     flex-direction: column;
-  }
-  .passwordnamediv {
+}
+
+.passwordnamediv {
     margin: 0 0 12px 0;
     display: flex;
     flex-direction: column;
-  }
-  .confirmpasswordnamediv {
+}
+
+.confirmpasswordnamediv {
     display: flex;
     flex-direction: column;
     margin: 0 0 30px 0;
-  }
-  .createaccountdiv {
+}
+
+.createaccountdiv {
+    font-family: 'Product Sans' !important;
+    text-transform: capitalize !important;
+    font-weight: 700 !important;
     width: 100%;
-    margin: 15px 0 14px 0 !important;
+    margin: 0px 0 0px 0 !important;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px !important;
     padding: 14px !important;
     height: 45px;
-  }
-  .createaccountwithgooglediv {
+    box-shadow: none !important;
+    margin-bottom: 14px !important;
+}
+
+.createaccountwithgooglediv {
+    font-family: 'Product Sans' !important;
+    text-transform: capitalize !important;
     width: 100%;
     border: 1px solid #D4DCE8 !important;
     border-radius: 5px !important;
@@ -2000,59 +2280,67 @@ color: #151515;
     line-height: 17px !important;
     color: #536780 !important;
     height: 45px;
-  }
-  .createaccountwithgooglediv img {
+}
+
+.createaccountwithgooglediv img {
     margin-right: 12px;
-  }
-  .logmaindiv {
+}
+
+.logmaindiv {
     display: flex;
     margin: 15px 0 0 0;
     justify-content: center;
-  }
-  .checkaccountdiv {
-    /* font-family: 'Product Sans'; */
+}
+
+.checkaccountdiv {
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     color: #B6BEC7;
-  }
-  .logintextdiv {
+}
+
+.logintextdiv {
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* font-family: 'Product Sans'; */
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     margin: 0 0 0 10px !important;
-  }
-  .trynowtext {
+}
+
+.trynowtext {
     margin: 60px 0 11px 0;
-    /* font-family: 'Product Sans'; */
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 24px;
     text-align: center;
     color: #151515;
-  }
-  .trynowextratext {
-    /* font-family: 'Product Sans'; */
+}
+
+.trynowextratext {
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
     color: #8492A7;
     text-align: center;
-  }
-  .btn-wrapper {
+}
+
+.btn-wrapper {
     display: flex;
     justify-content: center;
     text-decoration: none !important;
-  }
-  .trynowbtn {
+}
+
+.trynowbtn {
     position: relative;
     color: black;
     border-radius: 8px !important;
@@ -2060,9 +2348,10 @@ color: #151515;
     padding: 13px 20px !important;
     min-width: 268px !important;
     margin-top: 30px !important;
-    text-transform:capitalize !important;
-  }
-  .trynowbtn span {
+    text-transform: capitalize !important;
+}
+
+.trynowbtn span {
     position: relative;
     z-index: 2;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
@@ -2076,8 +2365,9 @@ color: #151515;
     font-size: 16px;
     line-height: 19px;
     text-align: center;
-  }
-  .trynowbtn::after {
+}
+
+.trynowbtn::after {
     position: absolute;
     content: "";
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
@@ -2087,117 +2377,146 @@ color: #151515;
     right: 0;
     bottom: 0;
     z-index: 1;
-  }
-  .w-100 {
+}
+
+.w-100 {
     width: 100%;
     max-width: 100%;
-  }
-  .mb-12 {
+}
+
+.mb-12 {
     margin-bottom: 12px;
-  }
-  .mb-29 {
+}
+
+.mb-29 {
     margin-bottom: 29px;
-  }
-  .priceperfactimg {
+}
+
+.priceperfactimg {
     position: absolute;
     top: 70px;
     left: 80px;
     display: flex;
     align-items: center;
-  }
-  .priceperfactimg h3{
+}
+
+.priceperfactimg h3 {
     margin: 0 0 0 5px;
-  }
-  @media only screen and (max-width: 1024px) and (min-width: 992px) {
-    .signupimages{
-      width:55% !important;
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 992px) {
+    .signupimages {
+        width: 55% !important;
     }
-    .signupdetails{
-      width:45%;
-      padding: 50px 50px 30px 50px;
+
+    .signupdetails {
+        width: 45%;
+        padding: 50px 50px 30px 50px;
     }
-  }
-  @media only screen and (max-width: 991px) and (min-width: 319px) {
-    .alldetails{
-      flex-wrap: wrap;
-      height: auto;
+}
+
+@media only screen and (max-width: 991px) and (min-width: 319px) {
+    .alldetails {
+        flex-wrap: wrap;
+        height: auto;
     }
-    .signupimages{
-      width:100% !important;
-      height: auto;
+
+    .signupimages {
+        width: 100% !important;
+        height: auto;
     }
-    .signupdetails{
-      width:100%;
-      padding: 15px;
+
+    .signupdetails {
+        width: 100%;
+        padding: 15px;
     }
-    .priceperfactimg{
-      top: 20px;
-      left: 30px;
+
+    .priceperfactimg {
+        top: 20px;
+        left: 30px;
     }
-    .userdetailsmaindiv{
-      flex-wrap: wrap;
-      margin: 0;
+
+    .userdetailsmaindiv {
+        flex-wrap: wrap;
+        margin: 0;
     }
-    .welcomeInputs.mr-4{
+
+    .welcomeInputs.mr-4 {
         margin: 0;
         width: 100%;
     }
-    .firstnamediv{
-      max-width:100%;
-      margin-bottom: 12px;
+
+    .firstnamediv {
+        max-width: 100%;
+        margin-bottom: 12px;
     }
-    .createaccountwithgooglediv{
-      padding: 8px !important;
+
+    .createaccountwithgooglediv {
+        padding: 8px !important;
     }
-    .createaccountwithgooglediv img{
-      margin-right: 4px;
+
+    .createaccountwithgooglediv img {
+        margin-right: 4px;
     }
-    .createaccountdiv{
-      margin-top: 12px !important;
+
+    .createaccountdiv {
+        margin-top: 12px !important;
     }
-    .trynowtext{
-      margin-top: 30px;
-      font-size: 18px;
-      line-height: 22px;
+
+    .trynowtext {
+        margin-top: 30px;
+        font-size: 18px;
+        line-height: 22px;
     }
-    .signText{
-      font-size: 26px;
-      line-height: 32px;
+
+    .signText {
+        font-size: 26px;
+        line-height: 32px;
     }
-  }
-  .text-trans{
+}
+
+.text-trans {
     text-transform: none !important;
-  }
-  .mb-12{
+}
+
+.mb-12 {
     margin-bottom: 12px;
-  }
-  .mb-28{
+}
+
+.mb-28 {
     margin-bottom: 28px;
-  }
-  .mb-34{
+}
+
+.mb-34 {
     margin-bottom: 34px;
-  }
-  .mb-49{
+}
+
+.mb-49 {
     margin-bottom: 49px;
-  }
-  .mb-41{
+}
+
+.mb-41 {
     margin-bottom: 41px;
-  }
-  .flex{
+}
+
+.flex {
     display: flex;
     flex-direction: column;
-  }
-  .result-wrapper{
+}
+
+.result-wrapper {
     border-bottom: 1px solid rgba(132, 146, 167, 0.3);
     margin-bottom: 21px;
     margin-top: 55px;
-  }
-  .wrapper{
+}
+
+.wrapper {
     display: flex;
     align-items: center;
     margin-bottom: 31px;
-  }
-  .wrapper span{
+}
+
+.wrapper span {
     margin-left: 24px;
     font-family: 'Product Sans';
     font-style: normal;
@@ -2205,34 +2524,37 @@ color: #151515;
     font-size: 18px;
     line-height: 26px;
     color: #536780;
-  }
-  .daily-wrapper{
+}
+
+.daily-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px;
-  }
-  .daily-wrapper span{
+}
+
+.daily-wrapper span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
     line-height: 22px;
     color: #536780;
-  }
-  .daily-wrapper div{
+}
+
+.daily-wrapper div {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
-    color: #FE6E98;  
-  }
-  
+    color: #FE6E98;
+}
 
 
-  /* Welcome page css is here  */
-  .welcomePage {
+
+/* Welcome page css is here  */
+.welcomePage {
     display: flex;
     justify-content: space-between;
     border-radius: 30px;
@@ -2240,20 +2562,21 @@ color: #151515;
 }
 
 .welcomeContent .welcome-wrappers .span {
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
     color: #8492A7;
-    margin-bottom: 34px;
+    margin-bottom: 27px;
     display: block;
 }
 
-.forgetPass{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+.forgetPass {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 }
 
 .welcomeContent .welcome-wrappers h4 {
@@ -2287,19 +2610,20 @@ color: #151515;
 }
 
 .welcomeInputs>div>div>input {
-    /* font-family: 'Product Sans'; */
+    font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     padding: 13px;
 }
+
 .welcomeInputs>div>div>input::placeholder {
     color: #B6BEC7;
     opacity: 1;
 }
 
-    .welcomeInputs>div>div>fieldset{
+.welcomeInputs>div>div>fieldset {
     border-radius: 5px;
     border-color: #D4DCE8;
 }
@@ -2314,6 +2638,8 @@ color: #151515;
 .welcomeInputs>span,
 .RememberMe>span,
 .noAccount>span {
+    font-family: 'Product Sans';
+
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2321,7 +2647,9 @@ color: #151515;
     line-height: 17px;
     color: #536780;
 }
-.RememberMe>span{
+
+.RememberMe>span {
+
     margin-top: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -2350,6 +2678,7 @@ color: #151515;
     border: 1px solid #D4DCE8;
     border-radius: 5px;
 }
+
 .welcomeBlock1>div {
     background: #FBF8FD !important;
     box-shadow: none;
@@ -2361,6 +2690,7 @@ color: #151515;
     border-radius: 0 !important;
     box-shadow: none;
 }
+
 .SignInBtn {
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px !important;
@@ -2408,6 +2738,7 @@ color: #151515;
     text-fill-color: transparent;
 
 }
+
 .welcomeBlock1>div {
     background: #FBF8FD !important;
     box-shadow: none;
@@ -2440,7 +2771,9 @@ color: #151515;
     display: flex;
     justify-content: center;
 }
-#scrollresult, .signupdetails a{
+
+#scrollresult,
+.signupdetails a {
     text-decoration: none;
 }
 
@@ -2448,7 +2781,9 @@ html {
     scroll-behavior: smooth;
 }
 
-.forgotPass{
+.forgotPass {
+    font-family: 'Product Sans';
+
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2461,70 +2796,71 @@ html {
     text-fill-color: transparent;
 }
 
-.label-remember>span{
+.label-remember>span {
     color: #8492A7;
 }
 
-.dont-account{
+.dont-account {
     color: #B6BEC7 !important;
     margin-right: 4px !important;
     margin-top: 0 !important;
 }
 
-.sign-up{
-    margin: 0 !important;
-}
-.sign-up a{
+.sign-up {
     margin: 0 !important;
 }
 
-.min-w{
+.sign-up a {
+    margin: 0 !important;
+}
+
+.min-w {
     min-width: 39%;
 }
 
-.min-wi{
-    max-width: 50%; 
-    width :100%; 
-    margin:0 auto;
-    padding:0 15px;
+.min-wi {
+    max-width: 50%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
-.wrappers{
-    max-width:482px;
-    width:100%;
-}
-
-.mb-34{
-    margin-bottom: 34px;
-}
-
-.padding{
-    padding: 30px 15px 10px 15px;
-}
-
-.mr-4{
-    margin: 0 4px;
-}
-
-.please-width{
+.wrappers {
+    max-width: 482px;
     width: 100%;
 }
 
-.scroll-revenue{
+.mb-34 {
+    margin-bottom: 34px;
+}
+
+.padding {
+    padding: 30px 15px 10px 15px;
+}
+
+.mr-4 {
+    margin: 0 4px;
+}
+
+.please-width {
+    width: 100%;
+}
+
+.scroll-revenue {
     text-decoration: none;
 }
 
-.welcomeContent:last-child{
+.welcomeContent:last-child {
     padding-bottom: 0 !important;
 }
 
-.close-icon{
+.close-icon {
     display: flex;
     justify-content: flex-end;
     cursor: pointer;
 }
 
-.NavCenterBtn > button > div > .active span{
+.NavCenterBtn>button>div>.active span {
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -2532,36 +2868,37 @@ html {
     text-fill-color: transparent;
 }
 
-.MuiMenu-paper{
+.MuiMenu-paper {
     border-radius: 8px !important;
 }
 
-.MuiMenu-paper p, .MuiMenu-paper p button{
+.MuiMenu-paper p,
+.MuiMenu-paper p button {
     width: 100%;
     justify-content: flex-start;
 }
 
-.MuiMenu-paper p button a{
+.MuiMenu-paper p button a {
     color: #000;
     text-decoration: none;
 }
 
-.MuiMenu-paper p button:hover{
+.MuiMenu-paper p button:hover {
     background-color: transparent;
 }
 
-.add-test-wrapper{
+.add-test-wrapper {
     margin: 34px 0 0 0 !important;
     display: flex !important;
     flex-wrap: wrap;
 }
 
-.add-test-wrapper >div:nth-child(even){
+.add-test-wrapper>div:nth-child(even) {
     margin-left: 18px;
     margin-right: 18px;
 }
 
-.control-wrapper{
+.control-wrapper {
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     border-radius: 14px;
     padding: 24px 32px 19px 25px;
@@ -2573,7 +2910,7 @@ html {
     margin-bottom: 28px;
 }
 
-.add-wrapper{
+.add-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2587,7 +2924,8 @@ html {
     margin-bottom: 28px;
 }
 
-.box-title{
+.box-title {
+    font-family: Product Sans;
     font-style: normal;
     font-weight: 400;
     font-size: 22px;
@@ -2596,13 +2934,14 @@ html {
     margin-left: 14px;
 }
 
-.control-box{
+.control-box {
     display: flex;
     align-items: center;
     margin-bottom: 22px;
 }
 
-.box-price{
+.box-price {
+    font-family: Product Sans;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -2611,15 +2950,17 @@ html {
     color: #895E6E;
 }
 
-.box-prices{
+.box-prices {
+    font-family: Product Sans;
     font-style: normal;
     font-weight: 700;
     font-size: 35px;
     line-height: 42px;
     color: #F42272;
+    word-break: break-all;
 }
 
-.icon-wrapper{
+.icon-wrapper {
     width: 50px;
     height: 50px;
     border-radius: 10px;
@@ -2629,11 +2970,12 @@ html {
     justify-content: center;
 }
 
-.add-icon{
+.add-icon {
     display: flex;
 }
 
-.add-test{
+.add-test {
+    font-family: Product Sans;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -2643,30 +2985,37 @@ html {
     display: block;
 }
 
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
+.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
     height: 45px;
     border-radius: 5px;
     margin: 8px 0 14px;
 }
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root input{
+
+.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root input {
+    font-family: 'Product Sans' !important;
+
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     padding: 13px;
 }
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-1laqsz7-MuiInputAdornment-root{
+
+.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-1laqsz7-MuiInputAdornment-root {
     margin: 0;
 }
-.welcomeInputs .css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+
+.welcomeInputs .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
     border-color: #D4DCE8;
     border-radius: 5px;
 }
-.increasePriceBtn.is-active p{
+
+.increasePriceBtn.is-active p {
     display: none;
 }
-.inc-dec-btn-group button{
-    text-transform:capitalize !important;
+
+.inc-dec-btn-group button {
+    text-transform: capitalize !important;
     font-family: Product Sans !important;
     font-size: 16px !important;
     font-style: normal !important;
@@ -2674,59 +3023,432 @@ html {
     line-height: 19px !important;
     letter-spacing: unset !important;
 }
-.increasePriceBtn.is-active>button{
+
+.increasePriceBtn.is-active>button {
     opacity: 100%;
     color: #fff;
-    text-transform:capitalize !important;
+    text-transform: capitalize !important;
 }
+
 @media only screen and (max-width: 991px) and (min-width: 319px) {
-    .welcomePage{
+    .welcomePage {
         flex-wrap: wrap;
         height: unset;
     }
-    .logo{
+
+    .logo {
         margin: 16px;
         left: 20px;
         top: 20px;
     }
-    .min-w{
+
+    .min-w {
         min-width: 100%;
     }
-    .min-wi{
-        max-width: 100%; 
-        width :100%;
+
+    .min-wi {
+        max-width: 100%;
+        width: 100%;
         margin-top: 40px;
         margin-bottom: 15px;
     }
-    .padding{
+
+    .padding {
         padding-top: 15px;
     }
-    .wrappers{
+
+    .wrappers {
         max-width: 100%;
     }
-    .welcomeContent .welcome-wrappers h4{
+
+    .welcomeContent .welcome-wrappers h4 {
         font-size: 28px;
         line-height: 34px;
     }
-    .forgetPass{
+
+    .forgetPass {
         flex-wrap: wrap;
     }
-    .forgotPass{
+
+    .forgotPass {
         margin-top: 6px;
     }
-    .welcomeBlock1Content{
+
+    .welcomeBlock1Content {
         height: unset;
     }
-    .welcomeBlock1Content img{
+
+    .welcomeBlock1Content img {
         width: 100%;
         height: 400px;
         object-fit: contain;
     }
 }
-.tableImages > div > img{
-    width: 50px !important ;
+
+.tableImages>div>img {
+    width: 50px !important;
 }
 
 /* .css-s18byi{
     overflow: auto !important;
 } */
+
+
+/* dhr css */
+.btnStack button {
+    font-family: 'Product Sans';
+    text-transform: capitalize;
+    box-shadow: none;
+}
+
+.tableImages div img {
+    /* z-index: -1; */
+    width: 100% !important;
+    max-height: 62px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.tableImages {
+    height: 65px;
+}
+
+.tableImages div {
+    /* padding: 8px !important;*/
+    height: 65px;
+    /* object-fit: cover; */
+    width: 90px;
+}
+
+.MuiDataGrid-cell:first-child {
+    padding: 0 !important;
+}
+
+.set_split {
+    margin-top: 0px !important;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #8492A7;
+    margin-bottom: 10px !important;
+}
+
+.add-test-wrapper {
+    margin: 34px 0 24px 0 !important;
+
+}
+
+.MuiDataGrid-columnHeaders {
+    z-index: 99;
+    background: #F9F8FE;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #8492A7;
+}
+
+.MuiDataGrid-virtualScrollerRenderZone {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #536780;
+
+}
+
+.productID {
+    padding-left: 20px;
+}
+
+.MuiDataGrid-columnHeader {
+    padding: 0 25px !important;
+}
+
+.MuiDataGrid-footerContainer {
+    display: none !important;
+}
+
+#root {
+    height: 100vh;
+    background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
+}
+
+.MuiDataGrid-cell,
+.scrollProductDisplayTable {
+    border: none !important;
+}
+
+.MuiDataGrid-columnSeparator {
+    display: none !important;
+}
+
+.MuiDataGrid-row {
+    /* min-height: 80px!important;
+    max-height: 80px!important; */
+
+    border-radius: 10px;
+    align-items: center !important;
+    padding: 8px;
+}
+
+.MuiDataGrid-cell--withRenderer {
+
+    min-height: unset !important;
+    max-height: unset !important;
+}
+
+.MuiDataGrid-row {
+    min-height: unset !important;
+    max-height: unset !important;
+}
+
+.MuiDataGrid-row:hover {
+    background-color: #fff !important;
+}
+
+.MuiDataGrid-row:nth-child(odd) {
+    background: #F9F8FE;
+
+}
+
+.MuiDataGrid-row:nth-child(even) {
+    background-color: #fff !important;
+
+}
+
+.MuiDataGrid-columnHeaders {
+    border-radius: 10px !important;
+}
+
+.variant_table .MuiDataGrid-root {
+    border: none !important;
+}
+
+.variant_table .MuiDataGrid-row {
+    width: 100% !important;
+    padding: 0;
+
+}
+
+.variant_table .MuiDataGrid-cell {
+    padding: 0 28px !important;
+
+}
+
+.MuiDataGrid-cell:last-child {
+    /* padding-right: 0 !important; */
+}
+
+.MuiDataGrid-columnHeader {
+    padding: 0 28px !important;
+}
+
+.variant_table .MuiDataGrid-columnHeaders {
+    background: #FFFFFF !important;
+}
+
+.variant_table .MuiDataGrid-columnHeaderTitle {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #8492A7;
+
+}
+
+.variant_table .MuiDataGrid-cellContent {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #536780;
+}
+
+.byPercentageDirection .MuiButtonBase-root {
+    opacity: 1;
+    background: linear-gradient(100.47deg, rgba(255, 143, 210, 0.1) -24.72%, rgba(244, 34, 114, 0.1) 113.36%);
+    border-radius: 8px;
+    padding: 14px;
+    margin: 12px;
+}
+
+.anotherAmount input {
+    border-radius: 8px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+}
+
+.anotherAmount .MuiOutlinedInput-notchedOutline {
+    display: none
+}
+
+.anotherAmount,
+.anotherAmount .MuiInputBase-root {
+    color: #F42272;
+    border-radius: 8px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    border: 0px;
+}
+
+.percentageBtnGroup .increasePriceBtn,
+.percentageBtnGroup div {
+    margin: 0;
+}
+.profile-main .main_profile_img{
+position: relative;
+}
+
+.proflie_pic{
+    position: absolute;
+    top: 60%;
+    left: 5%;
+}
+.profileData{
+    max-width: 80%;
+    margin: 30px 10px 0 auto;
+
+}
+.main_toda_rev span{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #536780;
+}
+
+.main_toda_rev span span{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #F42272;
+}
+
+.main_toda_rev{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-main .userDetails{
+    max-width: 65%;
+    margin: 0 0 0 auto;
+}
+
+.profile-main .MuiButtonBase-root{
+    font-family: 'Product Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 17px;
+color: #8492A7;
+padding: 0 !important;
+min-width: unset;margin: 0 36px;
+}
+.profile-main .MuiButtonBase-root:first-child{
+margin-left: 0;
+}
+
+.yourTests-main .createTestTable{
+    height: 63vh !important;
+}
+.yourTests-main .createTestTable .MuiDataGrid-root{
+    border: none !important;
+}
+.createTestTable .MuiDataGrid-virtualScrollerRenderZone{
+    max-width: 100% !important;
+}
+.createTestTable .MuiDataGrid-row{
+    max-width: 100%;
+    width: 100% !important; 
+    padding: 8px 0;
+}
+
+.createTestTable .MuiDataGrid-cell{
+    padding: 0px 28px !important;
+}
+
+.createTestTable .MuiDataGrid-cell:first-child{
+    padding-left:0 !important; 
+}
+
+.actionIcon img,.actionIcon a{
+    margin:auto 20px;
+}
+.actionIcon a:first-child,.actionIcon img:last-child{
+    margin: 0;
+}
+
+.yourTest-Block3 {
+    display: none;
+}
+
+.viewormanage-testItemData .MuiChip-root{
+    border-radius: 6px;
+    padding: 0;
+    width: fit-content;
+    height: unset;
+    margin-top:8px ;
+}
+.viewormanage-testItemData .MuiChip-root span{
+    padding: 6px;
+    color: #1BC78A;
+    background-color: rgba(27, 199, 138, 0.1);
+    font-family: 'Product Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+}
+
+.viewormanage-testItemData .viewormanage-status,.viewormanage-testItemData .viewormanage-product {
+    width: 40%;
+    align-items: flex-start;
+    padding-left: 10px;
+   
+}
+.viewormanage-status>span, .viewormanage-product>span{
+    margin-top: 10px;
+}
+
+.viewormanage-testItemData .viewormanage-product{
+    border-left: 1px solid #E9E9E9;
+}
+
+.viewormanage-testItemData>div{
+    justify-content: flex-start;
+}
+
+.deleteTest p{
+    font-weight: 700 !important;
+}
+
+.pricingDataReview div{
+    align-items: flex-start;
+}
+
+.pricingDataReview div div{
+    align-items: flex-start;
+}
+
+.pricingDataReview div div .MuiTypography-root{
+    max-width: 90px;
+}

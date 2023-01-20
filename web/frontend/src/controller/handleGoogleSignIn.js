@@ -11,6 +11,17 @@ export const handleGoogleSignIn = (setLoader, shop) => {
 
   }
 }
+export const handleGoogleLogout = async () => {
+  if (window.location.hostname === "localhost") {
+    console.log("Hello 132");
+    window.open(`/google/logout`, "_self")
+    
+  } else {
+    console.log("Hello 232");
+    window.open(window.location.origin + "/google/logout", "_self");
+
+  }}
+
 export function getUser(name,navigate, shop) {
   console.log("Cookie flag1");
   // Split cookie string and get all individual name=value pairs in an array

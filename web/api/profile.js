@@ -1,5 +1,6 @@
 const { decodeJWT } = require('../controllers/utils');
 const ProfileModal = require('../models/profileModal');
+const User = require("../models/User");
 
 const createProfile = async (req, res) => {
     try {
@@ -25,19 +26,16 @@ const createProfile = async (req, res) => {
     }
 }
 
-const getSingleProfile = async(req, res) => {
+const getSingleProfile = async (req, res) => {
     try {
         console.log("getSingleProfile ==>");
         const {token} = req.params;
-        console.log("decodedProfileid",token);
         const decodedProfile = await decodeJWT(token)
-        console.log("decodedProfile",decodedProfile);
 
         console.log("**** get single profile");
 
-        const fetchSingleData = await ProfileModal.find({googleId:decodedProfile.data} )
+        const fetchSingleData = await User.findOne({googleId:`${decodedProfile.data}`} )
 
-        console.log("fetchSingleData", fetchSingleData)
 
         if(!fetchSingleData){
             return res.json("filed fetch the single user profile...!");
@@ -56,12 +54,12 @@ const getSingleProfile = async(req, res) => {
 
 const getSingleProfileandUpdateById = async(req, res) => {
     try {
-
         console.log("**** Update Profile Data profile");
+        const {token} = req.params;
+        const decodedProfile = await decodeJWT(token)
 
-        const UpdateProfileData = await ProfileModal.findOneAndUpdate(req.params.id, req.body)
+        const UpdateProfileData = await User.findOneAndUpdate({googleId: `${decodedProfile.data}`}, req.body)
 
-        console.log("UpdateProfileData", UpdateProfileData)
 
         if(!UpdateProfileData){
             return res.json("filed Update Profile Data profile...!");

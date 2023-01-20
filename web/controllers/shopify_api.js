@@ -94,4 +94,25 @@ module.exports = {
         reject(error);
       }
     }),
+
+    DeleteApiRest: (url, client_secret) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios({
+          url,
+          method: "DELETE",
+          headers: {
+            "X-Shopify-Access-Token": client_secret,
+            "Accept-Encoding": "gzip,deflate,compress"
+          },
+          responseType: "json",
+          // data,
+        });
+        // console.log("response response response response", response)
+        resolve(response.data);
+      } catch (error) {
+        console.log("error in post api rest", error);
+        reject(error);
+      }
+    }),
 };

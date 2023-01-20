@@ -170,9 +170,9 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
   // }
 
   if (shop && host && code) {
-    console.log("shop:", shop);
-    console.log("encodedShop", encodedShop);
-    res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
+    // console.log("shop:", shop);
+    // console.log("encodedShop", encodedShop);
+    // res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
     try {
       const checkRes = await getAccessToken(
         process.env.SHOPIFY_API_KEY,
@@ -346,8 +346,11 @@ app.get("/google/callback", (req, res) => {
 });
 
 app.get("/google/logout", (req, res) => {
-  req.logout(() => {});
-  res.send(req.user);
+  console.log("logging out ...");
+  req.logout();
+  res.clearCookie("token");
+  res.redirect('/homeDashboard');
+  res.end();
 });
 
 //ab test
@@ -560,9 +563,9 @@ app.get("/api/inject", async(req, res) => {
 app.get("/", async (req, res) => {
   console.log(req.query, "/ route");
   const { shop, hmac, host, timestamp } = req.query;
-  const encodedShop = await encodeJWT(shop)
+  // const encodedShop = await encodeJWT(shop)
   if (shop) {
-    res.cookie('shop', encodedShop)
+    // res.cookie('shop', encodedShop)
     const shopGet = await Shop.findOne({ shop }).select(["shop", "app_status"]);
     if (shopGet && shopGet.app_status && shopGet.app_status == "installed") {
       console.log("app open ma");

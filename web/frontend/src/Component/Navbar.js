@@ -19,11 +19,15 @@ import avatarIcon from "./Images/image.png"
 import arrowDown from "./Images/arrow-down.png"
 import moreIcon from "./Images/more.svg"
 import { NavLink } from 'react-router-dom';
+import  priceperfactimg from './Images/Main_logo.png';
+import { handleGoogleLogout } from '../controller/handleGoogleSignIn';
+
 
 
 
 const Navbar = () => {
     const pages = [
+            
           <div className='navIcons'>
                 <NavLink to="/homeDashboard">
                     <img src={homeIcon} alt="" />
@@ -38,7 +42,8 @@ const Navbar = () => {
 
     <Button> <NavLink to="/profile">Profile</NavLink> </Button>,
     <Button> <NavLink to="/managetest">View/Manage Test</NavLink> </Button>,
-        
+    <Button onClick={() => handleGoogleLogout()}> Logout </Button>,
+
     ];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -75,7 +80,9 @@ const Navbar = () => {
                         <Toolbar disableGutters sx={{minHeight:"unset !important",}}>
                             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
                             {/* <img className='logo' src={logo} alt="" /> */}
-                        
+                            <div>
+                                <img src={priceperfactimg} alt="" />
+                            </div>
 
                             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                                 <IconButton

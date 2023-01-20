@@ -291,7 +291,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             headerName: "Title",
             minWidth: 80,
             flex: 1,
-            editable: true,
+            editable: false,
         },
         {
             field: "abVariantPrice",
@@ -390,14 +390,11 @@ const CreateTestStep2 = ({ objectSent }) => {
     console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
         let duplicateProductData = {
-            "trafficSplit": objectToBeSent.trafficSplit,
             'productId': id,
             'productTitle': title,
             handle:handle,
-            "status": "pending",
             objectToBeSent,
-            featuredImage:variantRes.data[0].featuredImage,
-            productPrice:variantRes.data[0].variantPrice
+        
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {
@@ -416,34 +413,34 @@ const CreateTestStep2 = ({ objectSent }) => {
                 // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
                 // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
                 // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
-                // let data = {
-                //     "trafficSplit": objectToBeSent.trafficSplit,
-                //     "testCases": objectToBeSent.testCases,
-                //     "productId": objectToBeSent.productId,
-                //     // duplicateProductId,
-                //     // duplicateVariants
+                let data = {
+                    "trafficSplit": objectToBeSent.trafficSplit,
+                    "testCases": objectToBeSent.testCases,
+                    "productId": objectToBeSent.productId,
+                    // duplicateProductId,
+                    // duplicateVariants
 
-                // }
+                }
             
-                // fetch(getApiUrl + '/api/createTestCase', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Accept': 'application/json, text/plain, */*',
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify(data)
-                // })
-                //     .then(async (res2) => {
+                fetch(getApiUrl + '/api/createTestCase', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(async (res2) => {
 
-                //         const apiRes2 = await res2.json()
-                //         console.log("Data sent:", apiRes2);
-                        
-                        
-                    // })
-                    // .catch((error) => console.log("Error", error))
-                    
-                    objectSent({apiRes, controlData: variantRes.data})
-                    navigate(`/reviewtest`);
+                        const apiRes2 = await res2.json()
+                        console.log("Data sent:", apiRes2);
+                        objectSent(apiRes)
+                        navigate(`/reviewtest`,apiRes);
+
+
+                    })
+                    .catch((error) => console.log("Error", error))
+
             })
             .catch((error) => console.log("Error", error))
 
@@ -466,14 +463,14 @@ const CreateTestStep2 = ({ objectSent }) => {
             console.log("calculated variant price temp", variantComparePriceTemp);
             if (percentIncDec === "+") {
 
-                const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
-                const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) + variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) + variantComparePriceTemp)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
             } else {
-                const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
-                const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) - variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) - variantComparePriceTemp)
                 // console.log("final number is:", final);
                 console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
@@ -503,7 +500,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     {/* <Button onClick={() => objectSent(objectToBeSent)}>Test</Button> */}
                     <Card className='createTestStep2Block'>
                         <Typography variant='h4'>Create Test</Typography>
-                        <Typography variant='p'>1. Select your prices to test</Typography><br />
+                        <Typography variant='p'>1. Select your prices to test</Typography>
                         {/* <><ol><li> Select your prices to test</li></ol></> */}
                         {/* <span  >
                             <div onClick={handleOpenControlSettings}>
@@ -544,8 +541,8 @@ const CreateTestStep2 = ({ objectSent }) => {
                                         </div>
                                         <span className='box-title'>Test {item.testId}</span>
                                     </div>
-                                    <span className='box-price'> ${Math.min(...item.variants.map(j => j.abVariantComparePrice))} - ${Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span>
-                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
+                                    <span className='box-price'> {variantCompareAtPriceData && <>${variantCompareAtPriceData}</>} - ${item.variants[0].abVariantComparePrice}</span>
+                                    <span className='box-prices'>${variantPriceData} - ${item.variants[0].abVariantPrice}</span>
                                 </div>
                             </>))}
 
@@ -569,9 +566,14 @@ const CreateTestStep2 = ({ objectSent }) => {
                                 </div> */}
                         </div>
 
-                        <Typography variant='p'> 2. Set your traffic split </Typography>
+                        
+                        <div className='set_split'>
+                            <Typography  variant='p'> 2. Set your traffic split </Typography>
+                            </div>
                         <Slider className="trafficSlider" valueLabelDisplay='auto' min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
-                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
+                        {/* <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography> */}
+                        <Typography variant='p' className='trafficSplitInfo'> 10% of visiting traffic will be split evenly between your 3 tests. The remaining 90% will be sent to the control.</Typography>
+                        
                         <div>
                             {/* {btns()} */}
                             <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Confirm</Button>
@@ -623,7 +625,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style} className="manualmodal">
+                <Box sx={style} className="manualmodal variant_table">
                     <img src={closeIcon} alt="" className='closeBtn' onClick={handleCloseManualModal} />
                     <Typography id="modal-modal-title" variant="h5" component="h2">
                         Configure Test 1

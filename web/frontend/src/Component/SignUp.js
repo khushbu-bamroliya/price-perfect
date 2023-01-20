@@ -64,15 +64,14 @@ export default function SignUp() {
             alert("Please check the password..!")
         } else {
             console.log("Else")
-            fetch(getApiUrl + '/api/signupdetails', {
+            await fetch('/api/signupdetails', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            })
-                .then(res => console.log(res))
+            }).then(async (res) =>  console.log(await res.json()))
                 .catch((error) => console.log("Error", error))
         }
     }
@@ -169,7 +168,7 @@ export default function SignUp() {
                                 </div>
                                 <div className='welcomeInputs'>
                                     <Typography variant='p'>Password</Typography>
-                                    
+
                                     <OutlinedInput
                                         className='please-width'
                                         id="outlined-adornment-password"
@@ -196,7 +195,7 @@ export default function SignUp() {
                                 </div>
                                 <div className='welcomeInputs'>
                                     <Typography variant='p'>Confirm Password</Typography>
-                                    
+
                                     <OutlinedInput
                                         className='please-width'
                                         id="outlined-adornment-password"
@@ -292,7 +291,7 @@ export default function SignUp() {
                                         onChange={(e) => setOrderValue(e.target.value)}
                                     />
                                 </div>
-                                <div className='welcomeInputs'>
+                                <div className='welcomeInputs' style={{marginBottom: "20px"}}>
                                     <Typography variant='p'>Conversion rate</Typography>
                                     <TextField
                                         className='please-width'
@@ -330,7 +329,7 @@ export default function SignUp() {
                                             <span>That is Sxxx per month in additional revenue and Sxxx per year!</span>
                                         </div>
                                     </div>
-                                    <div className='mb-41'>
+                                    <div className='mb-41 div_margin'>
                                         <div className='daily-wrapper'>
                                             <span>Daily Revenue</span>
                                             <div>{RevenueResult[0].dailyRevenueResult ? RevenueResult[0].dailyRevenueResult : "XXXX"}</div>

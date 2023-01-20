@@ -14,7 +14,6 @@ const ViewOrManageTestPage = () => {
     const {id} = useParams();
     const getSingleTest = () => {
     
-
         fetch(getApiUrl + `/api/get-single-testcase/${id}`, {
             method: 'GET',
             headers: {

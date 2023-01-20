@@ -25,10 +25,12 @@ function InitializingPassport(passport) {
               if (existingUser) {
                 done(null, existingUser);
               } else {
+                console.log("new profile",profile);
+                console.log("new profile json",profile._json);
                 new User({
                   googleId: profile.id,
-                  firstname: profile._json.given_name,
-                  lastname: profile._json.family_name,
+                  firstName: profile._json.given_name,
+                  lastName: profile._json.family_name,
                   email: profile._json.email,
                   picture: profile._json.picture
                 })

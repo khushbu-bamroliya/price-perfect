@@ -1,4 +1,4 @@
-import { Box, Button, Card, IconButton, Menu, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, IconButton, Menu, MenuItem, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import searchIcon from './Images/search-normal.png';
@@ -12,11 +12,30 @@ import { NavLink } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
 
 const YourTests = () => {
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
     const pages = ['Active', 'Upcoming', 'Ended', 'Paused'];
     const [] = useState();
-    const [allTests,setAllTests] = useState();
-    console.log("allTests",allTests);
+    const [allTests, setAllTests] = useState();
+    const [testId, setTestId] = useState();
+    console.log("allTests", allTests);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const handleOpenDeleteModal = (id) => {
+        console.log("deleteModal id", id);
+        setTestId(id)
+        setOpenDeleteModal(true)
+    };
+    const handleCloseDeleteModal = () => setOpenDeleteModal(false);
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -25,15 +44,15 @@ const YourTests = () => {
     };
     const rows2 = []
     const rows = [
-        { id: 1, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD",  },
-        { id: 2, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD",  },
-        { id: 3, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD",  },
-        { id: 4, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD",  },
-        { id: 5, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD",  },
-        { id: 6, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD",  },
-        { id: 7, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD",  },
-        { id: 8, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD",  },
-        { id: 9, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD",  },
+        { id: 1, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD", },
+        { id: 2, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD", },
+        { id: 3, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD", },
+        { id: 4, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD", },
+        { id: 5, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD", },
+        { id: 6, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD", },
+        { id: 7, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD", },
+        { id: 8, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD", },
+        { id: 9, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD", },
     ];
     const columns = [
         {
@@ -89,12 +108,12 @@ const YourTests = () => {
             sortable: false,
             flex: 0.2,
             renderCell: (params) => {
-                console.log("params: " + params.row.action);
+                // console.log("params: " + params.row.action);
                 return (
                     <div className='actionIcon'>
-                         <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink> 
+                        <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink>
                         <img src={LinkIcon} alt="" />
-                        <img src={TrashIcon} alt="" />
+                        <img src={TrashIcon} alt="" onClick={() => handleOpenDeleteModal(params.row.id)} />
                     </div>
                 )
             }
@@ -186,14 +205,14 @@ const YourTests = () => {
     //     //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
     //     // },
     // ];
-    allTests && allTests.data.map((i) =>{
+    allTests && allTests.data.map((i) => {
         rows2.push({
             id: i._id,
-            status:i.status,
-            duration:`${i.testCases[0].variants[0].variantPrice}USD`,
-            action:i._id,
-            product:i.productTitle,
-            featuredImage:i.featuredImage
+            status: i.status,
+            duration: `${i.testCases[0].variants[0].variantPrice}USD`,
+            action: i._id,
+            product: i.productTitle,
+            featuredImage: i.featuredImage
         })
     }
 
@@ -217,9 +236,24 @@ const YourTests = () => {
             })
             .catch((error) => console.log("Error", error))
     }
+    const deleteTestCase = () => {
+        console.log("deleting");
+        fetch(getApiUrl + `/api/deleteTestCase/${testId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(async (res) => {
+            const apiRes = await res.json();
+            console.log("Deleted", apiRes);
+        }).catch((err) => {
+            console.log("Error", err);
+        })
+    }
     useEffect(() => {
         getAllTests()
-    },[])
+    }, [])
     return (
         <>
             <Card className='yourTestsPage'>
@@ -233,7 +267,7 @@ const YourTests = () => {
                             </div>
 
                             <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                                {pages.map((page) => (
+                                {/* {pages.map((page) => (
                                     <Button
                                         key={page}
                                         onClick={handleCloseNavMenu}
@@ -241,7 +275,8 @@ const YourTests = () => {
                                     >
                                         {page}
                                     </Button>
-                                ))}
+                                ))} */}
+                                {/* <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography> */}
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
@@ -290,16 +325,33 @@ const YourTests = () => {
                             </Box>
                         </div>
                         <div className='createTestTable' style={{ height: 400, width: '100%' }}>
-                            
-                                <DataGrid
+
+                            <DataGrid
                                 rows={rows2}
                                 columns={columns}
                                 pageSize={5}
                                 rowsPerPageOptions={[5]}
                                 disableColumnMenu
                             />
-                            
+
                         </div>
+
+                        <Modal
+                            open={openDeleteModal}
+                            onClose={handleCloseDeleteModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={style}>
+                                {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Text in a modal
+                                </Typography> */}
+                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                    Are you sure you want to delete this test case?..
+                                </Typography>
+                                <Button onClick={() => deleteTestCase(testId)}> Delete </Button>
+                            </Box>
+                        </Modal>
                     </Card>
                 </div>
             </Card>
