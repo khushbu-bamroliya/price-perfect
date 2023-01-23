@@ -33,8 +33,8 @@ const getSingleProfile = async (req, res) => {
         const decodedProfile = await decodeJWT(token)
 
         console.log("**** get single profile");
-
-        const fetchSingleData = await User.findOne({googleId:`${decodedProfile.data}`} )
+console.log("decoded profile: ", decodedProfile);
+        const fetchSingleData = await User.findOne({googleId:`${decodedProfile.data}`} ) || await User.findOne({email:`${decodedProfile.data}`} )
 
 
         if(!fetchSingleData){

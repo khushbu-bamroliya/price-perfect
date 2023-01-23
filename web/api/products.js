@@ -36,12 +36,13 @@ const item_per_page = 10;
       hasNextPageCursor,
       hasPreviousPageCursor,
     } = req.body;
+    console.log("hasPreviousPageCursor", hasPreviousPageCursor);
     const endCursor = null
     console.log(req.body, "search");
     let query;
 
     async function recursion_products(endCursor) {
-      if (endCursor != "") {
+      if (!search) {
         console.log("cursor not blank", endCursor);
         let lastData;
         let firstData;
@@ -74,8 +75,10 @@ const item_per_page = 10;
                           } 
                         } 
                         pageInfo { 
-                          hasNextPage 
-                          hasPreviousPage 
+                          endCursor
+                          hasNextPage
+                          hasPreviousPage
+                          startCursor
                         } 
                 }
               }
@@ -221,6 +224,7 @@ const item_per_page = 10;
             endCursorFromApi,
             hasNextPageFromApi,
             hasPreviousPageFromApi,
+            startCursorFromApi
           };
           return finalAns;
         }
@@ -230,7 +234,7 @@ const item_per_page = 10;
     //call first time
     const resProducts = await recursion_products(JSON.stringify(hasNextPageCursor));
     console.log("resProducts: " + resProducts);
-
+ 
     res.status(200).send(resProducts);
 
 
@@ -657,7 +661,7 @@ const createDuplicateProduct = async (req, res) => {
     if (!createTestData) {
       return res.json("Create Test case error...!")
     }
-
+console.log("createTestData", createTestData);
     res.status(200).json({
       data: createTestData,
       handle,

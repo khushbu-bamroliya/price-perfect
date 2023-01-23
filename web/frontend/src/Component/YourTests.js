@@ -209,7 +209,7 @@ const YourTests = () => {
         rows2.push({
             id: i._id,
             status: i.status,
-            duration: `${i.testCases[0].variants[0].variantPrice}USD`,
+            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}USD`,
             action: i._id,
             product: i.productTitle,
             featuredImage: i.featuredImage
@@ -247,6 +247,9 @@ const YourTests = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Deleted", apiRes);
+            setOpenDeleteModal(false)
+            getAllTests()
+            
         }).catch((err) => {
             console.log("Error", err);
         })
@@ -329,8 +332,8 @@ const YourTests = () => {
                             <DataGrid
                                 rows={rows2}
                                 columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[5]}
+                                pageSize={50}
+                                rowsPerPageOptions={[50]}
                                 disableColumnMenu
                             />
 

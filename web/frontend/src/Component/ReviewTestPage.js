@@ -24,7 +24,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                             <div>
 
                                 <div className='imageBlock'>
-                                    <img src={created && created.apiRes.data.featuredImage} alt="product_image" />
+                                    <img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" />
                                 </div>
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>

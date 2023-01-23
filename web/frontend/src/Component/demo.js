@@ -7,10 +7,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
-import ArrowIcon from "./Images/Arrow.png";
-import AddIcon from "./Images/add-square.png";
 
-const CreateTestStep2 = ({ objectSent }) => {
+const CreateTestStep2 = () => {
     const navigate = useNavigate()
     const style = {
         position: 'absolute',
@@ -26,21 +24,19 @@ const CreateTestStep2 = ({ objectSent }) => {
     };
     // var variantPriceData;
     // var variantCompareAtPriceData;
-    const { id, title, handle } = useParams();
-
+    const { id } = useParams();
     var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
 
     const [variantPriceData, setVariantPriceData] = useState("")
     const [variantCompareAtPriceData, setVariantCompareAtPriceData] = useState();
-    const [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
+    let [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
     const [productVariants, setProductsVariants] = useState([])
-    const [testIdState, setTestIdState] = useState(0);
+    const [testIdState, setTestIdState] = useState();
     const [displayFinalVariantsArray, setDisplayFinalVariantsArray] = useState([]);
-    const [demoState, setDemoState] = useState();
 
-    console.log("testing testIdState", testIdState);
+
     const [pricePercent, setPricePercent] = useState("11");
     const [percentIncDec, setPercentIncDec] = useState("")
 
@@ -51,9 +47,10 @@ const CreateTestStep2 = ({ objectSent }) => {
         setValue(newValue);
     };
 
-    // console.log("range slider value:", value)
+    console.log("range slider value:", value)
     // configs of configure test 
     const [openConfigureTest1, setOpenConfigureTest1] = useState(false);
+    const handleOpenConfigureTest1 = () => setOpenConfigureTest1(true);
     const handleCloseConfigureTest1 = () => setOpenConfigureTest1(false);
 
     // configs of clicking manual btn
@@ -69,55 +66,17 @@ const CreateTestStep2 = ({ objectSent }) => {
 
     // configs of edit test button
     const [openEditTest, setOpenEditTest] = useState(false);
-
-    const handleOpenConfigureTest1 = (testId) => {
-        console.log(testId, 'test id from add btn');
-        setTestIdState(Number(testId));
-        setOpenConfigureTest1(true);
-    };
     const handleOpenEditTest = (testId) => {
-        console.log("test " + testId);
-        setTestIdState(Number(testId))
-        // console.log("setTestIdState1", testIdState);
-
+        setTestIdState(testId)
         setOpenEditTest(true);
         setOpenConfigureTest1(false)
         const singleTest = displayTestCasesArray.find(item => item.testId === testId)
 
-        // console.log("setTestIdState2", testIdState);
-    }
-    const handleCloseEditTest = () => {
-        // console.log("testIdState handleCloseEditTest",testIdState);
-        // if (displayTestCasesArray) {
-        //     console.log("Change test",displayTestCasesArray);
-        //     console.log("handleCloseEditTest testIdState", testIdState);
-        //     displayTestCasesArray[testIdState - 1] = {
-        //         id: testIdState,
-        //         testId: testIdState,
-        //         variants: productVariants
-        //     }
-        // }
-
-        // displayTestCasesArray && displayTestCasesArray[testIdState - 1].variants = productVariants
-        //new code
-        // let newItems = [...displayTestCasesArray];
-        // newItems[testIdState] = {
-        //     id: testIdState,
-        //     testId: testIdState,
-        //     variants: productVariants
-        // };
-        // console.log("setDisplayTestCasesArray1");
-        // setDisplayTestCasesArray(newItems);
-
-        setOpenEditTest(false)
-
-
-
-
-
     };
+    console.log("setTestIdState", testIdState);
+    const handleCloseEditTest = () => setOpenEditTest(false);
 
-    console.log("productVariants", productVariants);
+
     // configs of edit test button
     const [openControlSettings, setOpenControlSettings] = useState(false);
     const handleOpenControlSettings = () => {
@@ -139,7 +98,7 @@ const CreateTestStep2 = ({ objectSent }) => {
     let testId = 0;
     console.log("displayTestCasesArray", displayTestCasesArray)
     const totalTests = displayTestCasesArray && displayTestCasesArray.length;
-    // console.log("Total number of tests", totalTests)
+    console.log("Total number of tests", totalTests)
 
     // displayTestCasesArray.push({
     //     testId:displayTestCasesArray.length+1,
@@ -156,39 +115,25 @@ const CreateTestStep2 = ({ objectSent }) => {
         setHideShowBtns("flex")
         handleCloseManualModal() || handleCloseByPercentageModal()
 
-        // displayTestCasesArray.push({
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
+        displayTestCasesArray.push({
+            testId: displayTestCasesArray.length + 1,
+            id: displayTestCasesArray.length + 1,
 
-        //     variants: productVariants
-        // })
+            variants: productVariants
+        })
 
 
-        setDisplayTestCasesArray([
-            ...displayTestCasesArray,{
-                testId: displayTestCasesArray.length + 1,
-                    id: displayTestCasesArray.length + 1,
-                    variants: productVariants
-            }
-        ])
-        // let newItems = [...displayTestCasesArray];
-        // console.log(newItems, 'umi1');
-        // newItems[testIdState] = {
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-
-        //     variants: productVariants
-        // };
-        // console.log(newItems, 'umi2');
-        // console.log("setDisplayTestCasesArray2");
-        // setDisplayTestCasesArray(newItems);
     }
 
+    const objectToBeSent = {
+        trafficSplit: value / totalTests,
+        testCases: displayTestCasesArray,
+        "productId": `gid://shopify/Product/${id}`,
+    }
 
-
-    // console.log("Object to be sent", objectToBeSent);
-    // console.log("Split by percentage", value / totalTests);
-    // console.log("displayFinalVariantsArray", displayFinalVariantsArray && displayFinalVariantsArray);
+    console.log("Object to be sent", objectToBeSent);
+    console.log("Split by percentage", value / totalTests);
+    console.log("displayFinalVariantsArray", displayFinalVariantsArray && displayFinalVariantsArray);
 
     const onConfirmEdit = () => {
         handleCloseEditTest() || handleCloseControlSettings()
@@ -250,7 +195,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             .then(async (res) => {
 
                 apiRes = await res.json()
-                // console.log("apiRes.data", apiRes.data);
+                console.log(apiRes.data);
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
@@ -280,7 +225,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
             const updatedArray = productVariants?.map((item, index) => {
-                // console.log("item", item);
+                console.log("item", item);
                 if (index === objectIndex) {
                     // setEditVariantId(item.testId)
                     if (params.field === "abVariantComparePrice") {
@@ -298,10 +243,10 @@ const CreateTestStep2 = ({ objectSent }) => {
 
             })
             setProductsVariants(updatedArray)
-            // console.log("Updated array cellEditStopManualModal", updatedArray);
+            console.log("Updated array cellEditStopManualModal", updatedArray);
         }
     }
-    // console.log("Variants res =====>", variantRes && variantRes.data);
+    console.log("Variants res =====>", variantRes && variantRes.data);
 
 
 
@@ -313,7 +258,7 @@ const CreateTestStep2 = ({ objectSent }) => {
     //         variantComparePrice: item.variantComparePrice
     //     })
     // })
-    // console.log("productVariants", productVariants && productVariants);
+    console.log("productVariants", productVariants && productVariants);
 
 
 
@@ -420,167 +365,93 @@ const CreateTestStep2 = ({ objectSent }) => {
     ];
 
 
-    // console.log("New Array updated of productVariants", productVariants);
+    console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
 
-        const objectToBeSent = {
-            trafficSplit: value / totalTests,
-            testCases: displayTestCasesArray,
-            "productId": `gid://shopify/Product/${id}`,
-        }
 
-        let duplicateProductData = {
+        let data = {
             "trafficSplit": objectToBeSent.trafficSplit,
-            'productId': id,
-            'productTitle': title,
-            handle: handle,
-            "status": "pending",
-            objectToBeSent,
-            featuredImage: variantRes.data[0].featuredImage,
-            productPrice: variantRes.data[0].variantPrice
+            "testCases": objectToBeSent.testCases,
+            "productId": objectToBeSent.productId
         }
 
-        fetch(getApiUrl + '/api/createDuplicateProduct', {
+        fetch(getApiUrl + '/api/createTestCase', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(duplicateProductData)
+            body: JSON.stringify(data)
         })
             .then(async (res) => {
-                // console.log("Duplicate product id: " + res.data.productDuplicate.newProduct.id);
 
                 const apiRes = await res.json()
-                // console.log("apiRes: " + JSON.stringify(apiRes));
-                // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
-                // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
-                // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
-                // let data = {
-                //     "trafficSplit": objectToBeSent.trafficSplit,
-                //     "testCases": objectToBeSent.testCases,
-                //     "productId": objectToBeSent.productId,
-                //     // duplicateProductId,
-                //     // duplicateVariants
-
-                // }
-
-                // fetch(getApiUrl + '/api/createTestCase', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Accept': 'application/json, text/plain, */*',
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify(data)
-                // })
-                //     .then(async (res2) => {
-
-                //         const apiRes2 = await res2.json()
-                //         console.log("Data sent:", apiRes2);
+                console.log("Data sent", apiRes);
 
 
-                // })
-                // .catch((error) => console.log("Error", error))
 
-                objectSent({ apiRes, controlData: variantRes.data })
-                navigate(`/reviewtest`);
+                navigate('/reviewtest');
+
             })
             .catch((error) => console.log("Error", error))
 
-
     }
     const percentagePrices = [
-        "2%", "3%", "5%", "10%"
+        "2%", "3%", "5%", "10%", "Another Amount"
     ]
 
-    // console.log("pricePercent", pricePercent);
+    console.log("pricePercent", pricePercent);
     const onConfirmByPercentage = () => {
-        // console.log("percentIncDec", percentIncDec);
-        // console.log("Hello", variantRes);
+        console.log("percentIncDec", percentIncDec);
+        console.log("Hello", variantRes);
         const updatedArray = variantRes && variantRes?.data.map(item => {
-            // console.log("original productVariants from percentage", variantRes);
+            console.log("original productVariants from percentage", variantRes);
 
             const variantPriceTemp = (item.variantPrice / 100) * pricePercent.replace('%', '')
             const variantComparePriceTemp = (item.variantComparePrice / 100) * pricePercent.replace('%', '')
-            // console.log("variantPriceTemp", variantPriceTemp);
-            // console.log("calculated variant price temp", variantComparePriceTemp);
+            console.log("variantPriceTemp", variantPriceTemp);
+            console.log("calculated variant price temp", variantComparePriceTemp);
             if (percentIncDec === "+") {
 
-                const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
-                const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) + variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) + variantComparePriceTemp)
                 // console.log("final number is:", final);
-                // console.log("final number is temp2:", variantPriceTempFinal);
+                console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
             } else {
-                const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
-                const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
+                const variantPriceTempFinal = Math.round(Number(item.variantPrice) - variantPriceTemp)
+                const variantComparePriceFinal = Math.round(Number(item.variantComparePrice) - variantComparePriceTemp)
                 // console.log("final number is:", final);
-                // console.log("final number is temp2:", variantPriceTempFinal);
+                console.log("final number is temp2:", variantPriceTempFinal);
                 return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
 
             }
             return item
         })
-        // console.log("Hello again", updatedArray);
-        setProductsVariants(updatedArray);
-        console.log("updatedArray", updatedArray);
-        setDisplayTestCasesArray([
-            ...displayTestCasesArray,
-             {
+        console.log("Hello again", updatedArray);
+        setProductsVariants(updatedArray)
+        displayTestCasesArray.push({
             testId: displayTestCasesArray.length + 1,
             id: displayTestCasesArray.length + 1,
+
             variants: updatedArray
-        }])
-        // displayTestCasesArray.push({
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-
-        //     variants: updatedArray
-        // })
-
-        // let newItems = [...displayTestCasesArray];
-        // console.log("newItems1", newItems, testIdState);
-        // newItems[testIdState] = {
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-        //     variants: updatedArray
-        // };
-        // console.log("newItems2", newItems, testIdState);
-        console.log("setDisplayTestCasesArray3");
-        // setDisplayTestCasesArray(newItems);
-
-
-        // setDisplayTestCasesArray(
-        //     displayTestCasesArray.map((key, row) => {
-        //       if (row[key] === testIdState) {
-        //         return { ...row, [key]:{
-        //             testId: displayTestCasesArray.length + 1,
-        //             id: displayTestCasesArray.length + 1,
-        //             variants: updatedArray
-        //         }};
-        //       } else {
-        //         return row;
-        //       }
-        //     })
-        //   );
-
-        handleCloseByPercentageModal();
+        })
+        handleCloseByPercentageModal()
     }
     useEffect(() => {
         handleVariants()
     }, [])
-    const data = "Hello data passed"
+
     return (
         <>
             <Card className='createTestStep2'>
                 <div className='createTestStep2-main'>
                     <Navbar />
-                    {/* <Button onClick={() => objectSent(objectToBeSent)}>Test</Button> */}
                     <Card className='createTestStep2Block'>
                         <Typography variant='h4'>Create Test</Typography>
                         <Typography variant='p'>1. Select your prices to test</Typography><br />
                         {/* <><ol><li> Select your prices to test</li></ol></> */}
-                        {/* <span  >
+                        <span  >
                             <div onClick={handleOpenControlSettings}>
 
                                 <p>variantPriceData:{variantPriceData}</p>
@@ -596,60 +467,13 @@ const CreateTestStep2 = ({ objectSent }) => {
                         </span><br />
                         <Button onClick={handleOpenConfigureTest1}>
                             Add Test
-                        </Button><br /> */}
-
-
-                        <div className='add-test-wrapper'>
-                            <div className='control-wrapper' onClick={handleOpenControlSettings}>
-                                <div className='control-box'>
-                                    <div className='icon-wrapper'>
-                                        <img src={ArrowIcon} alt="" />
-                                    </div>
-                                    <span className='box-title'>Control</span>
-                                </div>
-                                <span className='box-price'>{variantCompareAtPriceData && <>${variantCompareAtPriceData}</>}</span>
-                                <span className='box-prices'>${variantPriceData}</span>
-                            </div>
-                            {displayTestCasesArray && displayTestCasesArray.map((item) => (<>
-
-                                <div className='control-wrapper' onClick={() => handleOpenEditTest(item.testId)}>
-                                    <div className='control-box'>
-                                        <div className='icon-wrapper'>
-                                            <img src={ArrowIcon} alt="" />
-                                        </div>
-                                        <span className='box-title'>Test {item.testId}</span>
-                                    </div>
-                                    {/* <span className='box-price'> ${Math.min(...item.variants.map(j => j.abVariantComparePrice))} - ${Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span> */}
-                                    <span className='box-prices'>${Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
-                                </div>
-                            </>))}
-
-                            <div className='add-wrapper' onClick={() => handleOpenConfigureTest1(displayTestCasesArray && displayTestCasesArray.length > 0 ? displayTestCasesArray.length - 1 : 0)} style={{ display: displayTestCasesArray && displayTestCasesArray.length === 10 ? 'none' : 'flex' }} >
-                                <div className='add-icon'>
-                                    <img src={AddIcon} alt="" />
-                                </div>
-                                <span className='add-test'>Add Test</span>
-                            </div>
-                            {/* <div className='add-wrapper'>
-                                    <div className='add-icon'>
-                                        <img src={AddIcon} alt="" />
-                                    </div>
-                                    <span className='add-test'>Add Test</span>
-                                </div>
-                                <div className='add-wrapper'>
-                                    <div className='add-icon'>
-                                        <img src={AddIcon} alt="" />
-                                    </div>
-                                    <span className='add-test'>Add Test</span>
-                                </div> */}
-                        </div>
-
+                        </Button><br />
                         <Typography variant='p'> 2. Set your traffic split </Typography>
-                        <Slider className="trafficSlider" valueLabelDisplay='auto' min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
-                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
+                        <Slider className="trafficSlider" min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length && `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
-                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Confirm</Button>
+                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Review & Launch</Button>
 
                             {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
                         </div>
@@ -745,11 +569,9 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <div className='byPercentageDirection'>
                         <Typography variant='h5'>Which direction do you want to adjust pricing? </Typography>
                         <div className='inc-dec-btn-group'>
-                            <div className={`increasePriceBtn ${percentIncDec === '-' && "is-active"} `} onClick={() => setPercentIncDec('-')} >
-                                <p>Decrease Price</p>
-                                <Button>Decrease Price</Button>
-                            </div>
-                            <div className={`increasePriceBtn ${percentIncDec === '+' && "is-active"} `} onClick={() => setPercentIncDec('+')} >
+                            <Button onClick={() => setPercentIncDec('-')} >Decrease Price </Button>
+                            <div className='increasePriceBtn' onClick={() => setPercentIncDec('+')} >
+
                                 <p>Increase Price</p>
                                 <Button>Increase Price</Button>
                             </div>
@@ -761,15 +583,16 @@ const CreateTestStep2 = ({ objectSent }) => {
                         <div className='percentageBtnGroup'>
                             {percentagePrices.map(i => (<>
 
-                                <div className={`increasePriceBtn ${pricePercent === i && "is-active"} `}>
-
+                                <div>
                                     <p>{i}</p>
                                     <Button onClick={() => setPricePercent(i)} >{i}</Button>
                                 </div>
                             </>))}
-                            <div className='anotherAmount'>
-                                <TextField type="number" placeholder='Another amount in %' onChange={(e) => setPricePercent(e.target.value)} />
-                            </div>
+
+                            {/* <Button>3&</Button>
+                            <Button>5%</Button>
+                            <Button>10%</Button>
+                            <Button>Other Amount</Button> */}
                         </div>
                     </div>
 
@@ -790,7 +613,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style} className="editTest">
-                    <img src={closeIcon} alt="" className='closeBtn' onClick={() => handleCloseEditTest} />
+                    <img src={closeIcon} alt="" className='closeBtn' onClick={handleCloseEditTest} />
                     <Typography id="modal-modal-title" variant="h5" component="h2">
                         Test Settings
                     </Typography>
@@ -833,7 +656,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <Typography id="modal-modal-description" variant='p'>
                         Here are the current settings for this product on your store, They cannot be changed within PricePerfect. The prices below will be used as the control for your testing
                     </Typography>
-                    <div className='controlTable' style={{ overflowY: 'auto' }}>
+                    <div className='controlTable' style={{overflowY:'auto'}}>
                         {/* <div style={{ height: '100%', }}>
                             <DataGrid
                                 rows={displayTestCasesArray && displayTestCasesArray}
@@ -843,7 +666,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                 disableColumnMenu
                             />
                         </div> */}
-
+                        
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -878,7 +701,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div>
 
                     <div className='confirmBtn'>
-                        <Button onClick={() => setOpenControlSettings(false)}>Confirm</Button>
+                        <Button onClick={onConfirmEdit}>Confirm</Button>
                     </div>
                 </Box>
             </Modal>

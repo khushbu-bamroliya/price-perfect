@@ -3,7 +3,7 @@ export const handleGoogleSignIn = (setLoader, shop) => {
   console.log("Signing in...");
   if (window.location.hostname === "localhost") {
     console.log("Hello 1");
-    window.open(`${window.location.hostname}/google/auth`, "_self")
+    window.open(`/google/auth`, "_self")
     
   } else {
     console.log("Hello 2");
