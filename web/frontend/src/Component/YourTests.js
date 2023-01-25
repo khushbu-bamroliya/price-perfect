@@ -1,4 +1,4 @@
-import { Box, Button, Card, IconButton, Menu, MenuItem, Modal, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, IconButton, Menu, MenuItem, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import searchIcon from './Images/search-normal.png';
@@ -29,7 +29,7 @@ const YourTests = () => {
     const [testId, setTestId] = useState();
     console.log("allTests", allTests);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const handleOpenDeleteModal = (id) => {
         console.log("deleteModal id", id);
         setTestId(id)
@@ -57,7 +57,7 @@ const YourTests = () => {
     const columns = [
         {
             field: 'featuredImage',
-            headerName: 'Product',
+            headerName: 'Image',
             width: 250,
             sortable: false,
             flex: 0.3,
@@ -79,7 +79,7 @@ const YourTests = () => {
 
         {
             field: 'product',
-            headerName: 'Test',
+            headerName: 'Test Product',
             width: 500,
             sortable: false,
             flex: 0.3
@@ -90,11 +90,13 @@ const YourTests = () => {
             width: 250,
             sortable: false,
             flex: 0.2,
-
+            renderCell: (params) => (<>
+                <Chip className={`chip_${params.row.status}`} label={params.row.status} />
+            </>)
         },
         {
             field: 'duration',
-            headerName: 'Duration',
+            headerName: 'Price',
             width: 250,
             sortable: false,
             flex: 0.2,
@@ -249,7 +251,7 @@ const YourTests = () => {
             console.log("Deleted", apiRes);
             setOpenDeleteModal(false)
             getAllTests()
-            
+
         }).catch((err) => {
             console.log("Error", err);
         })
@@ -279,7 +281,7 @@ const YourTests = () => {
                                         {page}
                                     </Button>
                                 ))} */}
-                                {/* <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography> */}
+                                <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography>
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
@@ -345,14 +347,16 @@ const YourTests = () => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={style}>
+                            <Box sx={style} className="configureTest1">
+
                                 {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Text in a modal
                                 </Typography> */}
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                    Are you sure you want to delete this test case?..
+                                    Are you sure you want to delete this test case?
                                 </Typography>
-                                <Button onClick={() => deleteTestCase(testId)}> Delete </Button>
+                                    <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> Delete </Button>
+                            
                             </Box>
                         </Modal>
                     </Card>

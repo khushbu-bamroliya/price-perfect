@@ -13,7 +13,7 @@ const manualSignIn = async (req, res) => {
             if (user.password === password) {
     
                 console.log("user", user);
-                const token = await encodeJWT(user.email);
+                const token = await encodeJWT(user._id);
                 console.log("token", token);
                   res.cookie("token", token);
                 // res.redirect('/homeDashboard')

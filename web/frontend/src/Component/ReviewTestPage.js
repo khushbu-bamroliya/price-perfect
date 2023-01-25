@@ -4,12 +4,31 @@ import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 import { useNavigate } from 'react-router-dom'
 import {useLocation} from 'react-router-dom';
+import getApiUrl from "../controller/utils.js";
 
 const ReviewTestPage = ({ created, productImage }) => {
     const location = useLocation();
     console.log("Created on review page", created,productImage);
     const navigate = useNavigate();
     const launchTest = () => {
+        fetch(getApiUrl + `/api/updatetest?`+new URLSearchParams({
+            status:"active",
+            id:created && created?.apiRes?.data?._id
+        }), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(async (res) => {
+            const apiRes = await res.json();
+            console.log("Status changes", apiRes);
+        
+            
+            
+        }).catch((err) => {
+            console.log("Error", err);
+        })
         navigate('/yourtests')
     }
     return (
@@ -44,7 +63,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
                                                     {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
-                                                    <Typography variant='p'>{created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography>
+                                                    <Typography variant='p'>{created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.abVariantPrice}, </>)))}</Typography>
                                                 </div>
 
                                             </div>

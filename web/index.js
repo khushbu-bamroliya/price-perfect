@@ -331,8 +331,8 @@ app.get("/google/callback", (req, res) => {
       return res.redirect("/google/auth/failed");
     }
     if (user) {
-    
-      const token = await encodeJWT(user.googleId);
+    console.log("user from googlecallback", user._id);
+      const token = await encodeJWT(user._id);
       res.cookie("token", token);
       console.log("here1");
       res.redirect("/homeDashboard");

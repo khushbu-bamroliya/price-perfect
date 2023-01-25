@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const { DeleteApiRest } = require('../controllers/shopify_api');
 const createTestModal = require('../models/createTestModal');
 const Shop = require("../models/Shop");
@@ -7,25 +8,25 @@ const createTestCaseApi = async (req, res) => {
 
         console.log("==>", req.body);
 
-        let { trafficSplit, productId,testCases, status } = req.body;
+        let { trafficSplit, productId, testCases, status } = req.body;
 
-        let createTestData = await createTestModal.create({trafficSplit, testCases, productId, status})
+        let createTestData = await createTestModal.create({ trafficSplit, testCases, productId, status })
 
-        if (!createTestData){
+        if (!createTestData) {
             return res.json("Create Test case error...!")
         }
 
-            res.status(200).json({
-                data: createTestData,
-                success: true,
-                status: 200
-            })
+        res.status(200).json({
+            data: createTestData,
+            success: true,
+            status: 200
+        })
     } catch (error) {
         console.log("Error Create Test Case", error);
     }
 }
 
-const getSingleTestCase = async(req, res) => {
+const getSingleTestCase = async (req, res) => {
     try {
 
         console.log("******* Get single test case")
@@ -34,7 +35,7 @@ const getSingleTestCase = async(req, res) => {
 
         console.log("getSingleTest", getSingleTest);
 
-        if(!getSingleTest){
+        if (!getSingleTest) {
             return res.json("filed to single test case error...!");
         }
 
@@ -43,7 +44,7 @@ const getSingleTestCase = async(req, res) => {
             success: true,
             status: 200
         })
-        
+
     } catch (error) {
         console.log("Error in get single test case: ", error);
     }
@@ -136,9 +137,26 @@ const deleteTestCaseData = async (req, res) => {
     }
 }
 
+const updateTestStatus = async (req, res) => {
+    try {
+        console.log("******* update test case status *******")
+        const { status, id } = req.query;
+console.log("req.query",req.query);
+        const statusUpdated = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(`${id}`) }, {
+            status
+        })
+
+        res.status(200).json({ success: true, status: statusUpdated })
+        console.log("=====END END====")
+    } catch (error) {
+        console.log("Error", error);
+    }
+}
+
 module.exports = {
     createTestCaseApi,
     getSingleTestCase,
     getTestCase,
-    deleteTestCaseData
+    deleteTestCaseData,
+    updateTestStatus
 }

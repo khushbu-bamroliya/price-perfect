@@ -87,8 +87,7 @@ const item_per_page = 10;
       } else {
         console.log("first time and searching");
         query = `query products{
-                products(first :10 ${search ? ',query:"title:*' + search + '*"' : ""
-          }){ 
+                products(first :10 ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}){ 
                   edges { 
                   cursor 
                   node { 
@@ -475,7 +474,7 @@ const createDuplicateProduct = async (req, res) => {
           //     }
           //   }
           // }`
-
+console.log("object tests", objectToBeSent.testCases);
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(

@@ -4,7 +4,7 @@ const { allProducts, getVariants, createDuplicateProduct } = require("../api/pro
 const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
-    deleteTestCaseData,getSingleTestCase } = require("../api/createTest");
+    deleteTestCaseData,getSingleTestCase, updateTestStatus } = require("../api/createTest");
 
     const { createProfile,
         getSingleProfile,
@@ -36,6 +36,7 @@ router.post("/create-profile", createProfile)
 router.get("/getSingleProfile/:token", getSingleProfile)
 
 router.put("/update-profile/:token", getSingleProfileandUpdateById)
+router.put("/updatetest", updateTestStatus)
 
 router.delete("/deleteTestCase/:id", deleteTestCaseData)
 

@@ -137,7 +137,7 @@
 .reviewTest-main,
 .profile-main,
 .viewormanage-main {
-    /* max-width: 1440px; */
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -666,7 +666,7 @@
 }
 
 .setManuallyBlock>button,
-.pauseTest {
+.pauseTest, .deleteTestCaseBtn {
     margin-top: 13px;
     height: 45px;
     margin-right: 18px;
@@ -3011,7 +3011,7 @@ html {
 }
 
 .increasePriceBtn.is-active p {
-    display: none;
+    display: block;
 }
 
 .inc-dec-btn-group button {
@@ -3026,7 +3026,7 @@ html {
 
 .increasePriceBtn.is-active>button {
     opacity: 100%;
-    color: #fff;
+    color: transparent;
     text-transform: capitalize !important;
 }
 
@@ -3375,6 +3375,7 @@ margin-left: 0;
 }
 .createTestTable .MuiDataGrid-virtualScrollerRenderZone{
     max-width: 100% !important;
+    width: 100% !important;
 }
 .createTestTable .MuiDataGrid-row{
     max-width: 100%;
@@ -3387,7 +3388,9 @@ margin-left: 0;
 }
 
 .createTestTable .MuiDataGrid-cell:first-child{
-    padding-left:0 !important; 
+    padding-left:10px !important; 
+    padding-right:8px !important; 
+
 }
 
 .actionIcon img,.actionIcon a{
@@ -3397,7 +3400,7 @@ margin-left: 0;
     margin: 0;
 }
 
-.yourTest-Block3 {
+.yourTests-main .yourTest-Block3 {
     display: none;
 }
 
@@ -3451,4 +3454,103 @@ line-height: 19px;
 
 .pricingDataReview div div .MuiTypography-root{
     max-width: 90px;
+}
+
+
+
+
+
+@media only screen and (max-width: 900px) {
+    
+    .navbar .MuiToolbar-root .MuiBox-root.css-1lvtzne{
+        justify-content: flex-end;
+    }
+
+    .navIcons{
+        justify-content: flex-start;
+    }
+    .navIcons a, span{
+        text-decoration: none;
+        text-transform: capitalize;
+        font-family: Product Sans;
+        color: #B6BEC7;  
+      }
+
+      .MuiTypography-root .navIcons a{
+        display: flex;
+        align-items: center;
+    justify-content: center;
+      }
+
+.navIcons a.active{
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.yourTest-Block3{
+    display: none !important;
+}
+
+.createTestTable .MuiDataGrid-cell,.createTestTable .MuiDataGrid-columnHeader{
+    max-width: 200px !important;
+    min-width: 200px !important;
+    padding: 0 18px !important;
+}
+.createTestTable .MuiDataGrid-columnHeaders{
+    
+    justify-content: start;
+}
+.tableImages div img{
+    max-height: 42px;
+
+}
+.tableImages{
+    height: 46px;
+}
+
+.tableImages div{
+    height: 42px;
+    width: 60px;
+}
+.actionIcon img, .actionIcon a{
+    margin: auto  5px;
+    width: 15px;
+}
+.createTestTable .MuiDataGrid-virtualScroller {overflow-x: scroll !important;}
+.createTestTable .MuiDataGrid-row{
+    width: fit-content !important;
+    max-width: unset !important;
+}
+}
+  
+
+.chip_active {
+    color: #1BC78A !important;
+    font-family: 'Product Sans' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    text-transform: capitalize !important;
+    background: rgba(27, 199, 138, 0.1) !important;
+    border-radius: 6px !important;
+    height: auto !important;
+}
+.chip_active span{
+    padding: 4px 6px;
+}
+.chip_pending {
+    color: #C7631B !important;
+    font-family: 'Product Sans' !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    text-transform: capitalize !important;
+    background: hsl(22deg 29% 78% / 30%) !important ;
+    border-radius: 6px !important;
+    height: auto !important;
+}
+.chip_pending span{
+    padding: 4px 6px;
 }

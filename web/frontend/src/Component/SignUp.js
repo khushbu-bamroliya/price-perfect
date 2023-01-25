@@ -347,7 +347,7 @@ export default function SignUp() {
                                             <div>{RevenueResult[0].ConversionRateResult ? RevenueResult[0].ConversionRateResult : "XXXX"}</div>
                                         </div>
                                     </div>
-                                    <NavLink to="/homeDashboard" style={{ textDecoration: "none" }}>
+                                    <NavLink to="/" style={{ textDecoration: "none" }}>
                                         <Button variant='contained' className='createaccountdiv text-trans'>Get Started Now!</Button>
                                     </NavLink>
                                 </div>}

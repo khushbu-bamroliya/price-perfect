@@ -32,6 +32,7 @@ const CreateTestStep2 = ({ objectSent }) => {
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
 
+    const [disabled, setDisabled] = useState(true)
     const [variantPriceData, setVariantPriceData] = useState("")
     const [variantCompareAtPriceData, setVariantCompareAtPriceData] = useState();
     const [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
@@ -58,7 +59,23 @@ const CreateTestStep2 = ({ objectSent }) => {
 
     // configs of clicking manual btn
     const [openManualModal, setOpenManualModal] = useState(false);
-    const handleOpenManualModal = () => { setOpenManualModal(true); setOpenConfigureTest1(false) };
+    const handleOpenManualModal = () => { 
+        console.log("apiRes", variantRes);
+        const updatedArray = variantRes.data.map((item, index) => {
+
+
+
+            return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
+
+
+
+            return item;
+
+        })
+setProductsVariants(updatedArray)
+        setOpenManualModal(true); 
+        setOpenConfigureTest1(false)
+     };
     const handleCloseManualModal = () => setOpenManualModal(false);
 
     // configs of clicking auto btn
@@ -80,10 +97,16 @@ const CreateTestStep2 = ({ objectSent }) => {
         setTestIdState(Number(testId))
         // console.log("setTestIdState1", testIdState);
 
+        
+        const singleTest = [...displayTestCasesArray];
+        const foundSingleTest = singleTest.find(item => item.testId === testId);
+        console.log("foundSingleTest", foundSingleTest);
+        setProductsVariants(foundSingleTest.variants)
+        console.log("productsVariants", productVariants);
         setOpenEditTest(true);
         setOpenConfigureTest1(false)
-        const singleTest = displayTestCasesArray.find(item => item.testId === testId)
-
+        // const singleTest = displayTestCasesArray.find(item => item.testId === testId)
+        // setDisplayTestCasesArray(singleTest)
         // console.log("setTestIdState2", testIdState);
     }
     const handleCloseEditTest = () => {
@@ -109,11 +132,12 @@ const CreateTestStep2 = ({ objectSent }) => {
         // console.log("setDisplayTestCasesArray1");
         // setDisplayTestCasesArray(newItems);
 
+        const newItems = [...displayTestCasesArray];
+        const object = newItems.find(i => i.id === testIdState);
+        console.log("object: " + object);
+        object.variants = productVariants
+setDisplayTestCasesArray(newItems);
         setOpenEditTest(false)
-
-
-
-
 
     };
 
@@ -165,12 +189,13 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
         setDisplayTestCasesArray([
-            ...displayTestCasesArray,{
+            ...displayTestCasesArray, {
                 testId: displayTestCasesArray.length + 1,
-                    id: displayTestCasesArray.length + 1,
-                    variants: productVariants
+                id: displayTestCasesArray.length + 1,
+                variants: productVariants
             }
         ])
+        setDisabled(false)
         // let newItems = [...displayTestCasesArray];
         // console.log(newItems, 'umi1');
         // newItems[testIdState] = {
@@ -250,7 +275,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             .then(async (res) => {
 
                 apiRes = await res.json()
-                // console.log("apiRes.data", apiRes.data);
+                console.log("apiRes.data", apiRes.data);
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
@@ -317,6 +342,32 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
 
+    const controlColumn = [
+        // { field: "id", headerName: "Emp ID", minWidth: 120, flex: 1 },
+        {
+            field: "variantTitle",
+            headerName: "Title",
+            minWidth: 80,
+            flex: 1,
+            editable: false,
+        },
+        {
+            field: "variantPrice",
+            headerName: "Price",
+            minWidth: 120,
+            flex: 1,
+            editable: false,
+
+        },
+        {
+            field: "variantComparePrice",
+            headerName: "CompareAtPrice",
+            minWidth: 100,
+            flex: 1,
+            editable: false,
+
+        },
+    ];
     const originalVariantColumn = [
         // { field: "id", headerName: "Emp ID", minWidth: 120, flex: 1 },
         {
@@ -324,7 +375,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             headerName: "Title",
             minWidth: 80,
             flex: 1,
-            editable: true,
+            editable: false,
         },
         {
             field: "abVariantPrice",
@@ -422,7 +473,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
     // console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
-
+        setDisabled(true)
         const objectToBeSent = {
             trafficSplit: value / totalTests,
             testCases: displayTestCasesArray,
@@ -483,6 +534,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                 // .catch((error) => console.log("Error", error))
 
                 objectSent({ apiRes, controlData: variantRes.data })
+                
                 navigate(`/reviewtest`);
             })
             .catch((error) => console.log("Error", error))
@@ -503,20 +555,20 @@ const CreateTestStep2 = ({ objectSent }) => {
             const variantPriceTemp = (item.variantPrice / 100) * pricePercent.replace('%', '')
             const variantComparePriceTemp = (item.variantComparePrice / 100) * pricePercent.replace('%', '')
             // console.log("variantPriceTemp", variantPriceTemp);
-            // console.log("calculated variant price temp", variantComparePriceTemp);
+            console.log("item.variantComparePrice", item.variantComparePrice);
             if (percentIncDec === "+") {
 
                 const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
-                // console.log("final number is:", final);
+                console.log("final number is:", variantComparePriceFinal);
                 // console.log("final number is temp2:", variantPriceTempFinal);
-                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
+                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal , "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal  }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 // console.log("final number is temp2:", variantPriceTempFinal);
-                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal }
+                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal ==='0.00' ? null :variantComparePriceFinal , "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal  }
 
             }
             return item
@@ -526,11 +578,11 @@ const CreateTestStep2 = ({ objectSent }) => {
         console.log("updatedArray", updatedArray);
         setDisplayTestCasesArray([
             ...displayTestCasesArray,
-             {
-            testId: displayTestCasesArray.length + 1,
-            id: displayTestCasesArray.length + 1,
-            variants: updatedArray
-        }])
+            {
+                testId: displayTestCasesArray.length + 1,
+                id: displayTestCasesArray.length + 1,
+                variants: updatedArray
+            }])
         // displayTestCasesArray.push({
         //     testId: displayTestCasesArray.length + 1,
         //     id: displayTestCasesArray.length + 1,
@@ -563,7 +615,7 @@ const CreateTestStep2 = ({ objectSent }) => {
         //       }
         //     })
         //   );
-
+setDisabled(false)
         handleCloseByPercentageModal();
     }
     useEffect(() => {
@@ -620,7 +672,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                                         <span className='box-title'>Test {item.testId}</span>
                                     </div>
                                     {/* <span className='box-price'> ${Math.min(...item.variants.map(j => j.abVariantComparePrice))} - ${Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span> */}
-                                    <span className='box-prices'>${Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
+                                    { item.variants.length > 1 ? 
+                                    
+                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
+                                    :
+                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
+                                     }
                                 </div>
                             </>))}
 
@@ -649,7 +706,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
-                            <Button onClick={reviewAndLaunchBtnFunc} className='step2completed'>Confirm</Button>
+                            <Button onClick={reviewAndLaunchBtnFunc} disabled={disabled}  className='step2completed'>Confirm</Button>
 
                             {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
                         </div>
@@ -694,9 +751,10 @@ const CreateTestStep2 = ({ objectSent }) => {
             {/* set price manually modal  */}
             <Modal
                 open={openManualModal}
-                onClose={handleCloseManualModal}
+                //onClose={handleCloseManualModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                //disableBackdropClick
             >
                 <Box sx={style} className="manualmodal">
                     <img src={closeIcon} alt="" className='closeBtn' onClick={handleCloseManualModal} />
@@ -710,7 +768,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <Card className='manualModalTable'>
                         <div style={{ height: '100%', width: '100%' }}>
                             <DataGrid
-                                rows={productVariants}
+                                rows={productVariants && productVariants}
                                 columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
@@ -730,7 +788,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             {/* set price by percentage modal  */}
             <Modal
                 open={openByPercentageModal}
-                onClose={handleCloseByPercentageModal}
+                //onClose={handleCloseByPercentageModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -785,12 +843,12 @@ const CreateTestStep2 = ({ objectSent }) => {
             {/* Control edit test  modal  */}
             <Modal
                 open={openEditTest}
-                onClose={handleCloseEditTest}
+                //onClose={handleCloseEditTest}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style} className="editTest">
-                    <img src={closeIcon} alt="" className='closeBtn' onClick={() => handleCloseEditTest} />
+                    <img src={closeIcon} alt="" className='closeBtn' onClick={() => handleCloseEditTest()} />
                     <Typography id="modal-modal-title" variant="h5" component="h2">
                         Test Settings
                     </Typography>
@@ -800,7 +858,8 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <div className='controlTable'>
                         <div style={{ height: '100%', }}>
                             <DataGrid
-                                rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
+                                // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
+                                rows={productVariants && productVariants}
                                 columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
@@ -844,7 +903,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                             />
                         </div> */}
 
-                        <Table aria-label="simple table">
+                        {/* <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Title</TableCell>
@@ -874,12 +933,26 @@ const CreateTestStep2 = ({ objectSent }) => {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
+                        </Table> */}
+                        {/* <div className='controlTable'> */}
+                        <div style={{ height: '100%', }}>
+                            <DataGrid
+                                // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
+                                rows={variantRes && variantRes.data}
+                                columns={controlColumn}
+                                // columns={originalVariantColumn}
+                                pageSize={6}
+                                rowsPerPageOptions={[6]}
+                                disableColumnMenu
+                                onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                            />
+                        </div>
+                    {/* </div> */}
                     </div>
 
-                    <div className='confirmBtn'>
+                    {/* <div className='confirmBtn'>
                         <Button onClick={() => setOpenControlSettings(false)}>Confirm</Button>
-                    </div>
+                    </div> */}
                 </Box>
             </Modal>
 

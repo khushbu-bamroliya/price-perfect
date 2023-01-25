@@ -1,17 +1,29 @@
-import { Button, Card, Chip, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Modal, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import dummyProductImage from "./Images/home-trophy.png"
 import LinkIcon from "./Images/link-2.png"
 import { DataGrid } from '@mui/x-data-grid'
 import EyeIcon from "./Images/eye.png"
 import TrashIcon from "./Images/trash.png"
-import { useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import getApiUrl from "../controller/utils.js";
 
 const ViewOrManageTestPage = () => {
     const [singleTest, setSingleTest] = useState()
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+const navigate = useNavigate();
     const {id} = useParams();
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
     const getSingleTest = () => {
     
         fetch(getApiUrl + `/api/get-single-testcase/${id}`, {
@@ -30,6 +42,28 @@ const ViewOrManageTestPage = () => {
             })
             .catch((error) => console.log("Error", error))
     }
+    const deleteTestCase = (id) => {
+        console.log("deleting");
+        fetch(getApiUrl + `/api/deleteTestCase/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(async (res) => {
+            const apiRes = await res.json();
+            console.log("Deleted", apiRes);
+            setOpenDeleteModal(false)
+            navigate('/yourtests');
+            
+        }).catch((err) => {
+            console.log("Error", err);
+        })
+    }
+    const handleOpenDeleteModal = () => {
+        setOpenDeleteModal(true)
+    };
+    const handleCloseDeleteModal = () => setOpenDeleteModal(false);
     const rows = [
         { id: 1, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ',revPerVisitor:"$203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "56 USD" },
         { id: 2, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ',revPerVisitor:"$203.34 ", initiateCheckout: 'Cersei', Purchases: 42, price: "56 USD" },
@@ -92,7 +126,6 @@ const ViewOrManageTestPage = () => {
             sortable: false,
             flex: 0.2,
             renderCell: (params) => {
-                console.log("params: " + params);
                 return (
                     <div className='actionIcon'>
                         <img src={EyeIcon} alt="" />
@@ -127,6 +160,27 @@ const ViewOrManageTestPage = () => {
         //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
         // },
     ];
+
+    const updateTestStatus = () =>{
+        fetch(getApiUrl + `/api/updatetest?`+new URLSearchParams({
+            status:"pending",
+            id:id
+        }), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            }
+        }).then(async (res) => {
+            const apiRes = await res.json();
+            console.log("Status changes", apiRes);
+        
+            getSingleTest()
+            
+        }).catch((err) => {
+            console.log("Error", err);
+        })
+    }
     useEffect(() => {
         getSingleTest()
     },[])
@@ -196,8 +250,8 @@ const ViewOrManageTestPage = () => {
 
                             </Card>
                             <div className="viewormanageBtnGroup">
-                                <Button className='pauseTest'>Pause Test </Button>
-                                <div className='deleteTest'>
+                                <Button className='pauseTest' onClick={() => updateTestStatus()} >Pause Test </Button>
+                                <div className='deleteTest' onClick={() => handleOpenDeleteModal()}>
                                     <p>Delete Test</p>
                                     <Button>Delete Test</Button>
                                 </div>
@@ -224,6 +278,22 @@ const ViewOrManageTestPage = () => {
                         </div>
                     </Card>
                 </div>
+                <Modal
+                            open={openDeleteModal}
+                            onClose={handleCloseDeleteModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={style}>
+                                {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Text in a modal
+                                </Typography> */}
+                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                    Are you sure you want to delete this test case?..
+                                </Typography>
+                                <Button onClick={() => deleteTestCase(id)}> Delete </Button>
+                            </Box>
+                        </Modal>
             </Card>
         </>)}
         </>

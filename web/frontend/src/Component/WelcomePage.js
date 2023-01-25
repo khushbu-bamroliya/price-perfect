@@ -17,6 +17,7 @@ import logo from "../Component/Images/Group 48.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getUser, handleGoogleSignIn } from "../controller/handleGoogleSignIn";
 import Loader from "./Loader";
+import getApiUrl from "../controller/utils.js";
 
 
 export default function WelcomePage({ shop }) {
@@ -37,13 +38,19 @@ const handleInputChange = (e) => {
 };
   const [loader, setLoader] = useState(false);
   const handleManualSignIn = () => {
-    fetch(`/api/signin?${new URLSearchParams({email: userData.email, password:userData.password})}`, {
+    fetch(getApiUrl + `/api/signin?${new URLSearchParams({email: userData.email, password:userData.password})}`, {
       method: 'GET',
 
     })
       .then(async (response) => {
-        console.log("response", await response.json())
-        navigate('/homeDashboard');
+        // console.log("response", await response.json())
+      return response.json()
+        // console.log("res", res);
+        // navigate('/homeDashboard');
+      }).then((res) => {
+        if (res.success == true) {
+          navigate('/homeDashboard');
+        }
       })
       .catch(err => console.log(err))
   }
