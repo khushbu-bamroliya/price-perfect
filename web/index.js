@@ -22,7 +22,7 @@ const Shop = require("./models/Shop");
 const createTestModal = require("./models/createTestModal");
 
 //analytics model
-const Analytics = require("./models/Analytics");
+const Analytics = require("./models/analytics");
 
 //order model
 const Order = require("./models/Order");
