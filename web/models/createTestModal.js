@@ -29,7 +29,15 @@ const createTestSchema = mongoose.Schema({
     productPrice:{
         type: String,
         trim: true,
-    }
+    },
+    handle:{
+        type: String,
+        trim: true,
+    },
+    currency:{
+        type: String,
+        trim: true,
+    },
 });
 
 const CreateTest = mongoose.model("createTestCase", createTestSchema);

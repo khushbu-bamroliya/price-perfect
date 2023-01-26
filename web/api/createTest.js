@@ -52,10 +52,19 @@ const getSingleTestCase = async (req, res) => {
 
 const getTestCase = async (req, res) => {
     try {
-
+        const { search } = req.query;
+        let getCase;
         console.log("***** get test case")
+        if (search) {
+            // getCase = await createTestModal.find({ "productTitle": `\"${search}\"` })
+            getCase = await createTestModal.find({ "productTitle": {
+                $regex: `${search}`,
+                $options: "gi"
+            } })
+        } else {
 
-        let getCase = await createTestModal.find({})
+            getCase = await createTestModal.find()
+        }
 
         if (!getCase) {
             return res.json("Fetch get test case filed...!")
@@ -141,7 +150,7 @@ const updateTestStatus = async (req, res) => {
     try {
         console.log("******* update test case status *******")
         const { status, id } = req.query;
-console.log("req.query",req.query);
+        console.log("req.query", req.query);
         const statusUpdated = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(`${id}`) }, {
             status
         })

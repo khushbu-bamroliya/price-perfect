@@ -5,10 +5,11 @@ const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
     deleteTestCaseData,getSingleTestCase, updateTestStatus } = require("../api/createTest");
-
-    const { createProfile,
+const { createProfile,
         getSingleProfile,
         getSingleProfileandUpdateById} = require("../api/profile");
+
+const { enableDisableApp } = require("../api/settings");
 
 const router = express.Router();
 
@@ -44,4 +45,5 @@ router.get("/get-single-testcase/:id", getSingleTestCase)
 
 router.get('/signin', manualSignIn);
 
+router.get("/enable-disable", enableDisableApp);
 module.exports = router;

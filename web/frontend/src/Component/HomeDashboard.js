@@ -18,6 +18,8 @@ import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
+import Loader from './Loader'
+import cookieReader from '../controller/cookieReader'
 
 const HomeDashboard = () => {
     const [allTests, setAllTests] = useState();
@@ -130,7 +132,8 @@ const HomeDashboard = () => {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             },
         })
             .then(async (res) => {
@@ -296,6 +299,7 @@ const HomeDashboard = () => {
                                 </div>
                                 <div>
                                     <div className='createTestTable' style={{ height: 400, width: '100%' }}>
+{!allTests ? <Loader size={40} />:(<>
 
                                         <DataGrid
                                             rows={rows2}
@@ -304,6 +308,7 @@ const HomeDashboard = () => {
                                             rowsPerPageOptions={[50]}
                                             disableColumnMenu
                                         />
+</>)}
 
                                     </div>
                                 </div>

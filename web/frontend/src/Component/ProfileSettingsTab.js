@@ -2,6 +2,8 @@ import { Button, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import dragAndDropIcon from './Images/dragAndDropIcon.png'
 import getApiUrl from "../controller/utils.js";
+import Loader from './Loader';
+import cookieReader from '../controller/cookieReader';
 
 const ProfileSettingsTab = () => {
     const initialValues = {
@@ -38,7 +40,9 @@ const ProfileSettingsTab = () => {
 
                 fetch(getApiUrl + `/api/getSingleProfile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
                     method: 'GET',
-
+                    headers: {
+                        'shop': cookieReader('shop')
+                    }
                 })
                     .then(async (res) => {
                         console.log("res profile: " + JSON.stringify(res));
@@ -62,9 +66,9 @@ const ProfileSettingsTab = () => {
                 fetch(getApiUrl + `/api/update-profile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
                     method: 'PUT',
                     headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(userData)
                 })
                     .then(async (res) => {
@@ -87,45 +91,49 @@ const ProfileSettingsTab = () => {
 
     return (
         <>
+
             <div className="profilesettingsTab">
-                <div className='profileInputsBlock1'>
+                {!userData ? <Loader size={40}  /> : (<>
 
-                    <label className='profileInputs'>
-                        <p>First Name</p>
-                        <TextField placeholder='First name' name='firstName' value={userData.firstName} onChange={handleInputChange} className='profileInputField' />
-                    </label>
-                    <label className='profileInputs'>
-                        <p>Last Name</p>
-                        <TextField placeholder='Last name' name='lastName' value={userData.lastName} onChange={handleInputChange} className='profileInputField' />
-                    </label>
-                </div>
-                <div className='profileInputsBlock2'>
-                    <div className='mailandcountry'>
+                    <div className='profileInputsBlock1'>
 
                         <label className='profileInputs'>
-                            <p>Email Address</p>
-                            <TextField placeholder='Your mail' name='email' value={userData.email} onChange={handleInputChange} className='profileInputField' />
+                            <p>First Name</p>
+                            <TextField placeholder='First name' name='firstName' value={userData.firstName} onChange={handleInputChange} className='profileInputField' />
                         </label>
                         <label className='profileInputs'>
-                            <p>Country</p>
-                            <TextField placeholder='United States' name='country' value={userData.country} onChange={handleInputChange} className='profileInputField' />
+                            <p>Last Name</p>
+                            <TextField placeholder='Last name' name='lastName' value={userData.lastName} onChange={handleInputChange} className='profileInputField' />
                         </label>
                     </div>
-                    <div className='dragAndDrop'>
-                        <label>
-                            <p>Your Photo</p>
-                            <div>
-                                <input type="file"
-                                    // value={userData.picture}
-                                    name="picture"
-                                    onChange={handleInputChange}
-                                />
-                                <img src={dragAndDropIcon} alt="" />
-                                <p>Click to upload, or drag and drop</p>
-                            </div>
-                        </label>
+                    <div className='profileInputsBlock2'>
+                        <div className='mailandcountry'>
+
+                            <label className='profileInputs'>
+                                <p>Email Address</p>
+                                <TextField placeholder='Your mail' name='email' value={userData.email} onChange={handleInputChange} className='profileInputField' />
+                            </label>
+                            <label className='profileInputs'>
+                                <p>Country</p>
+                                <TextField placeholder='United States' name='country' value={userData.country} onChange={handleInputChange} className='profileInputField' />
+                            </label>
+                        </div>
+                        <div className='dragAndDrop'>
+                            <label>
+                                <p>Your Photo</p>
+                                <div>
+                                    <input type="file"
+                                        // value={userData.picture}
+                                        name="picture"
+                                        onChange={handleInputChange}
+                                    />
+                                    <img src={dragAndDropIcon} alt="" />
+                                    <p>Click to upload, or drag and drop</p>
+                                </div>
+                            </label>
+                        </div>
                     </div>
-                </div>
+                </>)}
             </div>
             <Button onClick={() => updateUser()}>Save</Button>
         </>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Card, TextField, Typography, CardContent, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
 import googleImages from './Images/google (1).png';
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import ResultRevenueLogo from './Images/ResultRevenueLogo.png';
 import card1Img from "../Component/Images/Group-45.png";
 import logo from "../Component/Images/Group 48.png";
@@ -9,9 +9,28 @@ import closeIcon from "../Component/Images/close-circle.png"
 import { handleGoogleSignIn } from "../controller/handleGoogleSignIn";
 import getApiUrl from "../controller/utils.js";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
+import cookieReader from "../controller/cookieReader";
+import ResultRevenueLogo2 from './Images/ResultRevenueLogo2.png';
+
+
 
 export default function SignUp() {
+const navigate = useNavigate();
+    //Show error message
+    const [errorFirstName, setErrorFirstName] = useState(false);
+    const [errorLastName, setErrorLastName] = useState(false);
+    const [errorEmailName, setErrorEmailName] = useState(false);
+    const [errorPassName, setErrorPassName] = useState(false);
+    const [errorConfirmPassName, setErrorConfirmPassName] = useState(false);
 
+    // Revenue Increase Error message
+    const [errorDailyMess, setErrorDailyMess] = useState(false);
+    const [errorTrafficMess, setErrorTrafficMess] = useState(false);
+    const [errorAverageorderMess, setErrorAverageorderMess] = useState(false);
+    const [errorConversionRate, setErrorConversionRate] = useState(false);
+
+
+    //change the page
     const [toggle, setToggle] = useState(false);
     const [togglescrollresult, setToggleScrollresult] = useState(false);
 
@@ -21,6 +40,11 @@ export default function SignUp() {
     const [dailytraffic, setDailyTraffic] = useState("");
     const [orderValue, setOrderValue] = useState("");
     const [conversionRate, setConversionRate] = useState("");
+
+    console.log("dailyrevenue", dailyrevenue)
+    console.log("dailytraffic", dailytraffic)
+    console.log("orderValue", orderValue)
+    console.log("conversionRate", conversionRate)
 
     const [RevenueResult, setRevenueResult] = useState([{
         dailyRevenueResult: "",
@@ -51,6 +75,13 @@ export default function SignUp() {
 
 
     const createAccount = async () => {
+
+        setErrorFirstName(true)
+        setErrorLastName(true)
+        setErrorEmailName(true)
+        setErrorPassName(true)
+        setErrorConfirmPassName(true)
+
         let data = {
             "first_name": input.firstName,
             "last_name": input.lastName,
@@ -58,25 +89,47 @@ export default function SignUp() {
             "password": input.password,
             "confirmPassword": input.confirmPassword
         }
-
-        if (input.password !== input.confirmPassword) {
-            console.log("If")
-            alert("Please check the password..!")
+        if (!input.firstName || !input.lastName || !input.email || !input.password || !input.confirmPassword) {
+            console.log("Not a valid email or password");
         } else {
-            console.log("Else")
-            await fetch('/api/signupdetails', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain, */*',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }).then(async (res) =>  console.log(await res.json()))
-                .catch((error) => console.log("Error", error))
+            if (input.password !== input.confirmPassword) {
+                console.log("If")
+                alert("Please check the password..!")
+            } else {
+                console.log("Else")
+                await fetch('/api/signupdetails', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json',
+                        'shop': cookieReader('shop')
+                    },
+                    body: JSON.stringify(data)
+                }).then(async (res) => {
+                    const apiRes =await res.json() 
+                    console.log("signup apiRes", apiRes)
+                    navigate('/')
+                })
+                    .catch((error) => console.log("Error", error))
+            }
         }
+
+
     }
 
     const hideRevenueComponent = async () => {
+        setErrorDailyMess(true)
+        setErrorConversionRate(true)
+        setErrorTrafficMess(true)
+        setErrorAverageorderMess(true)
+
+        console.log("errorDailyMess", errorDailyMess)
+        console.log("************ dailyrevenue", typeof dailyrevenue)
+
+        if (dailyrevenue === "" || conversionRate === "" || dailytraffic === "" || orderValue === "") {
+            return false;
+        }
+
         // setTimeout(hideRevenueTime, 1000)
         console.log("dailyrevenue", RevenueResult)
         let newArray = [...RevenueResult]
@@ -133,6 +186,12 @@ export default function SignUp() {
                                             variant="outlined"
                                             name="firstName"
                                             placeholder='Enter your first name'
+                                            helperText={
+                                                errorFirstName && input?.firstName === ""
+                                                    ? "Please insert your first name name"
+                                                    : null
+                                            }
+                                            error={errorFirstName && input?.firstName === ""}
                                             value={input.firstName}
                                             onChange={inputEvent}
                                         />
@@ -147,6 +206,12 @@ export default function SignUp() {
                                             variant="outlined"
                                             name="lastName"
                                             placeholder='Enter your last name'
+                                            helperText={
+                                                errorLastName && input?.lastName === ""
+                                                    ? "Please insert your last name name"
+                                                    : null
+                                            }
+                                            error={errorLastName && input?.lastName === ""}
                                             value={input.lastName}
                                             onChange={inputEvent}
                                         />
@@ -162,10 +227,17 @@ export default function SignUp() {
                                         variant="outlined"
                                         name="email"
                                         placeholder='Enter your mail'
+                                        helperText={
+                                            errorEmailName && input?.email === ""
+                                                ? "Please insert your email name"
+                                                : null
+                                        }
+                                        error={errorEmailName && input?.email === ""}
                                         value={input.email}
                                         onChange={inputEvent}
                                     />
                                 </div>
+
                                 <div className='welcomeInputs'>
                                     <Typography variant='p'>Password</Typography>
 
@@ -176,6 +248,7 @@ export default function SignUp() {
                                         type={showPassword ? 'text' : 'password'}
                                         placeholder="Enter your password"
                                         name="password"
+
                                         value={input.password}
                                         onChange={inputEvent}
                                         endAdornment={
@@ -185,11 +258,19 @@ export default function SignUp() {
                                                     onClick={() => setShowPassword(!showPassword)}
                                                     onMouseDown={handleMouseDownPassword}
                                                     edge="end"
+                                                    error
+                                                    helperText="lalala"
                                                 >
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
                                             </InputAdornment>
                                         }
+                                        helperText={
+                                            errorPassName && input?.password === ""
+                                                ? "Please insert your password name"
+                                                : null
+                                        }
+                                        error={errorPassName && input?.password === ""}
                                     />
 
                                 </div>
@@ -203,6 +284,12 @@ export default function SignUp() {
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         placeholder="Enter your password"
                                         name="confirmPassword"
+                                        helperText={
+                                            errorConfirmPassName && input?.confirmPassword === ""
+                                                ? "Please insert your confirm Password name"
+                                                : null
+                                        }
+                                        error={errorConfirmPassName && input?.confirmPassword === ""}
                                         value={input.confirmPassword}
                                         onChange={inputEvent}
                                         endAdornment={
@@ -222,7 +309,7 @@ export default function SignUp() {
                                 <Button
                                     variant="contained"
                                     className='createaccountdiv'
-                                    onClick={createAccount}
+                                    onClick={() => createAccount()}
                                 >
                                     Create Account
                                 </Button>
@@ -263,6 +350,12 @@ export default function SignUp() {
                                         label=""
                                         variant="outlined"
                                         placeholder='e.g. $5000'
+                                        helperText={
+                                            errorDailyMess && dailyrevenue === ""
+                                                ? "Please insert Daily revenue"
+                                                : null
+                                        }
+                                        error={errorDailyMess && dailyrevenue === ""}
                                         value={dailyrevenue}
                                         onChange={(e) => setDailyrevenue(e.target.value)}
                                     />
@@ -275,6 +368,12 @@ export default function SignUp() {
                                         label=""
                                         variant="outlined"
                                         placeholder='e.g. 15,000 visitors'
+                                        helperText={
+                                            errorTrafficMess && dailytraffic === ""
+                                                ? "Please insert Daily Traffic"
+                                                : null
+                                        }
+                                        error={errorTrafficMess && dailytraffic === ""}
                                         value={dailytraffic}
                                         onChange={(e) => setDailyTraffic(e.target.value)}
                                     />
@@ -287,11 +386,17 @@ export default function SignUp() {
                                         abel=""
                                         variant="outlined"
                                         placeholder='e.g. $45.60'
+                                        helperText={
+                                            errorAverageorderMess && orderValue === ""
+                                                ? "Please insert Average order value"
+                                                : null
+                                        }
+                                        error={errorAverageorderMess && orderValue === ""}
                                         value={orderValue}
                                         onChange={(e) => setOrderValue(e.target.value)}
                                     />
                                 </div>
-                                <div className='welcomeInputs' style={{marginBottom: "20px"}}>
+                                <div className='welcomeInputs' style={{ marginBottom: "20px" }}>
                                     <Typography variant='p'>Conversion rate</Typography>
                                     <TextField
                                         className='please-width'
@@ -299,12 +404,20 @@ export default function SignUp() {
                                         label=""
                                         variant="outlined"
                                         placeholder='e.g. 2.7%'
+                                        helperText={
+                                            errorConversionRate && conversionRate === ""
+                                                ? "Please insert Conversion rate"
+                                                : null
+                                        }
+                                        error={errorConversionRate && conversionRate === ""}
                                         value={conversionRate}
                                         onChange={(e) => setConversionRate(e.target.value)}
                                     />
                                 </div>
-                                <a href='#scrollresult' style={{ textDecoration: "none" }} onClick={hideRevenueComponent}>
-                                    <Button variant="contained" className='createaccountdiv text-trans'>Calculate!</Button>
+                                <a href='#scrollresult' style={{ textDecoration: "none" }} >
+                                    <Button variant="contained" className='createaccountdiv text-trans'
+                                        onClick={hideRevenueComponent}
+                                    >Calculate!</Button>
                                 </a>
                             </div>}
 
@@ -321,7 +434,7 @@ export default function SignUp() {
                                     </div>
                                     <div className='result-wrapper'>
                                         <div className='wrapper'>
-                                            <img src={ResultRevenueLogo} alt="" />
+                                            <img src={ResultRevenueLogo2} alt="" />
                                             <span>Your revenue is expected to increase by ×% to Sxxx per day</span>
                                         </div>
                                         <div className='wrapper'>

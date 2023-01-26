@@ -3,29 +3,33 @@ import React from 'react'
 import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 import { useNavigate } from 'react-router-dom'
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
+import Loader from './Loader'
+import cookieReader from '../controller/cookieReader'
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
 const ReviewTestPage = ({ created, productImage }) => {
     const location = useLocation();
-    console.log("Created on review page", created,productImage);
+    console.log("Created on review page", created, productImage);
     const navigate = useNavigate();
     const launchTest = () => {
-        fetch(getApiUrl + `/api/updatetest?`+new URLSearchParams({
-            status:"active",
-            id:created && created?.apiRes?.data?._id
+        fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
+            status: "active",
+            id: created && created?.apiRes?.data?._id
         }), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             }
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
-        
-            
-            
+
+
+
         }).catch((err) => {
             console.log("Error", err);
         })
@@ -41,9 +45,11 @@ const ReviewTestPage = ({ created, productImage }) => {
 
                         <Card className='reviewTestBlock'>
                             <div>
+                                {!created ? <Loader size={40}  /> : (<>
 
                                 <div className='imageBlock'>
-                                    <img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" />
+                                {created && created.apiRes.data.featuredImage ?<img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" />:<HideImageOutlinedIcon/>}
+                                    
                                 </div>
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>
@@ -58,12 +64,12 @@ const ReviewTestPage = ({ created, productImage }) => {
 
                                                 <div>
                                                     <Typography variant='h5'>Control</Typography>
-                                                    <Typography variant='p'>{created && created.apiRes.data.productPrice}</Typography>
+                                                    <Typography variant='p'>{created.apiRes.currency} {created && created.apiRes.data.productPrice}</Typography>
                                                 </div>
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
                                                     {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
-                                                    <Typography variant='p'>{created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.abVariantPrice}, </>)))}</Typography>
+                                                    <Typography variant='p'>{created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<>{created.apiRes.currency} {j.abVariantPrice}, </>)))}</Typography>
                                                 </div>
 
                                             </div>
@@ -80,7 +86,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
                                                 {/* <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography> */}
-                                            {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
+                                                {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
                                             </div>
                                         </div>
 
@@ -89,7 +95,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                         <Typography variant='p'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</Typography>
                                     </div> */}
                                     <div className='reviewAndLaunchBtns'>
-                                        <Button className='launchTestBtn' onClick={()=> launchTest()}>Launch</Button>
+                                        <Button className='launchTestBtn' onClick={() => launchTest()}>Launch</Button>
                                         {/* <div className='scheduleTestBtn'>
 
                                             <p>Schedule</p>
@@ -97,6 +103,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                         </div> */}
                                     </div>
                                 </div>
+                                </>)}
                             </div>
                         </Card>
                     </div>

@@ -2,22 +2,18 @@ var jwt = require('jsonwebtoken');
 
 module.exports = { 
     encodeJWT : async (payLoad, expTime)=>{
-        console.log("payload", payLoad);
         // if (!expTime) return new Error("expiry time not found");
         return jwt.sign({
             data: payLoad
         }, process.env.JWT_SECRET);
     },
     decodeJWT : async (token)=>{
-        return new Promise((resolve,reject)=>{
             try {
-                var data = jwt.verify(token, process.env.JWT_SECRET);
-                // if (!secret) return reject(false);
-                return resolve(data);
+                var decoded = jwt.verify(token, process.env.JWT_SECRET);
+                return decoded.data;
             } catch (error) {
-                return reject(false);
+                console.log("Error in decode jwt",error);
             }
-        })
     },
     abTest: async(cases)=>{     
         return new Promise((resolve,reject)=>{

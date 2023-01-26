@@ -32,7 +32,7 @@
 
 .logo {
     width: 160px;
-    height: 38px;
+    /* height: 38px; */
     position: absolute;
     left: 80px;
     top: 70px;
@@ -83,8 +83,18 @@
     color: #000000;
 }
 
-.navIcons>a>img {
+.navIcons .colored {
     margin-right: 12px;
+}
+
+.navIcons .colored path {
+    fill: transparent;
+    stroke: #B6BEC7;
+}
+
+.navIcons .active .colored path {
+    fill: url(#paint0_linear_252_15328);
+    stroke: transparent;
 }
 
 .NavCenterBtn>button:active>div>a>span {
@@ -629,6 +639,8 @@
     line-height: 22px;
     color: #8492A7;
     width: max-content;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .controlSettings>span {
@@ -666,10 +678,11 @@
 }
 
 .setManuallyBlock>button,
-.pauseTest, .deleteTestCaseBtn {
+.pauseTest,
+.deleteTestCaseBtn {
     margin-top: 13px;
     height: 45px;
-    margin-right: 18px;
+    /* margin-right: 18px; */
     /* Gradient */
     text-transform: capitalize;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
@@ -679,7 +692,7 @@
     font-family: 'Product Sans' !important;
     font-style: normal !important;
     font-weight: 700 !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     line-height: 19px !important;
     text-align: center;
 
@@ -704,11 +717,12 @@
     height: 176px;
     border: 1px dashed #D4DCE8;
     border-radius: 14px;
-    margin: 33px auto 28px;
+    margin: 25px auto 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .setAutoBlock button {
@@ -771,7 +785,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 71px;
+    /* margin-bottom: 71px; */
+    text-align: center;
 }
 
 .manualmodal {
@@ -1697,9 +1712,10 @@
 }
 
 .viewormanage-testItemImage>img {
-    width: 192px;
-    height: 160px;
-    padding: 24px 42px;
+    width: 276px;
+    height: 207px;
+    /* padding: 24px 42px; */
+
 
 }
 
@@ -1802,6 +1818,10 @@
     text-align: center;
 
     color: #FFFFFF;
+}
+
+.viewormanage-testItemData>button img {
+    margin-left: 10px;
 }
 
 .viewormanage-testItemData {
@@ -2117,7 +2137,7 @@
 
 @media screen and (max-width: 420px) {
     .configureTest1 {
-        width: 65% !important;
+        width: 75% !important;
         height: 75vh !important;
         overflow: auto;
         padding: 25px !important;
@@ -2125,7 +2145,7 @@
 
     .setManuallyBlock,
     .setAutoBlock {
-        padding: 10px;
+        padding: 20px;
     }
 
     .byPercentageDirection {
@@ -2599,6 +2619,7 @@
 .welcomeBlock2>div {
     /* margin: 94px; */
     box-shadow: none;
+
 }
 
 .welcomeBlock2 {
@@ -2606,7 +2627,7 @@
     justify-content: center;
     align-items: center !important;
     box-shadow: none;
-    border-radius: 0px 30px 30px 0px !important;
+    /* border-radius: 0px 30px 30px 0px !important; */
 }
 
 .welcomeInputs>div>div>input {
@@ -2639,7 +2660,7 @@
 .RememberMe>span,
 .noAccount>span {
     font-family: 'Product Sans';
-
+    /* padding-left: 11px; */
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -2819,7 +2840,7 @@ html {
 }
 
 .min-wi {
-    max-width: 50%;
+    max-width: 60%;
     width: 100%;
     margin: 0 auto;
     padding: 0 15px;
@@ -3064,6 +3085,7 @@ html {
     .welcomeContent .welcome-wrappers h4 {
         font-size: 28px;
         line-height: 34px;
+        margin-top: 12px;
     }
 
     .forgetPass {
@@ -3171,7 +3193,7 @@ html {
 }
 
 .MuiDataGrid-footerContainer {
-    display: none !important;
+    /* display: none !important; */
 }
 
 #root {
@@ -3311,21 +3333,24 @@ html {
 .percentageBtnGroup div {
     margin: 0;
 }
-.profile-main .main_profile_img{
-position: relative;
+
+.profile-main .main_profile_img {
+    position: relative;
 }
 
-.proflie_pic{
+.proflie_pic {
     position: absolute;
     top: 60%;
     left: 5%;
 }
-.profileData{
+
+.profileData {
     max-width: 80%;
     margin: 30px 10px 0 auto;
 
 }
-.main_toda_rev span{
+
+.main_toda_rev span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -3334,7 +3359,7 @@ position: relative;
     color: #536780;
 }
 
-.main_toda_rev span span{
+.main_toda_rev span span {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -3343,116 +3368,129 @@ position: relative;
     color: #F42272;
 }
 
-.main_toda_rev{
+.main_toda_rev {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.profile-main .userDetails{
+
+.profile-main .userDetails {
     max-width: 65%;
     margin: 0 0 0 auto;
 }
 
-.profile-main .MuiButtonBase-root{
+.profile-main .MuiButtonBase-root {
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 17px;
-color: #8492A7;
-padding: 0 !important;
-min-width: unset;margin: 0 36px;
-}
-.profile-main .MuiButtonBase-root:first-child{
-margin-left: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #8492A7;
+    padding: 0 !important;
+    min-width: unset;
+    margin: 0 36px;
 }
 
-.yourTests-main .createTestTable{
+.profile-main .MuiButtonBase-root:first-child {
+    margin-left: 0;
+}
+
+.yourTests-main .createTestTable {
     height: 63vh !important;
 }
-.yourTests-main .createTestTable .MuiDataGrid-root{
+
+.yourTests-main .createTestTable .MuiDataGrid-root {
     border: none !important;
 }
-.createTestTable .MuiDataGrid-virtualScrollerRenderZone{
+
+.createTestTable .MuiDataGrid-virtualScrollerRenderZone {
     max-width: 100% !important;
     width: 100% !important;
 }
-.createTestTable .MuiDataGrid-row{
+
+.createTestTable .MuiDataGrid-row {
     max-width: 100%;
-    width: 100% !important; 
+    width: 100% !important;
     padding: 8px 0;
 }
 
-.createTestTable .MuiDataGrid-cell{
+.createTestTable .MuiDataGrid-cell {
     padding: 0px 28px !important;
 }
 
-.createTestTable .MuiDataGrid-cell:first-child{
-    padding-left:10px !important; 
-    padding-right:8px !important; 
+.createTestTable .MuiDataGrid-cell:first-child {
+    padding-left: 10px !important;
+    padding-right: 8px !important;
 
 }
 
-.actionIcon img,.actionIcon a{
-    margin:auto 20px;
+.actionIcon img,
+.actionIcon a {
+    margin: auto 20px;
 }
-.actionIcon a:first-child,.actionIcon img:last-child{
+
+.actionIcon a:first-child,
+.actionIcon img:last-child {
     margin: 0;
 }
 
 .yourTests-main .yourTest-Block3 {
-    display: none;
+    /* display: none; */
 }
 
-.viewormanage-testItemData .MuiChip-root{
+.viewormanage-testItemData .MuiChip-root {
     border-radius: 6px;
     padding: 0;
     width: fit-content;
     height: unset;
-    margin-top:8px ;
+    margin-top: 8px;
 }
-.viewormanage-testItemData .MuiChip-root span{
+
+.viewormanage-testItemData .MuiChip-root span {
     padding: 6px;
     color: #1BC78A;
     background-color: rgba(27, 199, 138, 0.1);
     font-family: 'Product Sans';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 19px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
 }
 
-.viewormanage-testItemData .viewormanage-status,.viewormanage-testItemData .viewormanage-product {
+.viewormanage-testItemData .viewormanage-status,
+.viewormanage-testItemData .viewormanage-product {
     width: 40%;
     align-items: flex-start;
     padding-left: 10px;
-   
+
 }
-.viewormanage-status>span, .viewormanage-product>span{
+
+.viewormanage-status>span,
+.viewormanage-product>span {
     margin-top: 10px;
 }
 
-.viewormanage-testItemData .viewormanage-product{
+.viewormanage-testItemData .viewormanage-product {
     border-left: 1px solid #E9E9E9;
 }
 
-.viewormanage-testItemData>div{
+.viewormanage-testItemData>div {
     justify-content: flex-start;
 }
 
-.deleteTest p{
+.deleteTest p {
     font-weight: 700 !important;
 }
 
-.pricingDataReview div{
+.pricingDataReview div {
     align-items: flex-start;
 }
 
-.pricingDataReview div div{
+.pricingDataReview div div {
     align-items: flex-start;
 }
 
-.pricingDataReview div div .MuiTypography-root{
+.pricingDataReview div div .MuiTypography-root {
     max-width: 90px;
 }
 
@@ -3461,68 +3499,81 @@ line-height: 19px;
 
 
 @media only screen and (max-width: 900px) {
-    
-    .navbar .MuiToolbar-root .MuiBox-root.css-1lvtzne{
+
+    .navbar .MuiToolbar-root .MuiBox-root.css-1lvtzne {
         justify-content: flex-end;
     }
 
-    .navIcons{
+    .navIcons {
         justify-content: flex-start;
     }
-    .navIcons a, span{
+
+    .navIcons a,
+    span {
         text-decoration: none;
         text-transform: capitalize;
         font-family: Product Sans;
-        color: #B6BEC7;  
-      }
+        /* color: #B6BEC7; */
+    }
 
-      .MuiTypography-root .navIcons a{
+    .MuiTypography-root .navIcons a {
         display: flex;
         align-items: center;
-    justify-content: center;
-      }
+        justify-content: center;
+    }
 
-.navIcons a.active{
-    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.yourTest-Block3{
-    display: none !important;
+    .navIcons a.active {
+        background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .yourTest-Block3 {
+        display: none !important;
+    }
+
+    .createTestTable .MuiDataGrid-cell,
+    .createTestTable .MuiDataGrid-columnHeader {
+        max-width: 200px !important;
+        min-width: 200px !important;
+        padding: 0 18px !important;
+    }
+
+    .createTestTable .MuiDataGrid-columnHeaders {
+
+        justify-content: start;
+    }
+
+    .tableImages div img {
+        max-height: 42px;
+
+    }
+
+    .tableImages {
+        height: 46px;
+    }
+
+    .tableImages div {
+        height: 42px;
+        width: 60px;
+    }
+
+    .actionIcon img,
+    .actionIcon a {
+        margin: auto 5px;
+        width: 15px;
+    }
+
+    .createTestTable .MuiDataGrid-virtualScroller {
+        overflow-x: scroll !important;
+    }
+
+    .createTestTable .MuiDataGrid-row {
+        width: fit-content !important;
+        max-width: unset !important;
+    }
 }
 
-.createTestTable .MuiDataGrid-cell,.createTestTable .MuiDataGrid-columnHeader{
-    max-width: 200px !important;
-    min-width: 200px !important;
-    padding: 0 18px !important;
-}
-.createTestTable .MuiDataGrid-columnHeaders{
-    
-    justify-content: start;
-}
-.tableImages div img{
-    max-height: 42px;
-
-}
-.tableImages{
-    height: 46px;
-}
-
-.tableImages div{
-    height: 42px;
-    width: 60px;
-}
-.actionIcon img, .actionIcon a{
-    margin: auto  5px;
-    width: 15px;
-}
-.createTestTable .MuiDataGrid-virtualScroller {overflow-x: scroll !important;}
-.createTestTable .MuiDataGrid-row{
-    width: fit-content !important;
-    max-width: unset !important;
-}
-}
-  
 
 .chip_active {
     color: #1BC78A !important;
@@ -3536,9 +3587,11 @@ line-height: 19px;
     border-radius: 6px !important;
     height: auto !important;
 }
-.chip_active span{
+
+.chip_active span {
     padding: 4px 6px;
 }
+
 .chip_pending {
     color: #C7631B !important;
     font-family: 'Product Sans' !important;
@@ -3547,10 +3600,270 @@ line-height: 19px;
     font-size: 12px;
     line-height: 15px;
     text-transform: capitalize !important;
-    background: hsl(22deg 29% 78% / 30%) !important ;
+    background: hsl(22deg 29% 78% / 30%) !important;
     border-radius: 6px !important;
     height: auto !important;
 }
-.chip_pending span{
+
+.chip_pending span {
     padding: 4px 6px;
+}
+
+
+
+
+
+
+
+
+/* RutDev CSS */
+/* .welcomeBlock1Content img{
+    width: 100%;
+} 
+
+.logo {
+    max-width: 10%;
+    width: 100%;
+}
+
+.welcomeBlock2 div {
+    max-width: 1440px;
+    width: 100%;
+}
+
+.welcomeContent .welcome-wrappers h4 {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 41px;
+    margin-bottom: 12px;
+    color: #151515;
+    letter-spacing: unset;
+}
+
+.welcomeContent .welcome-wrappers .span {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 19px;
+    color: #8492A7;
+    margin-bottom: 27px;
+    display: block;
+}
+
+.welcomeInputs>span,
+.RememberMe>span,
+.noAccount>span {
+    font-family: 'Product Sans';
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 34px;
+    margin-top: 12px;
+    line-height: 17px;
+    color: #536780;
+} */
+@media screen and (min-width: 1121px) {
+    .navbar>header div {
+        /* width: 100%; */
+        max-width: 100%;
+    }
+
+    .testAnalytics {
+        max-width: 60%;
+        width: 100%;
+    }
+
+    .yourTests {
+        max-width: 40%;
+        width: 100%;
+    }
+}
+
+.forgetPass label span:first-child {
+    padding-left: 11px;
+    ;
+}
+
+.manualModalTable div div {
+    border: none;
+}
+
+.inc-dec-btn-group .is-active button {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    color: white;
+}
+
+.percentageBtnGroup .is-active button {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    color: white;
+}
+
+.createTestBlock-buttons {
+    max-width: 90px;
+    margin: 0 auto;
+}
+
+.createTestBlock button {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    /* background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%); */
+    border-radius: 50px;
+    padding: 0;
+    color: #FFFFFF !important;
+    z-index: 999;
+}
+
+.createTestBlock button svg path {
+    stroke: #536780;
+}
+
+.createTestBlock button:hover svg path {
+    stroke: #FFFFFF !important;
+}
+
+.createTestBlock button:hover {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+}
+
+
+@media only screen and (max-width: 414px) {
+    .control-wrapper {
+        max-width: 100%;
+    }
+
+    .add-test-wrapper>div:nth-child(even) {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .add-wrapper {
+        max-width: 100%;
+    }
+
+    .box-title {
+        font-size: 18px;
+    }
+
+    .box-prices {
+        font-size: 24px;
+    }
+
+    .control-box {
+        margin-bottom: 15px;
+    }
+
+    .createTestStep2Block>h4,
+    .reviewTestBlock>h4 {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .createTestStep2Block>span,
+    .reviewTestBlock>span {
+        font-size: 16px;
+    }
+
+    .configureTest1>h2,
+    .manualmodal>h2,
+    .byPercentage>h2,
+    .editTest>h2,
+    .controlSettings>h2 {
+        font-size: 24px;
+    }
+
+    .configureTest1>span,
+    .manualmodal>span,
+    .byPercentage>span,
+    .editTest>span {
+        font-size: 16px;
+        display: block;
+        overflow: hidden;
+        max-width: 100%;
+        padding-bottom: 10px;
+    }
+
+
+}
+
+.inc-dec-btn-group>div:last-child {
+    margin-left: 32px;
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 567px) {
+
+    .configureTest1>span,
+    .manualmodal>span,
+    .byPercentage>span,
+    .editTest>span {
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .manualmodal>div,
+    .byPercentage>div {
+        width: unset;
+    }
+
+    .byPercentageDirection {
+        padding: 30px 0;
+    }
+
+    .byPercentage {
+        width: 75% !important;
+        padding: 45px 60px !important;
+    }
+
+    .inc-dec-btn-group>div:last-child {
+        margin-left: 14px;
+    }
+}
+
+@media only screen and (max-width: 600px) and (min-width: 319px) {
+    .byPercentage {
+        width: 85% !important;
+        padding: 24px 20px !important;
+        height: 85vh !important;
+    }
+
+    .inc-dec-btn-group {
+        width: 90%;
+        justify-content: space-around;
+        margin: 14px 0;
+    }
+
+    .inc-dec-btn-group>button,
+    .inc-dec-btn-group>div>button,
+    .inc-dec-btn-group>div,
+    .percentageBtnGroup>div,
+    .percentageBtnGroup>div>button {
+        width: 100%;
+        margin: 0;
+    }
+
+    .inc-dec-btn-group>div:last-child {
+        margin-top: 14px;
+    }
+
+    .byPercentageDirection>span>h5 {
+        margin-top: 14px;
+        margin-bottom: 14px;
+    }
+
+    .byPercentageDirection .MuiButtonBase-root {
+        margin: 0 0 10px 0;
+    }
+
+    .percentageBtnGroup {
+        max-width: 90%;
+        width: 100%;
+        margin: auto;
+    }
+}
+
+.welcomeInputs>div>p{
+    margin-left: 0
 }

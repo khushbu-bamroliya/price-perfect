@@ -1,17 +1,20 @@
 import { Button, Card, Modal, Slider, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system';
-import React from 'react'
+import React, { useCallback } from 'react'
 import Navbar from './Navbar'
 import closeIcon from "./Images/close-circle.png"
-import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate, useParams } from 'react-router-dom';
+import { DataGrid, gridClasses, GridCellEditStopReasons } from '@mui/x-data-grid';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
 import ArrowIcon from "./Images/Arrow.png";
 import AddIcon from "./Images/add-square.png";
+import Loader from './Loader';
+import cookieReader from '../controller/cookieReader';
 
 const CreateTestStep2 = ({ objectSent }) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
     const style = {
         position: 'absolute',
         top: '50%',
@@ -31,15 +34,14 @@ const CreateTestStep2 = ({ objectSent }) => {
     var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
-
+    const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(true)
     const [variantPriceData, setVariantPriceData] = useState("")
     const [variantCompareAtPriceData, setVariantCompareAtPriceData] = useState();
     const [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
     const [productVariants, setProductsVariants] = useState([])
     const [testIdState, setTestIdState] = useState(0);
-    const [displayFinalVariantsArray, setDisplayFinalVariantsArray] = useState([]);
-    const [demoState, setDemoState] = useState();
+
 
     console.log("testing testIdState", testIdState);
     const [pricePercent, setPricePercent] = useState("11");
@@ -59,7 +61,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
     // configs of clicking manual btn
     const [openManualModal, setOpenManualModal] = useState(false);
-    const handleOpenManualModal = () => { 
+    const handleOpenManualModal = () => {
         console.log("apiRes", variantRes);
         const updatedArray = variantRes.data.map((item, index) => {
 
@@ -72,10 +74,10 @@ const CreateTestStep2 = ({ objectSent }) => {
             return item;
 
         })
-setProductsVariants(updatedArray)
-        setOpenManualModal(true); 
+        setProductsVariants(updatedArray)
+        setOpenManualModal(true);
         setOpenConfigureTest1(false)
-     };
+    };
     const handleCloseManualModal = () => setOpenManualModal(false);
 
     // configs of clicking auto btn
@@ -97,7 +99,7 @@ setProductsVariants(updatedArray)
         setTestIdState(Number(testId))
         // console.log("setTestIdState1", testIdState);
 
-        
+
         const singleTest = [...displayTestCasesArray];
         const foundSingleTest = singleTest.find(item => item.testId === testId);
         console.log("foundSingleTest", foundSingleTest);
@@ -136,7 +138,7 @@ setProductsVariants(updatedArray)
         const object = newItems.find(i => i.id === testIdState);
         console.log("object: " + object);
         object.variants = productVariants
-setDisplayTestCasesArray(newItems);
+        setDisplayTestCasesArray(newItems);
         setOpenEditTest(false)
 
     };
@@ -268,7 +270,8 @@ setDisplayTestCasesArray(newItems);
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             },
             body: JSON.stringify(data)
         })
@@ -350,6 +353,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 80,
             flex: 1,
             editable: false,
+            sortable: false,
         },
         {
             field: "variantPrice",
@@ -357,6 +361,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 120,
             flex: 1,
             editable: false,
+            sortable: false,
 
         },
         {
@@ -365,6 +370,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 100,
             flex: 1,
             editable: false,
+            sortable: false,
 
         },
     ];
@@ -376,6 +382,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 80,
             flex: 1,
             editable: false,
+            sortable: false,
         },
         {
             field: "abVariantPrice",
@@ -383,7 +390,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 120,
             flex: 1,
             editable: true,
-
+            sortable: false,
         },
         {
             field: "abVariantComparePrice",
@@ -391,7 +398,7 @@ setDisplayTestCasesArray(newItems);
             minWidth: 100,
             flex: 1,
             editable: true,
-
+            sortable: false,
         },
     ];
 
@@ -473,10 +480,12 @@ setDisplayTestCasesArray(newItems);
 
     // console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
+        setLoading(true)
         setDisabled(true)
         const objectToBeSent = {
-            trafficSplit: value / totalTests,
+            trafficSplit: parseInt(Number(value) / Number(totalTests)),
             testCases: displayTestCasesArray,
+            currency:location.state.currency,
             "productId": `gid://shopify/Product/${id}`,
         }
 
@@ -495,7 +504,8 @@ setDisplayTestCasesArray(newItems);
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             },
             body: JSON.stringify(duplicateProductData)
         })
@@ -532,9 +542,9 @@ setDisplayTestCasesArray(newItems);
 
                 // })
                 // .catch((error) => console.log("Error", error))
-
+                setLoading(false)
                 objectSent({ apiRes, controlData: variantRes.data })
-                
+
                 navigate(`/reviewtest`);
             })
             .catch((error) => console.log("Error", error))
@@ -562,13 +572,13 @@ setDisplayTestCasesArray(newItems);
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 console.log("final number is:", variantComparePriceFinal);
                 // console.log("final number is temp2:", variantPriceTempFinal);
-                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal , "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal  }
+                return { ...item, "variantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice":   variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
                 // console.log("final number is:", final);
                 // console.log("final number is temp2:", variantPriceTempFinal);
-                return { ...item, "variantPrice": variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal ==='0.00' ? null :variantComparePriceFinal , "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :variantComparePriceFinal  }
+                return { ...item, "variantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
 
             }
             return item
@@ -615,13 +625,142 @@ setDisplayTestCasesArray(newItems);
         //       }
         //     })
         //   );
-setDisabled(false)
+        setDisabled(false)
         handleCloseByPercentageModal();
     }
+
+    const columnsDemo = [
+        { field: 'name', headerName: 'Name', width: 180, editable: true },
+        { field: 'age', headerName: 'Age', type: 'number', editable: true },
+
+    ];
+
+    const rowsDemo = [
+        {
+            id: 1,
+            name: "wer",
+            age: 25,
+
+        },
+        {
+            id: 2,
+            name: "wer",
+            age: 36,
+
+        },
+        {
+            id: 3,
+            name: "wer",
+            age: 19,
+
+        },
+        {
+            id: 4,
+            name: "wer",
+            age: 28,
+
+        },
+        {
+            id: 5,
+            name: "xyz",
+            age: 23,
+
+        },
+    ];
+    console.log("productVariants ******", productVariants);
+
+
+
+
+    const useCreateTestFakeMutation = () => {
+        return React.useCallback(
+            (user) =>
+                new Promise((resolve, reject) =>
+                    setTimeout(() => {
+                        console.log("user1", user);
+
+                        const objectIndex = productVariants.findIndex(item => item.id === user.id);
+                        console.log("objectIndex", objectIndex);
+                        const ObjKeyExists = Object.hasOwn(productVariants[objectIndex], "abVariantPrice") && Object.keys(productVariants[objectIndex], "abVariantComparePrice")
+                        console.log('ObjKeyExists', ObjKeyExists)
+
+                        if (ObjKeyExists) {
+                            console.log("Here we go");
+                            let tempArr = [...productVariants]
+                            console.log("tempArr = " + tempArr);
+                            // productVariants[objectIndex] = user
+                            // setProductsVariants(...productVariants, )
+
+
+
+                            const updatedArray = tempArr?.map((item, index) => {
+                                console.log("updatedArray item", item);
+                                console.log("updatedArray index", index);
+                                if (index === objectIndex) {
+                                    console.log("hello inside object");
+                                    // setEditVariantId(item.testId)
+                                    console.log("item", user.abVariantComparePrice);
+                                    // if (user.abVariantComparePrice) {
+
+                                    return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+                                    // }
+                                    // if (user.abVariantPrice) {
+
+                                    //     return { ...item, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+
+                                    // }
+                                }
+
+                                return item;
+
+                            })
+                            console.log("variants updated", updatedArray);
+                            setProductsVariants(updatedArray)
+
+                        }
+
+                        if (!user) {
+                            reject(new Error("Error while saving user: name can't be empty."));
+                        } else {
+
+                            resolve({ ...user });
+                        }
+                    }, 200),
+                ),
+            [productVariants],
+        );
+    };
+    const createTestMutateRow = useCreateTestFakeMutation();
+    const createTestProcessRowUpdate = React.useCallback(
+        async (newRow) => {
+            console.log("newRow", newRow);
+            // console.log("productVariants",productVariants);
+            // Make the HTTP request to save in the backend
+            const response = await createTestMutateRow(newRow);
+            console.log("response: table " + JSON.stringify(response));
+            console.log("response: id " + JSON.stringify(response.id));
+            // console.log("variantRes", variantRes  )
+            // updatemanualproducts(response)
+            //  variantRes.filter(obj => {
+            //     console.log("obj id", obj.id);
+            //     return obj.id === response.id;
+            //   });
+            // let foundObject = productVariants.find((item) => item.id === response.id);
+            // console.log("foundObject", JSON.stringify(foundObject));
+
+            // setProductsVariants(response)
+            // setSnackbar({ children: 'User successfully saved', severity: 'success' });
+            return response;
+        },
+        [createTestMutateRow],
+    );
+    const createTestHandleProcessRowUpdateError = React.useCallback((error) => {
+        console.log("error: " + error);
+    }, []);
     useEffect(() => {
         handleVariants()
     }, [])
-    const data = "Hello data passed"
+
     return (
         <>
             <Card className='createTestStep2'>
@@ -653,14 +792,20 @@ setDisabled(false)
 
                         <div className='add-test-wrapper'>
                             <div className='control-wrapper' onClick={handleOpenControlSettings}>
-                                <div className='control-box'>
-                                    <div className='icon-wrapper'>
-                                        <img src={ArrowIcon} alt="" />
+                                <>
+
+                                    <div className='control-box'>
+                                        <div className='icon-wrapper'>
+                                            <img src={ArrowIcon} alt="" />
+                                        </div>
+                                        <span className='box-title'>Control</span>
                                     </div>
-                                    <span className='box-title'>Control</span>
-                                </div>
-                                <span className='box-price'>{variantCompareAtPriceData && <>${variantCompareAtPriceData}</>}</span>
-                                <span className='box-prices'>${variantPriceData}</span>
+
+                                    {!variantPriceData ? <Loader size={40} /> : (<>
+                                        <span className='box-price'>{variantCompareAtPriceData && <>{location.state.currency} {variantCompareAtPriceData}</>}</span>
+                                        <span className='box-prices'>{location.state.currency} {variantPriceData}</span>
+                                    </>)}
+                                </>
                             </div>
                             {displayTestCasesArray && displayTestCasesArray.map((item) => (<>
 
@@ -671,13 +816,13 @@ setDisabled(false)
                                         </div>
                                         <span className='box-title'>Test {item.testId}</span>
                                     </div>
-                                    {/* <span className='box-price'> ${Math.min(...item.variants.map(j => j.abVariantComparePrice))} - ${Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span> */}
-                                    { item.variants.length > 1 ? 
-                                    
-                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))} - ${Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
-                                    :
-                                    <span className='box-prices'>${ Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
-                                     }
+                                    {/* <span className='box-price'> {location.state.currency} {Math.min(...item.variants.map(j => j.abVariantComparePrice))} - {location.state.currency} {Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span> */}
+                                    {item.variants.length > 1 ?
+
+                                        <span className='box-prices'>{location.state.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))} - {location.state.currency} {Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
+                                        :
+                                        <span className='box-prices'>{location.state.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
+                                    }
                                 </div>
                             </>))}
 
@@ -706,7 +851,7 @@ setDisabled(false)
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
                             {/* {btns()} */}
-                            <Button onClick={reviewAndLaunchBtnFunc} disabled={disabled}  className='step2completed'>Confirm</Button>
+                            <Button onClick={reviewAndLaunchBtnFunc} disabled={disabled} className='step2completed'>{loading ? <Loader size={20} /> : "Confirm"}</Button>
 
                             {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
                         </div>
@@ -729,7 +874,7 @@ setDisabled(false)
                     </Typography>
                     <Typography id="modal-modal-description" variant='p'>
                         This product has 5 variants.
-                    </Typography><br /><br />
+                    </Typography>
                     <Typography variant='p'>Do you want to set each variant’s price manually or auto adjust by percentage? </Typography>
                     <div className='setManuallyBlock'>
                         <Typography variant='p'>Gif here showing setting prices manually</Typography>
@@ -754,7 +899,7 @@ setDisabled(false)
                 //onClose={handleCloseManualModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                //disableBackdropClick
+            //disableBackdropClick
             >
                 <Box sx={style} className="manualmodal">
                     <img src={closeIcon} alt="" className='closeBtn' onClick={handleCloseManualModal} />
@@ -767,14 +912,57 @@ setDisabled(false)
 
                     <Card className='manualModalTable'>
                         <div style={{ height: '100%', width: '100%' }}>
-                            <DataGrid
+                            {!productVariants ? <Loader size={40} /> : (<>
+
+                                {/* <DataGrid
                                 rows={productVariants && productVariants}
                                 columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
+                                    experimentalFeatures={{ newEditingApi: true }}
                                 disableColumnMenu
                                 onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-                            />
+                                sx={{
+                                    [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                    {
+                                        outline: "none",
+                                    },
+                                    [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                    {
+                                        outline: "none",
+                                    },
+                                }}
+                            /> */}
+                                {/* <DataGrid
+        rows={productVariants && productVariants}
+                                columns={originalVariantColumn}
+        experimentalFeatures={{ newEditingApi: true }}
+        onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+      /> */}
+
+                                <DataGrid
+                                    rows={productVariants && productVariants}
+                                    columns={originalVariantColumn}
+                                    pageSize={6}
+                                    rowsPerPageOptions={[6]}
+                                    // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                    disableColumnMenu
+                                    processRowUpdate={createTestProcessRowUpdate}
+                                    onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
+                                    experimentalFeatures={{ newEditingApi: true }}
+                                    sx={{
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                    }}
+                                />
+
+                            </>)}
                         </div>
                     </Card>
                     <div>
@@ -857,15 +1045,49 @@ setDisabled(false)
                     </Typography>
                     <div className='controlTable'>
                         <div style={{ height: '100%', }}>
-                            <DataGrid
-                                // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
-                                rows={productVariants && productVariants}
-                                columns={originalVariantColumn}
-                                pageSize={6}
-                                rowsPerPageOptions={[6]}
-                                disableColumnMenu
-                                onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-                            />
+                            {!productVariants ? <Loader size={40} /> : (<>
+
+                                {/* <DataGrid
+                                    // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
+                                    rows={productVariants && productVariants}
+                                    columns={originalVariantColumn}
+                                    pageSize={6}
+                                    rowsPerPageOptions={[6]}
+                                    disableColumnMenu
+                                    onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                    sx={{
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                    }}
+                                /> */}
+                                <DataGrid
+                                    rows={productVariants && productVariants}
+                                    columns={originalVariantColumn}
+                                    pageSize={6}
+                                    rowsPerPageOptions={[6]}
+                                    // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                    disableColumnMenu
+                                    processRowUpdate={createTestProcessRowUpdate}
+                                    onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
+                                    experimentalFeatures={{ newEditingApi: true }}
+                                    sx={{
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                    }}
+                                />
+                            </>)}
                         </div>
                     </div>
 
@@ -945,9 +1167,19 @@ setDisabled(false)
                                 rowsPerPageOptions={[6]}
                                 disableColumnMenu
                                 onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                sx={{
+                                    [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                    {
+                                        outline: "none",
+                                    },
+                                    [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                    {
+                                        outline: "none",
+                                    },
+                                }}
                             />
                         </div>
-                    {/* </div> */}
+                        {/* </div> */}
                     </div>
 
                     {/* <div className='confirmBtn'>

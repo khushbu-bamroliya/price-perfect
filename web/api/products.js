@@ -15,19 +15,25 @@ const in_array = (array, id) => {
 
 const allProducts = async (req, res) => {
   try {
-    
+
+    const shop = req.headers.shop;
+
+    console.log("req.headers", req.headers);
 const item_per_page = 10;
     //let {shop} = req.headers
-    var shop = process.env.SHOP;
+    // var shop = process.env.SHOP;
     //shop = await decodeJWT(shop)
     //shop = shop.data
     var access_token = "";
+    var currency = "";
     // const shop = process.env.SHOP
     console.log("shop", shop);
     if (shop) {
 
-      const shopData = await Shop.findOne({ shop }).select(['access_token']);
+      const shopData = await Shop.findOne({ shop }).select(['access_token','money_format']);
+      console.log("====> shopData <====", shopData);
       access_token = shopData.access_token
+        currency = shopData.money_format.replace(' {{amount}}','')
     }
 
     const {
@@ -177,6 +183,7 @@ const item_per_page = 10;
                     ? node.featuredImage.url
                     : "",
                 title: node.title ? node.title : "",
+                currency:currency,
                 description: node.description ? node.description : "-",
                 variant_title: "",
                 price:
@@ -272,10 +279,12 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
 
 const getVariants = async (req, res) => {
 
+  const shop = req.headers.shop;
+
   console.log("==>1")
   // const { shop, access_token } = ctx.state;
   //let {shop} = req.headers
-  var shop = process.env.SHOP;
+  // var shop = process.env.SHOP;
 
   //shop = await decodeJWT(shop)
   //shop = shop.data
@@ -319,13 +328,13 @@ const getVariants = async (req, res) => {
     `;
 
     let ans1 = await PostApiGraphql(shop, access_token, query);
-
-    var products = [];
-
+        var products = [];
+    
     if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
       for (let resProduct of ans1.data.product.variants.edges) {
         const info = resProduct.node;
-
+        
+        console.log("ans1.data.product.handle",ans1.data.product.handle);
         products.push({
           // id: resProduct.id,
           // title: resProduct.title,
@@ -355,13 +364,15 @@ const getVariants = async (req, res) => {
 const createDuplicateProduct = async (req, res) => {
   try {
 
+    const shop = req.headers.shop;
+
     //console.log("1")
 
-    var { productId, productTitle,featuredImage,productPrice, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
-    //console.log("==>2", req.body)
-
+    var { productId, productTitle,featuredImage,productPrice,currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
+    console.log("==>2", handle)
+console.log("objectToBeSent.variants",objectToBeSent);
     //let {shop} = req.headers
-    var shop = process.env.SHOP;
+    // var shop = process.env.SHOP;
 
     //shop = await decodeJWT(shop)
     //shop = shop.data
@@ -441,11 +452,11 @@ const createDuplicateProduct = async (req, res) => {
         console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
 
         var query_var = '';
-
+console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice",objectToBeSent?.testCases[i].variants[j].abVariantComparePrice);
         // console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
 
-        if (objectToBeSent?.testCases[i].variants[j].abVariantComparePrice != null) {
-
+        if (objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice !=  null ) {
+console.log("****************************************************************");
           // query_var = `
           // mutation {
           //   productUpdate(input: {
@@ -474,14 +485,14 @@ const createDuplicateProduct = async (req, res) => {
           //     }
           //   }
           // }`
-console.log("object tests", objectToBeSent.testCases);
+          console.log("object tests", objectToBeSent.testCases);
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(
           input: {
             id: "${newMakeArr[j].id}",
             price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
-            compareAtPrice: "${objectToBeSent?.testCases[i].variants[j].abVariantComparePrice}"
+            compareAtPrice: "${objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice}"
           
         }
         ) {
@@ -565,7 +576,7 @@ console.log("object tests", objectToBeSent.testCases);
         `
         }
 
-        // console.log(query_var, 'query_var');
+        console.log(query_var, 'query_var');
 
         const NewPriceAtDuplicateProduct = await PostApiGraphql(shop, access_token, query_var);
 
@@ -588,7 +599,7 @@ console.log("object tests", objectToBeSent.testCases);
     }
 
 
-    originalProductTags.push('price_perfect_duplicate', `handle | ${handle}`)
+    originalProductTags.push('price_perfect_duplicate', `handle|${handle}`)
 
     console.log("originalProductTags", originalProductTags)
 
@@ -655,15 +666,16 @@ console.log("object tests", objectToBeSent.testCases);
 
     // let { trafficSplit, productId,testCases, status } = req.body;
 
-    let createTestData = await createTestModal.create({ trafficSplit, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
+    let createTestData = await createTestModal.create({currency:objectToBeSent.currency, trafficSplit,handle:`https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
 
     if (!createTestData) {
       return res.json("Create Test case error...!")
     }
-console.log("createTestData", createTestData);
+console.log("currency", objectToBeSent.currency);
     res.status(200).json({
       data: createTestData,
       handle,
+      currency:objectToBeSent.currency,
       success: true,
       status: 200
     })

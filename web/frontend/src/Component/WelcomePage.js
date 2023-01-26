@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,7 +8,12 @@ import {
   Stack,
   TextField,
   Typography,
+  Snackbar,
+  Alert
 } from "@mui/material";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import cookieReader from "../controller/cookieReader";
+
 // import "./style.css";
 // import '../App.css';
 import google from "../Component/Images/google (1).png";
@@ -22,38 +27,114 @@ import getApiUrl from "../controller/utils.js";
 
 export default function WelcomePage({ shop }) {
   const navigate = useNavigate()
+
+  const [opens, setOpens] = useState(false);
+  const [snackbar_msg, setsnackbar_msg] = useState("");
+
+  //Error message state
+  const [emailErrorMess, setEmailErrorMess] = useState(false);
+  const [passErrorMess, setPassErrorMess] = useState(false);
+
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+
   const initialValues = {
     email: "",
     password: "",
-}
-const [userData, setUserData] = useState(initialValues);
+  }
+  const [userData, setUserData] = useState(initialValues);
 
-console.log("userData", userData);
-const handleInputChange = (e) => {
+  console.log("userData", userData);
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({
-        ...userData,
-        [name]: value,
+      ...userData,
+      [name]: value,
     });
-};
-  const [loader, setLoader] = useState(false);
-  const handleManualSignIn = () => {
-    fetch(getApiUrl + `/api/signin?${new URLSearchParams({email: userData.email, password:userData.password})}`, {
-      method: 'GET',
+  };
 
+  const [loader, setLoader] = useState(false);
+
+
+
+  const handleManualSignIn = () => {
+
+    if (!userData.email) {
+      setEmailErrorMess(true)
+    }
+    if (!userData.password) {
+      setPassErrorMess(true)
+    }
+
+
+    fetch(getApiUrl + `/api/signin?${new URLSearchParams({ email: userData.email, password: userData.password, 'rememberMe': rememberMe })}`, {
+      method: 'GET',
+      headers: {
+        'shop': cookieReader('shop')
+      }
     })
       .then(async (response) => {
-        // console.log("response", await response.json())
-      return response.json()
-        // console.log("res", res);
-        // navigate('/homeDashboard');
+        return response.json()
       }).then((res) => {
         if (res.success == true) {
+          setOpens(true)
+          setsnackbar_msg("Login Successfully!")
           navigate('/homeDashboard');
         }
       })
       .catch(err => console.log(err))
   }
+
+  const handleRememberMe = (e) => {
+
+    if (rememberMe === true) {
+      setRememberMe(false)
+    }
+    if (rememberMe === false) {
+      setRememberMe(true)
+    }
+  }
+
+
+  // Show error message 
+  const handleClose = () => {
+    setOpens(false);
+  };
+  // function Alert(props) {
+  //   return <MuiAlert elevation={6} variant="filled" {...props} />;
+  // }
+
+
+
+  const errorfunction = () => {
+    return (<div>
+      <Snackbar
+        open={opens}
+        sx={{ width: "50%" }}
+        // anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          variant="filled"
+          onClose={handleClose}
+          sx={{ width: "50%", bgcolor: "#325240" }}
+        >
+          {snackbar_msg}
+        </Alert>
+      </Snackbar>
+    </div>)
+
+  };
+
+  const lala = () => {
+    console.log("******************////////////");
+    setOpens(true)
+    setsnackbar_msg("Moj")
+
+  }
+
   return (
     <>
       <div className="welcomePage">
@@ -74,14 +155,40 @@ const handleInputChange = (e) => {
                 <div>
                   <div className='welcomeInputs'>
                     <Typography variant='p'>Email</Typography>
-                    <TextField fullWidth id="fullWidth" placeholder='Enter your mail' name='email' value={userData.email} onChange={handleInputChange} />
+                    <TextField
+                      fullWidth
+                      id="fullWidth"
+                      placeholder='Enter your mail'
+                      name='email'
+                      helperText={
+                        emailErrorMess && userData?.email === ""
+                          ? "Please insert your email name"
+                          : null
+                      }
+                      error={emailErrorMess && userData?.email === ""}
+                      value={userData.email}
+                      onChange={handleInputChange}
+                    />
                   </div>
                   <div className='welcomeInputs'>
                     <Typography variant='p'>Password</Typography>
-                    <TextField fullWidth id="fullWidth" placeholder='Enter your Password' name='password' value={userData.password} onChange={handleInputChange} />
+                    <TextField
+                      fullWidth
+                      id="fullWidth"
+                      placeholder='Enter your Password'
+                      name='password'
+                      helperText={
+                        passErrorMess && userData?.password === ""
+                          ? "Please insert your password name"
+                          : null
+                      }
+                      error={passErrorMess && userData?.password === ""}
+                      value={userData.password}
+                      onChange={handleInputChange}
+                    />
                   </div>
                   <div className="forgetPass">
-                    <FormControlLabel className='RememberMe label-remember' control={<Checkbox defaultChecked />} label="Remember for 30 days " />
+                    <FormControlLabel className='RememberMe label-remember' control={<Checkbox defaultChecked={false} value={rememberMe} onChange={(e) => handleRememberMe(e)} />} label="Remember for 30 days " />
                     <NavLink to="/forgot-password" className="forgotPass">Forgot Password?</NavLink>
                   </div>
                 </div>
@@ -89,7 +196,8 @@ const handleInputChange = (e) => {
               <span className="mb-34">
                 <Stack spacing={2} direction="column" className='btnStack'>
                   <Button variant="contained" className='SignInBtn' onClick={() => handleManualSignIn()}>Sign in</Button>
-                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoader, shop, navigate)}> {loader === true ? <Loader /> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>)} </Button>
+                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoader, shop, navigate)}> {loader === true ? <Loader size={40}  /> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>)} </Button>
+
                 </Stack>
               </span>
               <div className="noAccount sign-up">
@@ -99,6 +207,7 @@ const handleInputChange = (e) => {
             </CardContent>
           </Card>
         </Card>
+        <div>{errorfunction()}</div>
       </div>
     </>
   );

@@ -34,7 +34,7 @@ const getSingleProfile = async (req, res) => {
 
         console.log("**** get single profile");
 console.log("decoded profile: ", decodedProfile);
-        const fetchSingleData = await User.findOne({googleId:`${decodedProfile.data}`} ) || await User.findOne({email:`${decodedProfile.data}`} )
+        const fetchSingleData = await User.findOne({_id:`${decodedProfile.data}`} ) || await User.findOne({_id:`${decodedProfile.data}`} )
 
 
         if(!fetchSingleData){
@@ -58,8 +58,8 @@ const getSingleProfileandUpdateById = async(req, res) => {
         const {token} = req.params;
         const decodedProfile = await decodeJWT(token)
 
-        const UpdateProfileData = await User.findOneAndUpdate({googleId: `${decodedProfile.data}`}, req.body)
-
+        const UpdateProfileData = await User.findOneAndUpdate({_id: `${decodedProfile.data}`}, req.body)
+console.log("UpdateProfileData", UpdateProfileData);
 
         if(!UpdateProfileData){
             return res.json("filed Update Profile Data profile...!");

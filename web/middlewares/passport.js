@@ -15,7 +15,7 @@ function InitializingPassport(passport) {
       {
         clientID:process.env.GOOGLE_CLIENT_ID,
         clientSecret:process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.NODE_ENV == "production" ? `${process.env.HOST}/google/callback` : `http://localhost:${process.env.PORT}/google/callback`,
+        callbackURL: `${process.env.HOST}/google/callback`,
       },
       async function (accessToken, refreshToken, profile, done) {
        if (profile) {
@@ -25,12 +25,10 @@ function InitializingPassport(passport) {
               if (existingUser) {
                 done(null, existingUser);
               } else {
-                console.log("new profile",profile);
-                console.log("new profile json",profile._json);
                 new User({
                   googleId: profile.id,
-                  firstName: profile._json.given_name,
-                  lastName: profile._json.family_name,
+                  firstname: profile._json.given_name,
+                  lastname: profile._json.family_name,
                   email: profile._json.email,
                   picture: profile._json.picture
                 })

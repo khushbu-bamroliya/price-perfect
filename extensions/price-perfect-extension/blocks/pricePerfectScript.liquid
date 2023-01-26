@@ -1,24 +1,78 @@
 <script>
-     var isDup = false;
-      {% if template.name == "product" %}
-         {% if product.tags contains 'price_perfect_duplicate' %}     
-            console.log("Duplicate product");
-            isDup = true;
-           {% for tag in product.tags %}
-              {% if tag contains 'handle|' %}
-                  {% assign handle = tag | split: "|" | last %}
-                  console.log("{{handle}}");
-                  window.location.href="{{handle}}";
-              {% endif %}
-          {% endfor %}
-           
-         {% endif %}
-      {% endif %}
+  function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+  }
+  var rString = "";
 
 
-{% if template.name == 'product' %}
-  
-function getTargetButtonFromEvent(target) {
+
+  if (localStorage.getItem('pricePerfectId') && localStorage.getItem('pricePerfectId') == null) {
+    rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+    localStorage.setItem("pricePerfectId", rString);
+  }
+  else {
+    rString = localStorage.getItem('pricePerfectId');
+  }
+
+  var pricePerfectMoney = "{{ 0000 | money }}";
+  //var pricePerfectMoneyWithCurrency = "{{ 0000 | money_with_currency }}";
+
+  var pricePerfectJson = {};
+
+
+  var isDup = false;
+  {% if template.name == "product" %}
+  {% if product.tags contains 'price_perfect_duplicate' %}
+  console.log("Duplicate product");
+  isDup = true;
+  {% for tag in product.tags %}
+  {% if tag contains 'handle|' %}
+  {% assign handle = tag | split: "|" | last %}
+  console.log("{{handle}}");
+  window.location.href = "{{handle}}";
+  {% endif %}
+  {% endfor %}
+
+  {% endif %}
+  {% endif %}
+
+
+  {% if template.name == 'product' %}
+
+  var productId = '{{product.id}}';
+
+  (function () {
+    var rs = history.replaceState;
+    history.replaceState = function () {
+      rs.apply(history, arguments); // preserve normal functionality
+      //console.log("navigating", arguments); // do something extra here; raise an event
+      var urlParams = new URLSearchParams(window.location.search);
+      var variantId = urlParams.get("variant");
+
+      if (localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '') {
+        pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+      }
+
+      //change it
+      const myInterval = setInterval(function () {
+        //console.log(document.querySelector('[data-product-id="'+productId+'"]'));
+        if (document.querySelector('[data-product-id="' + productId + '"]') && document.querySelector('[data-product-id="' + productId + '"]').innerHTML.trim() == 'hi') {
+          console.log(variantId, 'variantId');
+          document.querySelector('[data-product-id="' + productId + '"]').innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(variantId)]?.abVariantPrice);
+          //comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
+
+          clearInterval(myInterval);
+        }
+      }, 500);
+
+    };
+  }());
+
+
+
+  function getTargetButtonFromEvent(target) {
     if (!target) {
       return null;
     } else if (target.tagName == "BUTTON") {
@@ -29,57 +83,61 @@ function getTargetButtonFromEvent(target) {
       return null;
     }
   }
-const main = ()=>{
-    let secondClick=false;
+  const main = () => {
+    let secondClick = false;
     document.body.addEventListener(
-        "click",
-        async function (e) {
-          const add_to_cart_target = getTargetButtonFromEvent(e.target);
-          const closest_form = add_to_cart_target?.closest("form");
-          if (
-            add_to_cart_target &&
-            (add_to_cart_target.getAttribute("data-testid") == "Checkout-button" || add_to_cart_target.getAttribute("data-testid") != "Checkout-button") &&
-            closest_form &&
-            closest_form.getAttribute("action") == "/cart/add"
-          ) {
-            if (!secondClick) {
-              e.stopPropagation();
-              e.preventDefault();
-              //alert("Clicked");
-              secondClick=true;
-              //console.log(isDup,'isDup1');
-              if (isDup == false) {
-                console.log(isDup,'isDup');
-                //e.target.click();
+      "click",
+      async function (e) {
 
-                var pricePerfectJson = {};
-                
-                if(localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '')
-                {
-                   pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+        const add_to_cart_target = getTargetButtonFromEvent(e.target);
+        const closest_form = add_to_cart_target?.closest("form");
+        if (
+          add_to_cart_target &&
+          (add_to_cart_target.getAttribute("data-testid") == "Checkout-button" || add_to_cart_target.getAttribute("data-testid") != "Checkout-button") &&
+          closest_form &&
+          closest_form.getAttribute("action") == "/cart/add"
+        ) {
+          if (!secondClick) {
+            e.stopPropagation();
+            e.preventDefault();
+            //alert("Clicked",secondClick);
+            secondClick = true;
+            //console.log(isDup,'isDup1');
+            if (isDup == false) {
+              console.log(isDup, 'isDup');
+              //e.target.click();
+
+              if (localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '') {
+                pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+              }
+
+              var formElements = document.querySelector('[action="/cart/add"]');
+              var qty = 1;
+              var addCartVariant = "";
+              for (var i = 0, element; element = formElements[i++];) {
+                if (element.type === "text" && element.name === "quantity") {
+                  qty = element.value;
                 }
+                else if (element.type === "text" && element.name === "id") {
+                  addCartvariant = element.id;
+                }
+              }
 
-                 var formElements = document.querySelector('[action="/cart/add"]');
-                    var qty = 1;
-                    var addCartVariant = ""; 
-                    for (var i = 0, element; element = formElements[i++];) {
-                        if (element.type === "text" && element.name === "quantity")
-                        {
-                            qty = element.value;
-                            addCartvariant = element.id;
-                        }
-                    }
+              var urlParams = new URLSearchParams(window.location.search);
+              var addCartvariant = urlParams.get("variant");
 
-                console.log(ShopifyAnalytics?.meta?.selectedVariantId,pricePerfectJson);
+              if (addCartvariant == null) {
+                addCartvariant = ShopifyAnalytics?.meta?.selectedVariantId;
+              }
 
-                if(pricePerfectJson[ShopifyAnalytics?.meta?.selectedVariantId]?.duplicateVariantId)
-                {
+              console.log(addCartvariant, pricePerfectJson);
 
-                //Add to cart duplciate product
+              if (pricePerfectJson[addCartvariant]) {
 
-                  // await document.querySelector('[name=id]').value = ShopifyAnalytics?.meta?.selectedVariantId;
-                  // e.target.click();
-                  
+                //var addTocartForm = document.querySelector('[action="/cart/add"]');
+                //addTocartForm.querySelector('input[name="id"]').value = pricePerfectJson[addCartvariant]?.duplicateVariantId;
+
+
                 fetch('/cart/add.js', {
                   method: 'POST',
                   headers: {
@@ -87,147 +145,200 @@ const main = ()=>{
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({
-                   'items': [{
-                    'id': pricePerfectJson[ShopifyAnalytics?.meta?.selectedVariantId]?.duplicateVariantId,
-                    'quantity': qty
+                    'items': [{
+                      'id': pricePerfectJson[addCartvariant]?.duplicateVariantId,
+                      'quantity': qty
                     }]
                   })
                 }).then(res => res.json())
-                  .then(res => console.log(res));
+                  .then(res => {
+                    console.log(res);
+                    //secondClick=true;
+                  });
+
+                {% if template.name == 'product' %}
+                //send add to cart analytics
+                fetch('http://liam-price-perfect-app.appmixo.in/api/send-analytics', {
+                  method: 'POST',
+                  headers: {
+                    // 'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ shop: '{{shop.permanent_domain }}', userId: rString, event: 'addtocart', productId: '{{product.id}}', handle: '{{ product.handle}}', testResult: pricePerfectJson[addCartvariant] })
+                }).then(response => response.json())
+                  .then(data => {
+                    console.log(data);
+                  })
+                  .catch(err => {
+                    console.error(err);
+                  });
+                {% endif %}
+              }
+              else {
+                e.target.click();
+              }
+
+            } //if not duplicate ends
+            else {
+              window.location.href = "{{handle}}";
+            }
+          }//second click condition
+          else {
+            secondClick = false;
+          }
+        }
+      },
+      true
+    );
+
+  }
+
+  main();
+
+  {% endif %}
+
+  window.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+
+    // document.querySelector('[name="add"]').addEventListener('click', function(event){
+    //     event.preventDefault();
+    //     console.log("add to card blocked");
+    // });
+
+    var priceDivs = document.querySelectorAll('.pricePerfectPrice');
+    var comparePriceDivs = document.querySelectorAll('.pricePerfectComparePrice');
+
+    var productsArr = [];
+    var variantsArr = [];
+    for (var i = 0; i < priceDivs.length; i++) {
+      productsArr.push("gid://shopify/Product/" + priceDivs[i].getAttribute('data-product-id'));
+    }
+
+    productsArr = productsArr.filter(function (value, index, array) {
+      return array.indexOf(value) === index;
+    });
+
+    console.log(productsArr, 'productsArr');
+
+    fetch('http://liam-price-perfect-app.appmixo.in/abtest', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ experiment: localStorage.getItem('abTest') ? localStorage.getItem('abTest') : "", productsArr: productsArr })
+    }).then(res => res.json())
+      .then(res => {
+
+        const resArr = res;
+        console.log(res);
+
+        var pricePerfectJson = {};
+        var pricePerfectJsonNew = {};
+
+        if (localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '') {
+          pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
+          //console.log('get localstorage',pricePerfectJson);
+        }
+
+        for (let test in res) {
+          //console.log(pricePerfectJson, pricePerfectJson[test]);
+          if (!pricePerfectJson[test]) {
+            pricePerfectJsonNew[test] = res[test];
+            //console.log(pricePerfectJsonNew,'umi23123');
+            Object.assign(pricePerfectJson, pricePerfectJsonNew);
+          }
+        }
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var variantId = urlParams.get("variant");
+
+        for (var i = 0; i < priceDivs.length; i++) {
+          if (res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice) {
+            // console.log(priceDivs[i]?.getAttribute('data-variant-id'),pricePerfectJson);
+            if (pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]) {
+              console.log(i, 'test 1', pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+              console.log(priceDivs[i]?.getAttribute('data-variant-id'), variantId, 'ukp1');
+              if (variantId !== null) {
+                priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(variantId)]?.abVariantPrice);
+              }
+              else {
+                priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
+              }
+            }
+            else {
+              console.log(i, 'test 2', res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
+              if (variantId !== null) {
+                priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00', res[Number(variantId)]?.abVariantPrice);
+              }
+              else {
+                priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00', res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
+              }
+
+              pricePerfectJsonNew[Number(priceDivs[i].getAttribute('data-variant-id'))] = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))];
+              Object.assign(pricePerfectJson, pricePerfectJsonNew);
+            }
+          }
+          else {
+            priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00', priceDivs[i]?.getAttribute('data-price'));
+          }
+        }
+        for (var j = 0; j < comparePriceDivs.length; j++) {
+          if (res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice) {
+            if (pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]) {
+              if (variantId !== null) {
+                comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(variantId)]?.abVariantComparePrice);
+              }
+              else {
+                if (variantId !== null) {
+                  comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(variantId)]?.abVariantComparePrice);
                 }
                 else {
-                e.target.click();
-                } 
-              
-              } //if not duplciate ends
-              else {
-                window.location.href="{{handle}}";
+                  console.log('compare test 1', pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
+                  comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00', pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
+                }
               }
-            }//second click condition
+            }
             else {
-              secondClick = false;
+              console.log('compare test 2', res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
+              comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00', res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
             }
           }
-        },
-        true
-      );
-
-}
-
-main();
-{% endif %}
-
-        var pricePerfectMoney = "{{ 0000 | money }}";
-        //var pricePerfectMoneyWithCurrency = "{{ 0000 | money_with_currency }}";
-
-      
-
-      window.addEventListener('DOMContentLoaded', (event) => {
-          console.log('DOM fully loaded and parsed');
-        
-        // document.querySelector('[name="add"]').addEventListener('click', function(event){
-        //     event.preventDefault();
-        //     console.log("add to card blocked");
-        // });
-        
-          var priceDivs = document.querySelectorAll('.pricePerfectPrice');
-          var comparePriceDivs = document.querySelectorAll('.pricePerfectComparePrice');
-
-          var productsArr = [];
-          var variantsArr = [];
-          for(var i = 0; i < priceDivs.length; i++)
-          {
-             productsArr.push("gid://shopify/Product/"+priceDivs[i].getAttribute('data-product-id'));
+          else {
+            comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00', comparePriceDivs[j]?.getAttribute('data-compare-price'));
           }
+        }
 
-        productsArr = productsArr.filter(function (value, index, array) { 
-          return array.indexOf(value) === index;
-        });
+        console.log('set local after for loop', JSON.stringify(pricePerfectJson));
+        localStorage.setItem("pricePerfectJson", JSON.stringify(pricePerfectJson));
+        console.log('get localstorage 2', JSON.parse(localStorage.getItem('pricePerfectJson')));
 
-        console.log(productsArr,'productsArr');
-
-        fetch('http://liam-price-perfect-app.appmixo.in/abtest', {
+        {% if template.name == 'product' %}
+        //send page view analytics
+        fetch('http://liam-price-perfect-app.appmixo.in/api/send-analytics', {
           method: 'POST',
           headers: {
-            'Accept': 'application/json, text/plain, */*',
+            //'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({experiment:localStorage.getItem('abTest') ? localStorage.getItem('abTest') : "",productsArr:productsArr })
-          }).then(res => res.json())
-          .then(res => {
-
-            const resArr = res;
-            console.log(res);
-           
-            var pricePerfectJson = {};
-            var pricePerfectJsonNew = {};
-
-            if(localStorage.getItem('pricePerfectJson') && localStorage.getItem('pricePerfectJson') != '')
-            {
-               pricePerfectJson = JSON.parse(localStorage.getItem('pricePerfectJson'));
-               console.log('get localstorage',pricePerfectJson);
-            }
-            
-            for(var i = 0; i < priceDivs.length; i++)
-            {
-                if(res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice)
-                {
-                  // console.log(priceDivs[i]?.getAttribute('data-variant-id'),pricePerfectJson);
-                  
-                 
-                   if(pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))])
-                   {
-                     console.log(i,'test 1',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
-                     priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',pricePerfectJson[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
-                   }
-                   else 
-                   {
-                      console.log(i,'test 2',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]);
-                     priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',res[Number(priceDivs[i]?.getAttribute('data-variant-id'))]?.abVariantPrice);
-                     
-                     pricePerfectJsonNew[Number(priceDivs[i].getAttribute('data-variant-id'))] = res[Number(priceDivs[i]?.getAttribute('data-variant-id'))];
-                     Object.assign(pricePerfectJson, pricePerfectJsonNew);
-                   }
-                }
-                else 
-                {
-                  priceDivs[i].innerHTML = pricePerfectMoney.replace('0.00',priceDivs[i]?.getAttribute('data-price'));
-                }
-            }
-            for(var j=0; j < comparePriceDivs.length; j++)
-              {
-                if(res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice)
-                {
-                  if(pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))])
-                  {
-                    console.log('compare test 1',pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
-                    comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',pricePerfectJson[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
-                  }
-                  else 
-                  {
-                    console.log('compare test 2',res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]);
-                    comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',res[Number(comparePriceDivs[j]?.getAttribute('data-variant-id'))]?.abVariantComparePrice);
-                  }
-                }
-                else 
-                {
-                   comparePriceDivs[j].innerHTML = pricePerfectMoney.replace('0.00',comparePriceDivs[j]?.getAttribute('data-compare-price'));
-                }
-              }
-
-            console.log('set local after for loop',JSON.stringify(pricePerfectJson));
-            localStorage.setItem("pricePerfectJson", JSON.stringify(pricePerfectJson));
-            console.log('get localstorage 2',JSON.parse(localStorage.getItem('pricePerfectJson')));
-
+          body: JSON.stringify({ shop: '{{shop.permanent_domain }}', userId: rString, event: 'pageview', productId: '{{product.id}}', handle: '{{ product.handle}}', testResult: res })
+        }).then(response => response.json())
+          .then(data => {
+            console.log(data);
           })
-          .catch(err => console.error(err));
-      });
- 
-    </script>
+          .catch(err => {
+            console.error(err);
+          });
+        {% endif %}
+
+      })
+      .catch(err => console.error(err));
+  });
+</script>
 {% schema %}
-  {
-    "name": "App Embed",
-    "target": "body",
-    "settings": []
-  }
+{
+"name": "App Embed",
+"target": "body",
+"settings": []
+}
 {% endschema %}

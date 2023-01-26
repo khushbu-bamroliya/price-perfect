@@ -1,15 +1,18 @@
-import { Box, Button, Card, Chip, IconButton, Menu, MenuItem, Modal, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, IconButton, Menu, MenuItem, Modal, TextField, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import searchIcon from './Images/search-normal.png';
 import moreIcon from "./Images/more.png"
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
+import Loader from './Loader';
+import cookieReader from '../controller/cookieReader';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
 const YourTests = () => {
     const style = {
@@ -24,13 +27,18 @@ const YourTests = () => {
         p: 4,
     };
     const pages = ['Active', 'Upcoming', 'Ended', 'Paused'];
-    const [] = useState();
+    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
+    const [copiedTooltip, setCopiedTooltip] = useState(false)
+    const [searchData, setSearchData] = useState("");
+    console.log("searchData", searchData);
     const [allTests, setAllTests] = useState();
     const [testId, setTestId] = useState();
     console.log("allTests", allTests);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
-    const handleOpenDeleteModal = (id) => {
+    const handleOpenDeleteModal = (event, id) => {
+        event.stopPropagation();
         console.log("deleteModal id", id);
         setTestId(id)
         setOpenDeleteModal(true)
@@ -66,7 +74,9 @@ const YourTests = () => {
                     <>
                         <div className='tableImages'>
                             <div>
-                                <img src={params.row.featuredImage} alt='' />
+                            {params.row.featuredImage ? <img src={params.row.featuredImage } alt='' />:<HideImageOutlinedIcon/> }
+                            
+                                
                             </div>
                         </div>
                         <p className='productID'>
@@ -113,9 +123,21 @@ const YourTests = () => {
                 // console.log("params: " + params.row.action);
                 return (
                     <div className='actionIcon'>
-                        <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink>
-                        <img src={LinkIcon} alt="" />
-                        <img src={TrashIcon} alt="" onClick={() => handleOpenDeleteModal(params.row.id)} />
+                        <NavLink to={`/managetest/${params.row.action}`} onClick={(e) => e.stopPropagation()} ><img src={EyeIcon} alt="" /></NavLink>
+                        <Tooltip title={copiedTooltip ? "copied" : null }  arrow>
+
+                        <img src={LinkIcon} alt="" onClick={(e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(params.row.handle)
+                            setCopiedTooltip(true)
+                            setInterval(() => {
+                            setCopiedTooltip(false)
+
+                            },2000)
+                        }}
+                        />
+                        </Tooltip>
+                        <img src={TrashIcon} alt="" onClick={(event) => handleOpenDeleteModal(event, params.row.id)} />
                     </div>
                 )
             }
@@ -211,23 +233,25 @@ const YourTests = () => {
         rows2.push({
             id: i._id,
             status: i.status,
-            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}USD`,
+            duration: `${i.currency} ${i?.testCases[0]?.variants[0]?.variantPrice}`,
             action: i._id,
             product: i.productTitle,
-            featuredImage: i.featuredImage
+            featuredImage: i.featuredImage,
+            handle: i.handle
         })
     }
 
     )
     const getAllTests = async () => {
 
-
-
-        fetch(getApiUrl + '/api/getTestCase', {
+        fetch(getApiUrl + '/api/getTestCase?' + new URLSearchParams({
+            search: searchData
+        }), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             },
         })
             .then(async (res) => {
@@ -239,17 +263,21 @@ const YourTests = () => {
             .catch((error) => console.log("Error", error))
     }
     const deleteTestCase = () => {
+        setLoading(true)
         console.log("deleting");
         fetch(getApiUrl + `/api/deleteTestCase/${testId}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop')
             }
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Deleted", apiRes);
+            setLoading(false)
             setOpenDeleteModal(false)
+
             getAllTests()
 
         }).catch((err) => {
@@ -258,7 +286,7 @@ const YourTests = () => {
     }
     useEffect(() => {
         getAllTests()
-    }, [])
+    }, [searchData])
     return (
         <>
             <Card className='yourTestsPage'>
@@ -271,7 +299,7 @@ const YourTests = () => {
                                 <Typography variant='p'>Manage your current and past tests </Typography>
                             </div>
 
-                            <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: "flex" }}>
                                 {/* {pages.map((page) => (
                                     <Button
                                         key={page}
@@ -285,7 +313,7 @@ const YourTests = () => {
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
-                                <TextField id="outlined-basic" placeholder="search" variant="outlined" />
+                                <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchData} onChange={(e) => setSearchData(e.target.value)} />
                                 {/* <Button variant="outlined">
                                     <NavLink to="/home">
                                         Next
@@ -330,14 +358,27 @@ const YourTests = () => {
                             </Box>
                         </div>
                         <div className='createTestTable' style={{ height: 400, width: '100%' }}>
+                            {!allTests ? <Loader size={40} /> : (<>
 
-                            <DataGrid
-                                rows={rows2}
-                                columns={columns}
-                                pageSize={50}
-                                rowsPerPageOptions={[50]}
-                                disableColumnMenu
-                            />
+                                <DataGrid
+                                    rows={rows2}
+                                    columns={columns}
+                                    pageSize={5}
+                                    rowsPerPageOptions={[5]}
+                                    disableColumnMenu={true}
+                                    onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
+                                    sx={{
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                    }}
+                                />
+                            </>)}
 
                         </div>
 
@@ -355,8 +396,8 @@ const YourTests = () => {
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                     Are you sure you want to delete this test case?
                                 </Typography>
-                                    <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> Delete </Button>
-                            
+                                <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> {loading ? <Loader size={30}/>: "Delete"} </Button>
+
                             </Box>
                         </Modal>
                     </Card>
