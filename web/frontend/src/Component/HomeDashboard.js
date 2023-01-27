@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, Modal, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, Chip, Modal, Snackbar, Typography } from '@mui/material'
 import React, { useState,useEffect } from 'react'
 import statIcon1 from "./Images/Clock.png"
 import statIcon2 from "./Images/Activity.png"
@@ -13,7 +13,7 @@ import TestAnalyticsIcon4 from "./Images/Frame 26 4.png"
 import Navbar from './Navbar'
 import getApiUrl from "../controller/utils.js";
 import { DataGrid } from '@mui/x-data-grid'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
@@ -22,6 +22,10 @@ import Loader from './Loader'
 import cookieReader from '../controller/cookieReader'
 
 const HomeDashboard = () => {
+    const location = useLocation();
+    const [opens, setOpens] = useState(false);
+  const [snackbar_msg, setsnackbar_msg] = useState("");
+    
     const [allTests, setAllTests] = useState();
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [testId, setTestId] = useState();
@@ -107,8 +111,8 @@ const HomeDashboard = () => {
                 return (
                     <div className='actionIcon'>
                         <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink>
-                        <img src={LinkIcon} alt="" />
-                        <img src={TrashIcon} alt="" onClick={() => handleOpenDeleteModal(params.row.id)} />
+                        {/* <img src={LinkIcon} alt="" />
+                        <img src={TrashIcon} alt="" onClick={() => handleOpenDeleteModal(params.row.id)} /> */}
                     </div>
                 )
             }
@@ -168,7 +172,38 @@ const HomeDashboard = () => {
             console.log("Error", err);
         })
     }
+    const handleClose = () => {
+    setOpens(false);
+  };
+    const errorfunction = () => {
+    return (<div>
+      <Snackbar
+        open={opens}
+        sx={{ width: "50%" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          variant="filled"
+          onClose={handleClose}
+          sx={{ width: "50%", bgcolor: "#325240" }}
+        >
+          {snackbar_msg}
+        </Alert>
+      </Snackbar>
+    </div>)
+
+  };
+
+
     useEffect(() => {
+        if (location?.state?.message) {
+        setOpens(true)
+          setsnackbar_msg(location.state.message)
+    }else{
+        setOpens(false)
+    }
         getAllTests()
     }, [])
     return (
@@ -190,7 +225,7 @@ const HomeDashboard = () => {
                                     <div>
                                         <Card>
 
-                                            <img src={statIcon3} alt="" />
+                                            <img src={statIcon3} alt="" width='50px' />
                                         </Card>
                                         <Typography variant='p'>Today’s <span>Visitors</span></Typography>
                                     </div>
@@ -219,7 +254,7 @@ const HomeDashboard = () => {
                                     <div>
                                         <Card>
 
-                                            <img src={statIcon1} alt="" />
+                                            <img src={statIcon1} alt="" width='50px'/>
                                         </Card>
                                         <Typography variant='p'>PricePerfect <span>Revenue</span></Typography>
                                     </div>
@@ -248,7 +283,7 @@ const HomeDashboard = () => {
                                     <div>
                                         <Card>
 
-                                            <img src={statIcon2} alt="" />
+                                            <img src={statIcon2} alt="" width='50px' />
                                         </Card>
                                         <Typography variant='p'>Revenue <span>Change</span></Typography>
                                     </div>
@@ -298,7 +333,7 @@ const HomeDashboard = () => {
                                     <Typography variant='h5'>Your Tests</Typography>
                                 </div>
                                 <div>
-                                    <div className='createTestTable' style={{ height: 400, width: '100%' }}>
+                                    <div className='createTestTable' style={{ height: 360, width: '100%' }}>
 {!allTests ? <Loader size={40} />:(<>
 
                                         <DataGrid
@@ -333,7 +368,7 @@ const HomeDashboard = () => {
                             </Box>
                         </Modal>
             </Card>
-
+            <div>{errorfunction()}</div>
         </>
     )
 }

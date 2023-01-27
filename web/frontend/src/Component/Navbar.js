@@ -79,16 +79,16 @@ const Navbar = () => {
             <span>Create Test</span></NavLink></div>,
 
     ];
-    setTimeout(() => {
-        var element = document.getElementById("create");
-console.log("element", element);
-        if (window.location.href.indexOf("createtest2") > -1) {
-            element.classList.add("activated");
-        }else{
-              element.classList.remove("activated");
+//     setTimeout(() => {
+//         var element = document.getElementById("create");
+// console.log("element", element);
+//         if (window.location.href.indexOf("createtest2") > -1) {
+//             element.classList.add("activated");
+//         }else{
+//               element.classList.remove("activated");
     
-          }
-    },200)
+//           }
+//     },200)
     const settings = [
 
     <Button> <NavLink to="/profile">Profile</NavLink> </Button>,

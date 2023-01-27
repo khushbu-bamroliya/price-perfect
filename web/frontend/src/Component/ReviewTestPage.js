@@ -1,5 +1,5 @@
-import { Button, Card, Typography } from '@mui/material'
-import React from 'react'
+import { Alert, Button, Card, Snackbar, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import dummyProductImage from "./Images/home-trophy.png"
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,9 @@ import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 
 const ReviewTestPage = ({ created, productImage }) => {
     const location = useLocation();
+
+  const [opens, setOpens] = useState(false);
+  const [snackbar_msg, setsnackbar_msg] = useState("");
     console.log("Created on review page", created, productImage);
     const navigate = useNavigate();
     const launchTest = () => {
@@ -27,14 +30,48 @@ const ReviewTestPage = ({ created, productImage }) => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
+            setOpens(true)
+            setsnackbar_msg("Test launched successfully")
 
 
-
+            navigate('/yourtests', {state:{message: 'Test launched successfully'}})
         }).catch((err) => {
+            setOpens(true)
+            setsnackbar_msg("Error while launching test" )
             console.log("Error", err);
         })
-        navigate('/yourtests')
     }
+    const handleClose = () => {
+        setOpens(false);
+      };
+    const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: "#325240" }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
+      useEffect(() => {
+        if (location?.state?.message) {
+            setOpens(true)
+              setsnackbar_msg(location.state.message)
+        }else{
+            setOpens(false)
+        }
+      },[])
     return (
         <>
             {true && (<>
@@ -107,6 +144,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                             </div>
                         </Card>
                     </div>
+                    <div>{errorfunction()}</div>
                 </Card>
             </>)}
         </>

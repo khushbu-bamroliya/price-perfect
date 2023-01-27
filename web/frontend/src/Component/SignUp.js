@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, TextField, Typography, CardContent, OutlinedInput, InputAdornment, IconButton } from '@mui/material';
+import { Button, Card, TextField, Typography, CardContent, OutlinedInput, InputAdornment, IconButton, Snackbar, Alert } from '@mui/material';
 import googleImages from './Images/google (1).png';
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import ResultRevenueLogo from './Images/ResultRevenueLogo.png';
@@ -17,6 +17,8 @@ import ResultRevenueLogo2 from './Images/ResultRevenueLogo2.png';
 export default function SignUp() {
 const navigate = useNavigate();
     //Show error message
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
     const [errorFirstName, setErrorFirstName] = useState(false);
     const [errorLastName, setErrorLastName] = useState(false);
     const [errorEmailName, setErrorEmailName] = useState(false);
@@ -108,7 +110,9 @@ const navigate = useNavigate();
                 }).then(async (res) => {
                     const apiRes =await res.json() 
                     console.log("signup apiRes", apiRes)
-                    navigate('/')
+                    setOpens(true)
+                    setsnackbar_msg(`Account created successfully`)
+                    // navigate('/')
                 })
                     .catch((error) => console.log("Error", error))
             }
@@ -153,7 +157,41 @@ const navigate = useNavigate();
     const handleMouseDownConfirmPassword = (event) => {
         event.preventDefault();
     };
+    const redirectSignUp = () => {
+        setToggle(false)
+        navigate('/signup')
+        console.log("toggle", toggle)
+    }
 
+    const redirectRevenuePage = () => {
+        setToggle(false)
+        // navigate('/signup')
+        navigate('/signup#scrollrevenue')
+        console.log("toggle lalalal", toggle)
+    }
+    const handleClose = () => {
+        setOpens(false);
+      };
+    const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: "#325240" }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
     return (
         <>
 
@@ -218,7 +256,7 @@ const navigate = useNavigate();
                                     </div>
 
                                 </div>
-                                <div className='welcomeInputs'>
+                                <div className='welcomeInputs password'>
                                     <Typography variant='p'>Email</Typography>
                                     <TextField
                                         className='please-width'
@@ -238,7 +276,7 @@ const navigate = useNavigate();
                                     />
                                 </div>
 
-                                <div className='welcomeInputs'>
+                                <div className='welcomeInputs password'>
                                     <Typography variant='p'>Password</Typography>
 
                                     <OutlinedInput
@@ -274,7 +312,7 @@ const navigate = useNavigate();
                                     />
 
                                 </div>
-                                <div className='welcomeInputs'>
+                                <div className='welcomeInputs password'>
                                     <Typography variant='p'>Confirm Password</Typography>
 
                                     <OutlinedInput
@@ -337,7 +375,7 @@ const navigate = useNavigate();
                             {toggle && !togglescrollresult && <div id='scrollrevenue'>
                                 <div className='welcome-wrappers'>
                                     <div className='close-icon'>
-                                        <img src={closeIcon} alt="" />
+                                        <img src={closeIcon} alt="" onClick={() => redirectSignUp} />
                                     </div>
                                     <Typography variant='h4'>Revenue Increase Estimator</Typography>
                                     <Typography className='span' variant='p'>Calculate your expected revenue increase below!</Typography>
@@ -427,7 +465,7 @@ const navigate = useNavigate();
                                 <div id='scrollresult'>
                                     <div className='welcome-wrappers'>
                                         <div className='close-icon'>
-                                            <img src={closeIcon} alt="" />
+                                            <img src={closeIcon} alt="" onClick={ () => redirectRevenuePage} />
                                         </div>
                                         <Typography variant='h4'>Give them the results  here.</Typography>
                                         <Typography className='span' variant='p'>Calculate your expected revenue increase below!</Typography>
@@ -468,6 +506,7 @@ const navigate = useNavigate();
                     </Card>
                 </Card>
             </div>
+            <div>{errorfunction()}</div>
         </>
     )
 

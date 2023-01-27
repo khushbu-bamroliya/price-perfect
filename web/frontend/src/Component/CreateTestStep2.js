@@ -1,4 +1,4 @@
-import { Button, Card, Modal, Slider, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import { Alert, Button, Card, Modal, Slider, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system';
 import React, { useCallback } from 'react'
 import Navbar from './Navbar'
@@ -34,6 +34,9 @@ const CreateTestStep2 = ({ objectSent }) => {
     var editableArrayData = [];
     // Display variants state
     const [variantRes, setVariantRes] = useState([]);
+
+  const [opens, setOpens] = useState(false);
+  const [snackbar_msg, setsnackbar_msg] = useState("");
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(true)
     const [variantPriceData, setVariantPriceData] = useState("")
@@ -544,10 +547,15 @@ const CreateTestStep2 = ({ objectSent }) => {
                 // .catch((error) => console.log("Error", error))
                 setLoading(false)
                 objectSent({ apiRes, controlData: variantRes.data })
-
-                navigate(`/reviewtest`);
+                setOpens(true)
+                setsnackbar_msg("Test created successfully")
+                navigate(`/reviewtest`, {state:{message: "Test created successfully"}})
             })
-            .catch((error) => console.log("Error", error))
+            .catch((error) => {
+                setOpens(true)
+                setsnackbar_msg("Test failed")
+                console.log("Error", error)
+            })
 
 
     }
@@ -757,6 +765,29 @@ const CreateTestStep2 = ({ objectSent }) => {
     const createTestHandleProcessRowUpdateError = React.useCallback((error) => {
         console.log("error: " + error);
     }, []);
+    const handleClose = () => {
+        setOpens(false);
+      };
+    const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: "#325240" }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
     useEffect(() => {
         handleVariants()
     }, [])
@@ -1187,7 +1218,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div> */}
                 </Box>
             </Modal>
-
+            <div>{errorfunction()}</div>
 
 
         </>

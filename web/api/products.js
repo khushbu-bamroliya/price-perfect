@@ -16,7 +16,8 @@ const in_array = (array, id) => {
 const allProducts = async (req, res) => {
   try {
 
-    const shop = req.headers.shop;
+    // const shop = req.headers.shop;
+    const shop = process.env.SHOP;
 
     console.log("req.headers", req.headers);
 const item_per_page = 10;
@@ -279,7 +280,8 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
 
 const getVariants = async (req, res) => {
 
-  const shop = req.headers.shop;
+  // const shop = req.headers.shop;
+  const shop = process.env.SHOP;
 
   console.log("==>1")
   // const { shop, access_token } = ctx.state;
@@ -364,8 +366,8 @@ const getVariants = async (req, res) => {
 const createDuplicateProduct = async (req, res) => {
   try {
 
-    const shop = req.headers.shop;
-
+    // const shop = req.headers.shop;
+    const shop = process.env.SHOP;
     //console.log("1")
 
     var { productId, productTitle,featuredImage,productPrice,currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;

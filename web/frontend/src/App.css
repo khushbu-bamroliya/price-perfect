@@ -276,10 +276,10 @@
 
 .dailyStatsBlock2-sub1 h4,
 .dailyStatsBlock2-sub2>div h4 {
-    font-size: unset;
-    line-height: unset;
+    font-size: 42px;
+    line-height: auto;
     letter-spacing: unset;
-    font-weight: unset;
+    font-weight: 700;
 }
 
 .dailyStatsBlock2-sub2>div>img {
@@ -499,7 +499,7 @@
 .createTestTable {
     width: 100%;
     height: 100%;
-    margin-top: 39px;
+    margin-top: 20px;
 }
 
 .yourTest-Block3>button {
@@ -661,10 +661,10 @@
     background: #FFFFFF;
     border: 0 !important;
     border-radius: 14px;
-    padding: 45px !important;
+    padding: 45px;
     position: relative;
     height: max-content !important;
-    width: min-content;
+    width: auto;
 }
 
 .closeBtn:hover {
@@ -1945,7 +1945,7 @@
 @media screen and (max-width: 860px) {
     .configureTest1 {
         width: 75% !important;
-        height: 75vh !important;
+        /* height: 75vh !important; */
         overflow: auto;
     }
 
@@ -2119,10 +2119,20 @@
 
 @media screen and (max-width: 425px) {
     .dailyStatsBlock2-sub1>h4 {
-        border-bottom: 0.5px solid #E9E9E9;
+        border-bottom: 1px solid #E9E9E9;
         margin-bottom: 10px;
         padding-bottom: 10px;
-        margin-top: 15px;
+        /* margin-top: 15px; */
+        font-size: 30px;
+    }
+
+    .dailyStatsBlock2-sub1 h4,
+    .dailyStatsBlock2-sub2>div h4 {
+        font-size: 30px;
+    }
+
+    .dailyStatsBlock1>div>span {
+        font-size: 18px;
     }
 
     .dailyStatsBlock2-sub1 {
@@ -2135,12 +2145,21 @@
     }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 425px) {
     .configureTest1 {
         width: 75% !important;
-        height: 75vh !important;
+        /* height: 75vh !important; */
         overflow: auto;
         padding: 25px !important;
+    }
+
+    .configureTest1 p {
+        font-size: 18px !important;
+    }
+
+    .configureTest1 button {
+        font-size: 14px !important;
+        padding: 8px 15px !important;
     }
 
     .setManuallyBlock,
@@ -3006,15 +3025,14 @@ html {
     display: block;
 }
 
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+.password.welcomeInputs .MuiOutlinedInput-root {
     height: 45px;
     border-radius: 5px;
     margin: 8px 0 14px;
 }
 
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root input {
+.password.welcomeInputs .MuiOutlinedInput-root input {
     font-family: 'Product Sans' !important;
-
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -3022,11 +3040,11 @@ html {
     padding: 13px;
 }
 
-.welcomeInputs .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-1laqsz7-MuiInputAdornment-root {
+.password.welcomeInputs .MuiOutlinedInput-root .MuiInputAdornment-root {
     margin: 0;
 }
 
-.welcomeInputs .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+.password.welcomeInputs fieldset {
     border-color: #D4DCE8;
     border-radius: 5px;
 }
@@ -3070,7 +3088,7 @@ html {
     .min-wi {
         max-width: 100%;
         width: 100%;
-        margin-top: 40px;
+        /* margin-top: 40px; */
         margin-bottom: 15px;
     }
 
@@ -3097,7 +3115,7 @@ html {
     }
 
     .welcomeBlock1Content {
-        height: unset;
+        /* height: unset; */
     }
 
     .welcomeBlock1Content img {
@@ -3787,6 +3805,8 @@ html {
     }
 
 
+
+
 }
 
 .inc-dec-btn-group>div:last-child {
@@ -3864,6 +3884,80 @@ html {
     }
 }
 
-.welcomeInputs>div>p{
+.welcomeInputs>div>p {
     margin-left: 0
+}
+
+.configureTest1 {
+    padding: 40px;
+    width: auto;
+    /* display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap; */
+}
+
+.configureTest1 p {
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    color: #151515;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.configureTest1 button {
+    padding: 13px 25px;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #FFFFFF;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.configureTest1 .close-icon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.createTestTable .pagenate-page div:nth-child(3) div:nth-child(2) div p {
+    display: none;
+}
+/* Pagination spare css */
+/* .createTestTable .pagenate-page div:nth-child(3) div {
+    justify-content: center;
+} */
+.MuiDataGrid-footerContainer{
+    justify-content: center !important;
+    padding-top: 20px;
+}
+.MuiDataGrid-footerContainer div div{
+    padding: 0;
+}
+.MuiDataGrid-footerContainer div div div{
+    margin-left: 0;
+}
+
+.createTestTable .pagenate-page div:nth-child(3) div:nth-child(2) div button {
+    
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    /* color: #000000; */
+}
+
+.createTestTable .pagenate-page div:nth-child(3) div:nth-child(2) div button:hover {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    color: #FFFFFF;
 }

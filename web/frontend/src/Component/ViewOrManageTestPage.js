@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, Modal, Tooltip, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, Chip, Modal, Snackbar, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import LinkIcon from "./Images/link-2.png"
@@ -10,8 +10,11 @@ import getApiUrl from "../controller/utils.js";
 import Loader from './Loader'
 import cookieReader from '../controller/cookieReader'
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+import closeIcon from "../Component/Images/close-circle.png"
 
 const ViewOrManageTestPage = () => {
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
     const [singleTest, setSingleTest] = useState()
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -59,10 +62,14 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Deleted", apiRes);
+            setOpens(true)
+            setsnackbar_msg("Test deleted successfully.")
             setOpenDeleteModal(false)
-            navigate('/yourtests');
+            navigate('/yourtests', { state: { message: "Test deleted successfully" } });
 
         }).catch((err) => {
+            setOpens(true)
+            setsnackbar_msg("Error while deleting Test")
             console.log("Error", err);
         })
     }
@@ -181,13 +188,40 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
+            setOpens(true)
+            setsnackbar_msg("Test status updated.")
 
             getSingleTest()
 
         }).catch((err) => {
+            setOpens(true)
+            setsnackbar_msg("Error while updating status.")
             console.log("Error", err);
         })
     }
+    const handleClose = () => {
+        setOpens(false);
+    };
+    const errorfunction = () => {
+        return (<div>
+            <Snackbar
+                open={opens}
+                sx={{ width: "50%" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                autoHideDuration={3000}
+                onClose={handleClose}
+            >
+                <Alert
+                    variant="filled"
+                    onClose={handleClose}
+                    sx={{ width: "50%", bgcolor: "#325240" }}
+                >
+                    {snackbar_msg}
+                </Alert>
+            </Snackbar>
+        </div>)
+
+    };
     useEffect(() => {
         getSingleTest()
     }, [])
@@ -200,40 +234,42 @@ const ViewOrManageTestPage = () => {
                         <Navbar />
                         <div className='viewormanageBlock'>
                             <div className='viewormanage-testData'>
-                                {!singleTest ? <Loader size={40}  /> : (<>
+                                {!singleTest ? <Loader size={40} /> : (<>
 
-                                <Card className='viewormanage-testItem'>
-                                    <div className='viewormanage-testItemImage'>
-                                    {singleTest.data.featuredImage?<img src={singleTest.data.featuredImage} alt="" />:<HideImageOutlinedIcon />}
-                                        
-                                    </div>
-                                    <div className='viewormanage-testItemData'>
-                                        <Typography variant='h5'>{singleTest.data.productTitle} </Typography>
-                                        <Tooltip arrow title={copiedTooltip ? "copied" : null } >
+                                    <Card className='viewormanage-testItem'>
+                                        <div className='viewormanage-testItemImage'>
+                                            {singleTest.data.featuredImage ? <img src={singleTest.data.featuredImage} alt="" /> : <HideImageOutlinedIcon />}
 
-                                        <Button>Copy Link <img src={LinkIcon} alt="" onClick={() => {
-                                              navigator.clipboard.writeText(singleTest && singleTest.data.handle) 
-                                              setCopiedTooltip(true);
-                                              setInterval(() => {
-                                                setCopiedTooltip(false)
-                                              }, 2000)
-                                              }} /></Button>
-                                        </Tooltip>
-                                        <div>
-                                            <div className='viewormanage-status'>
-                                                <Typography variant='p'>Status</Typography>
-                                                <Chip label={`${singleTest.data.status}`} />
-                                            </div>
-                                            <div className='viewormanage-product'>
-                                                <Typography variant='p'>Product</Typography>
-                                                <Typography variant='p'>{singleTest.data.productTitle}</Typography>
+                                        </div>
+                                        <div className='viewormanage-testItemData'>
+                                            <Typography variant='h5'>{singleTest.data.productTitle} </Typography>
+                                            <Tooltip arrow title={copiedTooltip ? "copied" : null} >
 
+                                                <Button onClick={(e) => {
+                                                    // e.stopPropagation();
+                                                    navigator.clipboard.writeText(singleTest && singleTest.data.handle)
+                                                    setCopiedTooltip(true)
+                                                    setInterval(() => {
+                                                        setCopiedTooltip(false)
+
+                                                    }, 2000)
+                                                }}>Copy Link <img src={LinkIcon} alt="" /></Button>
+                                            </Tooltip>
+                                            <div>
+                                                <div className='viewormanage-status'>
+                                                    <Typography variant='p'>Status</Typography>
+                                                    <Chip label={`${singleTest.data.status}`} />
+                                                </div>
+                                                <div className='viewormanage-product'>
+                                                    <Typography variant='p'>Product</Typography>
+                                                    <Typography variant='p'>{singleTest.data.productTitle}</Typography>
+
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Card>
-                                <Card className='viewormanage-reviewData'>
-                                    {/* <div className='viewormanage-pricingDataReview pricingDataReview'>
+                                    </Card>
+                                    <Card className='viewormanage-reviewData'>
+                                        {/* <div className='viewormanage-pricingDataReview pricingDataReview'>
 
                                         <Typography variant='p'>Pricing</Typography>
                                         <div>
@@ -250,29 +286,29 @@ const ViewOrManageTestPage = () => {
 
                                         </div>
                                     </div> */}
-                                    <div className='viewormanage-productDataReview productDataReview'>
-                                        <Typography variant='p'>Product</Typography>
-                                        <div>
+                                        <div className='viewormanage-productDataReview productDataReview'>
+                                            <Typography variant='p'>Product</Typography>
+                                            <div>
 
-                                            <Typography variant='h5'>{singleTest.data.productTitle}</Typography>
+                                                <Typography variant='h5'>{singleTest.data.productTitle}</Typography>
+                                            </div>
+
+                                        </div>
+                                        <div className='trafficSplitDataReview'>
+                                            <Typography variant='p'>Traffic Split </Typography>
+                                            <div>
+                                                <Typography variant='h5'>{singleTest.data.trafficSplit * singleTest.data.testCases.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
+                                            </div>
                                         </div>
 
-                                    </div>
-                                    <div className='trafficSplitDataReview'>
-                                        <Typography variant='p'>Traffic Split </Typography>
-                                        <div>
-                                            <Typography variant='h5'>{singleTest.data.trafficSplit *singleTest.data.testCases.length}/{100 - singleTest.data.trafficSplit *singleTest.data.testCases.length}</Typography>
+                                    </Card>
+                                    <div className="viewormanageBtnGroup">
+                                        <Button className='pauseTest' disabled={singleTest && singleTest.data.status == 'active' ? false : true  } onClick={() => updateTestStatus()} >Pause Test </Button>
+                                        <div className='deleteTest' onClick={() => handleOpenDeleteModal()}>
+                                            <p>Delete Test</p>
+                                            <Button>Delete Test</Button>
                                         </div>
                                     </div>
-
-                                </Card>
-                                <div className="viewormanageBtnGroup">
-                                    <Button className='pauseTest' onClick={() => updateTestStatus()} >Pause Test </Button>
-                                    <div className='deleteTest' onClick={() => handleOpenDeleteModal()}>
-                                        <p>Delete Test</p>
-                                        <Button>Delete Test</Button>
-                                    </div>
-                                </div>
                                 </>)}
 
                             </div>
@@ -303,16 +339,20 @@ const ViewOrManageTestPage = () => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={style}>
+                        <Box sx={style} className="configureTest1">
                             {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Text in a modal
                                 </Typography> */}
+                                <div className='close-icon'>
+                                    <img src={closeIcon} alt="" onClick={() => setOpenDeleteModal(false)} />
+                                </div>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Are you sure you want to delete this test case?..
                             </Typography>
-                            <Button onClick={() => deleteTestCase(id)}> Delete </Button>
+                            <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(id)}> Delete </Button>
                         </Box>
                     </Modal>
+                    <div>{errorfunction()}</div>
                 </Card>
             </>)}
         </>

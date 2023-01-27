@@ -30,6 +30,7 @@ export default function WelcomePage({ shop }) {
 
   const [opens, setOpens] = useState(false);
   const [snackbar_msg, setsnackbar_msg] = useState("");
+  // const [snackbarColor, setsnackbarColor] = useState("#325240");
 
   //Error message state
   const [emailErrorMess, setEmailErrorMess] = useState(false);
@@ -79,11 +80,16 @@ export default function WelcomePage({ shop }) {
       }).then((res) => {
         if (res.success == true) {
           setOpens(true)
-          setsnackbar_msg("Login Successfully!")
-          navigate('/homeDashboard');
+          setsnackbar_msg(`${res.message}`)
+          navigate('/homeDashboard',{state:{message:`${res.message}`}});
+        }
+        if (res.success == false) {
+          setOpens(true)
+          setsnackbar_msg(`${res.message}`)
+          // navigate('/homeDashboard');
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => {console.log(err)})
   }
 
   const handleRememberMe = (e) => {
@@ -112,7 +118,7 @@ export default function WelcomePage({ shop }) {
       <Snackbar
         open={opens}
         sx={{ width: "50%" }}
-        // anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         autoHideDuration={3000}
         onClose={handleClose}
       >

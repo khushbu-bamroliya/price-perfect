@@ -17,6 +17,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
 
     // let products = {};
     const [productsData, setProductsData] = useState();
+    const [loading, setLoading] = useState(false);
     const [searchProduct, setSearchProduct] = useState("");
 
     //Pagination
@@ -32,7 +33,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 images: item.image,
                 title: item.title,
                 description: item.description && item.description,
-                price: item.currency  + " "+item.price ,
+                price: item.currency + " " + item.price,
                 handle: item.handle
             });
         });
@@ -48,7 +49,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         getProductImage(imgSrc)
         const productImgSrc = imgSrc
 
-        navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`,{state:{currency: productsData.products[0].currency}})
+        navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`, { state: { currency: productsData.products[0].currency } })
     }
     const columns = [
         {
@@ -63,8 +64,8 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                     <>
                         <div className='tableImages'>
                             <div>
-                            {params.row.images? <img src={params.row.images} alt='' />:<HideImageOutlinedIcon/>}
-                                
+                                {params.row.images ? <img src={params.row.images} alt='' /> : <HideImageOutlinedIcon />}
+
                             </div>
                         </div>
                         <p className='productID'>
@@ -123,7 +124,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
     }
 
     const getAllProductsApi = async (sendBody) => {
-
+        setLoading(true)
         const config = {
             method: "POST",
             credentials: "same-origin",
@@ -141,6 +142,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
 
                 setProductsData(products)
                 console.log("res1", products);
+                setLoading(false)
                 // useCallback(() => {setAllProducts(products)},[products])
             })
             .catch(err => console.log(err))
@@ -188,7 +190,8 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                             </div>
                         </div>
                         <div className='createTestTable' style={{ height: 600, width: '100%' }}>
-                            {!productsData ? < Loader size={40}  /> : (<>
+                            {/* {!productsData ? <Loader size={40}  /> : (<> */}
+                            {loading ? <Loader /> : (<>
 
                                 <DataGrid
                                     rows={rows}
@@ -214,6 +217,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                                     }}
                                 />
                             </>)}
+                            {/* </>)} */}
                         </div>
                         <div className='createTestBlock-buttons'>
                             <Button onClick={prevPageFunc} disabled={productsData && productsData.hasPreviousPageFromApi === true ? false : true}><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

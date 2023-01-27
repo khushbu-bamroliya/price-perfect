@@ -1,4 +1,4 @@
-import { Box, Button, Card, Chip, IconButton, Menu, MenuItem, Modal, TextField, Tooltip, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, Chip, IconButton, Menu, MenuItem, Modal, Snackbar, TextField, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import searchIcon from './Images/search-normal.png';
@@ -8,11 +8,13 @@ import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
 import Loader from './Loader';
 import cookieReader from '../controller/cookieReader';
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+import closeIcon from "../Component/Images/close-circle.png"
+
 
 const YourTests = () => {
     const style = {
@@ -27,7 +29,11 @@ const YourTests = () => {
         p: 4,
     };
     const pages = ['Active', 'Upcoming', 'Ended', 'Paused'];
+    const location = useLocation()
     const navigate = useNavigate()
+
+  const [opens, setOpens] = useState(false);
+  const [snackbar_msg, setsnackbar_msg] = useState("");
     const [loading, setLoading] = useState(false)
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [searchData, setSearchData] = useState("");
@@ -277,14 +283,47 @@ const YourTests = () => {
             console.log("Deleted", apiRes);
             setLoading(false)
             setOpenDeleteModal(false)
-
+            setOpens(true)
+            setsnackbar_msg("Test deleted successfully")
             getAllTests()
 
         }).catch((err) => {
+            setOpens(true)
+            setsnackbar_msg("Error in deleting test")
             console.log("Error", err);
         })
     }
+    const handleClose = () => {
+        setOpens(false);
+      };
+    const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: "#325240" }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
+    
     useEffect(() => {
+        if (location?.state?.message) {
+            setOpens(true)
+              setsnackbar_msg(location.state.message)
+        }else{
+            setOpens(false)
+        }
         getAllTests()
     }, [searchData])
     return (
@@ -309,7 +348,12 @@ const YourTests = () => {
                                         {page}
                                     </Button>
                                 ))} */}
-                                <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography>
+                                <Button disabled
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                    All Tests
+                                    </Button>
+                                {/* <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography> */}
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
@@ -361,6 +405,7 @@ const YourTests = () => {
                             {!allTests ? <Loader size={40} /> : (<>
 
                                 <DataGrid
+                                    className='pagenate-page'
                                     rows={rows2}
                                     columns={columns}
                                     pageSize={5}
@@ -393,6 +438,9 @@ const YourTests = () => {
                                 {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Text in a modal
                                 </Typography> */}
+                                <div className='close-icon'>
+                                    <img src={closeIcon} alt="" onClick={() => setOpenDeleteModal(false)} />
+                                </div>
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                     Are you sure you want to delete this test case?
                                 </Typography>
@@ -402,6 +450,7 @@ const YourTests = () => {
                         </Modal>
                     </Card>
                 </div>
+                <div>{errorfunction()}</div>
             </Card>
         </>
     )

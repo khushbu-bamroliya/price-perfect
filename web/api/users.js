@@ -26,13 +26,13 @@ const manualSignIn = async (req, res) => {
                     console.log("token", token);
                 }
                 // res.redirect('/homeDashboard')
-                res.status(200).json({ success: true, message: "User exists", user })
+                res.status(200).json({ success: true, message: "Logged in", user })
             } else {
-                res.status(403).json({ success: false, message: "wrong password" })
+                res.status(403).json({ success: false, message: "Incorrect password" })
             }
         } else {
             console.log("user", user);
-            res.status(403).json({ success: false, message: "user does not exist" })
+            res.status(403).json({ success: false, message: "User does not exist" })
         }
     } catch (error) {
         res.status(500).json({ success: false, error })

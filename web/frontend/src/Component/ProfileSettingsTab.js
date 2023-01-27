@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material'
+import { Alert, Button, Snackbar, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import dragAndDropIcon from './Images/dragAndDropIcon.png'
 import getApiUrl from "../controller/utils.js";
@@ -17,7 +17,8 @@ const ProfileSettingsTab = () => {
         picture: "no file choosen"
     }
     const [userData, setUserData] = useState(initialValues);
-
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
     console.log("userData", userData);
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -49,9 +50,15 @@ const ProfileSettingsTab = () => {
                         const apiRes = await res.json()
                         setUserData(apiRes.data)
                         console.log("apiRes.data", apiRes);
+                        setOpens(true)
+                        setsnackbar_msg("Profile updated")
 
                     })
-                    .catch((error) => console.log("Error", error))
+                    .catch((error) => {
+                        setOpens(true)
+                        setsnackbar_msg("Profile not updated")
+                        console.log("Error", error)
+                    })
             }
         }
         console.log("updateUser()");
@@ -84,6 +91,29 @@ const ProfileSettingsTab = () => {
         console.log("updateUser()");
 
     }
+    const handleClose = () => {
+        setOpens(false);
+      };
+    const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: "#325240" }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
 
     useEffect(() => {
         getUser()
@@ -136,6 +166,7 @@ const ProfileSettingsTab = () => {
                 </>)}
             </div>
             <Button onClick={() => updateUser()}>Save</Button>
+            <div>{errorfunction()}</div>
         </>
     )
 }
