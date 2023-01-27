@@ -88,7 +88,11 @@ const deleteTestCaseData = async (req, res) => {
 
         let responseShopData;
 
-        var shop = process.env.SHOP;
+        // var shop = process.env.SHOP;
+        var shop =req.headers.shop;
+
+
+
         let access_token;
 
         const shopData = await Shop.findOne({ shop }).select(["access_token"]);

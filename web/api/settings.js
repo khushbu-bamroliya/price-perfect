@@ -4,8 +4,8 @@ const {
   } = require("../controllers/shopify_api");
 
 const enableDisableApp = async(req, res) => {
-    // const shop = req.headers.shop;
-    const shop = process.env.SHOP;
+    const shop = req.headers.shop;
+    // const shop = process.env.SHOP;
     var access_token = "";
     const shopData = await Shop.findOne({ shop }).select(['access_token']);
     if(shopData)
