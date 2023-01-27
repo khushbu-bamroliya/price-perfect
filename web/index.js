@@ -594,6 +594,7 @@ app.get("/google/callback", (req, res) => {
 
 app.get("/google/logout", (req, res) => {
   req.logout(() => {});
+  res.clearCookie("token")
   // res.send(req.user);
   res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
 });
