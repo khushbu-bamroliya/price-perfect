@@ -37,6 +37,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
   const [opens, setOpens] = useState(false);
   const [snackbar_msg, setsnackbar_msg] = useState("");
+  const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [loading, setLoading] = useState(false)
     const [disabled, setDisabled] = useState(true)
     const [variantPriceData, setVariantPriceData] = useState("")
@@ -548,11 +549,13 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setLoading(false)
                 objectSent({ apiRes, controlData: variantRes.data })
                 setOpens(true)
+                setSnackbarColor('#325240')
                 setsnackbar_msg("Test created successfully")
                 navigate(`/reviewtest`, {state:{message: "Test created successfully"}})
             })
             .catch((error) => {
                 setOpens(true)
+                setSnackbarColor('red')
                 setsnackbar_msg("Test failed")
                 console.log("Error", error)
             })
@@ -780,7 +783,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             <Alert
               variant="filled"
               onClose={handleClose}
-              sx={{ width: "50%", bgcolor: "#325240" }}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
             >
               {snackbar_msg}
             </Alert>
@@ -903,8 +906,10 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <Typography id="modal-modal-title" variant="h5" component="h2">
                         Configure Test 1
                     </Typography>
+                    {!variantRes?.data ? <Loader/>:(<>
+
                     <Typography id="modal-modal-description" variant='p'>
-                        This product has 5 variants.
+                        This product has {variantRes && variantRes?.data?.length === 1 ? `${variantRes && variantRes?.data?.length} variant.` :`${variantRes && variantRes?.data?.length} variants.`} 
                     </Typography>
                     <Typography variant='p'>Do you want to set each variant’s price manually or auto adjust by percentage? </Typography>
                     <div className='setManuallyBlock'>
@@ -921,6 +926,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                         </div>
 
                     </div>
+                    </>)}
                 </Box>
             </Modal>
 
@@ -1007,7 +1013,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             {/* set price by percentage modal  */}
             <Modal
                 open={openByPercentageModal}
-                //onClose={handleCloseByPercentageModal}
+                onClose={handleCloseByPercentageModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >

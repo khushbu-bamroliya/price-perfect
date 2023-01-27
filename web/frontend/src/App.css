@@ -85,17 +85,24 @@
 
 .navIcons .colored {
     margin-right: 12px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 22px;
+    height: 22px;
 }
-
-.navIcons .colored path {
-    fill: transparent;
-    stroke: #B6BEC7;
+.absolute{
+    display: none;
 }
-
-.navIcons .active .colored path {
-    fill: url(#paint0_linear_252_15328);
-    stroke: transparent;
+.stroke{
+    position: absolute;
 }
+.navIcons .active .colored .stroke{
+    display: none;
+}
+.navIcons .active .colored .absolute{
+    display: block;
+}  
 
 .NavCenterBtn>button:active>div>a>span {
 
@@ -1276,6 +1283,8 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
+    display: block;
+    width: 100%;
     /* identical to box height */
 
 
@@ -3150,14 +3159,15 @@ html {
 }
 
 .tableImages {
-    height: 65px;
+    height: 100%;
+    width: 100%;
 }
 
 .tableImages div {
     /* padding: 8px !important;*/
-    height: 65px;
+    /* height: 65px; */
     /* object-fit: cover; */
-    width: 90px;
+    /* width: 90px; */
 }
 
 .MuiDataGrid-cell:first-child {
@@ -3189,6 +3199,14 @@ html {
     font-size: 14px;
     line-height: 17px;
     color: #8492A7;
+    justify-content: space-between !important;
+}
+
+.MuiDataGrid-columnHeadersInner,.MuiDataGrid-columnHeadersInner>div{
+    width: 100%;
+}
+.MuiDataGrid-columnHeadersInner>div{
+    justify-content: space-between;
 }
 
 .MuiDataGrid-virtualScrollerRenderZone {
@@ -3204,10 +3222,6 @@ html {
 
 .productID {
     padding-left: 20px;
-}
-
-.MuiDataGrid-columnHeader {
-    padding: 0 25px !important;
 }
 
 .MuiDataGrid-footerContainer {
@@ -3281,12 +3295,17 @@ html {
 
 }
 
-.MuiDataGrid-cell:last-child {
+.createTestTable .MuiDataGrid-cell:last-child {
     /* padding-right: 0 !important; */
+    justify-content: center !important;
+}
+
+.MuiDataGrid-columnHeader--alignRight .MuiDataGrid-columnHeaderTitleContainer{
+    justify-content: center !important;
 }
 
 .MuiDataGrid-columnHeader {
-    padding: 0 28px !important;
+    padding: 0 18px !important;
 }
 
 .variant_table .MuiDataGrid-columnHeaders {
@@ -3430,17 +3449,42 @@ html {
     max-width: 100%;
     width: 100% !important;
     padding: 8px 0;
+    justify-content: space-between !important;
 }
 
 .createTestTable .MuiDataGrid-cell {
-    padding: 0px 28px !important;
+    padding: 0px 18px !important;
+    justify-content: flex-start !important;
 }
 
-.createTestTable .MuiDataGrid-cell:first-child {
+.MuiDataGrid-cell--withRenderer:nth-last-child(2) {
+    justify-content: center !important;
+}
+
+.MuiDataGrid-row .MuiDataGrid-cell:last-child{
+    display: none !important;
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar-track
+{
+	background-color: #F5F5F5;
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar
+{
+	width: 2px;
+	background-color: #F5F5F5;
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
+
+/* .createTestTable .MuiDataGrid-cell:first-child {
     padding-left: 10px !important;
     padding-right: 8px !important;
-
-}
+} */
 
 .actionIcon img,
 .actionIcon a {
@@ -3506,6 +3550,7 @@ html {
 
 .pricingDataReview div div {
     align-items: flex-start;
+    flex-wrap: wrap;
 }
 
 .pricingDataReview div div .MuiTypography-root {
@@ -3526,12 +3571,11 @@ html {
         justify-content: flex-start;
     }
 
-    .navIcons a,
-    span {
+    .navIcons a, span {
         text-decoration: none;
         text-transform: capitalize;
         font-family: Product Sans;
-        /* color: #B6BEC7; */
+        color: #B6BEC7;
     }
 
     .MuiTypography-root .navIcons a {
@@ -3749,6 +3793,7 @@ html {
 
 
 @media only screen and (max-width: 414px) {
+
     .control-wrapper {
         max-width: 100%;
     }
@@ -3961,3 +4006,25 @@ html {
     margin: 0 5px;
     color: #FFFFFF;
 }
+
+
+/* .createTestTable div div:nth-child(3){
+    display: none;
+}
+
+.createTestTable div div:nth-child(3) div:nth-child(2) div button {
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    color: #000000;
+}
+
+.createTestTable div div:nth-child(3) div:nth-child(2) div button:hover {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    color: #FFFFFF;
+} */

@@ -32,7 +32,7 @@ const manualSignIn = async (req, res) => {
             }
         } else {
             console.log("user", user);
-            res.status(403).json({ success: false, message: "User does not exist" })
+            res.status(403).json({ success: false, message: "Invalid user" })
         }
     } catch (error) {
         res.status(500).json({ success: false, error })

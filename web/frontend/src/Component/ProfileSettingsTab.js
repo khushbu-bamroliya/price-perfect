@@ -19,6 +19,7 @@ const ProfileSettingsTab = () => {
     const [userData, setUserData] = useState(initialValues);
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     console.log("userData", userData);
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -51,11 +52,13 @@ const ProfileSettingsTab = () => {
                         setUserData(apiRes.data)
                         console.log("apiRes.data", apiRes);
                         setOpens(true)
+                        setSnackbarColor('#325240')
                         setsnackbar_msg("Profile updated")
 
                     })
                     .catch((error) => {
                         setOpens(true)
+                        setSnackbarColor('red')
                         setsnackbar_msg("Profile not updated")
                         console.log("Error", error)
                     })
@@ -106,7 +109,7 @@ const ProfileSettingsTab = () => {
             <Alert
               variant="filled"
               onClose={handleClose}
-              sx={{ width: "50%", bgcolor: "#325240" }}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
             >
               {snackbar_msg}
             </Alert>

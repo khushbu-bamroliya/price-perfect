@@ -14,6 +14,7 @@ const ReviewTestPage = ({ created, productImage }) => {
 
   const [opens, setOpens] = useState(false);
   const [snackbar_msg, setsnackbar_msg] = useState("");
+  const [snackbarColor, setSnackbarColor] = useState("#325240");
     console.log("Created on review page", created, productImage);
     const navigate = useNavigate();
     const launchTest = () => {
@@ -31,12 +32,14 @@ const ReviewTestPage = ({ created, productImage }) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
             setOpens(true)
+            setSnackbarColor('#325240')
             setsnackbar_msg("Test launched successfully")
 
 
             navigate('/yourtests', {state:{message: 'Test launched successfully'}})
         }).catch((err) => {
             setOpens(true)
+            setSnackbarColor('red')
             setsnackbar_msg("Error while launching test" )
             console.log("Error", err);
         })
@@ -56,7 +59,7 @@ const ReviewTestPage = ({ created, productImage }) => {
             <Alert
               variant="filled"
               onClose={handleClose}
-              sx={{ width: "50%", bgcolor: "#325240" }}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
             >
               {snackbar_msg}
             </Alert>
@@ -67,6 +70,7 @@ const ReviewTestPage = ({ created, productImage }) => {
       useEffect(() => {
         if (location?.state?.message) {
             setOpens(true)
+            setSnackbarColor('#325240')
               setsnackbar_msg(location.state.message)
         }else{
             setOpens(false)
@@ -106,7 +110,9 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
                                                     {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
-                                                    <Typography variant='p'>{created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<>{created.apiRes.currency} {j.abVariantPrice}, </>)))}</Typography>
+                                                    {created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<span>{created.apiRes.currency} {j.abVariantPrice}, </span>)))
+                                                    }
+                                                    {/* <Typography variant='p'></Typography> */}
                                                 </div>
 
                                             </div>

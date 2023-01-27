@@ -13,8 +13,13 @@ import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import closeIcon from "../Component/Images/close-circle.png"
 
 const ViewOrManageTestPage = () => {
+    const [loading, setLoading] = useState(false);
     const [opens, setOpens] = useState(false);
+    const [openTestStatusModal, setOpenTestStatusModal] = useState(false);
+    // const [pauseOrResume, setPauseOrResume] = useState();
+
     const [snackbar_msg, setsnackbar_msg] = useState("");
+  const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [singleTest, setSingleTest] = useState()
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -51,6 +56,7 @@ const ViewOrManageTestPage = () => {
             .catch((error) => console.log("Error", error))
     }
     const deleteTestCase = (id) => {
+        setLoading(true)
         console.log("deleting");
         fetch(getApiUrl + `/api/deleteTestCase/${id}`, {
             method: 'DELETE',
@@ -62,13 +68,16 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Deleted", apiRes);
+            setLoading(false)
             setOpens(true)
+            setSnackbarColor('#325240')
             setsnackbar_msg("Test deleted successfully.")
             setOpenDeleteModal(false)
             navigate('/yourtests', { state: { message: "Test deleted successfully" } });
 
         }).catch((err) => {
             setOpens(true)
+            setSnackbarColor('red')
             setsnackbar_msg("Error while deleting Test")
             console.log("Error", err);
         })
@@ -77,6 +86,7 @@ const ViewOrManageTestPage = () => {
         setOpenDeleteModal(true)
     };
     const handleCloseDeleteModal = () => setOpenDeleteModal(false);
+    const handleTestStatusModal = () => setOpenTestStatusModal(false);
     const rows = [
         { id: 1, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "56 USD" },
         { id: 2, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Cersei', Purchases: 42, price: "56 USD" },
@@ -175,8 +185,9 @@ const ViewOrManageTestPage = () => {
     ];
 
     const updateTestStatus = () => {
+        setLoading(true)
         fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
-            status: "pending",
+            // status: "pending",
             id: id
         }), {
             method: 'PUT',
@@ -188,13 +199,17 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
+            setLoading(false)
+            setOpenTestStatusModal(false)
             setOpens(true)
+            setSnackbarColor('#325240')
             setsnackbar_msg("Test status updated.")
 
             getSingleTest()
 
         }).catch((err) => {
             setOpens(true)
+            setSnackbarColor('red')
             setsnackbar_msg("Error while updating status.")
             console.log("Error", err);
         })
@@ -214,7 +229,7 @@ const ViewOrManageTestPage = () => {
                 <Alert
                     variant="filled"
                     onClose={handleClose}
-                    sx={{ width: "50%", bgcolor: "#325240" }}
+                    sx={{ width: "50%", bgcolor: snackbarColor }}
                 >
                     {snackbar_msg}
                 </Alert>
@@ -303,7 +318,8 @@ const ViewOrManageTestPage = () => {
 
                                     </Card>
                                     <div className="viewormanageBtnGroup">
-                                        <Button className='pauseTest' disabled={singleTest && singleTest.data.status == 'active' ? false : true  } onClick={() => updateTestStatus()} >Pause Test </Button>
+                                        {/* <Button className='pauseTest' onClick={() => updateTestStatus()} >{ singleTest?.data?.status === "pending" ? "Resume" : "Pause" } Test </Button> */}
+                                        <Button className='pauseTest' onClick={() => setOpenTestStatusModal(true)} >{ singleTest?.data?.status === "pending" ? "Resume" : "Pause" } Test </Button>
                                         <div className='deleteTest' onClick={() => handleOpenDeleteModal()}>
                                             <p>Delete Test</p>
                                             <Button>Delete Test</Button>
@@ -333,9 +349,12 @@ const ViewOrManageTestPage = () => {
                             </div>
                         </Card>
                     </div>
+
+
+                    // Delete test modal
                     <Modal
                         open={openDeleteModal}
-                        onClose={handleCloseDeleteModal}
+                        onClose={handleTestStatusModal}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
@@ -349,7 +368,33 @@ const ViewOrManageTestPage = () => {
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Are you sure you want to delete this test case?..
                             </Typography>
-                            <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(id)}> Delete </Button>
+                            <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(id)}> {loading ? <Loader size={20}/> :"Delete"} </Button>
+                        </Box>
+                    </Modal>
+
+
+                    // Test status update modal
+                    <Modal
+                        open={openTestStatusModal}
+                        onClose={handleCloseDeleteModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style} className="configureTest1">
+                            {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Text in a modal
+                                </Typography> */}
+                                <div className='close-icon'>
+                                    <img src={closeIcon} alt="" onClick={() => setOpenTestStatusModal(false)} />
+                                </div>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Are you sure you want to update this test case?..
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                Status
+                            </Typography>
+
+                            <Button className='deleteTestCaseBtn' onClick={() => updateTestStatus()}> {loading ? <Loader size={20}/> :singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
                         </Box>
                     </Modal>
                     <div>{errorfunction()}</div>

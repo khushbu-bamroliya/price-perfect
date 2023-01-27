@@ -34,6 +34,7 @@ const YourTests = () => {
 
   const [opens, setOpens] = useState(false);
   const [snackbar_msg, setsnackbar_msg] = useState("");
+  const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [loading, setLoading] = useState(false)
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [searchData, setSearchData] = useState("");
@@ -266,7 +267,12 @@ const YourTests = () => {
                 console.log("apiRes.data", apiRes);
                 setAllTests(apiRes)
             })
-            .catch((error) => console.log("Error", error))
+            .catch((error) => {
+                console.log("Error", error)
+                setOpens(true)
+            setSnackbarColor('red')
+            setsnackbar_msg("Server error")
+        })
     }
     const deleteTestCase = () => {
         setLoading(true)
@@ -284,11 +290,13 @@ const YourTests = () => {
             setLoading(false)
             setOpenDeleteModal(false)
             setOpens(true)
+            setSnackbarColor('#325240')
             setsnackbar_msg("Test deleted successfully")
             getAllTests()
 
         }).catch((err) => {
             setOpens(true)
+            setSnackbarColor('red')
             setsnackbar_msg("Error in deleting test")
             console.log("Error", err);
         })
@@ -308,7 +316,7 @@ const YourTests = () => {
             <Alert
               variant="filled"
               onClose={handleClose}
-              sx={{ width: "50%", bgcolor: "#325240" }}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
             >
               {snackbar_msg}
             </Alert>
@@ -408,8 +416,8 @@ const YourTests = () => {
                                     className='pagenate-page'
                                     rows={rows2}
                                     columns={columns}
-                                    pageSize={5}
-                                    rowsPerPageOptions={[5]}
+                                    pageSize={10}
+                                    rowsPerPageOptions={[10]}
                                     disableColumnMenu={true}
                                     onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
                                     sx={{

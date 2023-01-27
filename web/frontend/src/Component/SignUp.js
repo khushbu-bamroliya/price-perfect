@@ -19,6 +19,7 @@ const navigate = useNavigate();
     //Show error message
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [errorFirstName, setErrorFirstName] = useState(false);
     const [errorLastName, setErrorLastName] = useState(false);
     const [errorEmailName, setErrorEmailName] = useState(false);
@@ -93,10 +94,16 @@ const navigate = useNavigate();
         }
         if (!input.firstName || !input.lastName || !input.email || !input.password || !input.confirmPassword) {
             console.log("Not a valid email or password");
+            setOpens(true)
+                    setSnackbarColor('red')
+                    setsnackbar_msg(`All fields are required`)
         } else {
             if (input.password !== input.confirmPassword) {
                 console.log("If")
-                alert("Please check the password..!")
+                // alert("Please check the password..!")
+                setOpens(true)
+                setSnackbarColor('red')
+                setsnackbar_msg(`Passwords doesn't matched`)
             } else {
                 console.log("Else")
                 await fetch('/api/signupdetails', {
@@ -111,10 +118,16 @@ const navigate = useNavigate();
                     const apiRes =await res.json() 
                     console.log("signup apiRes", apiRes)
                     setOpens(true)
+                    setSnackbarColor('#325240')
                     setsnackbar_msg(`Account created successfully`)
-                    // navigate('/')
+                    navigate('/',{state:{message:'Account created successfully'}})
                 })
-                    .catch((error) => console.log("Error", error))
+                    .catch((error) => {
+                        setOpens(true)
+                    setSnackbarColor('red')
+                    setsnackbar_msg(`Account not created`)
+                        console.log("Error", error)
+                    })
             }
         }
 
@@ -184,7 +197,7 @@ const navigate = useNavigate();
             <Alert
               variant="filled"
               onClose={handleClose}
-              sx={{ width: "50%", bgcolor: "#325240" }}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
             >
               {snackbar_msg}
             </Alert>
@@ -375,7 +388,7 @@ const navigate = useNavigate();
                             {toggle && !togglescrollresult && <div id='scrollrevenue'>
                                 <div className='welcome-wrappers'>
                                     <div className='close-icon'>
-                                        <img src={closeIcon} alt="" onClick={() => redirectSignUp} />
+                                        <img src={closeIcon} alt="" onClick={redirectSignUp} />
                                     </div>
                                     <Typography variant='h4'>Revenue Increase Estimator</Typography>
                                     <Typography className='span' variant='p'>Calculate your expected revenue increase below!</Typography>
@@ -465,7 +478,7 @@ const navigate = useNavigate();
                                 <div id='scrollresult'>
                                     <div className='welcome-wrappers'>
                                         <div className='close-icon'>
-                                            <img src={closeIcon} alt="" onClick={ () => redirectRevenuePage} />
+                                            <img src={closeIcon} alt="" onClick={ redirectRevenuePage} />
                                         </div>
                                         <Typography variant='h4'>Give them the results  here.</Typography>
                                         <Typography className='span' variant='p'>Calculate your expected revenue increase below!</Typography>

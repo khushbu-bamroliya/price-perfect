@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Card, Chip, Modal, Snackbar, Typography } from '@mui/material'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import statIcon1 from "./Images/Clock.png"
 import statIcon2 from "./Images/Activity.png"
 import statIcon3 from "./Images/Graph.png"
@@ -24,8 +24,8 @@ import cookieReader from '../controller/cookieReader'
 const HomeDashboard = () => {
     const location = useLocation();
     const [opens, setOpens] = useState(false);
-  const [snackbar_msg, setsnackbar_msg] = useState("");
-    
+    const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [allTests, setAllTests] = useState();
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [testId, setTestId] = useState();
@@ -167,44 +167,46 @@ const HomeDashboard = () => {
             console.log("Deleted", apiRes);
             setOpenDeleteModal(false)
             getAllTests()
-            
+
         }).catch((err) => {
             console.log("Error", err);
         })
     }
     const handleClose = () => {
-    setOpens(false);
-  };
+        setOpens(false);
+    };
     const errorfunction = () => {
-    return (<div>
-      <Snackbar
-        open={opens}
-        sx={{ width: "50%" }}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        autoHideDuration={3000}
-        onClose={handleClose}
-      >
-        <Alert
-          variant="filled"
-          onClose={handleClose}
-          sx={{ width: "50%", bgcolor: "#325240" }}
-        >
-          {snackbar_msg}
-        </Alert>
-      </Snackbar>
-    </div>)
+        return (<div>
+            <Snackbar
+                open={opens}
+                sx={{ width: "50%" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                autoHideDuration={3000}
+                onClose={handleClose}
+            >
+                <Alert
+                    variant="filled"
+                    onClose={handleClose}
+                    sx={{ width: "50%", bgcolor: snackbarColor }}
+                >
+                    {snackbar_msg}
+                </Alert>
+            </Snackbar>
+        </div>)
 
-  };
+    };
 
 
     useEffect(() => {
-        if (location?.state?.message) {
-        setOpens(true)
-          setsnackbar_msg(location.state.message)
-    }else{
-        setOpens(false)
-    }
         getAllTests()
+        if (location?.state?.message) {
+            setOpens(true)
+            setSnackbarColor('#325240')
+            setsnackbar_msg(location.state.message)
+        } else {
+            setOpens(false)
+        }
+
     }, [])
     return (
         <>
@@ -254,7 +256,7 @@ const HomeDashboard = () => {
                                     <div>
                                         <Card>
 
-                                            <img src={statIcon1} alt="" width='50px'/>
+                                            <img src={statIcon1} alt="" width='50px' />
                                         </Card>
                                         <Typography variant='p'>PricePerfect <span>Revenue</span></Typography>
                                     </div>
@@ -334,16 +336,20 @@ const HomeDashboard = () => {
                                 </div>
                                 <div>
                                     <div className='createTestTable' style={{ height: 360, width: '100%' }}>
-{!allTests ? <Loader size={40} />:(<>
+                                        {!allTests ? <Loader size={40} /> : (<>
 
-                                        <DataGrid
-                                            rows={rows2}
-                                            columns={columns}
-                                            pageSize={50}
-                                            rowsPerPageOptions={[50]}
-                                            disableColumnMenu
-                                        />
-</>)}
+                                            <DataGrid
+                                                rows={rows2}
+                                                hideFooterPagination
+                                                columns={columns}
+                                                pageSize={50}
+                                                rowsPerPageOptions={[50]}
+                                                disableColumnMenu
+                                            // width= {30}
+                                            // minWidth= {30}
+                                            // flex= {1}
+                                            />
+                                        </>)}
 
                                     </div>
                                 </div>
@@ -352,21 +358,21 @@ const HomeDashboard = () => {
                     </div>
                 </div>
                 <Modal
-                            open={openDeleteModal}
-                            onClose={handleCloseDeleteModal}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box sx={style}>
-                                {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+                    open={openDeleteModal}
+                    onClose={handleCloseDeleteModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        {/* <Typography id="modal-modal-title" variant="h6" component="h2">
                                     Text in a modal
                                 </Typography> */}
-                                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                    Are you sure you want to delete this test case?..
-                                </Typography>
-                                <Button onClick={() => deleteTestCase(testId)}> Delete </Button>
-                            </Box>
-                        </Modal>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            Are you sure you want to delete this test case?..
+                        </Typography>
+                        <Button onClick={() => deleteTestCase(testId)}> Delete </Button>
+                    </Box>
+                </Modal>
             </Card>
             <div>{errorfunction()}</div>
         </>
