@@ -96,6 +96,8 @@ const CreateTestPage = ({ shop, getProductImage }) => {
             width: 150,
             sortable: false,
             flex: 0.1,
+            align: 'center',
+  headerAlign: 'center',
             renderCell: (params) => {
                 return (
                     <div className='actionIcon' onClick={(e) => e.stopPropagation()} >

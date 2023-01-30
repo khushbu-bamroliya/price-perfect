@@ -12,16 +12,19 @@ import TestAnalyticsIcon3 from "./Images/Frame 26 3.png"
 import TestAnalyticsIcon4 from "./Images/Frame 26 4.png"
 import Navbar from './Navbar'
 import getApiUrl from "../controller/utils.js";
-import { DataGrid } from '@mui/x-data-grid'
-import { NavLink, useLocation } from 'react-router-dom'
+import { DataGrid, gridClasses } from '@mui/x-data-grid'
+import { Navigate, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import LinkIcon from "./Images/link-2.png"
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
 import Loader from './Loader'
 import cookieReader from '../controller/cookieReader'
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+
 
 const HomeDashboard = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
@@ -63,7 +66,8 @@ const HomeDashboard = () => {
                     <>
                         <div className='tableImages'>
                             <div>
-                                <img src={params.row.featuredImage} alt='' />
+                            {params.row.featuredImage ?<img src={params.row.featuredImage} alt='' />:<HideImageOutlinedIcon />}
+                                {/* <img src={params.row.featuredImage ?params.row.featuredImage :<HideImageOutlinedIcon />} alt='' /> */}
                             </div>
                         </div>
                         <p className='productID'>
@@ -129,8 +133,6 @@ const HomeDashboard = () => {
         // },
     ];
     const getAllTests = async () => {
-
-
 
         fetch(getApiUrl + '/api/getTestCase', {
             method: 'GET',
@@ -340,11 +342,24 @@ const HomeDashboard = () => {
 
                                             <DataGrid
                                                 rows={rows2}
-                                                hideFooterPagination
+                                                // hideFooterPagination
                                                 columns={columns}
                                                 pageSize={50}
                                                 rowsPerPageOptions={[50]}
                                                 disableColumnMenu
+                                                hideFooterSelectedRowCount
+                                                onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
+                                    
+                                                sx={{
+                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                        {
+                                            outline: "none",
+                                        },
+                                    }}
                                             // width= {30}
                                             // minWidth= {30}
                                             // flex= {1}

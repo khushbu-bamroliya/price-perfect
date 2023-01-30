@@ -77,7 +77,7 @@ const { nextTick } = require("process");
 
 //Webhook Apis
 app.post(
-  "/webhook",
+  "/hook/webhook",
   validateWebhook,
   async (req, res) => {
 
@@ -107,30 +107,31 @@ app.post(
       return null;
     };
 
-    async function parallelWebhookFunc(req, res)
-    {
-      // console.log(req.body);
+    async function parallelWebhookFunc(req, res) {
       const shop = req.get("x-shopify-shop-domain");
       const topic = req.get("x-shopify-topic");
+      console.log("shop: " + shop)
+      console.log("topic: " + topic)
+      if (topic === "app/uninstalled") {
+        try {
+          console.log("Hello uninstall");
+        const updateShop = await Shop.findOneAndUpdate(
+            { shop },
+            {
+              app_status: "uninstalled",
+            }
+          );
+          console.log("updateShop", updateShop)
+        } catch (e) {
+          console.log("Error in app uninstall webhook", e);
+        }
+      } else if (topic === "shop/update") {
+        const {
+          responseShop
+        } = req.body;
 
-    if (topic === "app/uninstalled") {
-      try {
-        await Shop.findOneAndUpdate(
-          { shop },
-          {
-            app_status: "uninstalled",
-          }
-        );
-      } catch (e) {
-        console.log("Error in app uninstall webhook", e);
-      }
-    } else if (topic === "shop/update") {
-      const {
-        responseShop
-      } = req.body;
-
-      try {
-        const shopifyData = {
+        try {
+          const shopifyData = {
             shop: shop,
             phone: responseShop.phone,
             name: responseShop.name,
@@ -149,61 +150,60 @@ app.post(
             city: responseShop.city,
             shop_owner: responseShop.shop_owner,
             shop_plan: responseShop && responseShop.plan_name && responseShop.plan_name,
-        };
+          };
 
-        await Shop.findOneAndUpdate({ shop }, shopifyData, {
-          upsert: true,
-        });
-      } catch (e) {
-        console.log("Error in shop update webhook", e);
+          await Shop.findOneAndUpdate({ shop }, shopifyData, {
+            upsert: true,
+          });
+        } catch (e) {
+          console.log("Error in shop update webhook", e);
+        }
       }
-    } 
       else if (topic === "products/delete") {
         //delete duplicate products in shopify then delete test case from db
 
         try {
-
+console.log("products/delete")
           var access_token = "";
           const shopData = await Shop.findOne({ shop }).select(['access_token']);
           access_token = shopData.access_token;
-
           const productId = req.body.id;
-  
-          const getSingleTestCase = await createTestModal.findOne({productId})
-  
+          console.log("productId", productId)
+
+          const getSingleTestCase = await createTestModal.findOne({ productId })
+
           for (let singleObj of getSingleTestCase.testCases) {
 
-              let getSingleDuplicateProductIds = singleObj.variants[0].duplicateProductId.split("gid://shopify/Product/")[1];
-  
-              if (getSingleDuplicateProductIds) {
-  
-                  try {
-                      const responseShopData = await DeleteApiRest(
-                          `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/products/${Number(getSingleDuplicateProductIds)}.json`,
-                          access_token
-                      );
-  
-                      console.log("responseShopData", responseShopData)
-  
-  
-                  } catch (error) {
-                      console.log("Error deleting product in shopify in product delete webhook", error);
-                  }
+            let getSingleDuplicateProductIds = singleObj.variants[0].duplicateProductId.split("gid://shopify/Product/")[1];
+
+            if (getSingleDuplicateProductIds) {
+
+              try {
+                const responseShopData = await DeleteApiRest(
+                  `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/products/${Number(getSingleDuplicateProductIds)}.json`,
+                  access_token
+                );
+
+                console.log("responseShopData", responseShopData)
+
+
+              } catch (error) {
+                console.log("Error deleting product in shopify in product delete webhook", error);
               }
-  
+            }
+
           }
 
           try {
-            await createTestModal.findOneAndRemove({productId:"gid://shopify/Product/" + productId});
+            await createTestModal.findOneAndRemove({ productId: "gid://shopify/Product/" + productId });
           }
-          catch(error)
-          {
+          catch (error) {
             console.log("Error deleting product in db in delete webhook", error);
           }
-  
-      } catch (error) {
+
+        } catch (error) {
           console.log("Error in delete product webhook", error);
-      }
+        }
 
       }
       else if (topic === "orders/create") {
@@ -211,7 +211,7 @@ app.post(
         if (in_array(order, "_pricePerfectTestId")) {
           //order is via price perfect app
 
-          var pricePerfectId = await findKey(order,'pricePerfectId');
+          var pricePerfectId = await findKey(order, 'pricePerfectId');
           try {
             const orderInsert = await Order.findOneAndUpdate(
               {
@@ -241,15 +241,14 @@ app.post(
 
             if (order.line_items && order.line_items.length > 0) {
               for (const value of order.line_items) {
-                pricePerfectTestId = await findKey(order,'_pricePerfectTestId');
-                originalVariantId = await findKey(order,'_originalVariantId');
-                if(pricePerfectTestId)
-                {
-                    await OrderLine.findOneAndUpdate({
-                      orderId: order.id,
-                      shop: shop,
-                      shopifyVariantId: value.variant_id,
-                    },
+                pricePerfectTestId = await findKey(order, '_pricePerfectTestId');
+                originalVariantId = await findKey(order, '_originalVariantId');
+                if (pricePerfectTestId) {
+                  await OrderLine.findOneAndUpdate({
+                    orderId: order.id,
+                    shop: shop,
+                    shopifyVariantId: value.variant_id,
+                  },
                     {
                       shop: shop,
                       userId: pricePerfectId,
@@ -280,11 +279,10 @@ app.post(
                     }
                   );
 
-                  if(pricePerfectTestId != "control")
-                  {
-                  //get all locations from shopify
+                  if (pricePerfectTestId != "control") {
+                    //get all locations from shopify
 
-                  const query = `{
+                    const query = `{
                     productVariant(id:"gid://shopify/ProductVariant/44362991370536")
                     {
                       product{
@@ -302,28 +300,25 @@ app.post(
                       }
                     }
                   }`;
-                  var access_token = "";
-                  const shopData = await Shop.findOne({ shop }).select(['access_token']);
-                  access_token = shopData.access_token;
+                    var access_token = "";
+                    const shopData = await Shop.findOne({ shop }).select(['access_token']);
+                    access_token = shopData.access_token;
 
-                  const response = await PostApiGraphql(shop, access_token, query);
+                    const response = await PostApiGraphql(shop, access_token, query);
 
-                  if(response && response.data)
-                  {
-                    if(response.data.locations && response.data.locations.length > 0)
-                    {
-                      for(const value of response.data.locations)
-                      {
-                        
+                    if (response && response.data) {
+                      if (response.data.locations && response.data.locations.length > 0) {
+                        for (const value of response.data.locations) {
+
+                        }
                       }
                     }
+
                   }
 
-                }
-
 
                 }
-                
+
               }
             }
 
@@ -334,7 +329,7 @@ app.post(
         }
       }
 
-       return true;
+      return true;
 
     }
   }
@@ -593,7 +588,7 @@ app.get("/google/callback", (req, res) => {
 });
 
 app.get("/google/logout", (req, res) => {
-  req.logout(() => {});
+  req.logout(() => { });
   res.clearCookie("token")
   // res.send(req.user);
   res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
@@ -668,8 +663,8 @@ app.post("/abtest", async (req, res) => {
       var testPer = parseInt(Number(getTestCase.trafficSplit));
       var controlPer = parseInt(
         100 -
-          Number(getTestCase.trafficSplit) *
-            Number(getTestCase.testCases.length)
+        Number(getTestCase.trafficSplit) *
+        Number(getTestCase.testCases.length)
       );
 
       console.log(

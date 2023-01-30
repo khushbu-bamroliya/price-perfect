@@ -3,9 +3,9 @@ const crypto = require("crypto");
 
 const validateWebhook = async (req, res, next) => {
   try {
-    const { SHOPIFY_SECRET_KEY } = process.env;
+    const { SHOPIFY_API_SECRET } = process.env;
 
-    console.log("SHOPIFY_SECRET_KEY", SHOPIFY_SECRET_KEY);
+    console.log("SHOPIFY_API_SECRET", SHOPIFY_API_SECRET);
 
     const hmac = req.get("X-Shopify-Hmac-Sha256");
     console.log("hmac", hmac);
@@ -13,7 +13,7 @@ const validateWebhook = async (req, res, next) => {
     req.body = { ...JSON.parse(body) };
 
     const digest = crypto
-      .createHmac("sha256", SHOPIFY_SECRET_KEY)
+      .createHmac("sha256", SHOPIFY_API_SECRET)
       .update(body, "utf8", "hex")
       .digest("base64");
     if (digest !== hmac) {

@@ -74,34 +74,47 @@ export default function WelcomePage({ shop }) {
       setsnackbar_msg(`All fields are required`)
     } else {
 
-      fetch(getApiUrl + `/api/signin?${new URLSearchParams({ email: userData.email, password: userData.password, 'rememberMe': rememberMe })}`, {
-        method: 'GET',
-        headers: {
-          'shop': cookieReader('shop')
-        }
-      })
-        .then(async (response) => {
-          return response.json()
-        }).then((res) => {
-          if (res.success == true) {
+      if (isValidEmail(userData.email)) {
+        console.log('The email is valid');
+        fetch(getApiUrl + `/api/signin?${new URLSearchParams({ email: userData.email, password: userData.password, 'rememberMe': rememberMe })}`, {
+          method: 'GET',
+          headers: {
+            'shop': cookieReader('shop')
+          }
+        })
+          .then(async (response) => {
+            return response.json()
+          }).then((res) => {
+            if (res.success == true) {
+              setOpens(true)
+              setsnackbar_msg(`${res.message}`)
+              setSnackbarColor('#325240')
+              navigate('/homeDashboard', { state: { message: `${res.message}` } });
+            }
+            if (res.success == false) {
+              setOpens(true)
+              setSnackbarColor('red')
+              setsnackbar_msg(`${res.message}`)
+              // navigate('/homeDashboard');
+            }
+          })
+          .catch(err => {
             setOpens(true)
-            setsnackbar_msg(`${res.message}`)
+            setsnackbar_msg(`Invalid User`)
             setSnackbarColor('#325240')
-            navigate('/homeDashboard', { state: { message: `${res.message}` } });
-          }
-          if (res.success == false) {
-            setOpens(true)
-            setSnackbarColor('red')
-            setsnackbar_msg(`${res.message}`)
-            // navigate('/homeDashboard');
-          }
-        })
-        .catch(err => {
-          setOpens(true)
-          setsnackbar_msg(`Invalid User`)
-          setSnackbarColor('#325240')
-          console.log(err)
-        })
+            console.log(err)
+          })
+        // setOpens(true)
+        // setSnackbarColor('#325240')
+        // setsnackbar_msg("Correct email")
+    } else {
+        setOpens(true)
+        setsnackbar_msg("Invalid email")
+        setSnackbarColor('red')
+        // setError('Email is invalid');
+        console.log('The email is invalid');
+      }
+  
     }
 
   }
@@ -153,6 +166,9 @@ export default function WelcomePage({ shop }) {
     setOpens(true)
     setsnackbar_msg("Moj")
 
+  }
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
   }
   useEffect(() => {
     if (location?.state?.message) {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, TextField, Typography, CardContent } from '@mui/material';
+import { Button, Card, TextField, Typography, CardContent, Snackbar, Alert } from '@mui/material';
 import googleImages from './Images/google (1).png';
 import { NavLink, useNavigate } from "react-router-dom";
 import ResultRevenueLogo from './Images/ResultRevenueLogo.png';
@@ -8,7 +8,10 @@ import logo from "../Component/Images/Group 48.png";
 import closeIcon from "../Component/Images/close-circle.png"
 export default function SignUp() {
     const navigate = useNavigate();
-    
+
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [ForgotPass, setForgotPass]= useState({
         ForgotPassText: "",
     });
@@ -23,14 +26,52 @@ export default function SignUp() {
       };
 
     const resetPassword = () => {
-
+        if (isValidEmail(ForgotPass.ForgotPassText)) {
+            console.log('The email is valid');
+            
+            setOpens(true)
+            setSnackbarColor('#325240')
+            setsnackbar_msg("Correct email")
+        } else {
+            setOpens(true)
+            setErrorMessForgot(true)
+            setsnackbar_msg("Invalid email")
+            setSnackbarColor('red')
+            // setError('Email is invalid');
+            console.log('The email is invalid');
+          }
         console.log("called");
-        setErrorMessForgot(true)
+        
 
         console.log("End...")
     }
 
-
+    function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+      }
+      const handleClose = () => {
+        setOpens(false);
+      };
+      const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
 
     return (
         <>
@@ -83,6 +124,7 @@ export default function SignUp() {
                     </Card>
                 </Card>
             </div>
+            <div>{errorfunction()}</div>
         </>
     )
 }

@@ -921,8 +921,8 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                         <div className='btn_adjust'>
 
-                            <p>Adjust by Percentage</p>
-                            <Button onClick={handleOpenByPercentageModal}></Button>
+                            {/* <p></p> */}
+                            <Button onClick={handleOpenByPercentageModal}>Adjust by Percentage</Button>
                         </div>
 
                     </div>

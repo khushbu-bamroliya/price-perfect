@@ -105,7 +105,13 @@ const navigate = useNavigate();
                 setSnackbarColor('red')
                 setsnackbar_msg(`Passwords doesn't matched`)
             } else {
-                console.log("Else")
+                if (isValidEmail(input.email)) {
+                    console.log('The email is valid');
+                    
+                    // setOpens(true)
+                    // setSnackbarColor('#325240')
+                    // setsnackbar_msg("Correct email")
+                    console.log("Else")
                 await fetch('/api/signupdetails', {
                     method: 'POST',
                     headers: {
@@ -119,8 +125,11 @@ const navigate = useNavigate();
                     console.log("signup apiRes", apiRes)
                     setOpens(true)
                     setSnackbarColor('#325240')
-                    setsnackbar_msg(`Account created successfully`)
-                    navigate('/',{state:{message:'Account created successfully'}})
+                    setsnackbar_msg(`${apiRes.message}`)
+                    if (apiRes.message === "Account created successfully") {
+                        
+                        navigate('/',{state:{message:`${apiRes.message}`}})
+                    }
                 })
                     .catch((error) => {
                         setOpens(true)
@@ -128,6 +137,14 @@ const navigate = useNavigate();
                     setsnackbar_msg(`Account not created`)
                         console.log("Error", error)
                     })
+                } else {
+                    setOpens(true)
+                    setsnackbar_msg("Invalid email")
+                    setSnackbarColor('red')
+                    // setError('Email is invalid');
+                    console.log('The email is invalid');
+                  }
+                
             }
         }
 
@@ -205,6 +222,9 @@ const navigate = useNavigate();
         </div>)
     
       };
+      function isValidEmail(email) {
+        return /\S+@\S+\.\S+/.test(email);
+      }
     return (
         <>
 
@@ -299,7 +319,6 @@ const navigate = useNavigate();
                                         type={showPassword ? 'text' : 'password'}
                                         placeholder="Enter your password"
                                         name="password"
-
                                         value={input.password}
                                         onChange={inputEvent}
                                         endAdornment={
