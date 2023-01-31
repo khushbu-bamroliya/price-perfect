@@ -54,11 +54,8 @@ module.exports = {
     }),
   PostApiRest: (url, client_secret, data) =>
     new Promise(async (resolve, reject) => {
-      console.log("url: " + url);
-      console.log("client_secret: " + client_secret);
-      console.log("data: " + JSON.stringify(data));
+      // console.log("data: " + JSON.stringify(data))
       try {
-        console.log("inside post request");
         const response = await axios({
           url,
           method: "POST",
@@ -69,7 +66,7 @@ module.exports = {
           responseType: "json",
           data,
         });
-console.log("response from server: " + JSON.stringify(response))
+
         resolve(response.data);
       } catch (error) {
         console.log("error in post api rest", error);

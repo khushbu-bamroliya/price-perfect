@@ -445,15 +445,15 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
       } catch (error) {
         console.log("Shop insert error", error);
       }
-
+console.log("access_token",access_token);
       const registerShopWebhook = await PostApiRest(
         `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
         access_token,
         {
-          webhook: {
-            topic: "shop/update",
-            address: `${process.env.HOST}/hook/webhook`,
-            format: "json",
+          'webhook': {
+            'topic': "shop/update",
+            'address': `${process.env.HOST}/hook/webhook`,
+            'format': "json",
           },
         }
       );
@@ -486,10 +486,10 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
         `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
         access_token,
         {
-          webhook: {
-            topic: "product/delete",
-            address: `${process.env.HOST}/hook/webhook`,
-            format: "json",
+          'webhook': {
+            'topic': "product/delete",
+            'address': `${process.env.HOST}/hook/webhook`,
+            'format': "json",
           },
         }
       );
@@ -598,7 +598,7 @@ app.get("/google/logout", (req, res) => {
 app.use(
   "/api",
   async (req, res, next) => {
-    console.log("in middleware", req.headers.shop);
+    console.log("in middleware", req.headers);
     if (req.headers.shop) {
       req.headers.shop = await decodeJWT(req.headers.shop);
     } else {
