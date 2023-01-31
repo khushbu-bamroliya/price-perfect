@@ -54,7 +54,6 @@ module.exports = {
     }),
   PostApiRest: (url, client_secret, data) =>
     new Promise(async (resolve, reject) => {
-      // console.log("data: " + JSON.stringify(data))
       try {
         const response = await axios({
           url,

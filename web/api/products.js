@@ -18,7 +18,7 @@ const allProducts = async (req, res) => {
 
     const shop = req.headers.shop;
     // const shop = process.env.SHOP;
-
+    console.log("shop", shop);
     console.log("req.headers", req.headers);
 const item_per_page = 10;
     //let {shop} = req.headers

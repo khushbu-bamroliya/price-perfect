@@ -136,6 +136,7 @@ const HomeDashboard = () => {
 
         fetch(getApiUrl + '/api/getTestCase', {
             method: 'GET',
+            mode: 'cors',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',

@@ -390,9 +390,9 @@ const ViewOrManageTestPage = () => {
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Are you sure you want to update this test case?..
                             </Typography>
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Status
-                            </Typography>
+                            </Typography> */}
 
                             <Button className='deleteTestCaseBtn' onClick={() => updateTestStatus()}> {loading ? <Loader size={20}/> :singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
                         </Box>

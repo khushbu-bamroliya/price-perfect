@@ -115,7 +115,7 @@ app.post(
       if (topic === "app/uninstalled") {
         try {
           console.log("Hello uninstall");
-        const updateShop = await Shop.findOneAndUpdate(
+          const updateShop = await Shop.findOneAndUpdate(
             { shop },
             {
               app_status: "uninstalled",
@@ -445,7 +445,7 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
       } catch (error) {
         console.log("Shop insert error", error);
       }
-console.log("access_token",access_token);
+      console.log("access_token", access_token);
       const registerShopWebhook = await PostApiRest(
         `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
         access_token,
@@ -575,7 +575,9 @@ app.get("/google/callback", (req, res) => {
     }
     if (user) {
       const token = await encodeJWT(user.googleId);
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        maxAge: 86400000 * 10, secure: true
+      });
       console.log("here1");
       res.redirect("/homeDashboard");
 
@@ -814,7 +816,9 @@ app.get("/", async (req, res) => {
       // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
 
       // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
-      res.cookie("shop", encodedShop);
+      res.cookie("shop", encodedShop, {
+         secure: true
+      });
       res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
     } else {
       res.redirect(
