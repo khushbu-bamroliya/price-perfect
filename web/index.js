@@ -45,7 +45,7 @@ initializingPassport(passport);
 // app.use(express.urlencoded({extended: true}));
 // app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
 // app.use(cookieParser());
 
 app.use(passport.initialize());
@@ -70,10 +70,10 @@ const {
 } = require("./controllers/shopify_api");
 
 //router config
-const router = express.Router();
+//const router = express.Router();
 const ApiRoutes = require("./routers/router.js");
-const { createTestCaseApi } = require("./api/createTest");
-const { nextTick } = require("process");
+//const { createTestCaseApi } = require("./api/createTest");
+//const { nextTick } = require("process");
 
 //Webhook Apis
 app.post(
@@ -110,8 +110,8 @@ app.post(
     async function parallelWebhookFunc(req, res) {
       const shop = req.get("x-shopify-shop-domain");
       const topic = req.get("x-shopify-topic");
-      console.log("shop: " + shop)
-      console.log("topic: " + topic)
+      console.log("shop: " + shop);
+      console.log("topic: " + topic);
       if (topic === "app/uninstalled") {
         try {
           console.log("Hello uninstall");
@@ -163,7 +163,7 @@ app.post(
         //delete duplicate products in shopify then delete test case from db
 
         try {
-console.log("products/delete")
+          console.log("products/delete")
           var access_token = "";
           const shopData = await Shop.findOne({ shop }).select(['access_token']);
           access_token = shopData.access_token;
@@ -335,7 +335,7 @@ console.log("products/delete")
   }
 );
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 //shopify auth apis
 app.get("/auth", validateHmac, async (req, res) => {
@@ -487,7 +487,7 @@ console.log("access_token",access_token);
         access_token,
         {
           'webhook': {
-            'topic': "product/delete",
+            'topic': "products/delete",
             'address': `${process.env.HOST}/hook/webhook`,
             'format': "json",
           },

@@ -5,14 +5,9 @@ const validateWebhook = async (req, res, next) => {
   try {
     const { SHOPIFY_API_SECRET } = process.env;
 
-    console.log("SHOPIFY_API_SECRET", SHOPIFY_API_SECRET);
-
     const hmac = req.get("X-Shopify-Hmac-Sha256");
-    console.log("hmac", hmac);
     const body = await getRawBody(req);
-    console.log("body", body);
     req.body = { ...JSON.parse(body) };
-    console.log("req.body", req.body);
 
     const digest = crypto
       .createHmac("sha256", SHOPIFY_API_SECRET)
