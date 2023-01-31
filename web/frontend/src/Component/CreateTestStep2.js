@@ -15,6 +15,7 @@ import cookieReader from '../controller/cookieReader';
 const CreateTestStep2 = ({ objectSent }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    
     const style = {
         position: 'absolute',
         top: '50%',
@@ -792,6 +793,9 @@ const CreateTestStep2 = ({ objectSent }) => {
     
       };
     useEffect(() => {
+        if (!location?.state) {
+            navigate('/createtest')
+        }
         handleVariants()
     }, [])
 

@@ -20,11 +20,11 @@ const manualSignIn = async (req, res) => {
 
                 if (rememberMe === true) {
                     res.cookie("token", token, {
-                        maxAge: 86400000 * 30, secure: true
+                        maxAge: 86400000 * 30, secure: true,  sameSite: 'Strict'
                     });
                 } else {
                     res.cookie("token", token, {
-                        maxAge: 86400000 * 10, secure: true
+                        maxAge: 86400000 * 10, secure: true,  sameSite: 'Strict'
                     });
                     console.log("token", token);
                 }

@@ -75,6 +75,9 @@ const ReviewTestPage = ({ created, productImage }) => {
         }else{
             setOpens(false)
         }
+        if (!location?.state) {
+            navigate('/yourtests')
+        }
       },[])
     return (
         <>

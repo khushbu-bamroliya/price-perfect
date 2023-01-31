@@ -75,6 +75,20 @@ const ApiRoutes = require("./routers/router.js");
 //const { createTestCaseApi } = require("./api/createTest");
 //const { nextTick } = require("process");
 
+//GDPR API
+
+app.post("/hook/customers-data-request", validateWebhook, (req, res) => {
+    return res.sendStatus(200);
+});
+
+app.post("/hook/customer-redact", validateWebhook, (req, res) => {
+    return res.sendStatus(200);
+});
+
+app.post("/hook/shop-redact", validateWebhook, async (req, res) => {
+     return res.sendStatus(200);
+});
+
 //Webhook Apis
 app.post(
   "/hook/webhook",
@@ -576,7 +590,7 @@ app.get("/google/callback", (req, res) => {
     if (user) {
       const token = await encodeJWT(user.googleId);
       res.cookie("token", token, {
-        maxAge: 86400000 * 10, secure: true
+        maxAge: 86400000 * 10, secure: true, sameSite: 'Strict'
       });
       console.log("here1");
       res.redirect("/homeDashboard");
@@ -817,7 +831,7 @@ app.get("/", async (req, res) => {
 
       // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
       res.cookie("shop", encodedShop, {
-         secure: true
+         secure: true,  sameSite: 'Strict'
       });
       res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
     } else {

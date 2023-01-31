@@ -48,7 +48,7 @@
 }
 
 .NavCenterBtn>button {
-    margin: 0 9px;
+    margin: 0 9px !important;
 }
 
 .NavCenterBtn>button>div>a {
@@ -649,7 +649,7 @@
     font-size: 18px;
     line-height: 22px;
     color: #8492A7;
-    width: max-content;
+    /* width: max-content; */
     display: block;
     margin-bottom: 10px;
 }
@@ -1235,7 +1235,7 @@
 .reviewMainData {
     max-width: 44.3rem;
     /* height: 88px; */
-    /* padding: 0 25px; */
+    padding: 0 25px;
     background: #F9F8FE;
     border-radius: 10px;
     display: flex;
@@ -1292,7 +1292,7 @@
 .pricingDataReview>div>div>span,
 .trafficSplitDataReview>div>h5 {
     font-family: 'Product Sans';
-    margin: 0 16px 0 8px;
+    margin: 0 16px 0 0;
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -1438,8 +1438,9 @@
 .ProfileBackgroundImg {
     max-width: 100%;
     max-height: 165px;
-    object-fit: contain;
+    /* object-fit: contain; */
     width: 100vw;
+    opacity: .6;
 
 }
 
@@ -1465,6 +1466,8 @@
 
 .userDetails>div {
     margin-bottom: 18px;
+    display: flex;
+    align-items: center;
 }
 
 .userDetails>div>span {
@@ -1473,7 +1476,7 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
-
+    margin-left: 8px;
     color: #8492A7;
 
 }
@@ -1676,13 +1679,22 @@
     /* height: 155px; */
     height: 139px;
     /* height: 100%; */
-
+    position: relative;
     border: 1px dashed #D4DCE8;
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    
+}
+
+.dragAndDrop>label>div input{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    cursor: grab;
 }
 
 
@@ -2036,6 +2048,7 @@
     .onProfileStatistics,
     .onProfileStatistics>div {
         width: 100%;
+        margin-left: 25px;
     }
 
 }
@@ -3118,7 +3131,7 @@ html {
     }
 
     .padding {
-        padding-top: 15px;
+        padding-top: 0;
     }
 
     .wrappers {
@@ -3401,7 +3414,7 @@ html {
 
 .profileData {
     max-width: 80%;
-    margin: 30px 10px 0 auto;
+    margin: 30px 0 0 auto;
 
 }
 
@@ -3431,7 +3444,7 @@ html {
 
 .profile-main .userDetails {
     max-width: 65%;
-    margin: 0 0 0 auto;
+    margin: 0 0 0 0;
 }
 
 .profile-main .MuiButtonBase-root {
@@ -3489,11 +3502,18 @@ html {
 
 .MuiDataGrid-virtualScroller::-webkit-scrollbar {
     width: 2px;
+    height: 2px;
     background-color: #F5F5F5;
 }
 
 .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
     background-color: #000000;
+}
+.MuiDataGrid-virtualScroller{
+    overflow-x: hidden !important;
+}
+.analyticsSection .MuiDataGrid-footerContainer{
+    display: none !important;
 }
 
 /* .createTestTable .MuiDataGrid-cell:first-child {
@@ -3521,6 +3541,7 @@ html {
     width: fit-content;
     height: unset;
     margin-top: 8px;
+    margin-bottom: 10PX;
 }
 
 .viewormanage-testItemData .MuiChip-root span {
@@ -3592,7 +3613,7 @@ html {
         text-decoration: none;
         text-transform: capitalize;
         font-family: Product Sans;
-        color: #B6BEC7;
+        /* color: #B6BEC7; */
     }
 
     .MuiTypography-root .navIcons a {
@@ -3651,6 +3672,21 @@ html {
         width: fit-content !important;
         max-width: unset !important;
     }
+
+    .proflie_pic {
+        width: 90px;
+    }
+
+    .profile-main .userDetails {
+        max-width: 90%;
+        margin: 0 0 0 50px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    /* .MuiDataGrid-columnHeadersInner>div {
+        justify-content: space-around;
+    } */
 }
 
 
@@ -3871,7 +3907,10 @@ html {
         margin: auto 2px;
     }
 
-
+    .createTestTable .MuiDataGrid-cell, .createTestTable .MuiDataGrid-columnHeader{
+        max-width: 90px !important;
+        min-width: 90px !important;
+    }    
 }
 
 .inc-dec-btn-group>div:last-child {
@@ -4051,6 +4090,47 @@ html {
     margin: 0 5px;
     color: #FFFFFF;
 } */
+@media only screen and (max-width: 900px) {
+.add-test-wrapper>div{
+    margin-left: 0;
+    margin-right: 0;
+}
+.createTestStep2Block{
+    padding: 20px;
+}
+.control-wrapper,.add-wrapper{
+    max-width: 100%;
+}
+
+.productDataReview {
+    border: none;
+    padding-left: 0;
+    width: 100%;
+}
+
+.reviewData .reviewMainData {
+    flex-wrap: wrap !important;
+}
+
+.productDataReview {
+    margin: 0;
+    padding-left: 0;
+}
+
+.reviewTestBlock {
+    padding: 10px;
+}
+
+.imageBlock>img {
+    margin: 10px;
+}
+
+.imageBlock {
+    min-height: auto;
+}
+}
+
+
 
 @media only screen and (min-width: 900px) {
     .viewormanage-testItemImage {
@@ -4061,6 +4141,11 @@ html {
 
     }
 
+    
+
 }
 
-  
+.main_profile_img div {
+    background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
+    border-radius: 20px;
+}

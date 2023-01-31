@@ -6,6 +6,7 @@ import { Box } from "@mui/system";
 import PropTypes from "prop-types";
 import ProfileSettingsTab from "./ProfileSettingsTab";
 import Profile_logo from "./Images/Profile_logo.png";
+import Location from "./Images/location.png";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,7 +66,9 @@ const YourProfile = () => {
             <div className="profileData">
               <div className="userDetails">
                 <Typography variant="h4">Alexander</Typography>
+
                 <div>
+                <img src={Location} alt="User Location"/>
                   <Typography variant="p">New York City</Typography>
                   <br />
                 </div>

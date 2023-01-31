@@ -12,12 +12,14 @@ import YourProfile from './Component/YourProfile';
 import YourTests from './Component/YourTests';
 import { getUser } from "./controller/handleGoogleSignIn"
 import ForgotPassword from "./Component/ForgotPassword"
+import Loader from './Component/Loader';
 
 function App() {
 
   const navigate = useNavigate();
 
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
   const [productImage, setProductImage] = useState();
   const objectSent = (childdata) => {
     console.log("childdata: " + childdata);
@@ -29,30 +31,33 @@ function App() {
   }
   console.log("data", data);
 
-const shop = document.cookie.match('(^|;)\\s*' + "shop" + '\\s*=\\s*([^;]+)')?.pop() || ''
-console.log("shop is: " + shop);
-
-useEffect(() => {
-  
-
-    getUser("token", navigate, shop)
+  const shop = document.cookie.match('(^|;)\\s*' + "shop" + '\\s*=\\s*([^;]+)')?.pop() || ''
+  console.log("shop is: " + shop);
+console.log("window link", window.location.href);
+console.log("window path", window.location.pathname);
+const urlPath = window.location.pathname
+  useEffect(() => {
+    // setLoading(true)
+    getUser("token", navigate, shop, setLoading, urlPath)
+    // setLoading(false)
   }, [])
 
   return (
     <div>
-      <Routes>
-
-        <Route element={<WelcomePage shop={shop} />}  path='/' />
-        <Route element={<SignUp />} path='/signup' />
-        <Route element={<ForgotPassword />} path='/forgot-password' />
-        <Route element={<HomeDashboard />} path='/homeDashboard' />
-        <Route element={<CreateTestStep1 shop={shop} getProductImage={getProductImage} />} path="/createtest" />
-        <Route element={<CreateTestStep2 shop={shop} objectSent={objectSent} />} path="/createtest2/:handle/:id/:title" />
-        <Route element={<YourTests />} path="/yourtests" />
-        <Route element={<ReviewTestPage created={data} productImage={productImage}/>} path="/reviewtest" />
-        <Route element={<YourProfile />} path="/profile" />
-        <Route element={<ViewOrManageTestPage />} path="/managetest/:id" />
-      </Routes>
+      {loading ? <Loader /> : <>
+        <Routes>
+          <Route element={<WelcomePage shop={shop} />} path='/' />
+          <Route element={<SignUp />} path='/signup' />
+          <Route element={<ForgotPassword />} path='/forgot-password' />
+          <Route element={<HomeDashboard />} path='/homeDashboard' />
+          <Route element={<CreateTestStep1 shop={shop} getProductImage={getProductImage} />} path="/createtest" />
+          <Route element={<CreateTestStep2 shop={shop} objectSent={objectSent} />} path="/createtest2/:handle/:id/:title" />
+          <Route element={<YourTests />} path="/yourtests" />
+          <Route element={<ReviewTestPage created={data} productImage={productImage} />} path="/reviewtest" />
+          <Route element={<YourProfile />} path="/profile" />
+          <Route element={<ViewOrManageTestPage />} path="/managetest/:id" />
+        </Routes>
+      </>}
     </div>
   );
 }
