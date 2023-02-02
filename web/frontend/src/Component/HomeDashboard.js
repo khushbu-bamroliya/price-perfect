@@ -27,6 +27,7 @@ const HomeDashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [opens, setOpens] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
     const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [allTests, setAllTests] = useState();
@@ -112,7 +113,7 @@ const HomeDashboard = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink>
+                        <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div>
                     </div>
                 )
             }
@@ -120,7 +121,7 @@ const HomeDashboard = () => {
 
     ];
     const getAllTests = async () => {
-
+        setLoading(true)
         fetch(getApiUrl + '/api/getTestCase', {
             method: 'GET',
             mode: 'cors',
@@ -136,8 +137,13 @@ const HomeDashboard = () => {
                 const apiRes = await res.json()
                 console.log("apiRes.data", apiRes);
                 setAllTests(apiRes)
+                setLoading(false)
             })
             .catch((error) => {
+                setOpens(true)
+            setSnackbarColor('red')
+            setsnackbar_msg("Internal Server Error")
+                setLoading(false)
                 console.log("Error", error)
             })
     }
@@ -328,7 +334,7 @@ const HomeDashboard = () => {
                                 </div>
                                 <div>
                                     <div className='createTestTable' style={{ height: 360, width: '100%' }}>
-                                        {!allTests ? <Loader size={40} /> : (<>
+                                        {loading ? <Loader size={40} /> : (<>
 
                                             <DataGrid
                                                 rows={rows2}
@@ -337,7 +343,7 @@ const HomeDashboard = () => {
                                                 rowsPerPageOptions={[10]}
                                                 disableColumnMenu
                                                 hideFooterSelectedRowCount
-                                                onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
+                                                onRowClick={(params) => navigate(`/managetest`, {state:{id:params.row.action}})}
                                     
                                                 sx={{
                                         [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:

@@ -50,7 +50,7 @@ const SignUpUserDetails = async (req, res) => {
         }
 
         if (password.length < 8) {
-            res.status(500).json({ message: "Password must be at least 8 characters" });
+            res.status(500).json({ message: "Password must be at least 8 characters", success: false });
         } else {
 
             var encodedPassword = jwt.sign(password, process.env.JWT_SECRET);
@@ -58,13 +58,13 @@ const SignUpUserDetails = async (req, res) => {
             const userExists = await User.findOne({ email: email })
 
             if (userExists) {
-                res.status(500).json({ message: "User already exists" })
+                res.status(500).json({ message: "User already exists", sucess:false })
             }
             if (!userExists) {
                 let UserData = await User.create({ firstName: first_name, lastName: last_name, email, password: encodedPassword, googleId, country, picture, status, createdAt, updatedAt })
 
                 if (!UserData) {
-                    return res.status(500).json({ message: "User create failed..!" })
+                    return res.status(500).json({ message: "User create failed..!", sucess:false  })
                 }
 
                 res.status(200).json({

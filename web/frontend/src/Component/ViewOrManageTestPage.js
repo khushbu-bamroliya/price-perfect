@@ -5,7 +5,7 @@ import LinkIcon from "./Images/link-2.png"
 import { DataGrid } from '@mui/x-data-grid'
 import EyeIcon from "./Images/eye.png"
 import TrashIcon from "./Images/trash.png"
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import getApiUrl from "../controller/utils.js";
 import Loader from './Loader'
 import cookieReader from '../controller/cookieReader'
@@ -13,6 +13,12 @@ import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import closeIcon from "../Component/Images/close-circle.png"
 
 const ViewOrManageTestPage = () => {
+    const location = useLocation();
+    // const {id} = location?.state;
+    const [id, setId] = useState();
+
+
+    console.log("location: " + JSON.stringify(location?.state));
     const [loading, setLoading] = useState(false);
     const [opens, setOpens] = useState(false);
     const [openTestStatusModal, setOpenTestStatusModal] = useState(false);
@@ -23,7 +29,7 @@ const ViewOrManageTestPage = () => {
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
     const navigate = useNavigate();
-    const { id } = useParams();
+    // const { id } = useParams();
     const style = {
         position: 'absolute',
         top: '50%',
@@ -37,7 +43,7 @@ const ViewOrManageTestPage = () => {
     };
     const getSingleTest = () => {
 
-        fetch(getApiUrl + `/api/get-single-testcase/${id}`, {
+        fetch(getApiUrl + `/api/get-single-testcase/${location?.state?.id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
@@ -59,6 +65,7 @@ const ViewOrManageTestPage = () => {
                 setOpens(true)
                 setSnackbarColor('red')
                 setsnackbar_msg("Internal Server Error")
+                setLoading(false)
         })
     }
     const deleteTestCase = (id) => {
@@ -87,6 +94,7 @@ const ViewOrManageTestPage = () => {
             setSnackbarColor('red')
             setsnackbar_msg("Error while deleting Test")
             console.log("Error", err);
+            setLoading(false)
         })
     }
     const handleOpenDeleteModal = () => {
@@ -182,7 +190,7 @@ const ViewOrManageTestPage = () => {
     const updateTestStatus = () => {
         setLoading(true)
         fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
-            id: id
+            id: location?.state?.id
         }), {
             method: 'PUT',
             headers: {
@@ -207,6 +215,7 @@ const ViewOrManageTestPage = () => {
             setSnackbarColor('red')
             setsnackbar_msg("Error while updating status.")
             console.log("Error", err);
+            setLoading(false)
         })
     }
     const handleClose = () => {
@@ -230,14 +239,17 @@ const ViewOrManageTestPage = () => {
                 </Alert>
             </Snackbar>
         </div>)
-
     };
     useEffect(() => {
+        if (!location?.state?.id) {
+    
+            navigate('/yourtests')
+        }
         getSingleTest()
+
     }, [])
     return (
         <>
-            {!singleTest ? <Loader size={40}/> : (<>
 
                 <Card className='viewormanage'>
                     <div className='viewormanage-main'>
@@ -260,7 +272,6 @@ const ViewOrManageTestPage = () => {
                                                     setCopiedTooltip(true)
                                                     setInterval(() => {
                                                         setCopiedTooltip(false)
-
                                                     }, 2000)
                                                 }}>Copy Link <img src={LinkIcon} alt="" /></Button>
                                             </Tooltip>
@@ -272,7 +283,6 @@ const ViewOrManageTestPage = () => {
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='p'>Product</Typography>
                                                     <Typography variant='p'>{singleTest?.data?.productTitle}</Typography>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -284,7 +294,6 @@ const ViewOrManageTestPage = () => {
 
                                                 <Typography variant='h5'>{singleTest?.data?.productTitle}</Typography>
                                             </div>
-
                                         </div>
                                         <div className='trafficSplitDataReview'>
                                             <Typography variant='p'>Traffic Split </Typography>
@@ -340,7 +349,7 @@ const ViewOrManageTestPage = () => {
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Are you sure you want to delete this test case?..
                             </Typography>
-                            <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(id)}> {loading ? <Loader size={20}/> :"Delete"} </Button>
+                            <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(location?.state?.id)}> {loading ? <Loader size={20}/> :"Delete"} </Button>
                         </Box>
                     </Modal>
 
@@ -366,7 +375,7 @@ const ViewOrManageTestPage = () => {
                     </Modal>
                     <div>{errorfunction()}</div>
                 </Card>
-            </>)}
+        
         </>
     )
 }

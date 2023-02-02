@@ -1,13 +1,17 @@
 import cookieReader from "./cookieReader";
 
-export const handleGoogleSignIn = (setLoader, shop) => {
-  console.log("shop from handleGoogleSignIn",shop);
+export const handleGoogleSignIn = (setLoading, shop) => {
+  console.log("Hey Google");
+  setLoading(true)
+  // console.log("shop from handleGoogleSignIn",shop);
   console.log("Signing in...");
   if (window.location.hostname === "localhost") {
+    setLoading(false)
     console.log("Hello 1");
     window.open(`/google/auth`, "_self")
     
   } else {
+    setLoading(false)
     console.log("Hello 2");
     window.open(window.location.origin + "/google/auth", "_self");
 

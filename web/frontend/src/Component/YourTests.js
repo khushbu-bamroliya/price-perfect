@@ -114,7 +114,7 @@ const YourTests = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <NavLink to={`/managetest/${params.row.action}`} onClick={(e) => e.stopPropagation()} ><img src={EyeIcon} alt="" /></NavLink>
+                        <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div>
                         <Tooltip title={copiedTooltip ? "copied" : null }  arrow>
                         <img src={LinkIcon} alt="" onClick={(e) => {
                             e.stopPropagation();
@@ -167,8 +167,9 @@ const YourTests = () => {
             .catch((error) => {
                 console.log("Error", error)
                 setOpens(true)
-            setSnackbarColor('red')
-            setsnackbar_msg("Server error")
+                setSnackbarColor('red')
+                setsnackbar_msg("Server error")
+                setLoading('false')
         })
     }
     const deleteTestCase = () => {
@@ -197,6 +198,7 @@ const YourTests = () => {
             setOpens(true)
             setSnackbarColor('red')
             setsnackbar_msg("Error in deleting test")
+            setLoading(false)
             console.log("Error", err);
         })
     }
@@ -305,7 +307,8 @@ const YourTests = () => {
                                     pageSize={10}
                                     rowsPerPageOptions={[10]}
                                     disableColumnMenu={true}
-                                    onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
+                                    // onRowClick={(params) => navigate(`/managetest/${params.row.action}`,{state:{id:params.row.action}})}
+                                    onRowClick={(params) => navigate(`/managetest`,{state:{id:params.row.action}})}
                                     sx={{
                                         [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
                                         {

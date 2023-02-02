@@ -133,6 +133,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
             })
             .catch(err => {
                 console.log(err)
+                setLoading(false)
                 setOpens(true)
                 setsnackbar_msg("Internal Server Error")
                 setSnackbarColor('red')

@@ -146,7 +146,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
     var apiRes;
     const handleVariants = async () => {
-
+setLoading(true)
         let data = {
             productId: `gid://shopify/Product/${id}`
         }
@@ -176,8 +176,10 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setVariantCompareAtPriceData(apiRes.data[0].variantComparePrice)
                 setProductsVariants(updatedArray)
                 setVariantRes(apiRes)
+                setLoading(false)
             })
             .catch((error) => {
+                setLoading(false)
                 console.log("Error", error)
                 setSnackbarColor('red')
                 setsnackbar_msg("Internal Server Error")
@@ -309,6 +311,7 @@ const CreateTestStep2 = ({ objectSent }) => {
             })
             .catch((error) => {
                 setOpens(true)
+                setLoading(false)
                 setSnackbarColor('red')
                 setsnackbar_msg("Test failed")
                 console.log("Error", error)
@@ -489,7 +492,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                         <span className='box-title'>Control</span>
                                     </div>
 
-                                    {!variantPriceData ? <Loader size={40} /> : (<>
+                                    {loading ? <Loader size={40} /> : (<>
                                         <span className='box-price'>{variantCompareAtPriceData && <>{location.state.currency} {variantCompareAtPriceData}</>}</span>
                                         <span className='box-prices'>{location.state.currency} {variantPriceData}</span>
                                     </>)}

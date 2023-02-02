@@ -17,6 +17,7 @@ import ResultRevenueLogo2 from './Images/ResultRevenueLogo2.png';
 export default function SignUp() {
     const navigate = useNavigate();
     //Show error message
+    const [loading, setLoading] = useState(false);
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
     const [snackbarColor, setSnackbarColor] = useState("#325240");
@@ -25,7 +26,8 @@ export default function SignUp() {
     const [errorEmailName, setErrorEmailName] = useState(false);
     const [errorPassName, setErrorPassName] = useState(false);
     const [errorConfirmPassName, setErrorConfirmPassName] = useState(false);
-
+console.log("errorPassName", errorPassName);
+console.log("errorConfirmPassName", errorConfirmPassName);
     // Revenue Increase Error message
     const [errorDailyMess, setErrorDailyMess] = useState(false);
     const [errorTrafficMess, setErrorTrafficMess] = useState(false);
@@ -127,6 +129,7 @@ export default function SignUp() {
                 setOpens(true)
                 setSnackbarColor('red')
                 setsnackbar_msg(`Passwords doesn't matched`)
+                
             } else {
                 if (isValidEmail(input.email)) {
                     console.log('The email is valid');
@@ -141,9 +144,14 @@ export default function SignUp() {
                         body: JSON.stringify(data)
                     }).then(async (res) => {
                         const apiRes = await res.json()
+                        if (apiRes.success === false) {
+                            setSnackbarColor('red')
+                        }else{
+                            setSnackbarColor('#325240')
+
+                        }
                         console.log("signup apiRes", apiRes)
                         setOpens(true)
-                        setSnackbarColor('#325240')
                         setsnackbar_msg(`${apiRes.message}`)
                         if (apiRes.message === "Account created successfully") {
 
@@ -275,7 +283,7 @@ export default function SignUp() {
                                             placeholder='Enter your first name'
                                             helperText={
                                                 errorFirstName && input?.firstName === ""
-                                                    ? "Please insert your first name name"
+                                                    ? "Please insert your first name"
                                                     : null
                                             }
                                             error={errorFirstName && input?.firstName === ""}
@@ -295,7 +303,7 @@ export default function SignUp() {
                                             placeholder='Enter your last name'
                                             helperText={
                                                 errorLastName && input?.lastName === ""
-                                                    ? "Please insert your last name name"
+                                                    ? "Please insert your last name"
                                                     : null
                                             }
                                             error={errorLastName && input?.lastName === ""}
@@ -316,7 +324,7 @@ export default function SignUp() {
                                         placeholder='Enter your mail'
                                         helperText={
                                             errorEmailName && input?.email === ""
-                                                ? "Please insert your email name"
+                                                ? "Please insert your email"
                                                 : null
                                         }
                                         error={errorEmailName && input?.email === ""}
@@ -328,7 +336,7 @@ export default function SignUp() {
                                 <div className='welcomeInputs password'>
                                     <Typography variant='p'>Password</Typography>
 
-                                    <OutlinedInput
+                                    <TextField
                                         className='please-width'
                                         id="outlined-adornment-password"
                                         variant="outlined"
@@ -336,8 +344,9 @@ export default function SignUp() {
                                         placeholder="Enter your password"
                                         name="password"
                                         value={input.password}
-                                        onChange={inputEvent}
-                                        endAdornment={
+                                    InputProps={{
+
+                                        endAdornment:(
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -350,20 +359,22 @@ export default function SignUp() {
                                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
                                             </InputAdornment>
-                                        }
+                                        )
+                                    }}
                                         helperText={
                                             errorPassName && input?.password === ""
-                                                ? "Please insert your password name"
+                                                ? "Please insert your password"
                                                 : null
                                         }
                                         error={errorPassName && input?.password === ""}
+                                        onChange={inputEvent}
                                     />
 
                                 </div>
                                 <div className='welcomeInputs password'>
                                     <Typography variant='p'>Confirm Password</Typography>
 
-                                    <OutlinedInput
+                                    <TextField
                                         className='please-width'
                                         id="outlined-adornment-password"
                                         variant="outlined"
@@ -372,13 +383,14 @@ export default function SignUp() {
                                         name="confirmPassword"
                                         helperText={
                                             errorConfirmPassName && input?.confirmPassword === ""
-                                                ? "Please insert your confirm Password name"
+                                                ? "Please insert your confirm Password"
                                                 : null
                                         }
                                         error={errorConfirmPassName && input?.confirmPassword === ""}
                                         value={input.confirmPassword}
                                         onChange={inputEvent}
-                                        endAdornment={
+                                        InputProps={{
+                                        endAdornment:(
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -389,7 +401,9 @@ export default function SignUp() {
                                                     {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                                                 </IconButton>
                                             </InputAdornment>
-                                        }
+                                         ) 
+                                        }}
+                                        
                                     />
                                 </div>
                                 <Button
@@ -402,7 +416,7 @@ export default function SignUp() {
                                 <Button
                                     variant="outlined"
                                     className='createaccountwithgooglediv'
-                                    onClick={() => handleGoogleSignIn()}>
+                                    onClick={() => handleGoogleSignIn(setLoading, cookieReader('shop'))}>
                                     <img src={googleImages} alt=""></img>
                                     Create Account with Google
                                 </Button>
@@ -418,7 +432,6 @@ export default function SignUp() {
                                     </a>
                                 </div>
                             </div>}
-
 
                             {toggle && !togglescrollresult && <div id='scrollrevenue'>
                                 <div className='welcome-wrappers'>

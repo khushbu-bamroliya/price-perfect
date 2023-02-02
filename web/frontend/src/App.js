@@ -33,17 +33,19 @@ function App() {
 
   const shop = document.cookie.match('(^|;)\\s*' + "shop" + '\\s*=\\s*([^;]+)')?.pop() || ''
   console.log("shop is: " + shop);
-console.log("window link", window.location.href);
-console.log("window path", window.location.pathname);
-const urlPath = window.location.pathname
+  console.log("window link", window.location.href);
+  console.log("window path", window.location.pathname);
+  const urlPath = window.location.pathname
   useEffect(() => {
     getUser("token", navigate, shop, setLoading, urlPath)
 
   }, [])
 
   return (
-    <>
-      {loading ? <Loader size={40} /> : <>
+
+    loading ? <Loader size={40} /> : <>
+      {shop ? (<>
+
         <Routes>
           <Route element={<WelcomePage shop={shop} />} path='/' />
           <Route element={<SignUp />} path='/signup' />
@@ -54,9 +56,11 @@ const urlPath = window.location.pathname
           <Route element={<YourTests />} path="/yourtests" />
           <Route element={<ReviewTestPage created={data} productImage={productImage} />} path="/reviewtest" />
           <Route element={<YourProfile />} path="/profile" />
-          <Route element={<ViewOrManageTestPage />} path="/managetest/:id" />
+          <Route element={<ViewOrManageTestPage />} path="/managetest" />
         </Routes>
-      </>}
+      </>) :
+        "Please open app from the Shopify admin panel."
+      }
     </>
   );
 }

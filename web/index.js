@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cookie = require("cookie");
 const corsOption = {
   origin: [process.env.HOST],
 }
@@ -740,7 +741,22 @@ app.get("/", async (req, res) => {
       );
     }
   } else {
-    res.status(200).send("Please open app from the Shopify admin panel.");
+    let cookies = {};
+
+    const cookiesArray = req.headers.cookie.split(';');
+
+    cookiesArray.forEach((cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        cookies[key] = value;
+    });
+    
+    console.log("cookie not found", cookies.shop);
+    if (cookies.shop) {
+      res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+    } else {
+      
+      res.status(200).send("Please open app from the Shopify admin panel.");
+    }
   }
 });
 
