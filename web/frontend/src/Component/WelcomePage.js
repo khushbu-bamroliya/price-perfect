@@ -14,8 +14,6 @@ import {
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import cookieReader from "../controller/cookieReader";
 
-// import "./style.css";
-// import '../App.css';
 import google from "../Component/Images/google (1).png";
 import card1Img from "../Component/Images/Group-45.png";
 import logo from "../Component/Images/Group 48.png";
@@ -35,11 +33,7 @@ export default function WelcomePage({ shop }) {
   //Error message state
   const [emailErrorMess, setEmailErrorMess] = useState(false);
   const [passErrorMess, setPassErrorMess] = useState(false);
-
-
   const [rememberMe, setRememberMe] = useState(false);
-
-
   const initialValues = {
     email: "",
     password: "",
@@ -56,9 +50,6 @@ export default function WelcomePage({ shop }) {
   };
 
   const [loader, setLoader] = useState(false);
-
-
-
   const handleManualSignIn = () => {
 
     if (!userData.email) {
@@ -95,7 +86,7 @@ export default function WelcomePage({ shop }) {
               setOpens(true)
               setSnackbarColor('red')
               setsnackbar_msg(`${res.message}`)
-              // navigate('/homeDashboard');
+
             }
           })
           .catch(err => {
@@ -104,19 +95,13 @@ export default function WelcomePage({ shop }) {
             setSnackbarColor('#325240')
             console.log(err)
           })
-        // setOpens(true)
-        // setSnackbarColor('#325240')
-        // setsnackbar_msg("Correct email")
     } else {
         setOpens(true)
         setsnackbar_msg("Invalid email")
         setSnackbarColor('red')
-        // setError('Email is invalid');
         console.log('The email is invalid');
       }
-  
     }
-
   }
 
   const handleRememberMe = (e) => {
@@ -134,9 +119,7 @@ export default function WelcomePage({ shop }) {
   const handleClose = () => {
     setOpens(false);
   };
-  // function Alert(props) {
-  //   return <MuiAlert elevation={6} variant="filled" {...props} />;
-  // }
+
 
 
 
@@ -161,12 +144,6 @@ export default function WelcomePage({ shop }) {
 
   };
 
-  const lala = () => {
-    console.log("******************////////////");
-    setOpens(true)
-    setsnackbar_msg("Moj")
-
-  }
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }

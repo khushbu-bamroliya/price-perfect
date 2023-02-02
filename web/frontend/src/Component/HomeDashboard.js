@@ -67,7 +67,6 @@ const HomeDashboard = () => {
                         <div className='tableImages'>
                             <div>
                             {params.row.featuredImage ?<img src={params.row.featuredImage} alt='' />:<HideImageOutlinedIcon />}
-                                {/* <img src={params.row.featuredImage ?params.row.featuredImage :<HideImageOutlinedIcon />} alt='' /> */}
                             </div>
                         </div>
                         <p className='productID'>
@@ -111,26 +110,14 @@ const HomeDashboard = () => {
             sortable: false,
             flex: 0.2,
             renderCell: (params) => {
-                // console.log("params: " + params.row.action);
                 return (
                     <div className='actionIcon'>
                         <NavLink to={`/managetest/${params.row.action}`}><img src={EyeIcon} alt="" /></NavLink>
-                        {/* <img src={LinkIcon} alt="" />
-                        <img src={TrashIcon} alt="" onClick={() => handleOpenDeleteModal(params.row.id)} /> */}
                     </div>
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
+
     ];
     const getAllTests = async () => {
 
@@ -140,7 +127,8 @@ const HomeDashboard = () => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
             },
         })
             .then(async (res) => {
@@ -149,7 +137,9 @@ const HomeDashboard = () => {
                 console.log("apiRes.data", apiRes);
                 setAllTests(apiRes)
             })
-            .catch((error) => console.log("Error", error))
+            .catch((error) => {
+                console.log("Error", error)
+            })
     }
     const handleOpenDeleteModal = (id) => {
         console.log("deleteModal id", id);
@@ -163,7 +153,10 @@ const HomeDashboard = () => {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
+            
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -173,6 +166,9 @@ const HomeDashboard = () => {
 
         }).catch((err) => {
             console.log("Error", err);
+            setOpens(true)
+            setSnackbarColor('red')
+            setsnackbar_msg("Internal Server Error")
         })
     }
     const handleClose = () => {
@@ -314,14 +310,7 @@ const HomeDashboard = () => {
                             </Card>
                         </div>
                         <div className='analyticsSection'>
-                            {/* <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 3, sm: 8, md: 12 }}>
-                            {Array.from(Array(6)).map((_, index) => (
-                                <Grid className="test" item xs={3} sm={6} md={3} key={index}>
-                                    <p>xs=2</p>
-                                </Grid>
-                            ))}
-                        </Grid> */}
-
+                
                             <Card className='testAnalytics'>
                                 <div>
                                     <Typography variant='h5'>Test Analytics</Typography>
@@ -343,10 +332,9 @@ const HomeDashboard = () => {
 
                                             <DataGrid
                                                 rows={rows2}
-                                                // hideFooterPagination
                                                 columns={columns}
-                                                pageSize={50}
-                                                rowsPerPageOptions={[50]}
+                                                pageSize={10}
+                                                rowsPerPageOptions={[10]}
                                                 disableColumnMenu
                                                 hideFooterSelectedRowCount
                                                 onRowClick={(params) => navigate(`/managetest/${params.row.action}`)}
@@ -361,9 +349,7 @@ const HomeDashboard = () => {
                                             outline: "none",
                                         },
                                     }}
-                                            // width= {30}
-                                            // minWidth= {30}
-                                            // flex= {1}
+                                    
                                             />
                                         </>)}
 
@@ -380,9 +366,7 @@ const HomeDashboard = () => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                        {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Text in a modal
-                                </Typography> */}
+                    
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Are you sure you want to delete this test case?..
                         </Typography>

@@ -10,38 +10,39 @@ const { createProfile,
         getSingleProfileandUpdateById} = require("../api/profile");
 
 const { enableDisableApp } = require("../api/settings");
+const verifyToken = require("../middlewares/verifyToken.js");
 
 const router = express.Router();
 
 //get all product with pagination, searching and sorting
-router.post("/get-products", allProducts);
+router.post("/get-products",verifyToken, allProducts);
 
 //Store user details into db
 router.post("/signupdetails", SignUpUserDetails)
 
 //Get all product variants api
-router.post("/get-variants", getVariants)
+router.post("/get-variants", verifyToken,getVariants)
 
 router.get("/googleuser/:token", googleUserFound );
 
 // create duplicate product
-router.post("/createDuplicateProduct", createDuplicateProduct);
+router.post("/createDuplicateProduct",verifyToken, createDuplicateProduct);
 
 //create test case api
-router.post("/createTestCase", createTestCaseApi)
+router.post("/createTestCase",verifyToken, createTestCaseApi)
 
-router.get("/getTestCase", getTestCase)
+router.get("/getTestCase",verifyToken, getTestCase)
 
 router.post("/create-profile", createProfile)
 
-router.get("/getSingleProfile/:token", getSingleProfile)
+router.get("/getSingleProfile/:token",verifyToken, getSingleProfile)
 
-router.put("/update-profile/:token", getSingleProfileandUpdateById)
-router.put("/updatetest", updateTestStatus)
+router.put("/update-profile/:token",verifyToken, getSingleProfileandUpdateById)
+router.put("/updatetest",verifyToken, updateTestStatus)
 
-router.delete("/deleteTestCase/:id", deleteTestCaseData)
+router.delete("/deleteTestCase/:id",verifyToken, deleteTestCaseData)
 
-router.get("/get-single-testcase/:id", getSingleTestCase)
+router.get("/get-single-testcase/:id", verifyToken,getSingleTestCase)
 
 router.get('/signin', manualSignIn);
 

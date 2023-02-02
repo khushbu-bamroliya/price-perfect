@@ -106,9 +106,8 @@ module.exports = {
             "Accept-Encoding": "gzip,deflate,compress"
           },
           responseType: "json",
-          // data,
+  
         });
-        // console.log("response response response response", response)
         resolve(response.data);
       } catch (error) {
         console.log("error in post api rest", error);

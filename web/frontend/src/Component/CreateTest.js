@@ -1,7 +1,6 @@
 import { Button, Card, CardContent, TextField, Typography } from '@mui/material'
 import React from 'react'
 import Navbar from './Navbar'
-// import "../../Styles/MUI_CSS/CreateTest.css"
 import avatar from "../../src/Component/Images/image.png"
 import search from "../../src/Component/Images/search-normal.png"
 import { DataGrid } from '@mui/x-data-grid';
@@ -30,15 +29,10 @@ const CreateTest = () => {
                 console.log("params: " + params);
                 return (
                     <>
-
                         <div className='tableImages'>
                             <div>
-
                                 <img src={avatar} alt='' />
                             </div>
-
-
-
                         </div>
                         <p className='productID'>
                             {params.row.images}
@@ -47,8 +41,6 @@ const CreateTest = () => {
                 )
             }
         },
-
-
         {
             field: 'Description',
             headerName: 'Description',
@@ -81,19 +73,7 @@ const CreateTest = () => {
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //         // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
     ];
-
-
 
     return (
         <>

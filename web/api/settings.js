@@ -29,12 +29,10 @@ const enableDisableApp = async(req, res) => {
               `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/themes/${theme.id}/assets.json`,
               access_token
             );
-            //console.log(resAssets,'resAssets');
             if(resAssets && resAssets.assets && resAssets.assets.length > 0)
             {
               for(const asset of resAssets.assets)
               {
-                // console.log(asset,"asset");
                 if(asset.key === "snippets/price.liquid")
                 {
                     

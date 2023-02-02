@@ -26,7 +26,9 @@ const ReviewTestPage = ({ created, productImage }) => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
+                    
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -98,7 +100,6 @@ const ReviewTestPage = ({ created, productImage }) => {
                                 <div className='reviewData'>
                                     <Typography variant='h4'>Review Test</Typography>
                                     <Typography variant='p'>Confirm test configuration</Typography>
-                                    {/* <Typography variant='h5'>{location?.data?.testCases[0]?.variants[0]?.variantTitle ?  location?.data?.testCases[0]?.variants[0]?.variantTitle: ""}</Typography> */}
                                     <Typography variant='h5'>{created && created.apiRes.data.productTitle}</Typography>
                                     <div className='reviewMainData'>
                                         <div className='pricingDataReview'>
@@ -112,10 +113,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                 </div>
                                                 <div>
                                                     <Typography variant='h5'>Variations</Typography>
-                                                    {/* <Typography variant='p'>{created.apiRes.data.testCases.map(i => i.variants.map(j => (<>${j.variantPrice}, </>)))}</Typography> */}
-                                                    {created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<span>{created.apiRes.currency} {j.abVariantPrice}, </span>)))
-                                                    }
-                                                    {/* <Typography variant='p'></Typography> */}
+                                                    {created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<span>{created.apiRes.currency} {j.abVariantPrice}, </span>)))}
+                                            
                                                 </div>
 
                                             </div>
@@ -131,22 +130,15 @@ const ReviewTestPage = ({ created, productImage }) => {
                                         <div className='trafficSplitDataReview'>
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
-                                                {/* <Typography variant='h5'>{location.data.trafficSplit}/{100 - (Number(location.data.trafficSplit) * location.data.testCases.length)}</Typography> */}
-                                                {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
+                                            {created && (<>    <Typography variant='h5'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</Typography></>)}
                                             </div>
                                         </div>
 
                                     </div>
-                                    {/* <div className='reviewTestText'>
-                                        <Typography variant='p'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</Typography>
-                                    </div> */}
+                            
                                     <div className='reviewAndLaunchBtns'>
                                         <Button className='launchTestBtn' onClick={() => launchTest()}>Launch</Button>
-                                        {/* <div className='scheduleTestBtn'>
-
-                                            <p>Schedule</p>
-                                            <Button>Schedule</Button>
-                                        </div> */}
+                
                                     </div>
                                 </div>
                                 </>)}

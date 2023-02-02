@@ -30,20 +30,13 @@ const ProfileSettingsTab = () => {
     };
     const getUser = () => {
 
-        var cookieArr = document.cookie.split(";");
-
-        // Loop through the array elements
-        for (var i = 0; i < cookieArr.length; i++) {
-            var cookiePair = cookieArr[i].split("=");
-
-            /* Removing whitespace at the beginning of the cookie name
-            and compare it with the given string */
-            if ("token" == cookiePair[0].trim()) {
-
-                fetch(getApiUrl + `/api/getSingleProfile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
+                const token = cookieReader('token')
+                fetch(getApiUrl + `/api/getSingleProfile/${decodeURIComponent(token)}`, {
                     method: 'GET',
                     headers: {
-                        'shop': cookieReader('shop')
+                        'shop': cookieReader('shop'),
+                        "Authorization":"Bearer " + cookieReader('token')
+            
                     }
                 })
                     .then(async (res) => {
@@ -51,48 +44,48 @@ const ProfileSettingsTab = () => {
                         const apiRes = await res.json()
                         setUserData(apiRes.data)
                         console.log("apiRes.data", apiRes);
-                        setOpens(true)
-                        setSnackbarColor('#325240')
-                        setsnackbar_msg("Profile updated")
+                
 
                     })
                     .catch((error) => {
                         setOpens(true)
                         setSnackbarColor('red')
-                        setsnackbar_msg("Profile not updated")
+                        setsnackbar_msg("Profile not found")
                         console.log("Error", error)
                     })
-            }
-        }
         console.log("updateUser()");
 
 
     }
     const updateUser = () => {
-        var cookieArr = document.cookie.split(";");
-        for (var i = 0; i < cookieArr.length; i++) {
-            var cookiePair = cookieArr[i].split("=");
-            if ("token" == cookiePair[0].trim()) {
-                fetch(getApiUrl + `/api/update-profile/${JSON.stringify(decodeURIComponent(cookiePair[1])).replaceAll('"', '')}`, {
+
+            const token = cookieReader('token')
+                fetch(getApiUrl + `/api/update-profile/${decodeURIComponent(token)}`, {
                     method: 'PUT',
                     headers: {
                         'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'shop': cookieReader('shop'),
+                        "Authorization":"Bearer " + cookieReader('token')
                     },
                     body: JSON.stringify(userData)
                 })
                     .then(async (res) => {
                         console.log("res profile: " + JSON.stringify(res));
                         const apiRes = await res.json()
-                        setUserData(apiRes.data)
+                
                         console.log("apiRes.data", apiRes);
-
+                            setOpens(true)
+                        setSnackbarColor('#325240')
+                        setsnackbar_msg("Profile updated")
                     })
-                    .catch((error) => console.log("Error", error))
-            }
-        }
-        console.log("updateUser()");
+                    .catch((error) => {console.log("Error", error)
+                    setOpens(true)
+                    setSnackbarColor('red')
+                    setsnackbar_msg("Profile not updated")
+                })
 
+        console.log("updateUser()");
     }
     const handleClose = () => {
         setOpens(false);
@@ -156,7 +149,6 @@ const ProfileSettingsTab = () => {
                                 <p>Your Photo</p>
                                 <div>
                                     <input type="file"
-                                        // value={userData.picture}
                                         name="picture"
                                         onChange={handleInputChange}
                                     />

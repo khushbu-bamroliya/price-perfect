@@ -57,8 +57,7 @@ const Navbar = () => {
 
         <Button> <NavLink to="/profile">Profile</NavLink> </Button>,
         <Button onClick={() => handleGoogleLogout()}> <NavLink to="#">Logout</NavLink> </Button>,
-        // <Button> <NavLink to="/managetest">View/Manage Test</NavLink> </Button>,
-        // <Button onClick={() => handleGoogleLogout()}> Logout </Button>,
+
 
     ];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -68,7 +67,6 @@ const Navbar = () => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
-        // navigate('/profile')
         setAnchorElUser(event.currentTarget);
     };
 
@@ -79,9 +77,7 @@ const Navbar = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-    // if (window.location.href.indexOf('/createtest')) {
-    //     console.log("Hello");
-    // }
+
     if (window.location.href.includes("createtest")) {
         console.log("Match found");
     }
@@ -94,8 +90,7 @@ const Navbar = () => {
                 <AppBar position="static">
                     <Container maxWidth="xl" sx={{ padding: "21px 24px", }}>
                         <Toolbar disableGutters sx={{ minHeight: "unset !important", }}>
-                            {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-                            {/* <img className='logo' src={logo} alt="" /> */}
+                    
                             <div>
                                 <img src={priceperfactimg} alt="" />
                             </div>
@@ -109,7 +104,6 @@ const Navbar = () => {
                                     onClick={handleOpenNavMenu}
                                     color="inherit"
                                 >
-                                    {/* <MenuIcon /> */}
                                     <img className='moreIconNav' src={moreIcon} alt="" />
                                 </IconButton>
                                 <Menu
@@ -151,13 +145,12 @@ const Navbar = () => {
 
                             <Box sx={{ flexGrow: 0 }} className="navRightBlock">
 
-                                {/* <Tooltip title="Open settings" sx={{ padding: 0 }}> */}
                                     <IconButton className='NavRight' onClick={handleOpenUserMenu}>
                                         <Avatar className='avaratIcon' alt="Remy Sharp" src={avatarIcon} sx={{ width: "38px", height: "38px", }} />
                                         <Typography variant='p'>Alaxander</Typography>
                                         <img src={arrowDown} alt="" />
                                     </IconButton>
-                                {/* </Tooltip> */}
+                    
                                 <Menu
                                     sx={{ mt: '45px' }}
                                     id="menu-appbar"

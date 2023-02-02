@@ -16,7 +16,6 @@ const ViewOrManageTestPage = () => {
     const [loading, setLoading] = useState(false);
     const [opens, setOpens] = useState(false);
     const [openTestStatusModal, setOpenTestStatusModal] = useState(false);
-    // const [pauseOrResume, setPauseOrResume] = useState();
 
     const [snackbar_msg, setsnackbar_msg] = useState("");
   const [snackbarColor, setSnackbarColor] = useState("#325240");
@@ -43,7 +42,9 @@ const ViewOrManageTestPage = () => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
+                
             },
         })
             .then(async (res) => {
@@ -53,7 +54,12 @@ const ViewOrManageTestPage = () => {
                 setSingleTest(apiRes)
 
             })
-            .catch((error) => console.log("Error", error))
+            .catch((error) => {
+                console.log("Error", error)
+                setOpens(true)
+                setSnackbarColor('red')
+                setsnackbar_msg("Internal Server Error")
+        })
     }
     const deleteTestCase = (id) => {
         setLoading(true)
@@ -63,7 +69,8 @@ const ViewOrManageTestPage = () => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -139,8 +146,6 @@ const ViewOrManageTestPage = () => {
             sortable: false,
             flex: 0.3
         },
-
-
         {
             field: 'Purchases',
             headerName: 'Purchases',
@@ -172,29 +177,20 @@ const ViewOrManageTestPage = () => {
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
     ];
 
     const updateTestStatus = () => {
         setLoading(true)
         fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
-            // status: "pending",
             id: id
         }), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
+
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -204,7 +200,6 @@ const ViewOrManageTestPage = () => {
             setOpens(true)
             setSnackbarColor('#325240')
             setsnackbar_msg("Test status updated.")
-
             getSingleTest()
 
         }).catch((err) => {
@@ -242,7 +237,7 @@ const ViewOrManageTestPage = () => {
     }, [])
     return (
         <>
-            {singleTest && (<>
+            {!singleTest ? <Loader size={40}/> : (<>
 
                 <Card className='viewormanage'>
                     <div className='viewormanage-main'>
@@ -253,16 +248,15 @@ const ViewOrManageTestPage = () => {
 
                                     <Card className='viewormanage-testItem'>
                                         <div className='viewormanage-testItemImage'>
-                                            {singleTest.data.featuredImage ? <img src={singleTest.data.featuredImage} alt="" /> : <HideImageOutlinedIcon />}
+                                            {singleTest?.data?.featuredImage ? <img src={singleTest?.data?.featuredImage} alt="" /> : <HideImageOutlinedIcon />}
 
                                         </div>
                                         <div className='viewormanage-testItemData'>
-                                            <Typography variant='h5'>{singleTest.data.productTitle} </Typography>
+                                            <Typography variant='h5'>{singleTest?.data.productTitle} </Typography>
                                             <Tooltip arrow title={copiedTooltip ? "copied" : null} >
 
                                                 <Button onClick={(e) => {
-                                                    // e.stopPropagation();
-                                                    navigator.clipboard.writeText(singleTest && singleTest.data.handle)
+                                                    navigator.clipboard.writeText(singleTest && singleTest?.data.handle)
                                                     setCopiedTooltip(true)
                                                     setInterval(() => {
                                                         setCopiedTooltip(false)
@@ -277,48 +271,30 @@ const ViewOrManageTestPage = () => {
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='p'>Product</Typography>
-                                                    <Typography variant='p'>{singleTest.data.productTitle}</Typography>
+                                                    <Typography variant='p'>{singleTest?.data?.productTitle}</Typography>
 
                                                 </div>
                                             </div>
                                         </div>
                                     </Card>
                                     <Card className='viewormanage-reviewData'>
-                                        {/* <div className='viewormanage-pricingDataReview pricingDataReview'>
-
-                                        <Typography variant='p'>Pricing</Typography>
-                                        <div>
-
-                                            <div>
-                                                <Typography variant='h5'>Control</Typography>
-                                                <Typography variant='p'>{singleTest.data.currency} {singleTest.data.productPrice}</Typography>
-                                            </div>
-                                            <div>
-                                                <Typography variant='h5'>Variations</Typography>
-                                                {singleTest.data.testCases.map(i => i.variants.map(j => (<Typography variant='p'>{singleTest.data.currency} {j.abVariantPrice},</Typography>)))}
-
-                                            </div>
-
-                                        </div>
-                                    </div> */}
                                         <div className='viewormanage-productDataReview productDataReview'>
                                             <Typography variant='p'>Product</Typography>
                                             <div>
 
-                                                <Typography variant='h5'>{singleTest.data.productTitle}</Typography>
+                                                <Typography variant='h5'>{singleTest?.data?.productTitle}</Typography>
                                             </div>
 
                                         </div>
                                         <div className='trafficSplitDataReview'>
                                             <Typography variant='p'>Traffic Split </Typography>
                                             <div>
-                                                <Typography variant='h5'>{singleTest.data.trafficSplit * singleTest.data.testCases.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
+                                                <Typography variant='h5'>{singleTest?.data?.trafficSplit * singleTest?.data?.testCases?.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
                                             </div>
                                         </div>
 
                                     </Card>
                                     <div className="viewormanageBtnGroup">
-                                        {/* <Button className='pauseTest' onClick={() => updateTestStatus()} >{ singleTest?.data?.status === "pending" ? "Resume" : "Pause" } Test </Button> */}
                                         <Button className='pauseTest' onClick={() => setOpenTestStatusModal(true)} >{ singleTest?.data?.status === "pending" ? "Resume" : "Pause" } Test </Button>
                                         <div className='deleteTest' onClick={() => handleOpenDeleteModal()}>
                                             <p>Delete Test</p>
@@ -330,7 +306,6 @@ const ViewOrManageTestPage = () => {
                             </div>
                             <Card className='viewormanage-testAnalytics'>
                                 <div>
-
                                     <Typography variant='h5'>Test Analytics</Typography>
                                     <Button variant="outlined">Expand</Button>
                                 </div>
@@ -349,9 +324,8 @@ const ViewOrManageTestPage = () => {
                             </div>
                         </Card>
                     </div>
-
-
-                    // Delete test modal
+                                    
+                    {/* // Delete test modal */}
                     <Modal
                         open={openDeleteModal}
                         onClose={handleTestStatusModal}
@@ -359,9 +333,7 @@ const ViewOrManageTestPage = () => {
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style} className="configureTest1">
-                            {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Text in a modal
-                                </Typography> */}
+                    
                                 <div className='close-icon'>
                                     <img src={closeIcon} alt="" onClick={() => setOpenDeleteModal(false)} />
                                 </div>
@@ -373,7 +345,7 @@ const ViewOrManageTestPage = () => {
                     </Modal>
 
 
-                    // Test status update modal
+                    {/* // Test status update modal */}
                     <Modal
                         open={openTestStatusModal}
                         onClose={handleCloseDeleteModal}
@@ -381,19 +353,14 @@ const ViewOrManageTestPage = () => {
                         aria-describedby="modal-modal-description"
                     >
                         <Box sx={style} className="configureTest1">
-                            {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Text in a modal
-                                </Typography> */}
+                        
                                 <div className='close-icon'>
                                     <img src={closeIcon} alt="" onClick={() => setOpenTestStatusModal(false)} />
                                 </div>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                 Are you sure you want to update this test case?..
                             </Typography>
-                            {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Status
-                            </Typography> */}
-
+                        
                             <Button className='deleteTestCaseBtn' onClick={() => updateTestStatus()}> {loading ? <Loader size={20}/> :singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
                         </Box>
                     </Modal>

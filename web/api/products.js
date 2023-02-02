@@ -17,17 +17,13 @@ const allProducts = async (req, res) => {
   try {
 
     const shop = req.headers.shop;
-    // const shop = process.env.SHOP;
     console.log("shop", shop);
     console.log("req.headers", req.headers);
 const item_per_page = 10;
-    //let {shop} = req.headers
-    // var shop = process.env.SHOP;
-    //shop = await decodeJWT(shop)
-    //shop = shop.data
+  
     var access_token = "";
     var currency = "";
-    // const shop = process.env.SHOP
+
     console.log("shop", shop);
     if (shop) {
 
@@ -39,7 +35,6 @@ const item_per_page = 10;
 
     const {
       search,
-      // endCursor,
       hasNextPageCursor,
       hasPreviousPageCursor,
     } = req.body;
@@ -125,7 +120,6 @@ const item_per_page = 10;
             `;
       }
 
-      // console.log("Query", query);
 
       let ans1 = await getWithPagination(
         shop,
@@ -134,8 +128,7 @@ const item_per_page = 10;
         "products"
       );
       console.log("ans1", ans1);
-      let responseData = _.get(ans1.data, "products");
-      let temp_var = [];
+    
       let ans = ans1.products.edges;
 
       var products = [];
@@ -160,7 +153,6 @@ const item_per_page = 10;
         }
 
         var tempArr1 = [];
-        var tempArr2 = [];
 
         for (let index = 0; index < ans.length; index++) {
           if (index + 1 == ans.length) {
@@ -281,19 +273,13 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
 const getVariants = async (req, res) => {
 
   const shop = req.headers.shop;
-  // const shop = process.env.SHOP;
+
 
   console.log("==>1")
-  // const { shop, access_token } = ctx.state;
-  //let {shop} = req.headers
-  // var shop = process.env.SHOP;
 
-  //shop = await decodeJWT(shop)
-  //shop = shop.data
   const { productId } = req.body;
   console.log("==>2", req.body)
 
-  // var shop = process.env.SHOP;
   var access_token;
 
   const shopData = await Shop.findOne({ shop }).select(["access_token"]);
@@ -338,8 +324,6 @@ const getVariants = async (req, res) => {
         
         console.log("ans1.data.product.handle",ans1.data.product.handle);
         products.push({
-          // id: resProduct.id,
-          // title: resProduct.title,
           id: info.id,
           variantTitle: info.title,
           variantPrice: info.price,
@@ -367,19 +351,10 @@ const createDuplicateProduct = async (req, res) => {
   try {
 
     const shop = req.headers.shop;
-    // const shop = process.env.SHOP;
-    //console.log("1")
 
     var { productId, productTitle,featuredImage,productPrice,currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
     console.log("==>2", handle)
 console.log("objectToBeSent.variants",objectToBeSent);
-    //let {shop} = req.headers
-    // var shop = process.env.SHOP;
-
-    //shop = await decodeJWT(shop)
-    //shop = shop.data
-
-    // var shop = process.env.SHOP;
     var access_token;
     let newObjectToBeSent;
     let objectToBeSentCreated = [];
@@ -389,16 +364,11 @@ console.log("objectToBeSent.variants",objectToBeSent);
     if (shopData && shopData.access_token) {
       access_token = shopData.access_token;
     }
-
     console.log("==>3")
     const duplicateProductId = [];
     let originalProductTags = [];
     let duplicateVariantsIds = [];
-
-
     for (let i = 0; i < objectToBeSent?.testCases.length; i++) {
-
-
       var query = `mutation {
       productDuplicate(productId: "gid://shopify/Product/${productId}",
         newTitle: "${productTitle}",
@@ -432,8 +402,7 @@ console.log("objectToBeSent.variants",objectToBeSent);
 
       let newMakeArr = NewRes.data.productDuplicate.newProduct.variants.nodes;
       let duplicateVariantId = NewRes.data.productDuplicate.newProduct.id;
-      // console.log(newMakeArr); return false;
-      // console.log("NewRes", NewRes.data.productDuplicate.newProduct.variants.nodes)
+  
       duplicateProductId.push(NewRes.data.productDuplicate.newProduct.id)
       console.log("duplicateProductId", duplicateProductId);
 
@@ -446,7 +415,6 @@ console.log("objectToBeSent.variants",objectToBeSent);
       NewRes?.data?.productDuplicate?.newProduct?.tags
       console.log("variants array loop i=", i);
 
-      //new code
 
       for (j = 0; j < newMakeArr.length; j++) {
 
@@ -459,34 +427,6 @@ console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice",obj
 
         if (objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice !=  null ) {
 console.log("****************************************************************");
-          // query_var = `
-          // mutation {
-          //   productUpdate(input: {
-          //     id: "${duplicateVariantId}",
-          //     tags: "jash",
-          //     variants:[{
-          //       id:"${newMakeArr[j].id}",
-          //       price:"${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
-          //       compareAtPrice: "${objectToBeSent?.testCases[i].variants[j].abVariantComparePrice}"
-          //     }]
-          //   }) { 
-          //     product {
-          //       id
-          //       title
-          //       tags
-          //       variants(first:100) {
-          //         edges {
-          //           node {
-          //             id
-          //             title
-          //             price
-          //             compareAtPrice
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }`
           console.log("object tests", objectToBeSent.testCases);
           query_var = `
         mutation productVariantUpdate {
@@ -520,34 +460,7 @@ console.log("****************************************************************");
 
         }
         else {
-          // query_var = `
-          // mutation {
-          //   productUpdate(input: {
-          //     id: "${duplicateVariantId}",
-          //     tags: "jash",
-          //     variants:[{
-          //       id:"${newMakeArr[j].id}",
-          //       price:"${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
-          //     }]
-          //   }) { 
-          //     product {
-          //       id
-          //       title
-          //       tags
-          //       variants(first:100) {
-          //         edges {
-          //           node {
-          //             id
-          //             title
-          //             price
-          //             compareAtPrice
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }`
-
+    
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(
@@ -597,7 +510,7 @@ console.log("****************************************************************");
       newObjectToBeSent = { ...objectToBeSent.testCases[i] }
       objectToBeSentCreated.push(newObjectToBeSent)
       console.log("newObjectToBeSent", newObjectToBeSent);
-      //new code
+  
     }
 
 
@@ -621,7 +534,7 @@ console.log("****************************************************************");
         }
         `
       let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
-      // console.log("TagRes", TagRes)
+
     })
 
 
@@ -654,19 +567,13 @@ console.log("****************************************************************");
 `
 
       let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
-      // console.log("metafieldResponse", metafieldResponse);
+  
     })
     console.log("objectToBeSentCreated", JSON.stringify(objectToBeSentCreated));
-    // res.status(200).json({
-    //   data: { duplicateProductId, originalProductTags, duplicateVariantsIds, objectToBeSent: objectToBeSentCreated },
-    //   success: true,
-    //   status: 200
-    // })
 
     //Db API
     console.log("==>22", req.body);
 
-    // let { trafficSplit, productId,testCases, status } = req.body;
 
     let createTestData = await createTestModal.create({currency:objectToBeSent.currency, trafficSplit,handle:`https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
 
@@ -686,9 +593,7 @@ console.log("currency", objectToBeSent.currency);
   }
 }
 
-
 module.exports = {
   allProducts,
   getVariants, createDuplicateProduct
 }
-

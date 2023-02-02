@@ -7,7 +7,7 @@ const googleUserFound = async (req, res) => {
         const token = req.params.token;
         const decoded = await decodeJWT(token)
         console.log("Decoded token: " + decoded);
-        const user = await User.findOne({googleId: `${decoded}` });
+        const user = await User.findOne({_id: mongoose.Types.ObjectId(decoded)   });
         console.log("User is", user);
     
         res.send(user)

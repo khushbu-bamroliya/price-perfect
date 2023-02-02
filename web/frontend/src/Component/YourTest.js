@@ -62,7 +62,6 @@ const YourTest = () => {
                         {/* <Chip color="primary" className='chipStatusEnded ' label={params.row.status} /> */}
                         {/* <Chip color="primary" className='chipStatusUpcoming' label={params.row.status} /> */}
                         {/* <Chip color="primary" className='chipStatusPaused' label={params.row.status} /> */}
-
                     </>
                 )
             }
@@ -97,16 +96,7 @@ const YourTest = () => {
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //         // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
+
     ];
 
 
@@ -137,8 +127,8 @@ const YourTest = () => {
                         <div className='createTestBlock1'>
 
                             <CardContent>
-                                <Typography variant='h5' className='createTestTitle'>Your Test</Typography>
-                                <Typography variant='p' className='chooseProd'> Manage your current and past tests </Typography>
+                                <Typography variant='h5' className='createTestTitle'>Tests by Product</Typography>
+                                <Typography variant='p' className='chooseProd'>View current and past tests for a product</Typography>
                             </CardContent>
                         </div>
                         <div className='createTestBlock2'>

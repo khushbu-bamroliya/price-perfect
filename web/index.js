@@ -4,8 +4,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const corsOption = {
+  origin: [process.env.HOST],
+}
 
-app.use(cors());
+app.use(cors(corsOption));
 const path = require("path");
 const PORT = process.env.PORT || 8081;
 const bodyParser = require("body-parser");
@@ -42,11 +45,9 @@ app.use(
 const passport = require("passport");
 const initializingPassport = require("./middlewares/passport");
 initializingPassport(passport);
-// app.use(express.urlencoded({extended: true}));
-// app.use(express.json());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -69,11 +70,7 @@ const {
   DeleteApiRest,
 } = require("./controllers/shopify_api");
 
-//router config
-//const router = express.Router();
 const ApiRoutes = require("./routers/router.js");
-//const { createTestCaseApi } = require("./api/createTest");
-//const { nextTick } = require("process");
 
 //GDPR API
 
@@ -174,7 +171,6 @@ app.post(
         }
       }
       else if (topic === "products/delete") {
-        //delete duplicate products in shopify then delete test case from db
 
         try {
           console.log("products/delete")
@@ -223,7 +219,6 @@ app.post(
       else if (topic === "orders/create") {
         let order = ctx.request.body;
         if (in_array(order, "_pricePerfectTestId")) {
-          //order is via price perfect app
 
           var pricePerfectId = await findKey(order, 'pricePerfectId');
           try {
@@ -357,20 +352,16 @@ app.get("/auth", validateHmac, async (req, res) => {
   const { shop } = req.query;
   if (shop) {
     console.log("shop ->", shop);
-    //const state = nonce();
+
 
     const authUrl = AuthHelper.authUrl({
       shop,
-      //state,
       REDIRECT_URL: AuthHelper.generateRedirectUrl(req.baseUrl),
       SHOPIFY_API_KEY: process.env.SHOPIFY_API_KEY,
     });
 
     console.log("authUrl :- ", authUrl);
 
-    //res.cookie('state', shopState);
-
-    // res.cookie('shop', )
     return res.redirect(authUrl);
   } else {
     return res.status(400).send('Missing "Shop Name" parameter!!');
@@ -380,18 +371,9 @@ app.get("/auth", validateHmac, async (req, res) => {
 app.get("/auth/callback", validateHmac, async (req, res) => {
   const { shop, host, code, shopState } = req.query;
 
-  // console.log("req.query", req.query);
-
-  // const stateCookie = cookie.parse(req.headers.cookie).state;
-
-  // if (shopState !== stateCookie) {
-  //   return res.status(403).send('Request origin cannot be verified');
-  // }
-
   if (shop && host && code) {
     console.log("shop:", shop);
-    //console.log("encodedShop", encodedShop);
-    //res.cookie('shop', encodedShop,{expire: 300000 + Date.now()})
+
     try {
       const checkRes = await getAccessToken(
         process.env.SHOPIFY_API_KEY,
@@ -403,13 +385,6 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
       console.log("checkRes", checkRes);
 
       const { access_token } = checkRes;
-
-      // const restClient = shopifyRestApi.getRestClient(shop, access_token);
-      // console.log("restClient", restClient);
-
-      // const responseShopData = await restClient.get("shop.json");
-
-      // console.log('responseShopData?.data',responseShopData?.data);
 
       try {
         const responseShopData = await GetApiRest(
@@ -560,13 +535,6 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
 });
 
 //google apis
-// const isLoggedIn = (req, res, next) => {
-//   if (req.user) {
-//       next();
-//   } else {
-//       res.sendStatus(401);
-//   }
-// }
 
 app.get("/google/auth/failed", (req, res) => {
   res.send("Login Failed");
@@ -588,7 +556,8 @@ app.get("/google/callback", (req, res) => {
       return res.redirect("/google/auth/failed");
     }
     if (user) {
-      const token = await encodeJWT(user.googleId);
+      console.log("google user", user);
+      const token = await encodeJWT(user._id);
       res.cookie("token", token, {
         maxAge: 86400000 * 10, secure: true, sameSite: 'Strict'
       });
@@ -606,7 +575,7 @@ app.get("/google/callback", (req, res) => {
 app.get("/google/logout", (req, res) => {
   req.logout(() => { });
   res.clearCookie("token")
-  // res.send(req.user);
+
   res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
 });
 
@@ -628,8 +597,6 @@ app.use(
 app.post("/abtest", async (req, res) => {
   console.log("/abtest route");
 
-  //{"experiment":"",productsArr:"8055897555240","variantsArr":["44247576117544","44247576117544"]}
-
   const { variantsArr, productsArr, experiment } = req.body;
 
   var getTestCases = await createTestModal.find({
@@ -638,44 +605,8 @@ app.post("/abtest", async (req, res) => {
 
   console.log(getTestCases);
 
-  // var getTestCases = {
-  //     trafficSplit: 34,
-  //     productId: "gid://shopify/Product/8055898374440",
-  //     testCases: [
-  //       {
-  //         testId: 1,
-  //         variants: [
-  //           {
-  //             id: "gid://shopify/ProductVariant/44247576117544",
-  //             variantTitle: "Default Title",
-  //             variantComparePrice: "1",
-  //             variantPrice: "59.33",
-  //             abVariantComparePrice: "11",
-  //             abVariantPrice: "1",
-  //             duplcateVarId:"",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         testId: 2,
-  //         variants: [
-  //           {
-  //             id: "gid://shopify/ProductVariant/44247576117544",
-  //             variantTitle: "Default Title",
-  //             variantComparePrice: "4",
-  //             variantPrice: "59.33",
-  //             abVariantComparePrice: "22",
-  //             abVariantPrice: "2",
-  //             duplcateVarId:"",
-  //           },
-  //         ],
-  //       }
-  //     ],
-  //   };
-
   if (getTestCases && getTestCases.length > 0) {
     for (const getTestCase of getTestCases) {
-      //var testPer = parseInt(Number(getTestCase.trafficSplit) / Number(getTestCase.testCases.length));
       var testPer = parseInt(Number(getTestCase.trafficSplit));
       var controlPer = parseInt(
         100 -
@@ -690,7 +621,6 @@ app.post("/abtest", async (req, res) => {
         controlPer
       );
 
-      //var newArr = [];
       var newArr = {};
 
       for (var i = 0; i < getTestCase.testCases[0].variants.length; i++) {
@@ -733,13 +663,10 @@ app.post("/abtest", async (req, res) => {
             duplicateVariantId: duplicateVariantId,
           });
 
-          //console.log('i=',i,'j=',j);
-          //console.log('getTestCase',getTestCase.testCases[j].variants[i].variantComparePrice);
         }
         console.log(varId, "is done now");
         console.log("cases", cases);
         var abTestArr = await abTest(cases);
-        // newArr.push({[varId.split('gid://shopify/ProductVariant/')[1]]:{abTestArr}});
         newArr[varId.split("gid://shopify/ProductVariant/")[1]] = abTestArr;
       }
     }
@@ -792,24 +719,6 @@ app.post("/send-analytics", async (req, res) => {
 });
 
 app.get("/sendmail", async (req, res) => {
-  // let transporter = nodemailer.createTransport({
-  //   host: process.env.SMTP_HOST,
-  //   port: process.env.SMTP_PORT,
-  //   //secure: true, // true for 465, false for other ports
-  //   //secureConnection: true, // TLS requires secureConnection to be false
-  //   auth: {
-  //     user: process.env.SMTP_USERNAME, // generated ethereal user
-  //     pass: process.env.SMTP_PASSWORD, // generated ethereal password
-  //   },
-  // });
-  // // send mail with defined transport object
-  // let info = await transporter.sendMail({
-  //   from: `Price Perfect <umang@vedaha.com>`, // sender address
-  //   to: "umang@vedaha.com", // list of receivers
-  //   subject: 'Sending Email using Node.js',
-  //   text: 'That was easy!'
-  // });
-  // console.log(info,'info');
 });
 
 app.get("/", async (req, res) => {
@@ -820,16 +729,7 @@ app.get("/", async (req, res) => {
     const shopGet = await Shop.findOne({ shop }).select(["shop", "app_status"]);
     if (shopGet && shopGet.app_status && shopGet.app_status == "installed") {
       console.log("app open ma");
-      // res.redirect(
-      //   AuthHelper.embedAppUrl({ host, API_KEY, shop, id })
-      // );
 
-      // Create a buffer from the string
-      // let bufferObj = Buffer.from(host, "base64");
-
-      // console.log(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`);
-
-      // res.redirect(`https://${bufferObj}/apps/${process.env.SHOPIFY_API_KEY}/`)
       res.cookie("shop", encodedShop, {
          secure: true,  sameSite: 'Strict'
       });
@@ -841,7 +741,6 @@ app.get("/", async (req, res) => {
     }
   } else {
     res.status(200).send("Please open app from the Shopify admin panel.");
-    //res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
   }
 });
 
@@ -850,12 +749,6 @@ app.use(express.static(path.resolve(__dirname, "frontend/build")));
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
 });
-
-// All other GET requests not handled before will return our React app
-// app.get('*', (req, res) => {
-//   console.log("* route")
-//   res.sendFile(path.resolve(__dirname, 'frontend/build', 'index.html'));
-// });
 
 connectDB().then(() => {
   app.listen(PORT, () => {

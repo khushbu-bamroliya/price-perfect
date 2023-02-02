@@ -28,9 +28,6 @@ const createTestCaseApi = async (req, res) => {
 
 const getSingleTestCase = async (req, res) => {
     try {
-
-        console.log("******* Get single test case")
-
         const getSingleTest = await createTestModal.findById(req.params.id)
 
         console.log("getSingleTest", getSingleTest);
@@ -46,7 +43,11 @@ const getSingleTestCase = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in get single test case: ", error);
+        res.status(500).json({
+            error,
+            success: false
+            
+        })
     }
 }
 
@@ -56,7 +57,6 @@ const getTestCase = async (req, res) => {
         let getCase;
         console.log("***** get test case")
         if (search) {
-            // getCase = await createTestModal.find({ "productTitle": `\"${search}\"` })
             getCase = await createTestModal.find({
                 "productTitle": {
                     $regex: `${search}`,
@@ -79,35 +79,27 @@ const getTestCase = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error: ", error);
+        res.status(500).json({
+            error,
+            success: false
+            
+        })
     }
 }
 
 const deleteTestCaseData = async (req, res) => {
     try {
 
-        console.log("******* delete test case")
-
         let responseShopData;
-
-        // var shop = process.env.SHOP;
         var shop = req.headers.shop;
-
-
-
         let access_token;
-
         const shopData = await Shop.findOne({ shop }).select(["access_token"]);
-
         if (shopData && shopData.access_token) {
             access_token = shopData.access_token;
         }
-
         const getSingleTestCase = await createTestModal.findById(req.params.id)
 
         for (let singleObj of getSingleTestCase.testCases) {
-
-            // console.log("singleObj", singleObj)
 
             let getSingleDuplicateProductIds = singleObj.variants[0].duplicateProductId.split("gid://shopify/Product/")[1];
 
@@ -149,6 +141,11 @@ const deleteTestCaseData = async (req, res) => {
 
     } catch (error) {
         console.log("Error", error);
+        res.status(500).json({
+            error,
+            success: false
+            
+        })
     }
 }
 
@@ -170,15 +167,14 @@ const updateTestStatus = async (req, res) => {
             })
             res.status(200).json({ success: true, status: statusUpdated })
         }
-        console.log("req.query", req.query);
-        // const statusUpdated = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(`${id}`) }, {
-        //     status
-        // })
-
-        // res.status(200).json({ success: true, status: statusUpdated })
         console.log("=====END END====")
     } catch (error) {
         console.log("Error", error);
+        res.status(500).json({
+            error,
+            success: false
+            
+        })
     }
 }
 

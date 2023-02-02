@@ -8,8 +8,6 @@ const connectDB = () => {
       .connect(mongoUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        // useCreateIndex: true,
-        // useFindAndModify: false,
       })
       .then((res) => {
         console.log("DB Connection Successful");

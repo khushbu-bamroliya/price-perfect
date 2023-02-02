@@ -1,11 +1,10 @@
-import { Button, Card, Pagination, TextField, Typography } from '@mui/material'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Alert, Button, Card, Snackbar, TextField, Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import searchIcon from './Images/search-normal.png';
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
-import avatar from "./Images/image.png"
 import addTestCases from "./Images/add-circle.png"
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
 import Loader from './Loader';
 import cookieReader from '../controller/cookieReader';
@@ -15,16 +14,17 @@ const CreateTestPage = ({ shop, getProductImage }) => {
     const navigate = useNavigate();
     console.log("shop from CreateTestPage", shop);
 
-    // let products = {};
     const [productsData, setProductsData] = useState();
     const [loading, setLoading] = useState(false);
     const [searchProduct, setSearchProduct] = useState("");
 
     //Pagination
-
     const [nextPageCursor, setNextPageCursor] = useState(null);
     const [prevPageCursor, setPrevPageCursor] = useState(null);
 
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     const rows = []
     productsData &&
         productsData.products.forEach((item) => {
@@ -39,7 +39,6 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         });
 
     const createTestStep1Completed = (id, title, handle, imgSrc) => {
-        // event.stopPropagation();
         const productId = id.split('/').pop();
         console.log("title link", title);
         const productHandle = handle.split('/').pop();
@@ -47,8 +46,6 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         const productTitle = title.split('/').pop();
         console.log("productId: " + productId);
         getProductImage(imgSrc)
-        const productImgSrc = imgSrc
-
         navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`, { state: { currency: productsData.products[0].currency } })
     }
     const columns = [
@@ -65,7 +62,6 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                         <div className='tableImages'>
                             <div>
                                 {params.row.images ? <img src={params.row.images} alt='' /> : <HideImageOutlinedIcon />}
-
                             </div>
                         </div>
                         <p className='productID'>
@@ -97,7 +93,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
             sortable: false,
             flex: 0.1,
             align: 'center',
-  headerAlign: 'center',
+            headerAlign: 'center',
             renderCell: (params) => {
                 return (
                     <div className='actionIcon' onClick={(e) => e.stopPropagation()} >
@@ -106,23 +102,12 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
     ];
 
     const sendBody = {
         search: `${searchProduct}`,
         hasNextPageCursor: nextPageCursor,
         hasPreviousPageCursor: prevPageCursor
-
     }
 
     const getAllProductsApi = async (sendBody) => {
@@ -132,12 +117,12 @@ const CreateTestPage = ({ shop, getProductImage }) => {
             credentials: "same-origin",
             headers: {
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                'Authorization': 'Bearer ' + cookieReader('token'),
             },
             body: JSON.stringify(sendBody)
 
         }
-        // const data =    await fetch(`https://691b-2405-201-200c-6246-c0db-a72d-57f9-f6ea.in.ngrok.io/api/get-products`, config).then(async (res) => console.log("All products",await res.json())).catch((err) => console.log("Product error", err))
         await fetch(getApiUrl + `/api/get-products`, config)
             .then(async (res) => {
                 const products = await res.json();
@@ -145,29 +130,52 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 setProductsData(products)
                 console.log("res1", products);
                 setLoading(false)
-                // useCallback(() => {setAllProducts(products)},[products])
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                setOpens(true)
+                setsnackbar_msg("Internal Server Error")
+                setSnackbarColor('red')
+            })
 
 
     }
-    // setAllProducts(products);
 
     const nextPageFunc = () => {
         console.log("nextPageFunc");
         setNextPageCursor(productsData && productsData.endCursorFromApi)
         setPrevPageCursor(null)
-        // getAllProductsApi(sendBody);
     }
     const prevPageFunc = () => {
         console.log("prevPageFunc");
         setPrevPageCursor(productsData && productsData.startCursorFromApi)
         setNextPageCursor(null)
     }
+    const handleClose = () => {
+        setOpens(false);
+      };
+      const errorfunction = () => {
+        return (<div>
+          <Snackbar
+            open={opens}
+            sx={{ width: "50%" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
+              variant="filled"
+              onClose={handleClose}
+              sx={{ width: "50%", bgcolor: snackbarColor }}
+            >
+              {snackbar_msg}
+            </Alert>
+          </Snackbar>
+        </div>)
+    
+      };
     useEffect(() => {
-        // if (!shop) {
-        //     navigate('/')
-        //   }
+    
         getAllProductsApi(sendBody)
     }, [searchProduct, nextPageCursor, prevPageCursor])
     return (
@@ -184,23 +192,16 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                             <div className='createTest-Block2'>
                                 <img src={searchIcon} alt="" />
                                 <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchProduct} onChange={(e) => setSearchProduct(e.target.value)} />
-                                {/* <Button variant="outlined">
-                                    <NavLink to="/createtest2">
-                                        Next
-                                    </NavLink>
-                                </Button> */}
+                            
                             </div>
                         </div>
                         <div className='createTestTable' style={{ height: 600, width: '100%' }}>
-                            {/* {!productsData ? <Loader size={40}  /> : (<> */}
-                            {loading ? <Loader /> : (<>
+                        
+                            {loading ? <Loader size={40} /> : (<>
 
                                 <DataGrid
                                     rows={rows}
                                     columns={columns}
-                                    // pageSize={5}
-                                    // rowsPerPageOptions={[5]}
-
                                     disableColumnMenu
                                     disableSelectionOnClick
                                     hideFooterPagination
@@ -219,7 +220,6 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                                     }}
                                 />
                             </>)}
-                            {/* </>)} */}
                         </div>
                         <div className='createTestBlock-buttons'>
                             <Button onClick={prevPageFunc} disabled={productsData && productsData.hasPreviousPageFromApi === true ? false : true}><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -234,6 +234,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                     </Card>
                 </div>
             </Card>
+            <div>{errorfunction()}</div>
         </>
     )
 }

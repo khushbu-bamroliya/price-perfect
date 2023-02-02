@@ -2,7 +2,6 @@ var jwt = require('jsonwebtoken');
 
 module.exports = { 
     encodeJWT : async (payLoad, expTime)=>{
-        // if (!expTime) return new Error("expiry time not found");
         return jwt.sign({
             data: payLoad
         }, process.env.JWT_SECRET);

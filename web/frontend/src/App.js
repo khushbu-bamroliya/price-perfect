@@ -37,14 +37,13 @@ console.log("window link", window.location.href);
 console.log("window path", window.location.pathname);
 const urlPath = window.location.pathname
   useEffect(() => {
-    // setLoading(true)
     getUser("token", navigate, shop, setLoading, urlPath)
-    // setLoading(false)
+
   }, [])
 
   return (
-    <div>
-      {loading ? <Loader /> : <>
+    <>
+      {loading ? <Loader size={40} /> : <>
         <Routes>
           <Route element={<WelcomePage shop={shop} />} path='/' />
           <Route element={<SignUp />} path='/signup' />
@@ -58,7 +57,7 @@ const urlPath = window.location.pathname
           <Route element={<ViewOrManageTestPage />} path="/managetest/:id" />
         </Routes>
       </>}
-    </div>
+    </>
   );
 }
 

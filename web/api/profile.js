@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const { decodeJWT } = require('../controllers/utils');
 const ProfileModal = require('../models/profileModal');
 const User = require("../models/User");
@@ -23,21 +24,27 @@ const createProfile = async (req, res) => {
 
     } catch (error) {
         console.log("Error create profile..: ", error);
+        res.status(500).json({
+            error,
+            success: false
+
+        })
     }
 }
 
 const getSingleProfile = async (req, res) => {
     try {
         console.log("getSingleProfile ==>");
-        const {token} = req.params;
+        const { token } = req.params;
+        console.log("params token: " + token);
         const decodedProfile = await decodeJWT(token)
 
         console.log("**** get single profile");
-console.log("decoded profile: ", decodedProfile);
-        const fetchSingleData = await User.findOne({_id:`${decodedProfile.data}`} ) || await User.findOne({_id:`${decodedProfile.data}`} )
+        console.log("decoded profile: ", decodedProfile);
+        const fetchSingleData = await User.findOne({ _id: mongoose.Types.ObjectId(decodedProfile) })
 
 
-        if(!fetchSingleData){
+        if (!fetchSingleData) {
             return res.json("filed fetch the single user profile...!");
         }
 
@@ -46,22 +53,27 @@ console.log("decoded profile: ", decodedProfile);
             success: true,
             status: 200
         })
-        
+
     } catch (error) {
         console.log("Error get single profile: ", error)
+        res.status(500).json({
+            error,
+            success: false
+
+        })
     }
 }
 
-const getSingleProfileandUpdateById = async(req, res) => {
+const getSingleProfileandUpdateById = async (req, res) => {
     try {
         console.log("**** Update Profile Data profile");
-        const {token} = req.params;
+        const { token } = req.params;
         const decodedProfile = await decodeJWT(token)
 
-        const UpdateProfileData = await User.findOneAndUpdate({_id: `${decodedProfile.data}`}, req.body)
-console.log("UpdateProfileData", UpdateProfileData);
+        const UpdateProfileData = await User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(decodedProfile) }, req.body)
+        console.log("UpdateProfileData", UpdateProfileData);
 
-        if(!UpdateProfileData){
+        if (!UpdateProfileData) {
             return res.json("filed Update Profile Data profile...!");
         }
 
@@ -70,9 +82,14 @@ console.log("UpdateProfileData", UpdateProfileData);
             success: true,
             status: 200
         })
-        
+
     } catch (error) {
         console.log("Error get single profile: ", error)
+        res.status(500).json({
+            error,
+            success: false
+            
+        })
     }
 }
 

@@ -3,6 +3,7 @@ import loginImage from './Images/Group-45.png'
 import { Link, Button, TextField } from '@mui/material';
 import priceperfectimg from './Images/priceperfectimg.png';
 export default function Revenue() {
+
     return (
         <>
             <div className='alldetails'>
@@ -22,7 +23,7 @@ export default function Revenue() {
                     </div>
                     <div className='firstnamediv w-100 mb-12'>
                         <label>Daily revenue</label>
-                        <TextField id="" label="" variant="outlined" placeholder='e.g. $5000'/>
+                        <TextField id="" label="" variant="outlined" placeholder='e.g. $5000' />
                     </div>
                     <div className='firstnamediv w-100 mb-12'>
                         <label>Daily Traffic</label>

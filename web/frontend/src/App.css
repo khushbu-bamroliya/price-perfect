@@ -1686,10 +1686,10 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    
+
 }
 
-.dragAndDrop>label>div input{
+.dragAndDrop>label>div input {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -1722,6 +1722,7 @@
     border: 1px solid #E9E9E9;
     border-top: 0;
     border-bottom: none;
+    border-left: none;
     padding-left: 25px;
     padding-right: 25px;
     margin: 22px 25px !important;
@@ -1874,7 +1875,7 @@
     font-weight: 700;
     font-size: 30px;
     line-height: 36px;
-
+    /* text-align: center; */
     color: #151515;
 }
 
@@ -2153,33 +2154,6 @@
     }
 }
 
-@media screen and (max-width: 425px) {
-    .dailyStatsBlock2-sub1>h4 {
-        border-bottom: 1px solid #E9E9E9;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        /* margin-top: 15px; */
-        font-size: 30px;
-    }
-
-    .dailyStatsBlock2-sub1 h4,
-    .dailyStatsBlock2-sub2>div h4 {
-        font-size: 30px;
-    }
-
-    .dailyStatsBlock1>div>span {
-        font-size: 18px;
-    }
-
-    .dailyStatsBlock2-sub1 {
-        width: 100%;
-        text-align: center;
-    }
-
-    .dailyStatsBlock2>hr {
-        display: none !important;
-    }
-}
 
 @media screen and (max-width: 425px) {
     .configureTest1 {
@@ -2237,6 +2211,70 @@
     .reviewTestBlock>div {
         margin-bottom: 0;
         margin-top: 15px;
+    }
+
+    .dailyStatsBlock2-sub1>h4 {
+        border-bottom: 1px solid #E9E9E9;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        /* margin-top: 15px; */
+        font-size: 30px;
+    }
+
+    .dailyStatsBlock2-sub1 h4,
+    .dailyStatsBlock2-sub2>div h4 {
+        font-size: 30px;
+    }
+
+    .dailyStatsBlock1>div>span {
+        font-size: 18px;
+    }
+
+    .dailyStatsBlock2-sub1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .dailyStatsBlock2>hr {
+        display: none !important;
+    }
+
+    .viewormanage-testItemData {
+        margin-top: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .viewormanage-testItemData>div {
+        justify-content: space-around;
+    }
+
+    .productDataReview {
+        width: auto !important;
+        margin: 0 !important;
+    }
+
+    .viewormanage-testData>div {
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .dashboardBlock {
+        margin-top: 20px;
+    }
+
+    .homeDashboard,
+    .createTestPage,
+    .yourTestsPage,
+    .createTestStep2,
+    .reviewTest,
+    .profile,
+    .viewormanage {
+        padding: 10px;
+    }
+
+    .inc-dec-btn-group>div:last-child {
+        margin-left: 0 !important;
     }
 }
 
@@ -2633,9 +2671,8 @@
 /* Welcome page css is here  */
 .welcomePage {
     display: flex;
-    justify-content: space-between;
-    border-radius: 30px;
-    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
 }
 
 .welcomeContent .welcome-wrappers .span {
@@ -2900,7 +2937,7 @@ html {
     max-width: 60%;
     width: 100%;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 15px;
 }
 
 .wrappers {
@@ -3509,10 +3546,12 @@ html {
 .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
     background-color: #000000;
 }
-.MuiDataGrid-virtualScroller{
+
+.MuiDataGrid-virtualScroller {
     overflow-x: hidden !important;
 }
-.analyticsSection .MuiDataGrid-footerContainer{
+
+.analyticsSection .MuiDataGrid-footerContainer {
     display: none !important;
 }
 
@@ -3572,9 +3611,9 @@ html {
     border-left: 1px solid #E9E9E9;
 }
 
-.viewormanage-testItemData>div {
+/* .viewormanage-testItemData>div {
     justify-content: flex-start;
-}
+} */
 
 .deleteTest p {
     font-weight: 700 !important;
@@ -3613,7 +3652,7 @@ html {
         text-decoration: none;
         text-transform: capitalize;
         font-family: Product Sans;
-        /* color: #B6BEC7; */
+        color: #B6BEC7 !important;
     }
 
     .MuiTypography-root .navIcons a {
@@ -3907,10 +3946,11 @@ html {
         margin: auto 2px;
     }
 
-    .createTestTable .MuiDataGrid-cell, .createTestTable .MuiDataGrid-columnHeader{
+    .createTestTable .MuiDataGrid-cell,
+    .createTestTable .MuiDataGrid-columnHeader {
         max-width: 90px !important;
         min-width: 90px !important;
-    }    
+    }
 }
 
 .inc-dec-btn-group>div:last-child {
@@ -3977,9 +4017,9 @@ html {
         margin-bottom: 14px;
     }
 
-    .byPercentageDirection .MuiButtonBase-root {
+    /* .byPercentageDirection .MuiButtonBase-root {
         margin: 0 0 10px 0;
-    }
+    } */
 
     .percentageBtnGroup {
         max-width: 90%;
@@ -4091,43 +4131,46 @@ html {
     color: #FFFFFF;
 } */
 @media only screen and (max-width: 900px) {
-.add-test-wrapper>div{
-    margin-left: 0;
-    margin-right: 0;
-}
-.createTestStep2Block{
-    padding: 20px;
-}
-.control-wrapper,.add-wrapper{
-    max-width: 100%;
-}
+    .add-test-wrapper>div {
+        margin-left: 0;
+        margin-right: 0;
+    }
 
-.productDataReview {
-    border: none;
-    padding-left: 0;
-    width: 100%;
-}
+    .createTestStep2Block {
+        padding: 20px;
+    }
 
-.reviewData .reviewMainData {
-    flex-wrap: wrap !important;
-}
+    .control-wrapper,
+    .add-wrapper {
+        max-width: 100%;
+    }
 
-.productDataReview {
-    margin: 0;
-    padding-left: 0;
-}
+    .productDataReview {
+        border: none;
+        padding-left: 0;
+        width: 100%;
+    }
 
-.reviewTestBlock {
-    padding: 10px;
-}
+    .reviewData .reviewMainData {
+        flex-wrap: wrap !important;
+    }
 
-.imageBlock>img {
-    margin: 10px;
-}
+    .productDataReview {
+        margin: 0;
+        padding-left: 0;
+    }
 
-.imageBlock {
-    min-height: auto;
-}
+    .reviewTestBlock {
+        padding: 10px;
+    }
+
+    .imageBlock>img {
+        margin: 10px;
+    }
+
+    .imageBlock {
+        min-height: auto;
+    }
 }
 
 
@@ -4141,11 +4184,28 @@ html {
 
     }
 
-    
+
 
 }
 
+.min-wi{
+    overflow: auto !important;
+}
 .main_profile_img div {
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     border-radius: 20px;
+}
+/*  */
+.welcomeBlock1{
+    overflow-y: unset !important;
+    overflow-x: hidden !important;
+}
+.welcomeBlock1Content:last-child{
+    padding-bottom: 0 !important;
+}
+.welcomeBlock2>div{
+    margin: auto;
+}
+.welcomeBlock2{
+    overflow: auto !important;
 }

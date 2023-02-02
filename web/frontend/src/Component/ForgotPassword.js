@@ -37,12 +37,8 @@ export default function SignUp() {
             setErrorMessForgot(true)
             setsnackbar_msg("Invalid email")
             setSnackbarColor('red')
-            // setError('Email is invalid');
             console.log('The email is invalid');
           }
-        console.log("called");
-        
-
         console.log("End...")
     }
 

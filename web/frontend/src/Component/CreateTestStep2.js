@@ -28,12 +28,10 @@ const CreateTestStep2 = ({ objectSent }) => {
         boxShadow: 24,
         p: 4,
     };
-    // var variantPriceData;
-    // var variantCompareAtPriceData;
+
     const { id, title, handle } = useParams();
 
-    var editableArrayData = [];
-    // Display variants state
+
     const [variantRes, setVariantRes] = useState([]);
 
   const [opens, setOpens] = useState(false);
@@ -49,8 +47,8 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
     console.log("testing testIdState", testIdState);
-    const [pricePercent, setPricePercent] = useState("11");
-    const [percentIncDec, setPercentIncDec] = useState("")
+    const [pricePercent, setPricePercent] = useState("2%");
+    const [percentIncDec, setPercentIncDec] = useState("-")
 
     const [value, setValue] = useState(10);
     const [hideShowBtns, setHideShowBtns] = useState("none")
@@ -59,8 +57,6 @@ const CreateTestStep2 = ({ objectSent }) => {
         setValue(newValue);
     };
 
-    // console.log("range slider value:", value)
-    // configs of configure test 
     const [openConfigureTest1, setOpenConfigureTest1] = useState(false);
     const handleCloseConfigureTest1 = () => setOpenConfigureTest1(false);
 
@@ -68,28 +64,24 @@ const CreateTestStep2 = ({ objectSent }) => {
     const [openManualModal, setOpenManualModal] = useState(false);
     const handleOpenManualModal = () => {
         console.log("apiRes", variantRes);
+
         const updatedArray = variantRes.data.map((item, index) => {
 
-
-
             return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
-
-
-
             return item;
-
         })
+
         setProductsVariants(updatedArray)
         setOpenManualModal(true);
         setOpenConfigureTest1(false)
     };
+
     const handleCloseManualModal = () => setOpenManualModal(false);
 
     // configs of clicking auto btn
     const [openByPercentageModal, setOpenByPercentageModal] = useState(false);
     const handleOpenByPercentageModal = () => { setOpenByPercentageModal(true); setOpenConfigureTest1(false) };
     const handleCloseByPercentageModal = () => setOpenByPercentageModal(false);
-
 
     // configs of edit test button
     const [openEditTest, setOpenEditTest] = useState(false);
@@ -102,9 +94,6 @@ const CreateTestStep2 = ({ objectSent }) => {
     const handleOpenEditTest = (testId) => {
         console.log("test " + testId);
         setTestIdState(Number(testId))
-        // console.log("setTestIdState1", testIdState);
-
-
         const singleTest = [...displayTestCasesArray];
         const foundSingleTest = singleTest.find(item => item.testId === testId);
         console.log("foundSingleTest", foundSingleTest);
@@ -112,40 +101,15 @@ const CreateTestStep2 = ({ objectSent }) => {
         console.log("productsVariants", productVariants);
         setOpenEditTest(true);
         setOpenConfigureTest1(false)
-        // const singleTest = displayTestCasesArray.find(item => item.testId === testId)
-        // setDisplayTestCasesArray(singleTest)
-        // console.log("setTestIdState2", testIdState);
+
     }
     const handleCloseEditTest = () => {
-        // console.log("testIdState handleCloseEditTest",testIdState);
-        // if (displayTestCasesArray) {
-        //     console.log("Change test",displayTestCasesArray);
-        //     console.log("handleCloseEditTest testIdState", testIdState);
-        //     displayTestCasesArray[testIdState - 1] = {
-        //         id: testIdState,
-        //         testId: testIdState,
-        //         variants: productVariants
-        //     }
-        // }
-
-        // displayTestCasesArray && displayTestCasesArray[testIdState - 1].variants = productVariants
-        //new code
-        // let newItems = [...displayTestCasesArray];
-        // newItems[testIdState] = {
-        //     id: testIdState,
-        //     testId: testIdState,
-        //     variants: productVariants
-        // };
-        // console.log("setDisplayTestCasesArray1");
-        // setDisplayTestCasesArray(newItems);
-
         const newItems = [...displayTestCasesArray];
         const object = newItems.find(i => i.id === testIdState);
         console.log("object: " + object);
         object.variants = productVariants
         setDisplayTestCasesArray(newItems);
         setOpenEditTest(false)
-
     };
 
     console.log("productVariants", productVariants);
@@ -154,46 +118,16 @@ const CreateTestStep2 = ({ objectSent }) => {
     const handleOpenControlSettings = () => {
         setOpenControlSettings(true); setOpenConfigureTest1(false)
 
-        // const disp = objectToBeSent.testCases && objectToBeSent.testCases.map(i => i?.variants.map((j) => displayFinalVariantsArray.push({
-        //     id: j.id,
-        //     abVariantComparePrice:j.abVariantComparePrice,
-        //     abVariantPrice:j.abVariantPrice,
-        //     productId:j.productId,
-        //     variantComparePrice:j.variantComparePrice,
-        //     variantPrice:j.variantPrice,
-        //     variantTitle:j.variantTitle
-        // })))
-
     };
     const handleCloseControlSettings = () => setOpenControlSettings(false);
 
     let testId = 0;
     console.log("displayTestCasesArray", displayTestCasesArray)
     const totalTests = displayTestCasesArray && displayTestCasesArray.length;
-    // console.log("Total number of tests", totalTests)
-
-    // displayTestCasesArray.push({
-    //     testId:displayTestCasesArray.length+1,
-    //     id: productVariants[0].id,
-    //     abVariantPrice: productVariants[0].abVariantPrice,
-    //     abVariantComparePrice: productVariants[0].abVariantComparePrice,
-    //     productId:productVariants[0].productId,
-    //     variantComparePrice:productVariants[0].variantComparePrice,
-    //     variantPrice:productVariants[0].variantPrice,
-    //     variantTitle:productVariants[0].variantTitle,
-    // })
 
     const onConfirm = () => {
         setHideShowBtns("flex")
         handleCloseManualModal() || handleCloseByPercentageModal()
-
-        // displayTestCasesArray.push({
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-
-        //     variants: productVariants
-        // })
-
 
         setDisplayTestCasesArray([
             ...displayTestCasesArray, {
@@ -203,69 +137,15 @@ const CreateTestStep2 = ({ objectSent }) => {
             }
         ])
         setDisabled(false)
-        // let newItems = [...displayTestCasesArray];
-        // console.log(newItems, 'umi1');
-        // newItems[testIdState] = {
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-
-        //     variants: productVariants
-        // };
-        // console.log(newItems, 'umi2');
-        // console.log("setDisplayTestCasesArray2");
-        // setDisplayTestCasesArray(newItems);
+    
     }
-
-
-
-    // console.log("Object to be sent", objectToBeSent);
-    // console.log("Split by percentage", value / totalTests);
-    // console.log("displayFinalVariantsArray", displayFinalVariantsArray && displayFinalVariantsArray);
 
     const onConfirmEdit = () => {
         handleCloseEditTest() || handleCloseControlSettings()
-        // const object = displayTestCasesArray.findIndex(obj => obj.testId === editVariantId);
-
     }
 
-    function btns() {
-        return (<div className='afterConfirmBtns' style={{ display: hideShowBtns }}>
-            <Button onClick={handleOpenControlSettings} className='afterConfirmControlBtn'>Control</Button>
-            <div className='afterConfirmTesteditBtn'>
-                <p>Test edit</p>
-                <Button onClick={handleOpenEditTest}>Test edit</Button>
-            </div>
-        </div>)
-    }
-
-    const rows = [
-        displayTestCasesArray.map(i =>
-            [
-                {
-                    id: i.testId,
-                    variantTitle: i.variants.map((j) => {
-                        return j.variantTitle
-                    }),
-                    abVariantPrice: i.variants.map((j) => {
-                        return j.abVariantPrice
-                    }),
-                    abVariantComparePrice: i.variants.map((j) => {
-                        return j.abVariantComparePrice
-                    }),
-
-                }
-            ]
-
-        )
-    ];
-
-    const rowssss = [
-        { id: 1, price: '$5600 ', title: 'Jon --', compareAtPrice: "$4000" },
-        { id: 2, price: '$5600 ', title: 'Cersei', compareAtPrice: "$4000" },
-    ];
     var apiRes;
     const handleVariants = async () => {
-
 
         let data = {
             productId: `gid://shopify/Product/${id}`
@@ -276,7 +156,8 @@ const CreateTestStep2 = ({ objectSent }) => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                'Authorization': 'Bearer ' + cookieReader('token'),
             },
             body: JSON.stringify(data)
         })
@@ -287,13 +168,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
-
-
                     return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
-
-
-
-                    return item;
 
                 })
 
@@ -302,7 +177,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setProductsVariants(updatedArray)
                 setVariantRes(apiRes)
             })
-            .catch((error) => console.log("Error", error))
+            .catch((error) => {
+                console.log("Error", error)
+                setSnackbarColor('red')
+                setsnackbar_msg("Internal Server Error")
+        })
     }
     const cellEditStopManualModal = (params, event) => {
 
@@ -313,9 +192,8 @@ const CreateTestStep2 = ({ objectSent }) => {
 
 
             const updatedArray = productVariants?.map((item, index) => {
-                // console.log("item", item);
+            
                 if (index === objectIndex) {
-                    // setEditVariantId(item.testId)
                     if (params.field === "abVariantComparePrice") {
 
                         return { ...item, "abVariantComparePrice": event.target.value }
@@ -326,32 +204,13 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                     }
                 }
-
                 return item;
-
             })
             setProductsVariants(updatedArray)
-            // console.log("Updated array cellEditStopManualModal", updatedArray);
         }
     }
-    // console.log("Variants res =====>", variantRes && variantRes.data);
-
-
-
-    // productVariants && productVariants?.forEach((item) => {
-    //     originalVariantArray.push({
-    //         id: item.variant_id,
-    //         title: item.variantTitle,
-    //         variantPrice: item.variantPrice,
-    //         variantComparePrice: item.variantComparePrice
-    //     })
-    // })
-    // console.log("productVariants", productVariants && productVariants);
-
-
 
     const controlColumn = [
-        // { field: "id", headerName: "Emp ID", minWidth: 120, flex: 1 },
         {
             field: "variantTitle",
             headerName: "Title",
@@ -380,7 +239,6 @@ const CreateTestStep2 = ({ objectSent }) => {
         },
     ];
     const originalVariantColumn = [
-        // { field: "id", headerName: "Emp ID", minWidth: 120, flex: 1 },
         {
             field: "variantTitle",
             headerName: "Title",
@@ -407,83 +265,6 @@ const CreateTestStep2 = ({ objectSent }) => {
         },
     ];
 
-    const controlcolumns = [
-
-        {
-            field: 'variantTitle',
-            headerName: 'Title',
-            width: 250,
-            sortable: false,
-            flex: 0.5,
-
-            renderCell: (params) => {
-                return (<>
-                    <>
-                        {params.row.variants.map((role, index) => (
-                            <>
-
-                                <>{role.variantTitle}</><br />
-                            </>
-                        ))}
-                    </>
-                </>)
-
-
-
-            }
-        },
-
-
-        {
-            field: 'abVariantPrice',
-            headerName: 'Price',
-            width: 500,
-            sortable: false,
-            flex: 0.2,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {params.row.variants.map((role, index) => (
-                            <>{role.abVariantPrice}<br /></>
-                        ))}
-                    </>
-                )
-            }
-
-        },
-        {
-            field: 'abVariantComparePrice',
-            headerName: 'Compare at price',
-            width: 250,
-            sortable: false,
-            flex: 0.3,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {params.row.variants.map((role, index) => (
-                            <>{role.abVariantComparePrice}<br /></>
-                        ))}
-                    </>
-                )
-            }
-
-        },
-
-
-
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
-    ];
-
-
-    // console.log("New Array updated of productVariants", productVariants);
     const reviewAndLaunchBtnFunc = () => {
         setLoading(true)
         setDisabled(true)
@@ -510,43 +291,15 @@ const CreateTestStep2 = ({ objectSent }) => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
             },
             body: JSON.stringify(duplicateProductData)
         })
             .then(async (res) => {
-                // console.log("Duplicate product id: " + res.data.productDuplicate.newProduct.id);
 
                 const apiRes = await res.json()
-                // console.log("apiRes: " + JSON.stringify(apiRes));
-                // console.log("Data sent", apiRes.data.data.productDuplicate.newProduct.id);
-                // const duplicateProductId = apiRes.data.data.productDuplicate.newProduct.id;
-                // const duplicateVariants = apiRes.data.data.productDuplicate.newProduct.variants.node || apiRes.data.data.productDuplicate.newProduct.variants.nodes
-                // let data = {
-                //     "trafficSplit": objectToBeSent.trafficSplit,
-                //     "testCases": objectToBeSent.testCases,
-                //     "productId": objectToBeSent.productId,
-                //     // duplicateProductId,
-                //     // duplicateVariants
-
-                // }
-
-                // fetch(getApiUrl + '/api/createTestCase', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Accept': 'application/json, text/plain, */*',
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify(data)
-                // })
-                //     .then(async (res2) => {
-
-                //         const apiRes2 = await res2.json()
-                //         console.log("Data sent:", apiRes2);
-
-
-                // })
-                // .catch((error) => console.log("Error", error))
+            
                 setLoading(false)
                 objectSent({ apiRes, controlData: variantRes.data })
                 setOpens(true)
@@ -560,42 +313,36 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setsnackbar_msg("Test failed")
                 console.log("Error", error)
             })
-
-
     }
     const percentagePrices = [
         "2%", "3%", "5%", "10%"
     ]
 
-    // console.log("pricePercent", pricePercent);
     const onConfirmByPercentage = () => {
-        // console.log("percentIncDec", percentIncDec);
-        // console.log("Hello", variantRes);
+
         const updatedArray = variantRes && variantRes?.data.map(item => {
-            // console.log("original productVariants from percentage", variantRes);
+
 
             const variantPriceTemp = (item.variantPrice / 100) * pricePercent.replace('%', '')
             const variantComparePriceTemp = (item.variantComparePrice / 100) * pricePercent.replace('%', '')
-            // console.log("variantPriceTemp", variantPriceTemp);
+    
             console.log("item.variantComparePrice", item.variantComparePrice);
             if (percentIncDec === "+") {
 
                 const variantPriceTempFinal = (Number(item.variantPrice) + variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 console.log("final number is:", variantComparePriceFinal);
-                // console.log("final number is temp2:", variantPriceTempFinal);
+                
                 return { ...item, "variantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice":   variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
-                // console.log("final number is:", final);
-                // console.log("final number is temp2:", variantPriceTempFinal);
+        
                 return { ...item, "variantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice":  variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
 
             }
             return item
         })
-        // console.log("Hello again", updatedArray);
         setProductsVariants(updatedArray);
         console.log("updatedArray", updatedArray);
         setDisplayTestCasesArray([
@@ -605,84 +352,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                 id: displayTestCasesArray.length + 1,
                 variants: updatedArray
             }])
-        // displayTestCasesArray.push({
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
 
-        //     variants: updatedArray
-        // })
-
-        // let newItems = [...displayTestCasesArray];
-        // console.log("newItems1", newItems, testIdState);
-        // newItems[testIdState] = {
-        //     testId: displayTestCasesArray.length + 1,
-        //     id: displayTestCasesArray.length + 1,
-        //     variants: updatedArray
-        // };
-        // console.log("newItems2", newItems, testIdState);
         console.log("setDisplayTestCasesArray3");
-        // setDisplayTestCasesArray(newItems);
-
-
-        // setDisplayTestCasesArray(
-        //     displayTestCasesArray.map((key, row) => {
-        //       if (row[key] === testIdState) {
-        //         return { ...row, [key]:{
-        //             testId: displayTestCasesArray.length + 1,
-        //             id: displayTestCasesArray.length + 1,
-        //             variants: updatedArray
-        //         }};
-        //       } else {
-        //         return row;
-        //       }
-        //     })
-        //   );
         setDisabled(false)
         handleCloseByPercentageModal();
     }
-
-    const columnsDemo = [
-        { field: 'name', headerName: 'Name', width: 180, editable: true },
-        { field: 'age', headerName: 'Age', type: 'number', editable: true },
-
-    ];
-
-    const rowsDemo = [
-        {
-            id: 1,
-            name: "wer",
-            age: 25,
-
-        },
-        {
-            id: 2,
-            name: "wer",
-            age: 36,
-
-        },
-        {
-            id: 3,
-            name: "wer",
-            age: 19,
-
-        },
-        {
-            id: 4,
-            name: "wer",
-            age: 28,
-
-        },
-        {
-            id: 5,
-            name: "xyz",
-            age: 23,
-
-        },
-    ];
     console.log("productVariants ******", productVariants);
-
-
-
 
     const useCreateTestFakeMutation = () => {
         return React.useCallback(
@@ -700,41 +375,27 @@ const CreateTestStep2 = ({ objectSent }) => {
                             console.log("Here we go");
                             let tempArr = [...productVariants]
                             console.log("tempArr = " + tempArr);
-                            // productVariants[objectIndex] = user
-                            // setProductsVariants(...productVariants, )
-
-
-
+                
                             const updatedArray = tempArr?.map((item, index) => {
                                 console.log("updatedArray item", item);
                                 console.log("updatedArray index", index);
                                 if (index === objectIndex) {
                                     console.log("hello inside object");
-                                    // setEditVariantId(item.testId)
+                        
                                     console.log("item", user.abVariantComparePrice);
-                                    // if (user.abVariantComparePrice) {
 
                                     return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
-                                    // }
-                                    // if (user.abVariantPrice) {
-
-                                    //     return { ...item, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
-
-                                    // }
+                    
                                 }
-
                                 return item;
 
                             })
                             console.log("variants updated", updatedArray);
                             setProductsVariants(updatedArray)
-
                         }
-
                         if (!user) {
                             reject(new Error("Error while saving user: name can't be empty."));
                         } else {
-
                             resolve({ ...user });
                         }
                     }, 200),
@@ -746,22 +407,10 @@ const CreateTestStep2 = ({ objectSent }) => {
     const createTestProcessRowUpdate = React.useCallback(
         async (newRow) => {
             console.log("newRow", newRow);
-            // console.log("productVariants",productVariants);
-            // Make the HTTP request to save in the backend
             const response = await createTestMutateRow(newRow);
             console.log("response: table " + JSON.stringify(response));
             console.log("response: id " + JSON.stringify(response.id));
-            // console.log("variantRes", variantRes  )
-            // updatemanualproducts(response)
-            //  variantRes.filter(obj => {
-            //     console.log("obj id", obj.id);
-            //     return obj.id === response.id;
-            //   });
-            // let foundObject = productVariants.find((item) => item.id === response.id);
-            // console.log("foundObject", JSON.stringify(foundObject));
-
-            // setProductsVariants(response)
-            // setSnackbar({ children: 'User successfully saved', severity: 'success' });
+        
             return response;
         },
         [createTestMutateRow],
@@ -792,6 +441,27 @@ const CreateTestStep2 = ({ objectSent }) => {
         </div>)
     
       };
+      const rangeSliderMarks = [
+        {
+          value: 10,
+          label: '10%',
+        },
+        {
+          value: 25,
+          label: '25%',
+        },
+        {
+          value: 50,
+          label: '50%',
+        },
+        {
+          value: 75,
+          label: '75%',
+        },
+      ];
+      const rangeSliderValuetext = (value) => {
+        return `${value}°C`;
+      }
     useEffect(() => {
         if (!location?.state) {
             navigate('/createtest')
@@ -804,30 +474,10 @@ const CreateTestStep2 = ({ objectSent }) => {
             <Card className='createTestStep2'>
                 <div className='createTestStep2-main'>
                     <Navbar />
-                    {/* <Button onClick={() => objectSent(objectToBeSent)}>Test</Button> */}
                     <Card className='createTestStep2Block'>
                         <Typography variant='h4'>Create Test</Typography>
                         <Typography variant='p'>1. Select your prices to test</Typography><br />
-                        {/* <><ol><li> Select your prices to test</li></ol></> */}
-                        {/* <span  >
-                            <div onClick={handleOpenControlSettings}>
-
-                                <p>variantPriceData:{variantPriceData}</p>
-                                <p>variantCompareAtPriceData:{variantCompareAtPriceData}</p><br />
-                            </div>
-                            {displayTestCasesArray && displayTestCasesArray.map((item) => (<>
-                                <div onClick={() => handleOpenEditTest(item.testId)}>
-
-                                    <p>variantPriceData:{item.variants[0].abVariantPrice}</p>
-                                    <p>variantCompareAtPriceData:{item.variants[0].abVariantComparePrice}</p><br />
-                                </div>
-                            </>))}
-                        </span><br />
-                        <Button onClick={handleOpenConfigureTest1}>
-                            Add Test
-                        </Button><br /> */}
-
-
+            
                         <div className='add-test-wrapper'>
                             <div className='control-wrapper' onClick={handleOpenControlSettings}>
                                 <>
@@ -854,7 +504,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                                         </div>
                                         <span className='box-title'>Test {item.testId}</span>
                                     </div>
-                                    {/* <span className='box-price'> {location.state.currency} {Math.min(...item.variants.map(j => j.abVariantComparePrice))} - {location.state.currency} {Math.max(...item.variants.map(j => j.abVariantComparePrice))}</span> */}
                                     {item.variants.length > 1 ?
 
                                         <span className='box-prices'>{location.state.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))} - {location.state.currency} {Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
@@ -870,28 +519,17 @@ const CreateTestStep2 = ({ objectSent }) => {
                                 </div>
                                 <span className='add-test'>Add Test</span>
                             </div>
-                            {/* <div className='add-wrapper'>
-                                    <div className='add-icon'>
-                                        <img src={AddIcon} alt="" />
-                                    </div>
-                                    <span className='add-test'>Add Test</span>
-                                </div>
-                                <div className='add-wrapper'>
-                                    <div className='add-icon'>
-                                        <img src={AddIcon} alt="" />
-                                    </div>
-                                    <span className='add-test'>Add Test</span>
-                                </div> */}
+                        
                         </div>
 
                         <Typography variant='p'> 2. Set your traffic split </Typography>
-                        <Slider className="trafficSlider" valueLabelDisplay='auto' min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        
+                        <Slider className="trafficSlider" valueLabelDisplay='auto' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
                         <div>
-                            {/* {btns()} */}
-                            <Button onClick={reviewAndLaunchBtnFunc} disabled={disabled} className='step2completed'>{loading ? <Loader size={20} /> : "Confirm"}</Button>
-
-                            {/* <Button  className='step2completed' onClick={handleVariants}>jash</Button> */}
+                            <Button onClick={reviewAndLaunchBtnFunc} disabled={disabled} className='step2completed'>{loading ? <Loader size={20} /> :  displayTestCasesArray.length?"Review & Publish": "Review & Launch"}</Button>
+                
                         </div>
                     </Card>
                 </div>
@@ -925,7 +563,6 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                         <div className='btn_adjust'>
 
-                            {/* <p></p> */}
                             <Button onClick={handleOpenByPercentageModal}>Adjust by Percentage</Button>
                         </div>
 
@@ -937,10 +574,9 @@ const CreateTestStep2 = ({ objectSent }) => {
             {/* set price manually modal  */}
             <Modal
                 open={openManualModal}
-                //onClose={handleCloseManualModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-            //disableBackdropClick
+        
             >
                 <Box sx={style} className="manualmodal">
                     <img src={closeIcon} alt="" className='closeBtn' onClick={handleCloseManualModal} />
@@ -954,33 +590,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <Card className='manualModalTable'>
                         <div style={{ height: '100%', width: '100%' }}>
                             {!productVariants ? <Loader size={40} /> : (<>
-
-                                {/* <DataGrid
-                                rows={productVariants && productVariants}
-                                columns={originalVariantColumn}
-                                pageSize={6}
-                                rowsPerPageOptions={[6]}
-                                    experimentalFeatures={{ newEditingApi: true }}
-                                disableColumnMenu
-                                onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-                                sx={{
-                                    [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
-                                    {
-                                        outline: "none",
-                                    },
-                                    [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
-                                    {
-                                        outline: "none",
-                                    },
-                                }}
-                            /> */}
-                                {/* <DataGrid
-        rows={productVariants && productVariants}
-                                columns={originalVariantColumn}
-        experimentalFeatures={{ newEditingApi: true }}
-        onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-      /> */}
-
                                 <DataGrid
                                     rows={productVariants && productVariants}
                                     columns={originalVariantColumn}
@@ -1013,7 +622,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                 </Box>
             </Modal>
 
-
             {/* set price by percentage modal  */}
             <Modal
                 open={openByPercentageModal}
@@ -1042,7 +650,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                             </div>
                         </div>
                         <span>
-
                             <Typography variant='h5'>By how much? </Typography>
                         </span>
                         <div className='percentageBtnGroup'>
@@ -1066,9 +673,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                 </Box>
             </Modal>
 
-
-
-
             {/* Control edit test  modal  */}
             <Modal
                 open={openEditTest}
@@ -1088,25 +692,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                         <div style={{ height: '100%', }}>
                             {!productVariants ? <Loader size={40} /> : (<>
 
-                                {/* <DataGrid
-                                    // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
-                                    rows={productVariants && productVariants}
-                                    columns={originalVariantColumn}
-                                    pageSize={6}
-                                    rowsPerPageOptions={[6]}
-                                    disableColumnMenu
-                                    onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-                                    sx={{
-                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                    }}
-                                /> */}
                                 <DataGrid
                                     rows={productVariants && productVariants}
                                     columns={originalVariantColumn}
@@ -1138,8 +723,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                 </Box>
             </Modal>
 
-
-
             {/* Control settings  modal  */}
             <Modal
                 open={openControlSettings}
@@ -1156,54 +739,10 @@ const CreateTestStep2 = ({ objectSent }) => {
                         Here are the current settings for this product on your store, They cannot be changed within PricePerfect. The prices below will be used as the control for your testing
                     </Typography>
                     <div className='controlTable' style={{ overflowY: 'auto' }}>
-                        {/* <div style={{ height: '100%', }}>
-                            <DataGrid
-                                rows={displayTestCasesArray && displayTestCasesArray}
-                                columns={controlcolumns}
-                                pageSize={6}
-                                rowsPerPageOptions={[6]}
-                                disableColumnMenu
-                            />
-                        </div> */}
-
-                        {/* <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Title</TableCell>
-                                    <TableCell>Price</TableCell>
-                                    <TableCell>Compare at Price</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {displayTestCasesArray && displayTestCasesArray.map((row) => (
-                                    <TableRow
-                                        key={row.testId}
-                                    >
-
-                                        <TableCell align="right">{row.variants.map((i) => (<>
-                                            <>{i.variantTitle}</><br />
-                                        </>))
-                                        }</TableCell>
-                                        <TableCell align="right">{row.variants.map((i) => (<>
-                                            <>{i.variantPrice}</><br />
-                                        </>))
-                                        }</TableCell>
-                                        <TableCell align="right">{row.variants.map((i) => (<>
-                                            <>{i.variantComparePrice}</><br />
-                                        </>))
-                                        }</TableCell>
-
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table> */}
-                        {/* <div className='controlTable'> */}
                         <div style={{ height: '100%', }}>
                             <DataGrid
-                                // rows={displayTestCasesArray && displayTestCasesArray[testIdState - 1]?.variants}
                                 rows={variantRes && variantRes.data}
                                 columns={controlColumn}
-                                // columns={originalVariantColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
                                 disableColumnMenu
@@ -1220,17 +759,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                                 }}
                             />
                         </div>
-                        {/* </div> */}
                     </div>
 
-                    {/* <div className='confirmBtn'>
-                        <Button onClick={() => setOpenControlSettings(false)}>Confirm</Button>
-                    </div> */}
                 </Box>
             </Modal>
             <div>{errorfunction()}</div>
-
-
         </>
     )
 }

@@ -15,7 +15,7 @@ import ResultRevenueLogo2 from './Images/ResultRevenueLogo2.png';
 
 
 export default function SignUp() {
-const navigate = useNavigate();
+    const navigate = useNavigate();
     //Show error message
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
@@ -65,6 +65,12 @@ const navigate = useNavigate();
         password: "",
         confirmPassword: ""
     });
+    let [revenueInput, setRevenueInput] = useState({
+        dailyRevenue: "",
+        dailyTraffic: "",
+        averageOrderValue: "",
+        conversionRate: "",
+    });
 
     const inputEvent = (e) => {
         const { name, value } = e.target
@@ -75,7 +81,25 @@ const navigate = useNavigate();
             }
         })
     }
+    const handleChange = (event) => {
+        const numberRegex = /^\d+$/;
+        if (event.target.value === '' || numberRegex.test(event.target.value)) {
+            setDailyrevenue(event.target.value);
+        }
+      };
+    const inputRevenueEvent = (e) => {
+        const { name, value } = e.target
+        const numberRegex = /^\d+$/;
+        if (e.target.value === '' || numberRegex.test(e.target.value)) {
 
+            setRevenueInput((prev) => {
+                return {
+                    ...prev,
+                    [name]: value
+                }
+            })
+        }
+    }
 
     const createAccount = async () => {
 
@@ -95,56 +119,49 @@ const navigate = useNavigate();
         if (!input.firstName || !input.lastName || !input.email || !input.password || !input.confirmPassword) {
             console.log("Not a valid email or password");
             setOpens(true)
-                    setSnackbarColor('red')
-                    setsnackbar_msg(`All fields are required`)
+            setSnackbarColor('red')
+            setsnackbar_msg(`All fields are required`)
         } else {
             if (input.password !== input.confirmPassword) {
                 console.log("If")
-                // alert("Please check the password..!")
                 setOpens(true)
                 setSnackbarColor('red')
                 setsnackbar_msg(`Passwords doesn't matched`)
             } else {
                 if (isValidEmail(input.email)) {
                     console.log('The email is valid');
-                    
-                    // setOpens(true)
-                    // setSnackbarColor('#325240')
-                    // setsnackbar_msg("Correct email")
-                    console.log("Else")
-                await fetch('/api/signupdetails', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/json',
-                        'shop': cookieReader('shop')
-                    },
-                    body: JSON.stringify(data)
-                }).then(async (res) => {
-                    const apiRes =await res.json() 
-                    console.log("signup apiRes", apiRes)
-                    setOpens(true)
-                    setSnackbarColor('#325240')
-                    setsnackbar_msg(`${apiRes.message}`)
-                    if (apiRes.message === "Account created successfully") {
-                        
-                        navigate('/',{state:{message:`${apiRes.message}`}})
-                    }
-                })
-                    .catch((error) => {
+            
+                    await fetch('/api/signupdetails', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json, text/plain, */*',
+                            'Content-Type': 'application/json',
+                            'shop': cookieReader('shop')
+                        },
+                        body: JSON.stringify(data)
+                    }).then(async (res) => {
+                        const apiRes = await res.json()
+                        console.log("signup apiRes", apiRes)
                         setOpens(true)
-                    setSnackbarColor('red')
-                    setsnackbar_msg(`Account not created`)
-                        console.log("Error", error)
+                        setSnackbarColor('#325240')
+                        setsnackbar_msg(`${apiRes.message}`)
+                        if (apiRes.message === "Account created successfully") {
+
+                            navigate('/', { state: { message: `${apiRes.message}` } })
+                        }
                     })
+                        .catch((error) => {
+                            setOpens(true)
+                            setSnackbarColor('red')
+                            setsnackbar_msg(`Account not created`)
+                            console.log("Error", error)
+                        })
                 } else {
                     setOpens(true)
                     setsnackbar_msg("Invalid email")
                     setSnackbarColor('red')
-                    // setError('Email is invalid');
                     console.log('The email is invalid');
-                  }
-                
+                }
             }
         }
 
@@ -156,21 +173,19 @@ const navigate = useNavigate();
         setErrorConversionRate(true)
         setErrorTrafficMess(true)
         setErrorAverageorderMess(true)
-
         console.log("errorDailyMess", errorDailyMess)
         console.log("************ dailyrevenue", typeof dailyrevenue)
 
-        if (dailyrevenue === "" || conversionRate === "" || dailytraffic === "" || orderValue === "") {
+        if (revenueInput.dailyTraffic === "" || revenueInput.averageOrderValue === "" || revenueInput.conversionRate === "" || revenueInput.dailyRevenue === "") {
             return false;
         }
 
-        // setTimeout(hideRevenueTime, 1000)
         console.log("dailyrevenue", RevenueResult)
         let newArray = [...RevenueResult]
-        newArray[0].dailyRevenueResult = dailyrevenue;
-        newArray[0].dailytRafficResult = dailytraffic;
-        newArray[0].orderValueResult = orderValue;
-        newArray[0].ConversionRateResult = conversionRate;
+        newArray[0].dailyRevenueResult = revenueInput.dailyRevenue;
+        newArray[0].dailytRafficResult = revenueInput.dailyTraffic;
+        newArray[0].orderValueResult = revenueInput.averageOrderValue;
+        newArray[0].ConversionRateResult = revenueInput.conversionRate;
         setToggleScrollresult(newArray)
     };
 
@@ -195,36 +210,37 @@ const navigate = useNavigate();
 
     const redirectRevenuePage = () => {
         setToggle(false)
-        // navigate('/signup')
+
         navigate('/signup#scrollrevenue')
         console.log("toggle lalalal", toggle)
     }
     const handleClose = () => {
         setOpens(false);
-      };
+    };
     const errorfunction = () => {
         return (<div>
-          <Snackbar
-            open={opens}
-            sx={{ width: "50%" }}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            autoHideDuration={3000}
-            onClose={handleClose}
-          >
-            <Alert
-              variant="filled"
-              onClose={handleClose}
-              sx={{ width: "50%", bgcolor: snackbarColor }}
+            <Snackbar
+                open={opens}
+                sx={{ width: "50%" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                autoHideDuration={3000}
+                onClose={handleClose}
             >
-              {snackbar_msg}
-            </Alert>
-          </Snackbar>
+                <Alert
+                    variant="filled"
+                    onClose={handleClose}
+                    sx={{ width: "50%", bgcolor: snackbarColor }}
+                >
+                    {snackbar_msg}
+                </Alert>
+            </Snackbar>
         </div>)
-    
-      };
-      function isValidEmail(email) {
+
+    };
+    function isValidEmail(email) {
         return /\S+@\S+\.\S+/.test(email);
-      }
+    }
+
     return (
         <>
 
@@ -418,16 +434,17 @@ const navigate = useNavigate();
                                         className='please-width'
                                         id=""
                                         label=""
+                                        name='dailyRevenue'
                                         variant="outlined"
                                         placeholder='e.g. $5000'
                                         helperText={
-                                            errorDailyMess && dailyrevenue === ""
+                                            errorDailyMess && revenueInput.dailyRevenue === ""
                                                 ? "Please insert Daily revenue"
                                                 : null
                                         }
-                                        error={errorDailyMess && dailyrevenue === ""}
-                                        value={dailyrevenue}
-                                        onChange={(e) => setDailyrevenue(e.target.value)}
+                                        error={errorDailyMess && revenueInput.dailyRevenue === ""}
+                                        value={revenueInput.dailyRevenue}
+                                        onChange={inputRevenueEvent}
                                     />
                                 </div>
                                 <div className='welcomeInputs'>
@@ -436,16 +453,17 @@ const navigate = useNavigate();
                                         className='please-width'
                                         id=""
                                         label=""
+                                        name='dailyTraffic'
                                         variant="outlined"
                                         placeholder='e.g. 15,000 visitors'
                                         helperText={
-                                            errorTrafficMess && dailytraffic === ""
+                                            errorTrafficMess && revenueInput.dailyTraffic === ""
                                                 ? "Please insert Daily Traffic"
                                                 : null
                                         }
-                                        error={errorTrafficMess && dailytraffic === ""}
-                                        value={dailytraffic}
-                                        onChange={(e) => setDailyTraffic(e.target.value)}
+                                        error={errorTrafficMess && revenueInput.dailyTraffic === ""}
+                                        value={revenueInput.dailyTraffic}
+                                        onChange={inputRevenueEvent}
                                     />
                                 </div>
                                 <div className='welcomeInputs'>
@@ -454,16 +472,17 @@ const navigate = useNavigate();
                                         className='please-width'
                                         id="" l
                                         abel=""
+                                        name='averageOrderValue'
                                         variant="outlined"
                                         placeholder='e.g. $45.60'
                                         helperText={
-                                            errorAverageorderMess && orderValue === ""
+                                            errorAverageorderMess && revenueInput.averageOrderValue === ""
                                                 ? "Please insert Average order value"
                                                 : null
                                         }
-                                        error={errorAverageorderMess && orderValue === ""}
-                                        value={orderValue}
-                                        onChange={(e) => setOrderValue(e.target.value)}
+                                        error={errorAverageorderMess && revenueInput.averageOrderValue === ""}
+                                        value={revenueInput.averageOrderValue}
+                                        onChange={inputRevenueEvent}
                                     />
                                 </div>
                                 <div className='welcomeInputs' style={{ marginBottom: "20px" }}>
@@ -472,16 +491,17 @@ const navigate = useNavigate();
                                         className='please-width'
                                         id=""
                                         label=""
+                                        name='conversionRate'
                                         variant="outlined"
                                         placeholder='e.g. 2.7%'
                                         helperText={
-                                            errorConversionRate && conversionRate === ""
+                                            errorConversionRate && revenueInput.conversionRate === ""
                                                 ? "Please insert Conversion rate"
                                                 : null
                                         }
-                                        error={errorConversionRate && conversionRate === ""}
-                                        value={conversionRate}
-                                        onChange={(e) => setConversionRate(e.target.value)}
+                                        error={errorConversionRate && revenueInput.conversionRate === ""}
+                                        value={revenueInput.conversionRate}
+                                        onChange={inputRevenueEvent}
                                     />
                                 </div>
                                 <a href='#scrollresult' style={{ textDecoration: "none" }} >
@@ -497,7 +517,7 @@ const navigate = useNavigate();
                                 <div id='scrollresult'>
                                     <div className='welcome-wrappers'>
                                         <div className='close-icon'>
-                                            <img src={closeIcon} alt="" onClick={ redirectRevenuePage} />
+                                            <img src={closeIcon} alt="" onClick={redirectRevenuePage} />
                                         </div>
                                         <Typography variant='h4'>Give them the results  here.</Typography>
                                         <Typography className='span' variant='p'>Calculate your expected revenue increase below!</Typography>

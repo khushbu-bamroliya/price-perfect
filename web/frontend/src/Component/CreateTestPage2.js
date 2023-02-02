@@ -8,62 +8,7 @@ import selectPriceTestIcon from "../../src/Component/Images/Arrow.png"
 import addTestCases from "../../src/Component/Images/add-square.png"
 
 const CreateTestPage2 = () => {
-    const columns = [
-        {
-            field: 'id',
-            headerName: 'ID',
-            width: 250,
-            sortable: false,
-        },
-        {
-            field: 'Product',
-            headerName: 'Product',
-            width: 250,
-            sortable: false,
-        },
-        {
-            field: 'Description',
-            headerName: 'Description',
-            width: 250,
-            sortable: false,
-        },
-        {
-            field: 'status',
-            headerName: 'Status',
-            width: 250,
-            sortable: false,
-        },
-        {
-            field: 'action',
-            headerName: 'action',
-            type: 'number',
-            width: 250,
-            sortable: false,
-        },
-        {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
-            sortable: false,
-            width: 250,
-            type: 'number',
-            valueGetter: (params) =>
-                `${params.row.Product || ''} ${params.row.Description || ''}`,
-        },
-    ];
 
-
-    const rows = [
-        { id: 1, Description: 'Snow', Product: 'Jon', action: 35, status: "Active" },
-        { id: 2, Description: 'Lannister', Product: 'Cersei', action: 42, status: "Active" },
-        { id: 3, Description: 'Lannister', Product: 'Jaime', action: 45, status: "Active" },
-        { id: 4, Description: 'Stark', Product: 'Arya', action: 16, status: "Active" },
-        { id: 5, Description: 'Targaryen', Product: 'Daenerys', action: null, status: "Active" },
-        { id: 6, Description: 'Melisandre', Product: null, action: 150, status: "Active" },
-        { id: 7, Description: 'Clifford', Product: 'Ferrara', action: 44, status: "Active" },
-        { id: 8, Description: 'Frances', Product: 'Rossini', action: 36, status: "Active" },
-        { id: 9, Description: 'Roxie', Product: 'Harvey', action: 65, status: "Active" },
-    ];
     return (
         <>
             <Card className='createTestPage'>

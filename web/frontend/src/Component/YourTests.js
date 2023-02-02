@@ -58,17 +58,6 @@ const YourTests = () => {
         setAnchorElNav(null);
     };
     const rows2 = []
-    const rows = [
-        { id: 1, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD", },
-        { id: 2, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD", },
-        { id: 3, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD", },
-        { id: 4, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD", },
-        { id: 5, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD", },
-        { id: 6, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD", },
-        { id: 7, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD", },
-        { id: 8, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD", },
-        { id: 9, images: "#987546", duration: "2500 USD", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD", },
-    ];
     const columns = [
         {
             field: 'featuredImage',
@@ -82,8 +71,6 @@ const YourTests = () => {
                         <div className='tableImages'>
                             <div>
                             {params.row.featuredImage ? <img src={params.row.featuredImage } alt='' />:<HideImageOutlinedIcon/> }
-                            
-                                
                             </div>
                         </div>
                         <p className='productID'>
@@ -92,8 +79,6 @@ const YourTests = () => {
                 )
             }
         },
-
-
         {
             field: 'product',
             headerName: 'Test Product',
@@ -127,19 +112,16 @@ const YourTests = () => {
             sortable: false,
             flex: 0.2,
             renderCell: (params) => {
-                // console.log("params: " + params.row.action);
                 return (
                     <div className='actionIcon'>
                         <NavLink to={`/managetest/${params.row.action}`} onClick={(e) => e.stopPropagation()} ><img src={EyeIcon} alt="" /></NavLink>
                         <Tooltip title={copiedTooltip ? "copied" : null }  arrow>
-
                         <img src={LinkIcon} alt="" onClick={(e) => {
                             e.stopPropagation();
                             navigator.clipboard.writeText(params.row.handle)
                             setCopiedTooltip(true)
                             setInterval(() => {
                             setCopiedTooltip(false)
-
                             },2000)
                         }}
                         />
@@ -149,93 +131,7 @@ const YourTests = () => {
                 )
             }
         },
-        // {
-        //     field: 'fullName',
-        //     headerName: 'Full name',
-        //     description: 'This column has a value getter and is not sortable.',
-        //     sortable: false,
-        //     width: 250,
-        //     type: 'number',
-        //     valueGetter: (params) => console.log("params", params)
-        //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-        // },
     ];
-    // const columns = [
-    //     {
-    //         field: 'images',
-    //         headerName: 'Product',
-    //         width: 250,
-    //         sortable: false,
-    //         flex: 0.3,
-    //         renderCell: (params) => {
-    //             return (
-    //                 <>
-    //                     <div className='tableImages'>
-    //                         <div>
-    //                             <img src={avatar} alt='' />
-    //                         </div>
-    //                     </div>
-    //                     <p className='productID'>
-    //                         {params.row.images}
-    //                     </p>
-    //                 </>
-    //             )
-    //         }
-    //     },
-
-
-    //     {
-    //         field: 'Description',
-    //         headerName: 'Test',
-    //         width: 500,
-    //         sortable: false,
-    //         flex: 0.3
-    //     },
-    //     {
-    //         field: 'price',
-    //         headerName: 'Status',
-    //         width: 250,
-    //         sortable: false,
-    //         flex: 0.2,
-
-    //     },
-    //     {
-    //         field: 'duration',
-    //         headerName: 'Duration',
-    //         width: 250,
-    //         sortable: false,
-    //         flex: 0.2,
-
-    //     },
-    //     {
-    //         field: 'action',
-    //         headerName: 'Action',
-    //         type: "number",
-    //         width: 150,
-    //         sortable: false,
-    //         flex: 0.2,
-    //         renderCell: (params) => {
-    //             console.log("params: " + params);
-    //             return (
-    //                 <div className='actionIcon'>
-    //                      <NavLink to="/managetest"><img src={EyeIcon} alt="" /></NavLink> 
-    //                     <img src={LinkIcon} alt="" />
-    //                     <img src={TrashIcon} alt="" />
-    //                 </div>
-    //             )
-    //         }
-    //     },
-    //     // {
-    //     //     field: 'fullName',
-    //     //     headerName: 'Full name',
-    //     //     description: 'This column has a value getter and is not sortable.',
-    //     //     sortable: false,
-    //     //     width: 250,
-    //     //     type: 'number',
-    //     //     valueGetter: (params) => console.log("params", params)
-    //     //        // `${params.row.Product || ''} ${params.row.Description || ''}`,
-    //     // },
-    // ];
     allTests && allTests.data.map((i) => {
         rows2.push({
             id: i._id,
@@ -258,7 +154,8 @@ const YourTests = () => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
             },
         })
             .then(async (res) => {
@@ -282,7 +179,9 @@ const YourTests = () => {
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                'shop': cookieReader('shop')
+                'shop': cookieReader('shop'),
+                "Authorization":"Bearer " + cookieReader('token')
+            
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -347,30 +246,17 @@ const YourTests = () => {
                             </div>
 
                             <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: "flex" }}>
-                                {/* {pages.map((page) => (
-                                    <Button
-                                        key={page}
-                                        onClick={handleCloseNavMenu}
-                                        sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
-                                        {page}
-                                    </Button>
-                                ))} */}
+                            
                                 <Button disabled
                                         sx={{ my: 2, color: 'white', display: 'block' }}
                                     >
                                     All Tests
                                     </Button>
-                                {/* <Typography variant='p' sx={{ my: 2, display: 'block' }}>All Tests</Typography> */}
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
                                 <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchData} onChange={(e) => setSearchData(e.target.value)} />
-                                {/* <Button variant="outlined">
-                                    <NavLink to="/home">
-                                        Next
-                                    </NavLink>
-                                </Button> */}
+                            
                             </div>
                             <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                                 <IconButton
@@ -442,10 +328,6 @@ const YourTests = () => {
                             aria-describedby="modal-modal-description"
                         >
                             <Box sx={style} className="configureTest1">
-
-                                {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Text in a modal
-                                </Typography> */}
                                 <div className='close-icon'>
                                     <img src={closeIcon} alt="" onClick={() => setOpenDeleteModal(false)} />
                                 </div>
