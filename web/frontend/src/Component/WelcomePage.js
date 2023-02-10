@@ -139,11 +139,13 @@ export default function WelcomePage({ shop }) {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         autoHideDuration={3000}
         onClose={handleClose}
+        className="sanckbarWrapper"
       >
         <Alert
           variant="filled"
           onClose={handleClose}
           sx={{ width: "50%", bgcolor: snackbarColor }}
+          className="alertWrapper"
         >
           {snackbar_msg}
         </Alert>

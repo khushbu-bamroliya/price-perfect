@@ -299,9 +299,9 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className='mt-76'>
-                                                    <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
-                                                    <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
+                                                <div className='mt-76 flex-row justify-content-around'>
+                                                    <button className='launchBtn cursor min-192' onClick={() => launchTest()}>Launch</button>
+                                                    <button className='secondaryBtn cursor scheduleBtn min-183'><span>Schedule</span></button>
 
                                                 </div>
                                             </>) : (<>

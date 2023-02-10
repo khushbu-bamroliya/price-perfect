@@ -73,9 +73,9 @@ export default function SignUp() {
         <>
 
             {/* SignUp Page */}
-            <div className='welcomePage height'>
+            <div className='welcomePage height un-height'>
 
-                <Card className="welcomeBlock1 min-w">
+                <Card className="welcomeBlock1 min-w welcome-hei">
                     <img src={logo} className="logo" alt="" />
                     <Card>
                         <CardContent className="welcomeBlock1Content" sx={{ padding: 0 }}>
@@ -83,7 +83,7 @@ export default function SignUp() {
                         </CardContent>
                     </Card>
                 </Card>
-                <Card className='welcomeBlock2 min-wi padding'>
+                <Card className='welcomeBlock2 min-wi padding welcome-heig'>
                     <Card className='wrappers'>
                         <CardContent className='welcomeContent' sx={{ padding: 0 }}>
                             <div className='close-icon'>

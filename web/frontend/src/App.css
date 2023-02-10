@@ -3159,7 +3159,24 @@ html {
         flex-wrap: wrap;
         height: unset;
     }
+    .un-height{
+        height: 100%;
+    }
 
+    .welcome-hei{
+        height: 50%;
+    }
+
+    .welcome-heig{
+        height: 50%;
+        padding-top: 20px !important;
+    }
+    .welcomeBlock2.welcome-heig{
+        align-items: unset !important;
+    }
+    .welcome-heig>div{
+        margin-top: 0 !important;
+    }
     .logo {
         margin: 16px;
         left: 20px;

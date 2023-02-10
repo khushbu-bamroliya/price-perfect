@@ -600,7 +600,13 @@ const ViewOrManageTestPage = () => {
             return res.json()
         }).then(res => {
             console.log("Test status updated", res);
+            setOpens(true)
+            setSnackbarColor('#325240')
+            setsnackbar_msg("Test status updated.")
         }).catch((error) => {
+            setOpens(true)
+            setSnackbarColor('red')
+            setsnackbar_msg("Error while updating status.")
             console.log("error", error);
         })
     }

@@ -611,10 +611,10 @@ const [tempTestArr,setTempTestArr] = useState([])
 
                             {loading.variants ? <Loader size={40} /> : (<>
                                 {variantRes && variantRes?.data?.length > 1 ? (<>
-                                    <div className='padding'>
+                                    <div className='-1'>
                                         <button className='viewPricing mt-40' onClick={handleOpenControlSettings}>View Pricing</button>
                                     </div>
-                                </>) : (<div className='mt-22 padding'>
+                                </>) : (<div className='mt-22 padding-1'>
                                     <span className='CompareAtPriceData d-block'>{variantCompareAtPriceData && <>{location?.state?.currency} {variantCompareAtPriceData}</>}</span>
                                     <span className='ComparePrice d-block'>{location?.state?.currency} {variantPriceData}</span>
                                 </div>)}
@@ -637,7 +637,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                                         <span>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
                                     }  */}
 
-                                    <div className='padding mt-40 flex-row align-items-center justify-between'>
+                                    <div className='padding-1 mt-40 flex-row align-items-center justify-between'>
                                         <button onClick={() => handleOpenEditTest(item.testId)} className='managePricing mr-37'>
                                             <span className='manageSpan'>Manage Pricing</span>
                                         </button>
