@@ -5,6 +5,7 @@ const Product = require("../models/Product");
 const _ = require("lodash");
 const createTestModal = require('../models/createTestModal');
 const { decodeJWT } = require('../controllers/utils');
+const { default: mongoose } = require('mongoose');
 
 
 const in_array = (array, id) => {
@@ -19,18 +20,18 @@ const allProducts = async (req, res) => {
     const shop = req.headers.shop;
     console.log("shop", shop);
     console.log("req.headers", req.headers);
-const item_per_page = 10;
-  
+    const item_per_page = 10;
+
     var access_token = "";
     var currency = "";
 
     console.log("shop", shop);
     if (shop) {
 
-      const shopData = await Shop.findOne({ shop }).select(['access_token','money_format']);
+      const shopData = await Shop.findOne({ shop }).select(['access_token', 'money_format']);
       console.log("====> shopData <====", shopData);
       access_token = shopData.access_token
-        currency = shopData.money_format.replace(' {{amount}}','')
+      currency = shopData.money_format.replace(' {{amount}}', '')
     }
 
     const {
@@ -128,7 +129,7 @@ const item_per_page = 10;
         "products"
       );
       console.log("ans1", ans1);
-    
+
       let ans = ans1.products.edges;
 
       var products = [];
@@ -176,7 +177,7 @@ const item_per_page = 10;
                     ? node.featuredImage.url
                     : "",
                 title: node.title ? node.title : "",
-                currency:currency,
+                currency: currency,
                 description: node.description ? node.description : "-",
                 variant_title: "",
                 price:
@@ -233,7 +234,7 @@ const item_per_page = 10;
     //call first time
     const resProducts = await recursion_products(JSON.stringify(hasNextPageCursor));
     console.log("resProducts: " + resProducts);
- 
+
     res.status(200).send(resProducts);
 
 
@@ -316,19 +317,19 @@ const getVariants = async (req, res) => {
     `;
 
     let ans1 = await PostApiGraphql(shop, access_token, query);
-        var products = [];
-    
+    var products = [];
+
     if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
       for (let resProduct of ans1.data.product.variants.edges) {
         const info = resProduct.node;
-        
-        console.log("ans1.data.product.handle",ans1.data.product.handle);
+
+        console.log("ans1.data.product.handle", ans1.data.product.handle);
         products.push({
           id: info.id,
           variantTitle: info.title,
           variantPrice: info.price,
           variantComparePrice: info.compareAtPrice,
-          featuredImage: ans1.data.product.featuredImage ? ans1.data.product.featuredImage.src: "",
+          featuredImage: ans1.data.product.featuredImage ? ans1.data.product.featuredImage.src : "",
           productTitle: ans1.data.product.title
         })
       }
@@ -352,9 +353,9 @@ const createDuplicateProduct = async (req, res) => {
 
     const shop = req.headers.shop;
 
-    var { productId, productTitle,featuredImage,productPrice,currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
+    var { productId, productTitle, featuredImage, productPrice, currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
     console.log("==>2", handle)
-console.log("objectToBeSent.variants",objectToBeSent);
+    console.log("objectToBeSent.variants", objectToBeSent);
     var access_token;
     let newObjectToBeSent;
     let objectToBeSentCreated = [];
@@ -402,7 +403,7 @@ console.log("objectToBeSent.variants",objectToBeSent);
 
       let newMakeArr = NewRes.data.productDuplicate.newProduct.variants.nodes;
       let duplicateVariantId = NewRes.data.productDuplicate.newProduct.id;
-  
+
       duplicateProductId.push(NewRes.data.productDuplicate.newProduct.id)
       console.log("duplicateProductId", duplicateProductId);
 
@@ -422,11 +423,11 @@ console.log("objectToBeSent.variants",objectToBeSent);
         console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
 
         var query_var = '';
-console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice",objectToBeSent?.testCases[i].variants[j].abVariantComparePrice);
+        console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice", objectToBeSent?.testCases[i].variants[j].abVariantComparePrice);
         // console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
 
-        if (objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice !=  null ) {
-console.log("****************************************************************");
+        if (objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice != null) {
+          console.log("****************************************************************");
           console.log("object tests", objectToBeSent.testCases);
           query_var = `
         mutation productVariantUpdate {
@@ -460,7 +461,7 @@ console.log("****************************************************************");
 
         }
         else {
-    
+
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(
@@ -510,7 +511,7 @@ console.log("****************************************************************");
       newObjectToBeSent = { ...objectToBeSent.testCases[i] }
       objectToBeSentCreated.push(newObjectToBeSent)
       console.log("newObjectToBeSent", newObjectToBeSent);
-  
+
     }
 
 
@@ -567,7 +568,7 @@ console.log("****************************************************************");
 `
 
       let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
-  
+
     })
     console.log("objectToBeSentCreated", JSON.stringify(objectToBeSentCreated));
 
@@ -575,16 +576,16 @@ console.log("****************************************************************");
     console.log("==>22", req.body);
 
 
-    let createTestData = await createTestModal.create({currency:objectToBeSent.currency, trafficSplit,handle:`https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
+    let createTestData = await createTestModal.create({ currency: objectToBeSent.currency, trafficSplit, handle: `https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
 
     if (!createTestData) {
       return res.json("Create Test case error...!")
     }
-console.log("currency", objectToBeSent.currency);
+    console.log("currency", objectToBeSent.currency);
     res.status(200).json({
       data: createTestData,
       handle,
-      currency:objectToBeSent.currency,
+      currency: objectToBeSent.currency,
       success: true,
       status: 200
     })
@@ -592,8 +593,103 @@ console.log("currency", objectToBeSent.currency);
     console.log("Error for duplicate product", error);
   }
 }
+const updateDuplicateProduct = async (req, res) => {
 
+  const shop = req.headers.shop;
+  let access_token;
+  const updatedDuplicateVariants = []
+  const shopData = await Shop.findOne({ shop }).select(["access_token"]);
+
+  if (shopData && shopData.access_token) {
+    access_token = shopData.access_token;
+  }
+  const { testCases, databaseId } = req.body;
+  console.log("req.body", req.body);
+  let query;
+  try {
+    if (testCases) {
+      for (let j = 0; j < testCases.length; j++) {
+        for (let i = 0; i < testCases[j]?.variants?.length; i++) {
+          console.log("duplicateVariantId",testCases[j]?.variants[i]?.duplicateVariantId);
+          console.log("abVariantPrice",testCases[j]?.variants[i]?.abVariantPrice);
+          
+          if (testCases[j]?.variants[i]?.abVariantComparePrice != null) {
+            query = `mutation{
+              productVariantUpdate(input:{
+                id:"${testCases[j]?.variants[i]?.duplicateVariantId}",
+                price:${testCases[j]?.variants[i]?.abVariantPrice}
+                compareAtPrice:${testCases[j]?.variants[i]?.abVariantComparePrice}
+              }) {
+                  productVariant {
+                id
+                title
+                price
+            
+              }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+            `;
+          } else {
+            console.log("abVariantComparePrice", testCases[j]?.variants[i]?.abVariantComparePrice);
+            query = `mutation{
+            productVariantUpdate(input:{
+              id:"${testCases[j]?.variants[i]?.duplicateVariantId}",
+              price:${testCases[j]?.variants[i]?.abVariantPrice},
+          
+            }) {
+                productVariant {
+              id
+              title
+              price
+              compareAtPrice
+            }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+          `;
+          }
+          console.log("query: " + query);
+          let NewRes = await PostApiGraphql(shop, access_token, query);
+          console.log("new res: " + JSON.stringify(NewRes));
+  
+        }
+
+      }
+  
+
+      const dbDataUpdate = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(databaseId) }, {
+        testCases: testCases
+      })
+      console.log("dbDataUpdate", dbDataUpdate);
+    } else {
+      res.status(200).json({ success: false, message: "Update failed!" })
+    }
+
+    res.status(200).json({ success: true, data: updatedDuplicateVariants, message: "Test case updated " })
+
+  } catch (error) {
+    console.log("error", error);
+    res.status(200).json({ success: false, error, message: "Update failed!" })
+
+  }
+}
+
+const addNewTestCase = async (req, res) => {
+  const shop = req.headers.shop;
+  const shopData = await Shop.findOne({ shop }).select(["access_token"]);
+
+  if (shopData && shopData.access_token) {
+    access_token = shopData.access_token;
+  }
+}
 module.exports = {
   allProducts,
-  getVariants, createDuplicateProduct
+  getVariants, createDuplicateProduct, updateDuplicateProduct, addNewTestCase
 }

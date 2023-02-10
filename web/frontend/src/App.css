@@ -1703,10 +1703,15 @@
 .viewormanageBlock {
     margin-top: 24px;
     display: flex;
+    justify-content: space-between;
 }
 
 .viewormanage-testData {
-    width: 600px;
+    
+    width: 39%;
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 27px;
 }
 
 .viewormanage-pricingDataReview,
@@ -1730,7 +1735,7 @@
 
 .viewormanage-testData>div {
     box-shadow: none !important;
-    border-radius: 14px !important;
+    /* border-radius: 14px !important; */
     width: 100%;
 }
 
@@ -1743,8 +1748,8 @@
 }
 
 .viewormanage-testItem {
-    display: flex;
-    min-width: 37.5rem !important;
+    /* display: flex; */
+    /* min-width: 37.5rem !important; */
 }
 
 .viewormanage-testItemImage>img {
@@ -1756,30 +1761,31 @@
 }
 
 .viewormanage-testItemImage {
-    margin: 12px;
-    background: #F9F8FE;
+    margin: 12px 12px 0 0;
+    /* background: #F9F8FE; */
     border-radius: 10px;
 
 }
 
 .viewormanage-testItemData>div {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    margin-top: 12px;
+    /* display: flex; */
+    /* width: 100%; */
+    /* justify-content: space-around; */
+    /* margin-top: 12px; */
 }
 
 .viewormanage-status,
 .viewormanage-product {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    /* flex-direction: column; */
 
 }
 
 .viewormanage-product>span:nth-child(2) {
 
-    font-size: 16px !important;
-    line-height: 19px !important;
+    /* font-size: 16px !important; */
+    /* line-height: 19px !important; */
 }
 
 .viewormanage-status>span,
@@ -1792,7 +1798,7 @@
     line-height: 17px;
     /* identical to box height */
     color: #536780;
-    margin-top: 8px;
+    /* margin-top: 8px; */
 }
 
 .viewormanage-testAnalytics>div>button {
@@ -1815,9 +1821,9 @@
 }
 
 .viewormanage-testAnalytics {
-    width: 100%;
+    width: 52%;
     box-shadow: none !important;
-    margin-left: 24px;
+    /* margin-left: 24px; */
     border-radius: 14px !important;
     padding: 23px 27px;
 }
@@ -1861,11 +1867,11 @@
 }
 
 .viewormanage-testItemData {
-    margin-left: 52px;
-    margin-top: 42px;
+    /* margin-left: 52px; */
+    /* margin-top: 42px; */
     /* margin-right: 32px; */
-    width: 100%;
-    margin-right: 32px;
+    /* width: 100%; */
+    /* margin-right: 32px; */
 
 }
 
@@ -1925,7 +1931,7 @@
 
 @media screen and (max-width:1120px) {
     .viewormanage-testData {
-        width: 100%;
+        width: auto;
     }
 
     .viewormanage-testAnalytics>div {
@@ -3201,7 +3207,7 @@ html {
 }
 
 .tableImages>div>img {
-    width: 50px !important;
+    /* width: 50px !important; */
 }
 
 /* .css-s18byi{
@@ -3218,7 +3224,7 @@ html {
 
 .tableImages div img {
     /* z-index: -1; */
-    width: 50% !important;
+    /* width: 50% !important; */
     max-height: 62px;
     object-fit: cover;
     border-radius: 6px;
@@ -3579,14 +3585,14 @@ html {
     padding: 0;
     width: fit-content;
     height: unset;
-    margin-top: 8px;
-    margin-bottom: 10PX;
+    /* margin-top: 8px; */
+    /* margin-bottom: 10PX; */
 }
 
 .viewormanage-testItemData .MuiChip-root span {
-    padding: 6px;
-    color: #1BC78A;
-    background-color: rgba(27, 199, 138, 0.1);
+    /* padding: 4px 6px; */
+    /* color: #1BC78A; */
+    /* background-color: rgba(27, 199, 138, 0.1); */
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
@@ -3596,19 +3602,19 @@ html {
 
 .viewormanage-testItemData .viewormanage-status,
 .viewormanage-testItemData .viewormanage-product {
-    width: 40%;
-    align-items: flex-start;
-    padding-left: 10px;
+    /* width: 40%; */
+    /* align-items: flex-start; */
+    /* padding-left: 10px; */
 
 }
 
 .viewormanage-status>span,
 .viewormanage-product>span {
-    margin-top: 10px;
+    /* margin-top: 10px; */
 }
 
 .viewormanage-testItemData .viewormanage-product {
-    border-left: 1px solid #E9E9E9;
+    /* border-left: 1px solid #E9E9E9; */
 }
 
 /* .viewormanage-testItemData>div {
@@ -3647,13 +3653,18 @@ html {
         justify-content: flex-start;
     }
 
-    .navIcons a,
+/* <<<<<<< HEAD */
+    /* .navIcons a,
     span {
+=======
+    /* span is removed from here because it affects in your test page. */
+    .navIcons a {
+/* >>>>>>> eb11cbd (Test page UI changes.) */
         text-decoration: none;
         text-transform: capitalize;
         font-family: Product Sans;
         color: #B6BEC7 !important;
-    }
+    } 
 
     .MuiTypography-root .navIcons a {
         display: flex;
@@ -4188,24 +4199,29 @@ html {
 
 }
 
-.min-wi{
+.min-wi {
     overflow: auto !important;
 }
+
 .main_profile_img div {
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     border-radius: 20px;
 }
+
 /*  */
-.welcomeBlock1{
+.welcomeBlock1 {
     overflow-y: unset !important;
     overflow-x: hidden !important;
 }
-.welcomeBlock1Content:last-child{
+
+.welcomeBlock1Content:last-child {
     padding-bottom: 0 !important;
 }
-.welcomeBlock2>div{
+
+.welcomeBlock2>div {
     margin: auto;
 }
-.welcomeBlock2{
+
+.welcomeBlock2 {
     overflow: auto !important;
 }

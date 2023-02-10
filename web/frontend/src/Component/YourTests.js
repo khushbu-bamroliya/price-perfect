@@ -32,9 +32,9 @@ const YourTests = () => {
     const location = useLocation()
     const navigate = useNavigate()
 
-  const [opens, setOpens] = useState(false);
-  const [snackbar_msg, setsnackbar_msg] = useState("");
-  const [snackbarColor, setSnackbarColor] = useState("#325240");
+    const [opens, setOpens] = useState(false);
+    const [snackbar_msg, setsnackbar_msg] = useState("");
+    const [snackbarColor, setSnackbarColor] = useState("#325240");
     const [loading, setLoading] = useState(false)
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [searchData, setSearchData] = useState("");
@@ -70,7 +70,7 @@ const YourTests = () => {
                     <>
                         <div className='tableImages'>
                             <div>
-                            {params.row.featuredImage ? <img src={params.row.featuredImage } alt='' />:<HideImageOutlinedIcon/> }
+                                {params.row.featuredImage ? <img src={params.row.featuredImage} alt='' /> : <HideImageOutlinedIcon />}
                             </div>
                         </div>
                         <p className='productID'>
@@ -114,17 +114,26 @@ const YourTests = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div>
-                        <Tooltip title={copiedTooltip ? "copied" : null }  arrow>
-                        <img src={LinkIcon} alt="" onClick={(e) => {
+                        <><img src={EyeIcon} alt="" onClick={(e) => {
                             e.stopPropagation();
-                            navigator.clipboard.writeText(params.row.handle)
-                            setCopiedTooltip(true)
-                            setInterval(() => {
-                            setCopiedTooltip(false)
-                            },2000)
+                            navigate('/managetest', {
+                                state: {
+                                    id: params.row.action,
+                                }
+                            })
                         }}
-                        />
+                        /></>
+                        {/* <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div> */}
+                        <Tooltip title={copiedTooltip ? "copied" : null} arrow>
+                            <img src={LinkIcon} alt="" onClick={(e) => {
+                                e.stopPropagation();
+                                navigator.clipboard.writeText(params.row.handle)
+                                setCopiedTooltip(true)
+                                setInterval(() => {
+                                    setCopiedTooltip(false)
+                                }, 2000)
+                            }}
+                            />
                         </Tooltip>
                         <img src={TrashIcon} alt="" onClick={(event) => handleOpenDeleteModal(event, params.row.id)} />
                     </div>
@@ -155,7 +164,7 @@ const YourTests = () => {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
                 'shop': cookieReader('shop'),
-                "Authorization":"Bearer " + cookieReader('token')
+                "Authorization": "Bearer " + cookieReader('token')
             },
         })
             .then(async (res) => {
@@ -170,7 +179,7 @@ const YourTests = () => {
                 setSnackbarColor('red')
                 setsnackbar_msg("Server error")
                 setLoading('false')
-        })
+            })
     }
     const deleteTestCase = () => {
         setLoading(true)
@@ -181,8 +190,8 @@ const YourTests = () => {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
                 'shop': cookieReader('shop'),
-                "Authorization":"Bearer " + cookieReader('token')
-            
+                "Authorization": "Bearer " + cookieReader('token')
+
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -204,33 +213,33 @@ const YourTests = () => {
     }
     const handleClose = () => {
         setOpens(false);
-      };
+    };
     const errorfunction = () => {
         return (<div>
-          <Snackbar
-            open={opens}
-            sx={{ width: "50%" }}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            autoHideDuration={3000}
-            onClose={handleClose}
-          >
-            <Alert
-              variant="filled"
-              onClose={handleClose}
-              sx={{ width: "50%", bgcolor: snackbarColor }}
+            <Snackbar
+                open={opens}
+                sx={{ width: "50%" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                autoHideDuration={3000}
+                onClose={handleClose}
             >
-              {snackbar_msg}
-            </Alert>
-          </Snackbar>
+                <Alert
+                    variant="filled"
+                    onClose={handleClose}
+                    sx={{ width: "50%", bgcolor: snackbarColor }}
+                >
+                    {snackbar_msg}
+                </Alert>
+            </Snackbar>
         </div>)
-    
-      };
-    
+
+    };
+
     useEffect(() => {
         if (location?.state?.message) {
             setOpens(true)
-              setsnackbar_msg(location.state.message)
-        }else{
+            setsnackbar_msg(location.state.message)
+        } else {
             setOpens(false)
         }
         getAllTests()
@@ -248,17 +257,17 @@ const YourTests = () => {
                             </div>
 
                             <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: "flex" }}>
-                            
+
                                 <Button disabled
-                                        sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
                                     All Tests
-                                    </Button>
+                                </Button>
                             </Box>
                             <div className='yourTest-Block2'>
                                 <img src={searchIcon} alt="" />
                                 <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchData} onChange={(e) => setSearchData(e.target.value)} />
-                            
+
                             </div>
                             <Box className='yourTest-Block3' sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                                 <IconButton
@@ -297,6 +306,7 @@ const YourTests = () => {
                                 </Menu>
                             </Box>
                         </div>
+                    
                         <div className='createTestTable' style={{ height: 400, width: '100%' }}>
                             {!allTests ? <Loader size={40} /> : (<>
 
@@ -308,7 +318,7 @@ const YourTests = () => {
                                     rowsPerPageOptions={[10]}
                                     disableColumnMenu={true}
                                     // onRowClick={(params) => navigate(`/managetest/${params.row.action}`,{state:{id:params.row.action}})}
-                                    onRowClick={(params) => navigate(`/managetest`,{state:{id:params.row.action}})}
+                                    onRowClick={(params) => navigate(`/managetest`, { state: { id: params.row.action } })}
                                     sx={{
                                         [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
                                         {
@@ -337,7 +347,7 @@ const YourTests = () => {
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                     Are you sure you want to delete this test case?
                                 </Typography>
-                                <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> {loading ? <Loader size={30}/>: "Delete"} </Button>
+                                <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> {loading ? <Loader size={30} /> : "Delete"} </Button>
 
                             </Box>
                         </Modal>

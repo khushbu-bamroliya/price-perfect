@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { allProducts, getVariants, createDuplicateProduct } = require("../api/products.js");
+const { allProducts, getVariants, createDuplicateProduct, updateDuplicateProduct } = require("../api/products.js");
 const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
@@ -47,4 +47,11 @@ router.get("/get-single-testcase/:id", verifyToken,getSingleTestCase)
 router.get('/signin', manualSignIn);
 
 router.get("/enable-disable", enableDisableApp);
+
+
+
+router.post("/updateduplicateproduct",verifyToken, updateDuplicateProduct);
+
+
+
 module.exports = router;

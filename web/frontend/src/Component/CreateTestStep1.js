@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar';
 import searchIcon from './Images/search-normal.png';
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
+// import addTestCases from "./Images/add-circle-create.png"
 import addTestCases from "./Images/add-circle.png"
 import { useNavigate } from 'react-router-dom';
 import getApiUrl from "../controller/utils.js";
@@ -46,7 +47,14 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         const productTitle = title.split('/').pop();
         console.log("productId: " + productId);
         getProductImage(imgSrc)
-        navigate(`/createtest2/${productHandle}/${productId}/${productTitle}`, { state: { currency: productsData.products[0].currency } })
+        navigate(`/createtest/step2`, { 
+            state: { 
+                currency: productsData.products[0].currency,
+                handle:productHandle,
+                title: productTitle,
+                id:productId
+            } 
+        })
     }
     const columns = [
         {

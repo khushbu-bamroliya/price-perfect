@@ -26,8 +26,8 @@ export default function SignUp() {
     const [errorEmailName, setErrorEmailName] = useState(false);
     const [errorPassName, setErrorPassName] = useState(false);
     const [errorConfirmPassName, setErrorConfirmPassName] = useState(false);
-console.log("errorPassName", errorPassName);
-console.log("errorConfirmPassName", errorConfirmPassName);
+    console.log("errorPassName", errorPassName);
+    console.log("errorConfirmPassName", errorConfirmPassName);
     // Revenue Increase Error message
     const [errorDailyMess, setErrorDailyMess] = useState(false);
     const [errorTrafficMess, setErrorTrafficMess] = useState(false);
@@ -75,6 +75,7 @@ console.log("errorConfirmPassName", errorConfirmPassName);
     });
 
     const inputEvent = (e) => {
+
         const { name, value } = e.target
         setInput((prev) => {
             return {
@@ -88,7 +89,7 @@ console.log("errorConfirmPassName", errorConfirmPassName);
         if (event.target.value === '' || numberRegex.test(event.target.value)) {
             setDailyrevenue(event.target.value);
         }
-      };
+    };
     const inputRevenueEvent = (e) => {
         const { name, value } = e.target
         const numberRegex = /^\d+$/;
@@ -110,7 +111,12 @@ console.log("errorConfirmPassName", errorConfirmPassName);
         setErrorEmailName(true)
         setErrorPassName(true)
         setErrorConfirmPassName(true)
+        const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+        if (!emailRegex.test(input.email)) {
+            setErrorEmailName(true)
+        } else {
 
+        }
         let data = {
             "first_name": input.firstName,
             "last_name": input.lastName,
@@ -119,6 +125,7 @@ console.log("errorConfirmPassName", errorConfirmPassName);
             "confirmPassword": input.confirmPassword
         }
         if (!input.firstName || !input.lastName || !input.email || !input.password || !input.confirmPassword) {
+
             console.log("Not a valid email or password");
             setOpens(true)
             setSnackbarColor('red')
@@ -129,11 +136,11 @@ console.log("errorConfirmPassName", errorConfirmPassName);
                 setOpens(true)
                 setSnackbarColor('red')
                 setsnackbar_msg(`Passwords doesn't matched`)
-                
+
             } else {
                 if (isValidEmail(input.email)) {
                     console.log('The email is valid');
-            
+
                     await fetch('/api/signupdetails', {
                         method: 'POST',
                         headers: {
@@ -146,7 +153,7 @@ console.log("errorConfirmPassName", errorConfirmPassName);
                         const apiRes = await res.json()
                         if (apiRes.success === false) {
                             setSnackbarColor('red')
-                        }else{
+                        } else {
                             setSnackbarColor('#325240')
 
                         }
@@ -246,7 +253,7 @@ console.log("errorConfirmPassName", errorConfirmPassName);
 
     };
     function isValidEmail(email) {
-        return /\S+@\S+\.\S+/.test(email);
+        return /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email);
     }
 
     return (
@@ -277,7 +284,6 @@ console.log("errorConfirmPassName", errorConfirmPassName);
                                         <TextField
                                             className='please-width'
                                             id="outlined-basic"
-                                            label=""
                                             variant="outlined"
                                             name="firstName"
                                             placeholder='Enter your first name'
@@ -344,23 +350,23 @@ console.log("errorConfirmPassName", errorConfirmPassName);
                                         placeholder="Enter your password"
                                         name="password"
                                         value={input.password}
-                                    InputProps={{
+                                        InputProps={{
 
-                                        endAdornment:(
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
-                                                    error
-                                                    helperText="lalala"
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                        error
+                                                        helperText="lalala"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }}
                                         helperText={
                                             errorPassName && input?.password === ""
                                                 ? "Please insert your password"
@@ -390,20 +396,20 @@ console.log("errorConfirmPassName", errorConfirmPassName);
                                         value={input.confirmPassword}
                                         onChange={inputEvent}
                                         InputProps={{
-                                        endAdornment:(
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                    onMouseDown={handleMouseDownConfirmPassword}
-                                                    edge="end"
-                                                >
-                                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                         ) 
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                        onMouseDown={handleMouseDownConfirmPassword}
+                                                        edge="end"
+                                                    >
+                                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
                                         }}
-                                        
+
                                     />
                                 </div>
                                 <Button

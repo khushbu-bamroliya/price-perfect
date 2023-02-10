@@ -26,7 +26,10 @@ import getApiUrl from "../controller/utils.js";
 export default function WelcomePage({ shop }) {
   const navigate = useNavigate()
   const location = useLocation();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({
+    manual:false,
+    google:false,
+  });
   const [opens, setOpens] = useState(false);
   const [snackbar_msg, setsnackbar_msg] = useState("");
   const [snackbarColor, setSnackbarColor] = useState("#325240");
@@ -52,7 +55,7 @@ export default function WelcomePage({ shop }) {
 
   const [loader, setLoader] = useState(false);
   const handleManualSignIn = () => {
-    setLoading(true)
+  
     if (!userData.email) {
       setEmailErrorMess(true)
     }
@@ -64,11 +67,12 @@ export default function WelcomePage({ shop }) {
       setOpens(true)
       setSnackbarColor('red')
       setsnackbar_msg(`All fields are required`)
-      setLoading(false)
+      setLoading({manual : false})
     } else {
 
       if (isValidEmail(userData.email)) {
         console.log('The email is valid');
+        setLoading({manual : true})
         fetch(getApiUrl + `/api/signin?${new URLSearchParams({ email: userData.email, password: userData.password, 'rememberMe': rememberMe })}`, {
           method: 'GET',
           headers: {
@@ -82,21 +86,21 @@ export default function WelcomePage({ shop }) {
               setOpens(true)
               setsnackbar_msg(`${res.message}`)
               setSnackbarColor('#325240')
-              setLoading(false)
+              setLoading({manual : false})
               navigate('/homeDashboard', { state: { message: `${res.message}` } });
             }
             if (res.success == false) {
               setOpens(true)
               setSnackbarColor('red')
               setsnackbar_msg(`${res.message}`)
-              setLoading(false)
+              setLoading({manual : false})
             }
           })
           .catch(err => {
             setOpens(true)
             setsnackbar_msg(`Invalid User`)
             setSnackbarColor('#325240')
-            setLoading(false)
+            setLoading({manual : false})
             console.log(err)
           })
     } else {
@@ -149,7 +153,7 @@ export default function WelcomePage({ shop }) {
   };
 
   function isValidEmail(email) {
-    return /\S+@\S+\.\S+/.test(email);
+    return /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email);
   }
   useEffect(() => {
     if (location?.state?.message) {
@@ -185,11 +189,11 @@ export default function WelcomePage({ shop }) {
                       placeholder='Enter your mail'
                       name='email'
                       helperText={
-                        emailErrorMess && userData?.email === ""
-                          ? "Please insert your email name"
+                        emailErrorMess 
+                          ? "Please insert your email"
                           : null
                       }
-                      error={emailErrorMess && userData?.email === ""}
+                      error={emailErrorMess}
                       value={userData.email}
                       onChange={handleInputChange}
                     />
@@ -203,7 +207,7 @@ export default function WelcomePage({ shop }) {
                       name='password'
                       helperText={
                         passErrorMess && userData?.password === ""
-                          ? "Please insert your password name"
+                          ? "Please insert your password"
                           : null
                       }
                       error={passErrorMess && userData?.password === ""}
@@ -219,14 +223,14 @@ export default function WelcomePage({ shop }) {
               </div>
               <span className="mb-34">
                 <Stack spacing={2} direction="column" className='btnStack'>
-                  <Button variant="contained" className='SignInBtn' onClick={() => handleManualSignIn()}>{loading? <Loader size={20}/> : "Sign in"}</Button>
-                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoading, shop, navigate)}> {loading === true ? <Loader size={40} /> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>)} </Button>
+                  <Button variant="contained" className='SignInBtn' onClick={() => handleManualSignIn()}>{loading.manual? <Loader size={20}/> : "Sign in"}</Button>
+                  <Button variant="outlined" className='googleSignInBtn' onClick={() => handleGoogleSignIn(setLoading, shop, navigate)}> {loading.google ? <Loader size={40} /> : (<><img src={google} alt="" /> <Typography variant='p'>Sign in with Google</Typography></>)} </Button>
 
                 </Stack>
               </span>
               <div className="noAccount sign-up">
                 <span className="dont-account">Don’t have an account?</span>
-                <NavLink to="/signup">Sign Up</NavLink>
+                <NavLink to="/signup">Sign up</NavLink>
               </div>
             </CardContent>
           </Card>

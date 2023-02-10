@@ -113,7 +113,8 @@ const HomeDashboard = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div>
+                        <><img src={EyeIcon} alt="" onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} /></>
+                        {/* <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div> */}
                     </div>
                 )
             }

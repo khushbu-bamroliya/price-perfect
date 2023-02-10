@@ -273,7 +273,7 @@ setLoading(true)
         const objectToBeSent = {
             trafficSplit: parseInt(Number(value) / Number(totalTests)),
             testCases: displayTestCasesArray,
-            currency:location.state.currency,
+            currency:location?.state?.currency,
             "productId": `gid://shopify/Product/${id}`,
         }
 
@@ -447,6 +447,7 @@ setLoading(true)
       const rangeSliderMarks = [
         {
           value: 10,
+        //   label: <div><img src={ArrowIcon} alt="" /><p>10%</p></div>,
           label: '10%',
         },
         {
@@ -466,7 +467,7 @@ setLoading(true)
         return `${value}°C`;
       }
     useEffect(() => {
-        if (!location?.state) {
+        if (!location?.state?.currency) {
             navigate('/createtest')
         }
         handleVariants()
@@ -493,8 +494,8 @@ setLoading(true)
                                     </div>
 
                                     {loading ? <Loader size={40} /> : (<>
-                                        <span className='box-price'>{variantCompareAtPriceData && <>{location.state.currency} {variantCompareAtPriceData}</>}</span>
-                                        <span className='box-prices'>{location.state.currency} {variantPriceData}</span>
+                                        <span className='box-price'>{variantCompareAtPriceData && <>{location?.state?.currency} {variantCompareAtPriceData}</>}</span>
+                                        <span className='box-prices'>{location?.state?.currency} {variantPriceData}</span>
                                     </>)}
                                 </>
                             </div>
@@ -509,9 +510,9 @@ setLoading(true)
                                     </div>
                                     {item.variants.length > 1 ?
 
-                                        <span className='box-prices'>{location.state.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))} - {location.state.currency} {Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
+                                        <span className='box-prices'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))} - {location?.state?.currency} {Math.max(...item.variants.map(j => j.abVariantPrice))}</span>
                                         :
-                                        <span className='box-prices'>{location.state.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
+                                        <span className='box-prices'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
                                     }
                                 </div>
                             </>))}

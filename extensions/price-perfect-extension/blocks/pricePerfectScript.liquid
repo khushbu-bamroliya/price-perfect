@@ -8,7 +8,7 @@
 
 
 
-  if (localStorage.getItem('pricePerfectId') && localStorage.getItem('pricePerfectId') == null) {
+  if (localStorage.getItem('pricePerfectId') == null) {
     rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
     localStorage.setItem("pricePerfectId", rString);
   }
