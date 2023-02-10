@@ -38,6 +38,10 @@ const createTestSchema = mongoose.Schema({
         type: String,
         trim: true,
     },
+    shop:{
+        type: String,
+        trim: true,
+    },
 });
 
 const CreateTest = mongoose.model("createTestCase", createTestSchema);

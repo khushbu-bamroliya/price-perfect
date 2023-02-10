@@ -13,9 +13,19 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ArrowIcon from "./Images/Arrow.png";
 import rightArrow from './Images/arrow-right.svg'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import RedImg from './Images/Red.svg';
+import BlackImg from './Images/Black.svg';
+import BlueImg from './Images/Blue.svg';
+import CyanImg from './Images/Cyan.svg';
+import GreenImg from './Images/Green.svg';
+import GreyImg from './Images/Grey.svg';
+import OrangeImg from './Images/Orange.svg';
+import PurpleImg from './Images/Purple.svg';
+import YellowImg from './Images/Yellow.svg';
+
 const ReviewTestPage = ({ created, productImage }) => {
     const location = useLocation();
-
+    const testCaseImages = [BlueImg, RedImg,YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg ];
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
     const [snackbarColor, setSnackbarColor] = useState("#325240");
@@ -23,7 +33,7 @@ const ReviewTestPage = ({ created, productImage }) => {
     const testCases = created?.apiRes?.data?.testCases
     const navigate = useNavigate();
     const launchTest = () => {
-        fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
+        fetch(getApiUrl + `/api/updatealltests?` + new URLSearchParams({
             status: "active",
             id: created && created?.apiRes?.data?._id
         }), {
@@ -204,11 +214,11 @@ const ReviewTestPage = ({ created, productImage }) => {
         return (
             <React.Fragment>
                 <div className='cursor controlTest' onClick={() => setOpen(!open)}>
-                    <div className={`arrowIcon ${open ?  "openIcon" : "closeIcon"}`}>
+                    <div className={`arrowIcon ${open ? "openIcon" : "closeIcon"}`}>
                         <ArrowForwardIosIcon fontSize='large' />
                     </div>
                     <div className='flex-row justify-content-center flex-1 p-11'>
-                        <img width="21px" height="21px" src={ArrowIcon} alt="" />
+                        <img width="21px" height="21px" src={testCaseImages[row.id - 1 ]} alt="" />
                         <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color} Test</div>
                     </div>
                     <div className='nameTitle'>{/* {row.name} */}</div>
@@ -245,94 +255,99 @@ const ReviewTestPage = ({ created, productImage }) => {
     return (
         <>
             {true && (
-            <>
-                <div className='bg-linear-gradient'>
-                    <div className='p-25'>
-                        <Navbar />
-                        <Card  className='mt-34 pt-24 pb-74 py-40 border-radius-14'>
-                            <div className='arrowWrapper'>
-                                <img src={rightArrow} />
-                            </div>
-                            <div className='flex-row gap-70 align-items-unset flex-crea'>
-                                {!created ? <Loader size={40} /> : (<>
-                                    <div className='createdImgWrapper w-50'>
-                                        {created && created.apiRes.data.featuredImage ? <img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" /> : <HideImageOutlinedIcon />}
-                                    </div>
-                                    <div className={`w-50 ${testCases && testCases.length > 1 ?  "w-full" : "" }`}>
-                                        <h2 className='configureHeading'>Review Test</h2>
-                                        <span className='subProductTitle mb-34'>Confirm test configuration</span>
-                                        <div className='flex-row justify-content-between-dk mb-20'>
-                                            <h3 className='catTitle'>{created && created.apiRes.data.productTitle}</h3>
-                                            <div className='flex-row'>
-                                                <span className='pricingHeading mb-0 mr-9'>Traffic Split:</span>
-                                                <div>
-                                                    {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
-                                                </div>
-                                            </div>
+                <>
+                    <div className='bg-linear-gradient'>
+                        <div className='p-25'>
+                            <Navbar />
+                            <Card className='mt-34 pt-24 pb-74 py-40 border-radius-14'>
+                                <div className='arrowWrapper'>
+                                    <img src={rightArrow} />
+                                </div>
+                                <div className='flex-row gap-70 align-items-unset flex-crea'>
+                                    {!created ? <Loader size={40} /> : (<>
+                                        <div className='createdImgWrapper w-50'>
+                                            {created && created.apiRes.data.featuredImage ? <img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" /> : <HideImageOutlinedIcon />}
                                         </div>
-                                        {testCases && testCases.length > 1 ? (<>
-                                            <div className='mobileTitle'>
-                                                <div className='testCasesWrapper'>
-                                                    <div className='testCasesTitle'>Title</div>
-                                                    <div className='testCasesTitle'>Variant</div>
-                                                    <div className='testCasesTitle'>Price</div>
-                                                    <div className='testCasesTitle'>Compare at price</div>
-                                                </div>
-                                                <div className='width-fit'>
-                                                    {rows.map((row) => (
-                                                        <Div key={row.name} row={row} />
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className='mt-76'>
-                                                <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
-                                                <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
+                                        <div className={`w-50 ${testCases && testCases.length > 1 ? "w-full" : ""}`}>
+                                            <h2 className='configureHeading'>Review Test</h2>
+                                            <span className='subProductTitle mb-34'>Confirm test configuration</span>
+                                            <div className='flex-row justify-content-between-dk mb-20'>
+                                                <h3 className='catTitle'>{created && created.apiRes.data.productTitle}</h3>
+
+                                                {created && created?.apiRes?.data?.testCases.length > 1 && (<>
+
+                                                    <div className='flex-row'>
+                                                        <span className='pricingHeading mb-0 mr-9'>Traffic Split:</span>
+                                                        <div>
+                                                            {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
+                                                        </div>
+                                                    </div>
+                                                </>)}
 
                                             </div>
-                                        </>) : (<>
-                                            {/* changing */}
-                                            <div className='pricingWrapper'>
-                                                <div className='pricingBoxs'>
-                                                    <span className='pricingHeading'>Pricing</span>
-                                                    <div className='ControlWrapper'>
-                                                        <div className='flex-row'>
-                                                            <h5 className='ControlHeading'>Control</h5>
-                                                            <h6 className='ControlPrice'>{created.apiRes.currency} {created && created.apiRes.data.productPrice}</h6>
-                                                        </div>
+                                            {testCases && testCases.length > 1 ? (<>
+                                                <div className='mobileTitle'>
+                                                    <div className='testCasesWrapper'>
+                                                        <div className='testCasesTitle'>Title</div>
+                                                        <div className='testCasesTitle'>Variant</div>
+                                                        <div className='testCasesTitle'>Price</div>
+                                                        <div className='testCasesTitle'>Compare at price</div>
+                                                    </div>
+                                                    <div className='width-fit'>
+                                                        {rows.map((row) => (
+                                                            <Div key={row.name} row={row} />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className='mt-76'>
+                                                    <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
+                                                    <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
+
+                                                </div>
+                                            </>) : (<>
+                                                {/* changing */}
+                                                <div className='pricingWrapper'>
+                                                    <div className='pricingBoxs'>
+                                                        <span className='pricingHeading'>Pricing</span>
+                                                        <div className='ControlWrapper'>
+                                                            <div className='flex-row'>
+                                                                <h5 className='ControlHeading'>Control</h5>
+                                                                <h6 className='ControlPrice'>{created.apiRes.currency} {created && created.apiRes.data.productPrice}</h6>
+                                                            </div>
                                                             <div className='ml-16 flex-row variations'>
                                                                 <h5 className='ControlHeading'>Variations</h5>
                                                                 {created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<h6 className='ControlPrice'>{created.apiRes.currency} {j.abVariantPrice}</h6>)))}
                                                             </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                {/* <div>
+                                                    {/* <div>
                                                     <Typography variant='p'>Product</Typography>
                                                     <Typography variant='h5'>{created && created.apiRes.data.productTitle}</Typography>
                                                 </div> */}
-                                                <div className='pl-42 border-Traffic ml-50'>
-                                                    <span className='pricingHeading'>Traffic Split</span>
-                                                    <div>
-                                                        {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
+                                                    <div className='pl-42 border-Traffic ml-50'>
+                                                        <span className='pricingHeading'>Traffic Split</span>
+                                                        <div>
+                                                            {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <p className='simplyPara'>
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                            </p>
-                                            <div className='mt-76'>
-                                                <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
-                                                <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
-                                            </div>
-                                            {/* changing  */}
-                                        </>)}
-                                    </div>
-                                </>)}
-                            </div>
-                        </Card>
+                                                <p className='simplyPara'>
+                                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                                                </p>
+                                                <div className='mt-76'>
+                                                    <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
+                                                    <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
+                                                </div>
+                                                {/* changing  */}
+                                            </>)}
+                                        </div>
+                                    </>)}
+                                </div>
+                            </Card>
+                        </div>
+                        <div>{errorfunction()}</div>
                     </div>
-                    <div>{errorfunction()}</div>
-                </div>
-            </>)}
+                </>)}
         </>
     )
 }

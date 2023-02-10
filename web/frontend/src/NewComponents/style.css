@@ -117,7 +117,7 @@ margin-left: 50px;
 .padding-one{
     padding: 30px 40px 0 24px;
 }
-.padding{
+.padding-1{
     padding: 0 24px 20px 24px;
 }
 .wrapperControl{
@@ -331,7 +331,7 @@ margin-left: 50px;
     .padding-one{
         padding: 20px 20px 0 20px;
     }
-    .padding{
+    .padding-1{
         padding: 0 20px 20px 20px;
     }
     .mt-40{
@@ -367,7 +367,7 @@ margin-left: 50px;
     .padding-one{
         padding: 16px 16px 0 16px;
     }
-    .padding{
+    .padding-1{
         padding: 0 16px 16px 16px;
     }
     .imgWrapper{
@@ -410,6 +410,15 @@ margin-left: 50px;
     }
     .pricingBox{
         padding: 23px 14px 23px 14px !important;
+    }
+    .min-183{
+        min-width: auto !important;
+    }
+    .min-192{
+        min-width: auto !important;
+    }
+    .justify-content-around{
+        justify-content: center !important;
     }
 }
 @media only screen and (max-width: 355px) {
@@ -517,7 +526,7 @@ margin-left: 50px;
     .modalWrapper .MuiBox-root{
         width: 100%;
         max-width: 80%;
-        height: 80%;
+        max-height: 80%;
         overflow: auto;
     }
     .modalWrapper .MuiPaper-root-modal .MuiBox-root{
@@ -1466,4 +1475,28 @@ margin-left: 50px;
     .viewormanage-testAnalytics {
         width: auto;
     }
+}
+.sanckbarWrapper{
+    width: 90% !important;
+    left: 50% !important;
+    transform: translate(-50%, 0px);
+}
+.min-183{
+    min-width: 183px;
+}
+.justify-content-around{
+    justify-content: space-around;
+}
+@media only screen and (max-width: 568px) {
+    .alertWrapper{
+        width: 100% !important;
+    }
+    .sanckbarWrapper{
+        width: 90% !important;
+        left: 50% !important;
+        transform: translate(-50%, 0px);
+    }
+}
+.min-192{
+    min-width: 192px;
 }

@@ -576,7 +576,7 @@ const createDuplicateProduct = async (req, res) => {
     console.log("==>22", req.body);
 
 
-    let createTestData = await createTestModal.create({ currency: objectToBeSent.currency, trafficSplit, handle: `https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle })
+    let createTestData = await createTestModal.create({ currency: objectToBeSent.currency, trafficSplit, handle: `https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle, shop })
 
     if (!createTestData) {
       return res.json("Create Test case error...!")

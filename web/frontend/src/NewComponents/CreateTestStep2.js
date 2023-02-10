@@ -13,6 +13,15 @@ import Loader from './Loader';
 import cookieReader from '../controller/cookieReader';
 import trash from './Images/trash.svg';
 import './style.css';
+import RedImg from './Images/Red.svg';
+import BlackImg from './Images/Black.svg';
+import BlueImg from './Images/Blue.svg';
+import CyanImg from './Images/Cyan.svg';
+import GreenImg from './Images/Green.svg';
+import GreyImg from './Images/Grey.svg';
+import OrangeImg from './Images/Orange.svg';
+import PurpleImg from './Images/Purple.svg';
+import YellowImg from './Images/Yellow.svg';
 
 
 const CreateTestStep2 = ({ objectSent }) => {
@@ -47,7 +56,7 @@ const [tempTestArr,setTempTestArr] = useState([])
     const [productVariants, setProductsVariants] = useState([])
     const [testIdState, setTestIdState] = useState(0);
     let testColors = ['Blue', 'Red', 'Yellow', 'Purple', 'Green', 'Orange', 'Grey', 'Black', 'Brown', 'Cyan']
-
+    const testCaseImages = [BlueImg, RedImg,YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg ];
 
     console.log("testing testIdState", testIdState);
     const [pricePercent, setPricePercent] = useState("2%");
@@ -159,6 +168,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                             testId: getRandomNumber,
                             id: getRandomNumber,
                             color:testColors[getRandomNumber-1],
+                            status:"pending",
                             variants: productVariants
                         }
                     ])
@@ -358,7 +368,8 @@ const [tempTestArr,setTempTestArr] = useState([])
             "status": "pending",
             objectToBeSent,
             featuredImage: variantRes.data[0].featuredImage,
-            productPrice: variantRes.data[0].variantPrice
+            productPrice: variantRes.data[0].variantPrice,
+        
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {
@@ -442,6 +453,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                             testId: getRandomNumber,
                             id: getRandomNumber,
                             color:testColors[getRandomNumber-1],
+                            status:"pending",
                             variants: updatedArray
                         }
                     ])
@@ -613,7 +625,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                                 <div className='wrapperControl'>
                                     <div class="flex-row padding-one">
                                         <div className='imgWrapper'>
-                                            <img src={ArrowIcon} alt="" />
+                                            <img src={testCaseImages[item.id - 1]} alt="" />
                                         </div>
                                         <span className='viewControl'> {item.color} Test</span>
                                     </div>

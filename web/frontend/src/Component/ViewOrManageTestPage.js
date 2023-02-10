@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, Chip, Collapse, IconButton, Modal, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+import { Alert, Box, Button, Card, Chip, Collapse, IconButton, Modal, Slider, Snackbar, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import LinkIcon from "./Images/link-2.png"
@@ -15,10 +15,21 @@ import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import closeIcon from "../Component/Images/close-circle.png";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import RedImg from './Images/Red.svg';
+import BlackImg from './Images/Black.svg';
+import BlueImg from './Images/Blue.svg';
+import CyanImg from './Images/Cyan.svg';
+import GreenImg from './Images/Green.svg';
+import GreyImg from './Images/Grey.svg';
+import OrangeImg from './Images/Orange.svg';
+import PurpleImg from './Images/Purple.svg';
+import YellowImg from './Images/Yellow.svg';
 
 const ViewOrManageTestPage = () => {
     const location = useLocation();
     // const {id} = location?.state;
+    const testCaseImages = [BlueImg, RedImg,YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg ];
+    const [rangevalue, setRangeValue] = useState(10);
     const [testCases, setTestCases] = useState([]);
     const [productVariants, setProductsVariants] = useState([]);
     console.log("Testcases", testCases);
@@ -203,8 +214,8 @@ const ViewOrManageTestPage = () => {
 
     const updateTestStatus = () => {
         setLoading(true)
-        fetch(getApiUrl + `/api/updatetest?` + new URLSearchParams({
-            id: location?.state?.id
+        fetch(getApiUrl + `/api/updatealltests?` + new URLSearchParams({
+            id: location?.state?.id,
         }), {
             method: 'PUT',
             headers: {
@@ -213,7 +224,8 @@ const ViewOrManageTestPage = () => {
                 'shop': cookieReader('shop'),
                 "Authorization": "Bearer " + cookieReader('token')
 
-            }
+            },
+
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
@@ -262,7 +274,7 @@ const ViewOrManageTestPage = () => {
     // }
 
     // New collapsible table 
-    function createData(id, variants, price, compareAtPrice,color) {
+    function createData(id, variants, price, compareAtPrice, color) {
         return {
             id,
             //   calories,
@@ -302,16 +314,18 @@ const ViewOrManageTestPage = () => {
                         >
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
+                        <img src={testCaseImages[row.id - 1]} alt="" />
+                        {row.color ? row.color + " Test" : row.id}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                        { row.color ? row.color + " Test" : row.id}
+                        {/* { row.color ? row.color + " Test" : row.id} */}
                     </TableCell>
-                    {/* <TableCell align="right">{row.calories}</TableCell> */}
-                    <TableCell align="right">{row.price}</TableCell>
-                    <TableCell align="right">{row.compareAtPrice}</TableCell>
-                    {/* <TableCell align="right">{row.protein}</TableCell> */}
-                    <TableCell align="right">
-                        <img src={pauseIcon} alt="" />
+                    {/* <TableCell  >{row.calories}</TableCell> */}
+                    <TableCell >{row.price}</TableCell>
+                    <TableCell>{row.compareAtPrice}</TableCell>
+                    {/* <TableCell  >{row.protein}</TableCell> */}
+                    <TableCell>
+                        <img src={pauseIcon} alt="" onClick={() => {updateOneTestStatus(row.id)}} />
                         <img src={editIcon} alt="" onClick={() => handleEditTest(row.id)} />
                     </TableCell>
 
@@ -328,32 +342,32 @@ const ViewOrManageTestPage = () => {
                         <TableRow>
                           <TableCell></TableCell>
                           <TableCell>Customer</TableCell>
-                          <TableCell align="right">Amount</TableCell>
-                          <TableCell align="right">Total price ($)</TableCell>
+                          <TableCell  >Amount</TableCell>
+                          <TableCell  >Total price ($)</TableCell>
                         </TableRow>
                       </TableHead> */}
                                     <TableBody>
                                         {row.variants.map((i) => (
                                             <TableRow key={i.id}>
-                                                <TableCell component="th" scope="row" align="right">
+                                                <TableCell component="th" scope="row"  >
 
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" align="right">
+                                                <TableCell component="th" scope="row"  >
                                                     {i.variantTitle}
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" align="right">
+                                                <TableCell component="th" scope="row"  >
                                                     {singleTest?.data?.currency} {i.abVariantPrice}
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" align="right">
+                                                <TableCell component="th" scope="row"  >
                                                     {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" align="right">
+                                                <TableCell component="th" scope="row"  >
 
                                                 </TableCell>
 
                                                 {/* <TableCell>{historyRow.customerId}</TableCell>
-                            <TableCell align="right">{historyRow.amount}</TableCell>
-                            <TableCell align="right">
+                            <TableCell  >{historyRow.amount}</TableCell>
+                            <TableCell  >
                               {Math.round(historyRow.amount * row.price * 100) / 100}
                             </TableCell> */}
                                             </TableRow>
@@ -417,6 +431,7 @@ const ViewOrManageTestPage = () => {
     //     ]
     // ]))
     const [openEditTest, setOpenEditTest] = useState(false);
+    const [openEditTrafficSplit, setOpenEditTrafficSplit] = useState(false);
     const handleCloseEditTest = () => {
         const newItems = [...testCases];
         const object = newItems.find(i => i.id === testIdState);
@@ -424,6 +439,14 @@ const ViewOrManageTestPage = () => {
         object.variants = productVariants
         setTestCases(newItems);
         setOpenEditTest(false)
+    };
+    const handleOpenEditTrafficSplit = () => {
+    
+        setOpenEditTrafficSplit(true)
+    };
+    const handleCloseEditTrafficSplit = () => {
+    
+        setOpenEditTrafficSplit(false)
     };
     const onConfirmEdit = () => {
 
@@ -450,13 +473,13 @@ const ViewOrManageTestPage = () => {
         fetch(getApiUrl + '/api/updateduplicateproduct', config).then((res) => { return res.json() }).then(res => {
             console.log("res", res);
             if (res.success === true) {
-                
+
                 setOpens(true)
                 setSnackbarColor('#325240')
                 setsnackbar_msg(`${res.message}`)
             }
             if (res.success === false) {
-                
+
                 setOpens(true)
                 setSnackbarColor('#325240')
                 setsnackbar_msg(`${res.message}`)
@@ -465,8 +488,8 @@ const ViewOrManageTestPage = () => {
         }).catch(err => {
             console.log("error", err);
             setOpens(true)
-                setSnackbarColor('red')
-                setsnackbar_msg("Internal Server Error")
+            setSnackbarColor('red')
+            setsnackbar_msg("Internal Server Error")
 
         })
 
@@ -563,6 +586,67 @@ const ViewOrManageTestPage = () => {
 
     }
 
+    const updateOneTestStatus = (id) => {
+        const config = {
+            method: 'PUT',
+            headers: {
+                shop:cookieReader('shop'),
+                Authorization: 'Bearer ' + cookieReader('token')
+            }
+        }
+        fetch(getApiUrl +  `/api/updateoneteststatus/${id}?`+ new URLSearchParams({
+            id: location?.state?.id,
+        }), config).then((res) => {
+            return res.json()
+        }).then(res => {
+            console.log("Test status updated", res);
+        }).catch((error) => {
+            console.log("error", error);
+        })
+    }
+const onConfirmTrafficSplit = () => {
+setOpenEditTrafficSplit(false)
+}
+const rangeSliderMarks = [
+    {
+        value: 10,
+        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+            </svg>
+            <span>10%</span></div>,
+    },
+    {
+        value: 25,
+        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+            </svg>
+            <span>25%</span></div>,
+    },
+    {
+        value: 50,
+        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+            </svg>
+            <span>50%</span></div>,
+    },
+    {
+        value: 75,
+        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+            </svg>
+            <span>75%</span></div>,
+    },
+];
+const rangeSliderValuetext = (value) => {
+    return `${value}°C`;
+}
+const handleChangeSlider = (event, newValue) => {
+    setRangeValue(newValue);
+};
     useEffect(() => {
         if (!location?.state?.id) {
 
@@ -585,49 +669,31 @@ const ViewOrManageTestPage = () => {
                                     <Typography variant='h5'>{singleTest?.data.productTitle} </Typography>
                                     <div className='viewormanage-flex-div'>
                                         <div className='viewormanage-testItemImage'>
-                                            {singleTest?.data?.featuredImage ? <img src={singleTest?.data?.featuredImage} alt="" /> : <HideImageOutlinedIcon />}
-                                            <Tooltip arrow title={copiedTooltip ? "copied" : null} >
-
-
-                                                <div className='copy-link-img' onClick={(e) => {
-                                                    navigator.clipboard.writeText(singleTest && singleTest?.data.handle)
-                                                    setCopiedTooltip(true)
-                                                    setInterval(() => {
-                                                        setCopiedTooltip(false)
-                                                    }, 2000)
-                                                }}>
-                                                    <img src={LinkIcon} />
-                                                    <a href="#">Copy Link</a>
-                                                </div>
-                                            </Tooltip>
+                                            {singleTest?.data?.featuredImage ? <div className='imageWrapper'><img src={singleTest?.data?.featuredImage} alt="" /> </div> : <div className='imageWrapper'><HideImageOutlinedIcon /></div>}
                                         </div>
                                         <div className='viewormanage-testItemData'>
                                             {/* <Typography variant='h5'>{singleTest?.data.productTitle} </Typography> */}
                                             <Typography variant='caption' className='testItemData-head'>Details</Typography>
-                                            <hr />
-                                            <div>
+                                            <div className='border-top mt-8 pt-2'>
                                                 <div className='viewormanage-status'>
                                                     <Typography variant='caption'>Status</Typography>
                                                     <Chip label={`${singleTest.data.status}`} className={`chip_${singleTest.data.status}`} />
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Product</Typography>
-                                                    <Typography variant='p'>Cat Socks ></Typography>
+                                                    <Typography variant='p'>{singleTest?.data?.productTitle}</Typography>
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Active Tests</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">4</Typography>
+                                                    <Typography variant='p' className="viewormanage-product-pink-f">4 (static)</Typography>
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Control RPM</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">$15.98</Typography>
+                                                    <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.currency} 15.98 (static)</Typography>
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Traffic Split</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">50/50</Typography>
-                                                </div>
-                                                <div className='viewormanage-product'>
-                                                    <button>Edit Traffic Split</button>
+                                                    <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.trafficSplit * singleTest?.data?.testCases?.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
                                                 </div>
                                             </div>
                                             {/* <Tooltip arrow title={copiedTooltip ? "copied" : null} >
@@ -641,6 +707,23 @@ const ViewOrManageTestPage = () => {
                                             }}>Copy Link <img src={LinkIcon} alt="" /></Button>
                                         </Tooltip> */}
 
+                                        </div>
+                                    </div>
+                                    <div className='viewormanage-flex-div flex-justify-content align-items-center'>
+                                        <Tooltip arrow title={copiedTooltip ? "copied" : null} >
+                                            <div className='copy-link-img' onClick={(e) => {
+                                                navigator.clipboard.writeText(singleTest && singleTest?.data.handle)
+                                                setCopiedTooltip(true)
+                                                setInterval(() => {
+                                                    setCopiedTooltip(false)
+                                                }, 2000)
+                                            }}>
+                                                <img src={LinkIcon} />
+                                                <a href="#">Copy Link</a>
+                                            </div>
+                                        </Tooltip>
+                                        <div className=''>
+                                            <button onClick={handleOpenEditTrafficSplit}>Edit Traffic Split</button>
                                         </div>
                                     </div>
                                 </Card>
@@ -696,11 +779,11 @@ const ViewOrManageTestPage = () => {
                             <Table aria-label="collapsible table">
                                 <TableHead>
                                     <TableRow className='table-row-cells'>
-                                        <TableCell />
+                                        <TableCell>Title</TableCell>
                                         <TableCell>Variant</TableCell>
-                                        <TableCell align="right">Price</TableCell>
-                                        <TableCell align="right">Compare at price</TableCell>
-                                        <TableCell align="right">Actions</TableCell>
+                                        <TableCell  >Price</TableCell>
+                                        <TableCell  >Compare at price</TableCell>
+                                        <TableCell  >Actions</TableCell>
 
                                     </TableRow>
                                 </TableHead>
@@ -825,7 +908,7 @@ const ViewOrManageTestPage = () => {
                     </Box>
                 </Modal>
 
-                {/* Edit test cses  */}
+                {/* Edit test cases  */}
                 <Modal
                     open={openEditTest}
                     //onClose={handleCloseEditTest}
@@ -871,6 +954,31 @@ const ViewOrManageTestPage = () => {
 
                         <div className='confirmBtn'>
                             <Button onClick={onConfirmEdit}>Confirm</Button>
+                        </div>
+                    </Box>
+                </Modal>
+
+
+
+                {/* Edit traffic split  */}
+                <Modal
+                    open={openEditTrafficSplit}
+                    //onClose={handleCloseEditTest}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style} className="editTest">
+                        <img src={closeIcon} alt="" className='closeBtn' onClick={() => handleCloseEditTrafficSplit()} />
+                        <Typography id="modal-modal-title" variant="h5" component="h2">
+                            Test Settings
+                        </Typography>
+                        {/* <Typography id="modal-modal-description" variant='p'>
+                            Set a percentage to adjust all variant prices by.
+                        </Typography> */}
+                        <Slider valueLabelDisplay='auto' className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={rangevalue} onChange={handleChangeSlider} />
+
+                        <div className='confirmBtn'>
+                            <Button onClick={onConfirmTrafficSplit}>Confirm</Button>
                         </div>
                     </Box>
                 </Modal>

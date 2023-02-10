@@ -54,6 +54,7 @@ const getSingleTestCase = async (req, res) => {
 const getTestCase = async (req, res) => {
     try {
         const { search } = req.query;
+        const shop = req.headers.shop
         let getCase;
         console.log("***** get test case")
         if (search) {
@@ -65,7 +66,7 @@ const getTestCase = async (req, res) => {
             })
         } else {
 
-            getCase = await createTestModal.find()
+            getCase = await createTestModal.find({shop: shop })
         }
 
         if (!getCase) {
@@ -149,22 +150,91 @@ const deleteTestCaseData = async (req, res) => {
     }
 }
 
+
+const updateSingleTestStatus = async (req, res) => {
+    const {id} = req.query;
+    const {testid} = req.params;
+    console.log("req.params", req.params);
+    console.log("req.query", req.query);
+    try {
+        const dbData = await createTestModal.findOne({_id: mongoose.Types.ObjectId(`${id}`)})
+        console.log("testCases", JSON.stringify(dbData && dbData?.testCases))
+        console.log("testCases2222", dbData.testCases)
+
+        const found = dbData && dbData?.testCases.find(i => Number(i.testId) === Number(testid));
+        console.log("found", found);
+
+        if (found.status === "active") {
+            const statusUpdated = await createTestModal.findOneAndUpdate(
+                {_id: mongoose.Types.ObjectId(`${id}`), testCases:{ $elemMatch:{status:'active'} }},
+                { $set: {"testCases.$.status": "pending" } },
+              )
+              console.log("statusUpdated", statusUpdated);
+              res.status(200).json({ success: true, status: statusUpdated })
+        } else {
+            const statusUpdated = await createTestModal.findOneAndUpdate(
+                {_id: mongoose.Types.ObjectId(`${id}`), testCases:{ $elemMatch:{status:'pending'} }},
+                { $set: {"testCases.$.status": "active" } },
+              )
+              console.log("statusUpdated", statusUpdated);
+              res.status(200).json({ success: true, status: statusUpdated })
+        }
+
+        // const statusUpdated = await createTestModal.findOneAndUpdate(
+        //     {_id: mongoose.Types.ObjectId(`${id}`), testCases:{ $elemMatch:{status:'pending'} }},
+        //     { $set: {"testCases.$.status": "active" } },
+        //   )
+        //   console.log("statusUpdated", statusUpdated);
+        //   res.status(200).json({ success: true, status: statusUpdated })
+    } catch (error) {
+        console.log("errror", error);
+        res.status(500).json({ success: false, error: error })
+    }
+
+    
+
+}
+
 const updateTestStatus = async (req, res) => {
     try {
-        // const { status, id } = req.query;
+        // const { testCases } = req.body;
         const { id } = req.query;
+        // console.log("testCases updateTestStatus", testCases);
+        
+        // patients.findOneAndUpdate(
+        //     {_id: "5cb939a3ba1d7d693846136c"},
+        //     {$set: {"testCases.$[el].status": "pending" } },
+        //     { 
+        //       arrayFilters: [{ "el.status": "active" }],
+        //       new: true,
+              
+        //     }
+        //   )
         console.log("******* update test case status *******")
         const checkStatus = await createTestModal.findOne({ _id: mongoose.Types.ObjectId(`${id}`) });
         console.log("checkStatus", checkStatus.status);
         if (checkStatus.status === 'pending') {
-            const statusUpdated = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(`${id}`) }, {
-                status: "active"
-            })
+            const statusUpdated = await createTestModal.findOneAndUpdate(
+                {_id: mongoose.Types.ObjectId(`${id}`)},
+                { status:"active", $set: {"testCases.$[el].status": "active" } },
+                { 
+                  arrayFilters: [{ "el.status": "pending" }],
+                  new: true,
+                  multi: true
+                }
+              )
+              console.log("statusUpdated", statusUpdated);
             res.status(200).json({ success: true, status: statusUpdated })
         } else {
-            const statusUpdated = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(`${id}`) }, {
-                status: "pending"
-            })
+            const statusUpdated = await createTestModal.findOneAndUpdate(
+                {_id: mongoose.Types.ObjectId(`${id}`)},
+                {status:"pending",$set: {"testCases.$[el].status": "pending" } },
+                { 
+                  arrayFilters: [{ "el.status": "active" }],
+                  new: true,
+                  multi: true
+                }
+              )
             res.status(200).json({ success: true, status: statusUpdated })
         }
         console.log("=====END END====")
@@ -183,5 +253,6 @@ module.exports = {
     getSingleTestCase,
     getTestCase,
     deleteTestCaseData,
-    updateTestStatus
+    updateTestStatus,
+    updateSingleTestStatus
 }
