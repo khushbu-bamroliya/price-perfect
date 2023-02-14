@@ -1580,3 +1580,26 @@ margin-left: 50px;
 .padding-text{
     padding: 0px 24px 24px 24px;
 }
+
+.graph-h50 {
+    width: 100% !important;
+}
+
+@media only screen and (min-width: 1900px) {
+.graph-h50 {
+    height: 22vh;
+    max-height: 31vh;
+}
+
+.graph-h25 {
+    height: 22vh;
+    max-height: 18vh;
+}
+
+.dashboardTable{
+    height: 700px !important;
+} 
+}
+.dashboardTable{
+    height: 360px;
+} 

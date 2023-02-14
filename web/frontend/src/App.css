@@ -1840,13 +1840,12 @@
 }
 
 .viewormanage-testAnalytics>div>h5 {
-    font-family: 'Product Sans' !important;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 19px;
-
-    color: #151515;
+    font-family: 'Product Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 22px;
+line-height: 27px;
+color: #151515;
 
 }
 
@@ -1946,7 +1945,7 @@
         margin: 0 !important;
         margin-top: 24px !important;
         padding: 0;
-        min-height: 600px;
+        /* min-height: 600px; */
     }
 
     .viewormanageBlock {

@@ -21,9 +21,22 @@ import TrashIcon from "./Images/trash.png"
 import Loader from './Loader'
 import cookieReader from '../controller/cookieReader'
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
-
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+  import { Line } from 'react-chartjs-2';
+//   import faker from 'faker';
 
 const HomeDashboard = () => {
+
+
     const navigate = useNavigate();
     const location = useLocation();
     const [opens, setOpens] = useState(false);
@@ -201,6 +214,45 @@ const HomeDashboard = () => {
         </div>)
 
     };
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+ const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom' ,
+    },
+    
+  },
+};
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+ const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data:  [21,32,744,55,656,235,1006],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Dataset 2',
+      data: [568,786,365,454,210,102,42],
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ],
+};
 
 
     useEffect(() => {
@@ -321,6 +373,7 @@ const HomeDashboard = () => {
                             <Card className='testAnalytics'>
                                 <div>
                                     <Typography variant='h5'>Test Analytics</Typography>
+                                    <Line options={options} data={data} />
                                     <div className='analyticsBtnGroup'>
                                         <Button><img src={TestAnalyticsIcon1} alt="" /> <p>Lorem ipsum</p></Button>
                                         <Button><img src={TestAnalyticsIcon2} alt="" /><p>Lorem ipsum</p></Button>
@@ -334,7 +387,7 @@ const HomeDashboard = () => {
                                     <Typography variant='h5'>Your Tests</Typography>
                                 </div>
                                 <div>
-                                    <div className='createTestTable' style={{ height: 360, width: '100%' }}>
+                                    <div className='createTestTable dashboardTable' style={{ width: '100%' }}>
                                         {loading ? <Loader size={40} /> : (<>
 
                                             <DataGrid
@@ -345,7 +398,7 @@ const HomeDashboard = () => {
                                                 disableColumnMenu
                                                 hideFooterSelectedRowCount
                                                 onRowClick={(params) => navigate(`/managetest`, { state: { id: params.row.action } })}
-                                                className='pagenate-page'
+                                                className='pagenate-page table-height'
                                                 sx={{
                                                     [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
                                                     {

@@ -26,6 +26,18 @@ import OrangeImg from './Images/Orange.svg';
 import PurpleImg from './Images/Purple.svg';
 import YellowImg from './Images/Yellow.svg';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip as chartTooltip,
+    Legend,
+  } from 'chart.js';
+  import { Line } from 'react-chartjs-2';
+//   import faker from 'faker';
 
 const ViewOrManageTestPage = () => {
     const location = useLocation();
@@ -705,6 +717,47 @@ const ViewOrManageTestPage = () => {
             }
         }
     }
+
+    ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  chartTooltip,
+  Legend
+);
+
+ const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom' ,
+    },
+    
+  },
+};
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+ const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data:  [21,32,744,55,656,235,1006],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Dataset 2',
+      data: [568,786,365,454,210,102,42,56,580],
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ],
+};
+
     useEffect(() => {
         if (!location?.state?.id) {
 
@@ -817,6 +870,7 @@ const ViewOrManageTestPage = () => {
                                 <Typography variant='h5'>Test Analytics</Typography>
                                 <Button variant="outlined" className='cursor'>Expand</Button>
                             </div>
+                            <Line  options={options} data={data} className={` ${singleTest?.data?.featuredImage ? 'graph-h50' :'graph-h25'}`}/>
                         </Card>
                     </div>
                     <Card className='funnelBreakdown'>
