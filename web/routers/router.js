@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { allProducts, getVariants, createDuplicateProduct, updateDuplicateProduct } = require("../api/products.js");
+const { allProducts, getVariants, createDuplicateProduct, updateDuplicateProduct, deleteOneTestCase } = require("../api/products.js");
 const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
@@ -44,6 +44,8 @@ router.put("/updatealltests",verifyToken, updateTestStatus)
 router.put("/updateoneteststatus/:testid",verifyToken, updateSingleTestStatus)
 
 router.delete("/deleteTestCase/:id",verifyToken, deleteTestCaseData)
+
+router.post("/deleteoneTestCase/:id",verifyToken, deleteOneTestCase)
 
 router.get("/get-single-testcase/:id", verifyToken,getSingleTestCase)
 

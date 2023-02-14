@@ -528,7 +528,7 @@ setLoading(true)
 
                         <Typography variant='p'> 2. Set your traffic split </Typography>
                         
-                        <Slider className="trafficSlider" valueLabelDisplay='auto' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Slider className="trafficSlider" valueLabelDisplay='auto' step={10} marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
                         
                         <Typography variant='p' className='trafficSplitInfo'> {displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</Typography>
                         <div>

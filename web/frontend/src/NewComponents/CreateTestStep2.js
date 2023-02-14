@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
 import ArrowIcon from "./Images/Arrow.png";
 import AddIcon from "./Images/add-square.png";
+
 import Loader from './Loader';
 import cookieReader from '../controller/cookieReader';
 import trash from './Images/trash.svg';
@@ -22,7 +23,7 @@ import GreyImg from './Images/Grey.svg';
 import OrangeImg from './Images/Orange.svg';
 import PurpleImg from './Images/Purple.svg';
 import YellowImg from './Images/Yellow.svg';
-
+import editIcon from "./Images/edit-icon.png"
 
 const CreateTestStep2 = ({ objectSent }) => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ const CreateTestStep2 = ({ objectSent }) => {
     };
     // let tempTestArr = [];
     const { id, title, handle } = useParams();
-const [tempTestArr,setTempTestArr] = useState([])
+    const [tempTestArr, setTempTestArr] = useState([])
 
     const [variantRes, setVariantRes] = useState([]);
 
@@ -55,14 +56,14 @@ const [tempTestArr,setTempTestArr] = useState([])
     const [displayTestCasesArray, setDisplayTestCasesArray] = useState([])
     const [productVariants, setProductsVariants] = useState([])
     const [testIdState, setTestIdState] = useState(0);
-    let testColors = ['Blue', 'Red', 'Yellow', 'Purple', 'Green', 'Orange', 'Grey', 'Black', 'Brown', 'Cyan']
-    const testCaseImages = [BlueImg, RedImg,YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg ];
+    let testColors = ['Blue', 'Red', 'Yellow', 'Purple', 'Green', 'Orange', 'Grey', 'Black', 'Cyan']
+    const testCaseImages = [BlueImg, RedImg, YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg];
 
     console.log("testing testIdState", testIdState);
     const [pricePercent, setPricePercent] = useState("2%");
     const [percentIncDec, setPercentIncDec] = useState("-")
 
-    const [value, setValue] = useState(10);
+    const [value, setValue] = useState(location?.state?.trafficSplit || 10);
     const [hideShowBtns, setHideShowBtns] = useState("none")
 
     const handleChange = (event, newValue) => {
@@ -153,32 +154,32 @@ const [tempTestArr,setTempTestArr] = useState([])
         //         }
         //     ])
         // }
-        
+
         const randNum = (min, max, exclude = []) => {
             let num = Math.floor(Math.random() * (max - min + 1 - exclude.length) + min);
             exclude
-              .slice()
-              .sort((a, b) => a - b)
-              .every((exeption) => exeption <= num && (num++, true));
-              return num;
-            };
-            const getRandomNumber =randNum(1, testColors.length, tempTestArr)
-            setDisplayTestCasesArray([
-                        ...displayTestCasesArray, {
-                            testId: getRandomNumber,
-                            id: getRandomNumber,
-                            color:testColors[getRandomNumber-1],
-                            status:"pending",
-                            variants: productVariants
-                        }
-                    ])
-            console.log("randNum(0, testColors.length, tempTestArr)",getRandomNumber);
+                .slice()
+                .sort((a, b) => a - b)
+                .every((exeption) => exeption <= num && (num++, true));
+            return num;
+        };
+        const getRandomNumber = randNum(1, testColors.length, tempTestArr)
+        setDisplayTestCasesArray([
+            ...displayTestCasesArray, {
+                testId: getRandomNumber,
+                id: getRandomNumber,
+                color: testColors[getRandomNumber - 1],
+                status: "pending",
+                variants: productVariants
+            }
+        ])
+        console.log("randNum(0, testColors.length, tempTestArr)", getRandomNumber);
 
-            setTempTestArr(prev => [...prev, getRandomNumber]);
-            setDisabled(false)
-            
-        }
-        console.log("tempTestArr", tempTestArr);
+        setTempTestArr(prev => [...prev, getRandomNumber]);
+        setDisabled(false)
+
+    }
+    console.log("tempTestArr", tempTestArr);
 
     const onConfirmEdit = () => {
         handleCloseEditTest() || handleCloseControlSettings()
@@ -211,7 +212,15 @@ const [tempTestArr,setTempTestArr] = useState([])
                     return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
 
                 })
+                console.log("location.state.testCases", location?.state?.testCases)
+                if (location?.state && location?.state?.testCases) {
+                    setDisplayTestCasesArray(location?.state?.testCases)
+                    location?.state?.testCases.map(i => {
 
+                        setTempTestArr(prev => [...prev, [i.testId]]);
+                    })
+                    setDisabled(false)
+                }
                 setVariantPriceData(apiRes.data[0].variantPrice)
                 setVariantCompareAtPriceData(apiRes.data[0].variantComparePrice)
                 setProductsVariants(updatedArray)
@@ -326,6 +335,7 @@ const [tempTestArr,setTempTestArr] = useState([])
         {
             field: "abVariantPrice",
             headerName: "Price",
+
             minWidth: 120,
             flex: 0.3,
             editable: true,
@@ -340,14 +350,58 @@ const [tempTestArr,setTempTestArr] = useState([])
             sortable: false,
         }
     ];
-    const deleteTestCase = id => {
+    const deleteTestCase = (e,id) => {
+        e.stopPropagation();
         // tempTestArr.filter(j => j !== id)
-        setTempTestArr(prev => prev.filter( j => j !== id))
+        // console.log("deleteTestCase", id);
+        // setLoading(true)
+        const found = displayTestCasesArray.filter(item => item.id === id);
+
+        // console.log("found222",found[0]?.variants[0]?.duplicateProductId)
+        // console.log("found",found[0]?.variants[0]?.duplicateProductId.split('/').pop())
+        if (found[0]?.variants[0]?.duplicateProductId && found[0]?.variants[0]?.duplicateProductId) {
+            fetch(getApiUrl + `/api/deleteoneTestCase/${found[0]?.variants[0]?.duplicateProductId.split('/').pop()}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json',
+                    'shop': cookieReader('shop'),
+                    "Authorization": "Bearer " + cookieReader('token')
+
+                },
+            })
+                .then(async (res) => {
+
+                    const apiRes = await res.json()
+                    console.log("apiRes.data", apiRes);
+                    setOpens(true)
+                    setSnackbarColor('red')
+                    setsnackbar_msg("TestCase deleted")
+                    // setLoading(false)
+                    // setSingleTest(apiRes)
+                    // setTestCases(apiRes.data.testCases)
+                })
+                .catch((error) => {
+                    console.log("Error", error)
+                    setOpens(true)
+                    setSnackbarColor('red')
+                    setsnackbar_msg("Internal Server Error")
+                    setLoading(false)
+                })
+        }
+        setTempTestArr(prev => prev.filter(j => j !== id))
         setDisplayTestCasesArray(prevItems => prevItems.filter(item => item.id !== id));
         console.log("display test cases length: " + displayTestCasesArray.length);
-        if (!displayTestCasesArray.length <= 1) {
+        if (!displayTestCasesArray.length <= 1 || displayTestCasesArray.length >= 5) {
             setDisabled(true)
+        } else {
+            setDisabled(false)
+
         }
+        setOpens(true)
+        setSnackbarColor('red')
+        setsnackbar_msg("TestCase deleted")
+        console.log('deleteTestCase', displayTestCasesArray)
     };
 
     const reviewAndLaunchBtnFunc = () => {
@@ -359,7 +413,7 @@ const [tempTestArr,setTempTestArr] = useState([])
             currency: location?.state?.currency,
             "productId": `gid://shopify/Product/${location?.state?.id}`,
         }
-
+        console.log('objectToBeSent', objectToBeSent)
         let duplicateProductData = {
             "trafficSplit": objectToBeSent.trafficSplit,
             'productId': location?.state?.id,
@@ -369,7 +423,7 @@ const [tempTestArr,setTempTestArr] = useState([])
             objectToBeSent,
             featuredImage: variantRes.data[0].featuredImage,
             productPrice: variantRes.data[0].variantPrice,
-        
+            mongoId: location?.state?.mongoId ? location?.state?.mongoId : null
         }
 
         fetch(getApiUrl + '/api/createDuplicateProduct', {
@@ -442,24 +496,24 @@ const [tempTestArr,setTempTestArr] = useState([])
         const randNum = (min, max, exclude = []) => {
             let num = Math.floor(Math.random() * (max - min + 1 - exclude.length) + min);
             exclude
-              .slice()
-              .sort((a, b) => a - b)
-              .every((exeption) => exeption <= num && (num++, true));
-              return num;
-            };
-            const getRandomNumber =randNum(1, testColors.length, tempTestArr)
-            setDisplayTestCasesArray([
-                        ...displayTestCasesArray, {
-                            testId: getRandomNumber,
-                            id: getRandomNumber,
-                            color:testColors[getRandomNumber-1],
-                            status:"pending",
-                            variants: updatedArray
-                        }
-                    ])
-            console.log("randNum(0, testColors.length, tempTestArr)",getRandomNumber);
+                .slice()
+                .sort((a, b) => a - b)
+                .every((exeption) => exeption <= num && (num++, true));
+            return num;
+        };
+        const getRandomNumber = randNum(1, testColors.length, tempTestArr)
+        setDisplayTestCasesArray([
+            ...displayTestCasesArray, {
+                testId: getRandomNumber,
+                id: getRandomNumber,
+                color: testColors[getRandomNumber - 1],
+                status: "pending",
+                variants: updatedArray
+            }
+        ])
+        console.log("randNum(0, testColors.length, tempTestArr)", getRandomNumber);
 
-            setTempTestArr(prev => [...prev, getRandomNumber]);
+        setTempTestArr(prev => [...prev, getRandomNumber]);
         console.log("setDisplayTestCasesArray3");
         setDisabled(false)
         handleCloseByPercentageModal();
@@ -611,7 +665,7 @@ const [tempTestArr,setTempTestArr] = useState([])
 
                             {loading.variants ? <Loader size={40} /> : (<>
                                 {variantRes && variantRes?.data?.length > 1 ? (<>
-                                    <div className='-1'>
+                                    <div className='-1 center-vwbtn'>
                                         <button className='viewPricing mt-40' onClick={handleOpenControlSettings}>View Pricing</button>
                                     </div>
                                 </>) : (<div className='mt-22 padding-1'>
@@ -622,7 +676,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                         </div>
                         {displayTestCasesArray && displayTestCasesArray.map((item) => (
                             <>
-                                <div className='wrapperControl'>
+                                <div className='wrapperControl' onClick={() => variantRes && variantRes?.data?.length <= 1 && handleOpenEditTest(item.testId)}>
                                     <div class="flex-row padding-one">
                                         <div className='imgWrapper'>
                                             <img src={testCaseImages[item.id - 1]} alt="" />
@@ -637,11 +691,22 @@ const [tempTestArr,setTempTestArr] = useState([])
                                         <span>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
                                     }  */}
 
-                                    <div className='padding-1 mt-40 flex-row align-items-center justify-between'>
-                                        <button onClick={() => handleOpenEditTest(item.testId)} className='managePricing mr-37'>
-                                            <span className='manageSpan'>Manage Pricing</span>
-                                        </button>
-                                        <img src={trash} alt="" onClick={() => deleteTestCase(item.id)} />
+                                    <div className={`'padding-1 ${variantRes && variantRes?.data?.length > 1 ? 'mt-40 ' : 'mt-22'} padding-text flex-row align-items-center justify-between'`}>
+                                        {variantRes && variantRes?.data?.length > 1 ? <>
+
+                                            <button onClick={() => handleOpenEditTest(item.testId)} className='managePricing mr-37'>
+                                                <span className='manageSpan'>Manage Pricing</span>
+                                            </button>
+                                        </> : <>
+
+                                            <div className='padding-1 newtestcase'>
+
+                                                <span className='CompareAtPriceData d-block'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantComparePrice && j.abVariantComparePrice))} </span>
+
+                                                <span className='ComparePrice d-block'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
+                                            </div>
+                                        </>}
+                                        <img src={trash} alt="" onClick={(e) => deleteTestCase(e,item.id)} />
                                     </div>
                                 </div>
                             </>
@@ -662,11 +727,11 @@ const [tempTestArr,setTempTestArr] = useState([])
                     </div>
                     <div className='mt-52'>
                         <span className='subHeadingTitle mb-22 d-block'> 2. Set your traffic split </span>
-                        <Slider valueLabelDisplay='auto' className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Slider valueLabelDisplay='auto' step={null} className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
 
                         <span className='trafficControl'>{displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</span>
                         <div className='flex justify-content-center align-items-center mt-153 mb-43'>
-                            <button className='reviewLaunchBtn' onClick={reviewAndLaunchBtnFunc} disabled={disabled}>{loading.testCases ? <Loader size={20} /> : displayTestCasesArray.length ? "Review & Publish" : "Review & Launch"}</button>
+                            <button className='reviewLaunchBtn cursor' onClick={reviewAndLaunchBtnFunc} disabled={disabled}>{loading.testCases ? <Loader size={20} /> : displayTestCasesArray.length ? "Review & Publish" : "Review & Launch"}</button>
 
                         </div>
                     </div>
@@ -674,8 +739,8 @@ const [tempTestArr,setTempTestArr] = useState([])
             </div>
 
 
-           {/* Configure test  */}
-           <Modal
+            {/* Configure test  */}
+            <Modal
                 open={openConfigureTest1}
                 onClose={handleCloseConfigureTest1}
                 aria-labelledby="modal-modal-title"
@@ -726,28 +791,28 @@ const [tempTestArr,setTempTestArr] = useState([])
                     <Card className='MuiPaper-root-modal'>
                         <Box style={{ height: 320, width: '100%' }}>
                             {!productVariants ? <Loader size={40} /> : (
-                            <>
-                                <DataGrid
-                                    rows={productVariants && productVariants}
-                                    columns={originalVariantColumn}
-                                    // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
-                                    disableColumnMenu
-                                    hideFooter={true}
-                                    processRowUpdate={createTestProcessRowUpdate}
-                                    onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
-                                    experimentalFeatures={{ newEditingApi: true }}
-                                    sx={{
-                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                    }}
-                                />
-                            </>
+                                <>
+                                    <DataGrid
+                                        rows={productVariants && productVariants}
+                                        columns={originalVariantColumn}
+                                        // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                        disableColumnMenu
+                                        hideFooter={true}
+                                        processRowUpdate={createTestProcessRowUpdate}
+                                        onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
+                                        experimentalFeatures={{ newEditingApi: true }}
+                                        sx={{
+                                            [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                            {
+                                                outline: "none",
+                                            },
+                                            [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                            {
+                                                outline: "none",
+                                            },
+                                        }}
+                                    />
+                                </>
                             )}
                         </Box>
                     </Card>
@@ -777,17 +842,17 @@ const [tempTestArr,setTempTestArr] = useState([])
                         <div>
                             <div className='mobile-btn'>
                                 <button className={`cursor btnPading mr-32 ${percentIncDec === '-' && "is-active"}`} onClick={() => setPercentIncDec('-')}><span>Decrease Price</span></button>
-                                <button className={`cursor btnPading ${percentIncDec === '+' && "is-active"}`} onClick={() => setPercentIncDec('+')} 
+                                <button className={`cursor btnPading ${percentIncDec === '+' && "is-active"}`} onClick={() => setPercentIncDec('+')}
                                 >
                                     <span>Increase Price</span></button>
                             </div>
                         </div>
-                            <h4 className='pricingTitle mt-53 mb-28'>By how much?</h4>
+                        <h4 className='pricingTitle mt-53 mb-28'>By how much?</h4>
                         <div className='flex-row justify-content-center mobile'>
                             {percentagePrices.map(i => (<>
-                                    <button  className={`cursor btnPading mr-12 ${pricePercent === i && "is-active"}`} onClick={() => setPricePercent(i)} ><span>{i}</span></button>
+                                <button className={`cursor btnPading mr-12 ${pricePercent === i && "is-active"}`} onClick={() => setPricePercent(i)} ><span>{i}</span></button>
                             </>))}
-                                <TextField type="number" className={`cursor false`} placeholder='Another amount in %' onChange={(e) => setPricePercent(e.target.value)} />
+                            <TextField type="number" className={`cursor false`} placeholder='Another amount in %' onChange={(e) => setPricePercent(e.target.value)} />
                         </div>
                     </div>
                     <div className='btnWrapper'>
@@ -803,7 +868,7 @@ const [tempTestArr,setTempTestArr] = useState([])
                 aria-describedby="modal-modal-description"
                 className='modalWrapper'
             >
-             <Box sx={style} >
+                <Box sx={style} >
                     <img className='absolutes cursor' src={closeIcon} alt="" onClick={() => handleCloseEditTest()} />
                     <h2 className='configureHeading' id="modal-modal-title">Test Settings</h2>
                     <span className='subProductTitle mb-34' id="modal-modal-description">
@@ -881,9 +946,9 @@ const [tempTestArr,setTempTestArr] = useState([])
                             />
                         </Box>
                     </Card>
-                        <div className='flex justify-content-center align-items-center mt-53'>
-                            <button className='reviewLaunchBtn min-240' onClick={onConfirmEdit}>Confirm</button>
-                        </div>
+                    <div className='flex justify-content-center align-items-center mt-53'>
+                        <button className='reviewLaunchBtn min-240' onClick={onConfirmEdit}>Confirm</button>
+                    </div>
                 </Box>
             </Modal>
             <div>{errorfunction()}</div>

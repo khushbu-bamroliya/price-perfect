@@ -2,6 +2,7 @@ import { Alert, Box, Button, Card, Chip, Collapse, IconButton, Modal, Slider, Sn
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import LinkIcon from "./Images/link-2.png"
+import copyGrey from "./Images/copyGrey.png";
 import { DataGrid, gridClasses } from '@mui/x-data-grid'
 import EyeIcon from "./Images/eye.png"
 import pauseIcon from "./Images/pause-icon.png"
@@ -24,12 +25,14 @@ import GreyImg from './Images/Grey.svg';
 import OrangeImg from './Images/Orange.svg';
 import PurpleImg from './Images/Purple.svg';
 import YellowImg from './Images/Yellow.svg';
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 
 const ViewOrManageTestPage = () => {
     const location = useLocation();
     // const {id} = location?.state;
-    const testCaseImages = [BlueImg, RedImg,YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg ];
+    const testCaseImages = [BlueImg, RedImg, YellowImg, PurpleImg, GreenImg, OrangeImg, GreyImg, BlackImg, CyanImg];
     const [rangevalue, setRangeValue] = useState(10);
+    let [activeTests, setActiveTests] = useState(0);
     const [testCases, setTestCases] = useState([]);
     const [productVariants, setProductsVariants] = useState([]);
     console.log("Testcases", testCases);
@@ -72,6 +75,16 @@ const ViewOrManageTestPage = () => {
             .then(async (res) => {
 
                 const apiRes = await res.json()
+                var temp = 0;
+                for (let i = 0; i < apiRes?.data?.testCases.length; i++) {
+                    console.log("Hello........", i);
+                    // for (let j = 0; j < apiRes?.data?.testCases[i].variants.length; j++) {
+                    if (apiRes?.data?.testCases[i]?.status == 'active') {
+                        temp = temp + 1
+                        console.log("temp", temp);
+                    }
+                }
+                setActiveTests(temp)
                 console.log("apiRes.data", apiRes);
                 setSingleTest(apiRes)
                 setTestCases(apiRes.data.testCases)
@@ -181,7 +194,7 @@ const ViewOrManageTestPage = () => {
                 return (
                     <div className='actionIcon'>
                         <img src={EyeIcon} alt="" />
-                        <img src={LinkIcon} alt="" />
+                        <img src={copyGrey} alt="" />
                         <img src={TrashIcon} alt="" />
                     </div>
                 )
@@ -234,7 +247,7 @@ const ViewOrManageTestPage = () => {
             setOpens(true)
             setSnackbarColor('#325240')
             setsnackbar_msg("Test status updated.")
-            getSingleTest()
+            getSingleTest();
 
         }).catch((err) => {
             setOpens(true)
@@ -274,7 +287,7 @@ const ViewOrManageTestPage = () => {
     // }
 
     // New collapsible table 
-    function createData(id, variants, price, compareAtPrice, color) {
+    function createData(id, variants, price, compareAtPrice, color, status) {
         return {
             id,
             //   calories,
@@ -283,7 +296,8 @@ const ViewOrManageTestPage = () => {
             // protein,
             // price,
             variants,
-            color
+            color,
+            status
             //   history: [
             //     {
             //       date: '2020-01-05',
@@ -306,7 +320,7 @@ const ViewOrManageTestPage = () => {
         return (
             <React.Fragment>
                 <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                    <TableCell>
+                    <TableCell className='img-flex'>
                         <IconButton
                             aria-label="expand row"
                             size="small"
@@ -321,19 +335,21 @@ const ViewOrManageTestPage = () => {
                         {/* { row.color ? row.color + " Test" : row.id} */}
                     </TableCell>
                     {/* <TableCell  >{row.calories}</TableCell> */}
-                    <TableCell >{row.price}</TableCell>
+                    <TableCell>{row.price}</TableCell>
                     <TableCell>{row.compareAtPrice}</TableCell>
                     {/* <TableCell  >{row.protein}</TableCell> */}
+                    
                     <TableCell>
-                        <img src={pauseIcon} alt="" onClick={() => {updateOneTestStatus(row.id)}} />
-                        <img src={editIcon} alt="" onClick={() => handleEditTest(row.id)} />
+                        {row.status === 'active' ?<img src={pauseIcon} className='cursor' alt="" onClick={() => { updateOneTestStatus(row.id) }} /> : <PlayArrowOutlinedIcon onClick={() => { updateOneTestStatus(row.id) }} /> }
+                        {/* <img src={pauseIcon} alt="" onClick={() => { updateOneTestStatus(row.id) }} /> */}
+                        <img src={editIcon} className='cursor' alt="" onClick={() => handleEditTest(row.id)} />
                     </TableCell>
 
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <TableCell  className='no_pad-collapse' style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                         <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box sx={{ margin: 1 }}>
+                            <Box sx={{ margin: 1 }}  className='no_mar-collapse'>
                                 {/* <Typography variant="h6" gutterBottom component="div">
                       History
                     </Typography> */}
@@ -346,16 +362,17 @@ const ViewOrManageTestPage = () => {
                           <TableCell  >Total price ($)</TableCell>
                         </TableRow>
                       </TableHead> */}
-                                    <TableBody>
+                                    <TableBody  className='evn-od-style'>
                                         {row.variants.map((i) => (
-                                            <TableRow key={i.id}>
-                                                <TableCell component="th" scope="row"  >
+                                            <TableRow key={i.id} className='pad-516p'>
+                                                <TableCell component="th" scope="row" className='table-width-1' >
 
                                                 </TableCell>
-                                                <TableCell component="th" scope="row"  >
+                                                <TableCell component="th" scope="row" className={row?.variants.length > 1 ? 'table-width-2' : 'table-width-3'} >
+                                                    {/* <TableCell component="th" scope="row" className='table-width-2' > */}
                                                     {i.variantTitle}
                                                 </TableCell>
-                                                <TableCell component="th" scope="row"  >
+                                                <TableCell component="th" scope="row" className={row?.variants.length > 1 ? 'table-price' : 'table-price-2'}>
                                                     {singleTest?.data?.currency} {i.abVariantPrice}
                                                 </TableCell>
                                                 <TableCell component="th" scope="row"  >
@@ -419,7 +436,8 @@ const ViewOrManageTestPage = () => {
                 singleTest?.data?.currency + Math.min(...i.variants.map(j => j.abVariantComparePrice)) + ' - ' + singleTest?.data?.currency + Math.max(...i.variants.map(j => j.abVariantComparePrice))
                 : i.variants.map(j => j.abVariantComparePrice)
             ,
-            i.color
+            i.color,
+            i.status
 
         )
     ))
@@ -441,11 +459,11 @@ const ViewOrManageTestPage = () => {
         setOpenEditTest(false)
     };
     const handleOpenEditTrafficSplit = () => {
-    
+
         setOpenEditTrafficSplit(true)
     };
     const handleCloseEditTrafficSplit = () => {
-    
+
         setOpenEditTrafficSplit(false)
     };
     const onConfirmEdit = () => {
@@ -583,18 +601,34 @@ const ViewOrManageTestPage = () => {
     ];
 
     const addNewTestCase = () => {
+        const productId = singleTest && singleTest?.data?.productId.split('/').pop();
 
+        const productHandle = singleTest && singleTest?.data?.handle.split('/').pop();
+
+        navigate('/createtest/step2', {
+            state: {
+                currency: singleTest && singleTest?.data?.currency,
+                handle: productHandle,
+                title: singleTest && singleTest?.data?.productTitle,
+                id: productId,
+                testCases: testCases && testCases,
+                mongoId: singleTest && singleTest?.data?._id,
+                trafficSplit: singleTest && singleTest?.data?.trafficSplit * singleTest?.data?.testCases.length
+
+            }
+        })
     }
 
     const updateOneTestStatus = (id) => {
+        console.log("id", id);
         const config = {
             method: 'PUT',
             headers: {
-                shop:cookieReader('shop'),
+                shop: cookieReader('shop'),
                 Authorization: 'Bearer ' + cookieReader('token')
             }
         }
-        fetch(getApiUrl +  `/api/updateoneteststatus/${id}?`+ new URLSearchParams({
+        fetch(getApiUrl + `/api/updateoneteststatus/${id}?` + new URLSearchParams({
             id: location?.state?.id,
         }), config).then((res) => {
             return res.json()
@@ -603,6 +637,7 @@ const ViewOrManageTestPage = () => {
             setOpens(true)
             setSnackbarColor('#325240')
             setsnackbar_msg("Test status updated.")
+            getSingleTest()
         }).catch((error) => {
             setOpens(true)
             setSnackbarColor('red')
@@ -610,57 +645,75 @@ const ViewOrManageTestPage = () => {
             console.log("error", error);
         })
     }
-const onConfirmTrafficSplit = () => {
-setOpenEditTrafficSplit(false)
-}
-const rangeSliderMarks = [
-    {
-        value: 10,
-        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-            </svg>
-            <span>10%</span></div>,
-    },
-    {
-        value: 25,
-        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-            </svg>
-            <span>25%</span></div>,
-    },
-    {
-        value: 50,
-        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-            </svg>
-            <span>50%</span></div>,
-    },
-    {
-        value: 75,
-        label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-            </svg>
-            <span>75%</span></div>,
-    },
-];
-const rangeSliderValuetext = (value) => {
-    return `${value}°C`;
-}
-const handleChangeSlider = (event, newValue) => {
-    setRangeValue(newValue);
-};
+    const onConfirmTrafficSplit = () => {
+        setOpenEditTrafficSplit(false)
+    }
+    const rangeSliderMarks = [
+        {
+            value: 10,
+            label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                </svg>
+                <span>10%</span></div>,
+        },
+        {
+            value: 25,
+            label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                </svg>
+                <span>25%</span></div>,
+        },
+        {
+            value: 50,
+            label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                </svg>
+                <span>50%</span></div>,
+        },
+        {
+            value: 75,
+            label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                </svg>
+                <span>75%</span></div>,
+        },
+    ];
+    const rangeSliderValuetext = (value) => {
+        return `${value}°C`;
+    }
+    const handleChangeSlider = (event, newValue) => {
+        setRangeValue(newValue);
+    };
+    const countActiveTests = () => {
+        console.log("for loop");
+        if (testCases) {
+            console.log("for loop.........");
+
+            for (let i = 0; i < testCases && testCases.length; i++) {
+                console.log("testCases[i].status")
+                for (let j = 0; j < testCases[i].variants.length; j++) {
+
+
+                }
+                if (testCases[i].status == 'active') {
+                    setActiveTests(activeTests + 1)
+                }
+            }
+        }
+    }
     useEffect(() => {
         if (!location?.state?.id) {
 
             navigate('/yourtests')
         }
-        getSingleTest()
 
-    }, [])
+        getSingleTest()
+        // countActiveTests();
+    }, [activeTests])
     return (
         <>
 
@@ -691,7 +744,7 @@ const handleChangeSlider = (event, newValue) => {
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Active Tests</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">4 (static)</Typography>
+                                                    <Typography variant='p' className="viewormanage-product-pink-f">{activeTests && activeTests}</Typography>
                                                 </div>
                                                 <div className='viewormanage-product'>
                                                     <Typography variant='caption'>Control RPM</Typography>
@@ -728,8 +781,8 @@ const handleChangeSlider = (event, newValue) => {
                                                 <a href="#">Copy Link</a>
                                             </div>
                                         </Tooltip>
-                                        <div className=''>
-                                            <button onClick={handleOpenEditTrafficSplit}>Edit Traffic Split</button>
+                                        <div className='viewormanage-flex-button'>
+                                            <button onClick={(addNewTestCase)} className='secondaryBtn cursor'><span>Edit Traffic Split</span></button>
                                         </div>
                                     </div>
                                 </Card>
@@ -762,7 +815,7 @@ const handleChangeSlider = (event, newValue) => {
                         <Card className='viewormanage-testAnalytics'>
                             <div>
                                 <Typography variant='h5'>Test Analytics</Typography>
-                                <Button variant="outlined">Expand</Button>
+                                <Button variant="outlined" className='cursor'>Expand</Button>
                             </div>
                         </Card>
                     </div>
@@ -770,7 +823,7 @@ const handleChangeSlider = (event, newValue) => {
                         <div className='funnel-button-div'>
                             <Typography variant='h5'>All Tests</Typography>
                             <div className='two-buttons'>
-                                <Button onClick={addNewTestCase}>
+                                <Button className='cursor' onClick={addNewTestCase} disabled={singleTest && singleTest.data.testCases.length >= 5 ? true : false}>
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.66797 10H13.3346" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                         <path d="M10 13.3337V6.66699" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -778,7 +831,7 @@ const handleChangeSlider = (event, newValue) => {
                                     </svg>
                                     Create New Test
                                 </Button>
-                                <Button onClick={() => setOpenTestStatusModal(true)}>{singleTest?.data?.status === "pending" ? "Resume" : "Pause"} All Tests</Button>
+                                <Button  className='secondaryBtn cursor' onClick={() => setOpenTestStatusModal(true)}><span>{singleTest?.data?.status === "pending" ? "Resume" : "Pause"} All Tests</span> </Button>
                             </div>
                         </div>
                         <div className='funnelBreakdownTable' style={{ width: '100%' }}>
@@ -800,6 +853,11 @@ const handleChangeSlider = (event, newValue) => {
                                 </TableBody>
                             </Table>
                         </div>
+
+
+
+
+
                         {/* <div className='funnelBreakdownTable' style={{ height: 400, width: '100%' }}>
                             <Table>
 
@@ -889,7 +947,7 @@ const handleChangeSlider = (event, newValue) => {
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Are you sure you want to delete this test case?..
                         </Typography>
-                        <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(location?.state?.id)}> {loading ? <Loader size={20} /> : "Delete"} </Button>
+                        <Button className='deleteTestCaseBtn cursor' onClick={() => deleteTestCase(location?.state?.id)}> {loading ? <Loader size={20} /> : "Delete"} </Button>
                     </Box>
                 </Modal>
 
@@ -910,7 +968,7 @@ const handleChangeSlider = (event, newValue) => {
                             Are you sure you want to update this test case?..
                         </Typography>
 
-                        <Button className='deleteTestCaseBtn' onClick={() => updateTestStatus()}> {loading ? <Loader size={20} /> : singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
+                        <Button className='deleteTestCaseBtn cursor' onClick={() => updateTestStatus()}> {loading ? <Loader size={20} /> : singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
                     </Box>
                 </Modal>
 
@@ -959,7 +1017,7 @@ const handleChangeSlider = (event, newValue) => {
                         </div>
 
                         <div className='confirmBtn'>
-                            <Button onClick={onConfirmEdit}>Confirm</Button>
+                            <Button className='cursor' onClick={onConfirmEdit}>Confirm</Button>
                         </div>
                     </Box>
                 </Modal>
@@ -984,7 +1042,7 @@ const handleChangeSlider = (event, newValue) => {
                         <Slider valueLabelDisplay='auto' className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={rangevalue} onChange={handleChangeSlider} />
 
                         <div className='confirmBtn'>
-                            <Button onClick={onConfirmTrafficSplit}>Confirm</Button>
+                            <Button className='cursor' onClick={onConfirmTrafficSplit}>Confirm</Button>
                         </div>
                     </Box>
                 </Modal>

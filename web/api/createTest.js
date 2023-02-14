@@ -46,7 +46,7 @@ const getSingleTestCase = async (req, res) => {
         res.status(500).json({
             error,
             success: false
-            
+
         })
     }
 }
@@ -66,7 +66,7 @@ const getTestCase = async (req, res) => {
             })
         } else {
 
-            getCase = await createTestModal.find({shop: shop })
+            getCase = await createTestModal.find({ shop: shop })
         }
 
         if (!getCase) {
@@ -83,7 +83,7 @@ const getTestCase = async (req, res) => {
         res.status(500).json({
             error,
             success: false
-            
+
         })
     }
 }
@@ -145,19 +145,19 @@ const deleteTestCaseData = async (req, res) => {
         res.status(500).json({
             error,
             success: false
-            
+
         })
     }
 }
 
 
 const updateSingleTestStatus = async (req, res) => {
-    const {id} = req.query;
-    const {testid} = req.params;
+    const { id } = req.query;
+    const { testid } = req.params;
     console.log("req.params", req.params);
     console.log("req.query", req.query);
     try {
-        const dbData = await createTestModal.findOne({_id: mongoose.Types.ObjectId(`${id}`)})
+        const dbData = await createTestModal.findOne({ _id: mongoose.Types.ObjectId(`${id}`) })
         console.log("testCases", JSON.stringify(dbData && dbData?.testCases))
         console.log("testCases2222", dbData.testCases)
 
@@ -165,19 +165,36 @@ const updateSingleTestStatus = async (req, res) => {
         console.log("found", found);
 
         if (found.status === "active") {
-            const statusUpdated = await createTestModal.findOneAndUpdate(
-                {_id: mongoose.Types.ObjectId(`${id}`), testCases:{ $elemMatch:{status:'active'} }},
-                { $set: {"testCases.$.status": "pending" } },
-              )
-              console.log("statusUpdated", statusUpdated);
-              res.status(200).json({ success: true, status: statusUpdated })
+            // createTestModal.findOneAndUpdate(
+            //     {_id: mongoose.Types.ObjectId(`${id}`)},
+            //     { status:"active", $set: {"testCases.$[el].status": "active" } },
+            //     { 
+            //       arrayFilters: [{ "el.status": "pending" }],
+            //       new: true,
+            //       multi: true
+            //     }
+            //   )
+            console.log("testid", id, testid);
+
+            const statusUpdated = await createTestModal.updateOne(
+                { _id: mongoose.Types.ObjectId(id), "testCases.testId": Number(testid) },
+                { $set: { "testCases.$.status": "pending" } }
+            )
+            // const statusUpdated = await createTestModal.updateOne(
+            //     {_id: mongoose.Types.ObjectId(`${id}`),  'testCases.$.testId': testid},
+            //     { $set: {"testCases.$.status": "pending" } }
+            //   )
+            console.log("statusUpdated", statusUpdated);
+            res.status(200).json({ success: true, status: statusUpdated })
         } else {
-            const statusUpdated = await createTestModal.findOneAndUpdate(
-                {_id: mongoose.Types.ObjectId(`${id}`), testCases:{ $elemMatch:{status:'pending'} }},
-                { $set: {"testCases.$.status": "active" } },
-              )
-              console.log("statusUpdated", statusUpdated);
-              res.status(200).json({ success: true, status: statusUpdated })
+
+            const statusUpdated = await createTestModal.updateOne(
+                { _id: mongoose.Types.ObjectId(id), "testCases.testId": Number(testid) },
+                { $set: { "testCases.$.status": "active" } }
+            )
+
+            console.log("statusUpdated", statusUpdated);
+            res.status(200).json({ success: true, status: statusUpdated })
         }
 
         // const statusUpdated = await createTestModal.findOneAndUpdate(
@@ -191,7 +208,7 @@ const updateSingleTestStatus = async (req, res) => {
         res.status(500).json({ success: false, error: error })
     }
 
-    
+
 
 }
 
@@ -200,14 +217,12 @@ const updateTestStatus = async (req, res) => {
         // const { testCases } = req.body;
         const { id } = req.query;
         // console.log("testCases updateTestStatus", testCases);
-        
         // patients.findOneAndUpdate(
         //     {_id: "5cb939a3ba1d7d693846136c"},
         //     {$set: {"testCases.$[el].status": "pending" } },
         //     { 
         //       arrayFilters: [{ "el.status": "active" }],
         //       new: true,
-              
         //     }
         //   )
         console.log("******* update test case status *******")
@@ -215,26 +230,26 @@ const updateTestStatus = async (req, res) => {
         console.log("checkStatus", checkStatus.status);
         if (checkStatus.status === 'pending') {
             const statusUpdated = await createTestModal.findOneAndUpdate(
-                {_id: mongoose.Types.ObjectId(`${id}`)},
-                { status:"active", $set: {"testCases.$[el].status": "active" } },
-                { 
-                  arrayFilters: [{ "el.status": "pending" }],
-                  new: true,
-                  multi: true
+                { _id: mongoose.Types.ObjectId(`${id}`) },
+                { status: "active", $set: { "testCases.$[el].status": "active" } },
+                {
+                    arrayFilters: [{ "el.status": "pending" }],
+                    new: true,
+                    multi: true
                 }
-              )
-              console.log("statusUpdated", statusUpdated);
+            )
+            console.log("statusUpdated", statusUpdated);
             res.status(200).json({ success: true, status: statusUpdated })
         } else {
             const statusUpdated = await createTestModal.findOneAndUpdate(
-                {_id: mongoose.Types.ObjectId(`${id}`)},
-                {status:"pending",$set: {"testCases.$[el].status": "pending" } },
-                { 
-                  arrayFilters: [{ "el.status": "active" }],
-                  new: true,
-                  multi: true
+                { _id: mongoose.Types.ObjectId(`${id}`) },
+                { status: "pending", $set: { "testCases.$[el].status": "pending" } },
+                {
+                    arrayFilters: [{ "el.status": "active" }],
+                    new: true,
+                    multi: true
                 }
-              )
+            )
             res.status(200).json({ success: true, status: statusUpdated })
         }
         console.log("=====END END====")
@@ -243,7 +258,7 @@ const updateTestStatus = async (req, res) => {
         res.status(500).json({
             error,
             success: false
-            
+
         })
     }
 }

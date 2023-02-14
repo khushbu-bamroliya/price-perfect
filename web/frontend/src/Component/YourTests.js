@@ -5,6 +5,7 @@ import searchIcon from './Images/search-normal.png';
 import moreIcon from "./Images/more.png"
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import LinkIcon from "./Images/link-2.png"
+import copyGrey from "./Images/copyGrey.png";
 import EyeIcon from "./Images/eye.png"
 import avatar from "./Images/image.png"
 import TrashIcon from "./Images/trash.png"
@@ -125,7 +126,7 @@ const YourTests = () => {
                         /></>
                         {/* <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div> */}
                         <Tooltip title={copiedTooltip ? "copied" : null} arrow>
-                            <img src={LinkIcon} alt="" onClick={(e) => {
+                            <img src={copyGrey} alt="" onClick={(e) => {
                                 e.stopPropagation();
                                 navigator.clipboard.writeText(params.row.handle)
                                 setCopiedTooltip(true)
@@ -183,7 +184,7 @@ const YourTests = () => {
     }
     const deleteTestCase = () => {
         setLoading(true)
-        console.log("deleting");
+        console.log("deleting", testId);
         fetch(getApiUrl + `/api/deleteTestCase/${testId}`, {
             method: 'DELETE',
             headers: {

@@ -154,8 +154,8 @@ margin-left: 50px;
     color: #FFFFFF;
     border: 0;
     outline: 0;
-    padding: 8px 10px;
-    width: 100%;
+    padding: 8px 30px;
+    /* width: 100%; */
     cursor: pointer;
     border: 1px solid #FF8FD2;
 }
@@ -1217,6 +1217,17 @@ margin-left: 50px;
 
 .viewormanage-flex-div {
     display: flex;
+    margin-top: 24px;
+}
+
+.viewormanage-flex-button {
+    width: 100%;
+    max-width: 260px;
+}
+
+.viewormanage-flex-button button {
+    width: 100%;
+    border: none;
 }
 
 .viewormanage-flex-div .viewormanage-testItemImage {
@@ -1343,13 +1354,42 @@ margin-left: 50px;
     font-size: 16px;
     line-height: 19px;
     color: #536780;
+    padding: 5px 16px;
+}
+/* .table-body-row tr:first-child td {
+    display: flex;
+    align-items: center;
+} */
+.table-width-1 {
+    width: 29%;
+}
+.table-width-2 {
+    width: 12%;
+}
+.table-width-3 {
+    width: 13%;
+}
+.table-price {
+    width: 23%;
+}
+.table-price-2{
+    width: 17%;
 }
 .table-body-row td img {
     margin: 0 5px;
 }
 
+.pad-516p th{
+    padding: 12px 16px;
+}
+
 .funnel-button-div {
     display: flex;
+}
+
+.table-body-row {
+    background: #F9F8FE;
+    border-radius: 10px;
 }
 
 .two-buttons {
@@ -1369,7 +1409,10 @@ margin-left: 50px;
     color: #FFFFFF;
     padding: 11px 25px;
 }
-
+.img-flex{
+    display: flex !important;
+    align-items: center ;
+}
 .two-buttons button:first-child {
     margin-right: 20px;
 }
@@ -1379,17 +1422,31 @@ margin-left: 50px;
 }
 
 .two-buttons button:nth-child(2) {
-    opacity: 0.1;
+    background: linear-gradient(270deg, #FADDEE 0%, #F8E7F6 100%);
+    border-radius: 8px;
+}
+.two-buttons button:nth-child(2) span {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    text-transform: none;;
 }
 
 @media only screen and (max-width: 425px) {
     .viewormanage-flex-div {
         flex-wrap: wrap;
+        justify-content: space-around;
     }
 
     .viewormanage-flex-div .viewormanage-testItemImage {
         width: auto;
         max-width: 100%;
+
     }
 
     .viewormanage-flex-div .viewormanage-testItemData {
@@ -1399,6 +1456,7 @@ margin-left: 50px;
 
     .copy-link-img {
         margin-top: 20px;
+        justify-content: space-around;
     }
 
     .viewormanage-flex-div .viewormanage-testItemImage {
@@ -1416,10 +1474,10 @@ margin-left: 50px;
     }
 
     .two-buttons button {
-        font-weight: 700;
-        font-size: 12px;
-        line-height: 10px;
-        padding: 5px 15px;
+        font-weight: 600 !important;
+        font-size: 12px !important;
+        line-height: 15px !important;
+        padding: 5px 10px !important;
         width: 50%;
     }
     
@@ -1433,6 +1491,9 @@ margin-left: 50px;
 
     .table-body-row td img {
         margin: 0;
+    }
+    .funnelBreakdown {
+        padding: 15px;
     }
 }
 
@@ -1471,6 +1532,10 @@ margin-left: 50px;
     }
 }
 
+.viewormanage-testAnalytics {
+    width: 59%;
+}
+
 @media only screen and (max-width: 1024px) {
     .viewormanage-testAnalytics {
         width: auto;
@@ -1499,4 +1564,19 @@ margin-left: 50px;
 }
 .min-192{
     min-width: 192px;
+}
+.two-buttons button:nth-child(2):hover {
+    background: transparent;
+}
+.center-vwbtn{
+    text-align: center;
+}
+.mt-22{
+    margin-top: 22px;
+}
+.newtestcase{
+    padding-left: 0;
+}
+.padding-text{
+    padding: 0px 24px 24px 24px;
 }

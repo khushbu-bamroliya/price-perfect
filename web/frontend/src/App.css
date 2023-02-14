@@ -370,13 +370,13 @@
 .testAnalytics {
     margin-right: 12px;
     width: 766px;
-    height: 414px;
+    /* height: 414px; */
 }
 
 .yourTests {
     margin-left: 12px;
     width: 589px;
-    height: 414px;
+    /* height: 414px; */
 }
 
 .analyticsBtnGroup>button>img {
@@ -1924,7 +1924,7 @@
 .funnelBreakdown {
     margin-top: 24px;
     box-shadow: none !important;
-    padding: 23px 12px;
+    padding: 27px;
     border-radius: 14px !important;
 }
 
@@ -1963,7 +1963,7 @@
     .yourTests {
         margin: 0 !important;
         width: 100% !important;
-        height: 414px;
+        /* height: 414px; */
     }
 
     .yourTests {
@@ -2285,6 +2285,9 @@
 
     .inc-dec-btn-group>div:last-child {
         margin-left: 0 !important;
+    }
+    .funnelBreakdownTable {
+        overflow-x: scroll;
     }
 }
 
@@ -3343,7 +3346,7 @@ html {
 
     border-radius: 10px;
     align-items: center !important;
-    padding: 8px;
+    /* padding: 8px; */
 }
 
 .MuiDataGrid-cell--withRenderer {
@@ -3579,7 +3582,7 @@ html {
 }
 
 .analyticsSection .MuiDataGrid-footerContainer {
-    display: none !important;
+    /* display: none !important; */
 }
 
 /* .createTestTable .MuiDataGrid-cell:first-child {
@@ -4267,4 +4270,35 @@ html {
 }
 .flex-justify-content{
     justify-content: space-between;
+}
+.evn-od-style tr:nth-child(even) {
+    background: #F9F8FE;
+    border-radius: 10px;
+}
+.evn-od-style tr:nth-child(odd) {
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+.table-body-row tr {
+    border-radius: 10px;
+}
+.table-body-row tr td {
+    border-bottom: none;
+}
+.table-body-row tr th {
+    border-bottom: none;
+}
+.no_pad-collapse {
+    padding: 0 !important;
+}
+.no_mar-collapse {
+    margin: 0 !important;
+}
+.table-row-cells {
+    background: #F9F8FE;
+    border-radius: 10px;
+    margin-bottom: 2px !important;
+}
+.funnelBreakdownTable div {
+    border: none;
 }

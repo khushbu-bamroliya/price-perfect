@@ -1,22 +1,23 @@
 //shopify apis
-const { PostApiGraphql, PostApiRest, DemoGrapqlApi } = require('../controllers/shopify_api');
+const {
+  PostApiGraphql,
+  PostApiRest,
+} = require("../controllers/shopify_api");
 const Shop = require("../models/Shop");
 const Product = require("../models/Product");
 const _ = require("lodash");
-const createTestModal = require('../models/createTestModal');
-const { decodeJWT } = require('../controllers/utils');
-const { default: mongoose } = require('mongoose');
-
+const createTestModal = require("../models/createTestModal");
+const { decodeJWT, delay } = require("../controllers/utils");
+const { default: mongoose } = require("mongoose");
 
 const in_array = (array, id) => {
   return array.some(function (item) {
     return item.productId === id;
   });
-}
+};
 
 const allProducts = async (req, res) => {
   try {
-
     const shop = req.headers.shop;
     console.log("shop", shop);
     console.log("req.headers", req.headers);
@@ -27,20 +28,18 @@ const allProducts = async (req, res) => {
 
     console.log("shop", shop);
     if (shop) {
-
-      const shopData = await Shop.findOne({ shop }).select(['access_token', 'money_format']);
+      const shopData = await Shop.findOne({ shop }).select([
+        "access_token",
+        "money_format",
+      ]);
       console.log("====> shopData <====", shopData);
-      access_token = shopData.access_token
-      currency = shopData.money_format.replace(' {{amount}}', '')
+      access_token = shopData.access_token;
+      currency = shopData.money_format.replace(" {{amount}}", "");
     }
 
-    const {
-      search,
-      hasNextPageCursor,
-      hasPreviousPageCursor,
-    } = req.body;
+    const { search, hasNextPageCursor, hasPreviousPageCursor } = req.body;
     console.log("hasPreviousPageCursor", hasPreviousPageCursor);
-    const endCursor = null
+    const endCursor = null;
     console.log(req.body, "search");
     let query;
 
@@ -57,7 +56,14 @@ const allProducts = async (req, res) => {
           firstData = item_per_page;
         }
         query = `query products{
-              products(first: ${firstData}, last:${lastData}, ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}, after: ${endCursor} , before: ${JSON.stringify(hasPreviousPageCursor)}){ 
+              products(first: ${firstData}, last:${lastData}, ${search
+            ? 'query: "tag_not:price_perfect_duplicate AND title:*' +
+            search +
+            '*"'
+            : 'query:"tag_not:price_perfect_duplicate"'
+          }, after: ${endCursor} , before: ${JSON.stringify(
+            hasPreviousPageCursor
+          )}){ 
                   edges { 
                     cursor 
                     node { 
@@ -90,7 +96,12 @@ const allProducts = async (req, res) => {
       } else {
         console.log("first time and searching");
         query = `query products{
-                products(first :10 ${search ? 'query: "tag_not:price_perfect_duplicate AND title:*' + search + '*"' : 'query:"tag_not:price_perfect_duplicate"'}){ 
+                products(first :10 ${search
+            ? 'query: "tag_not:price_perfect_duplicate AND title:*' +
+            search +
+            '*"'
+            : 'query:"tag_not:price_perfect_duplicate"'
+          }){ 
                   edges { 
                   cursor 
                   node { 
@@ -121,13 +132,7 @@ const allProducts = async (req, res) => {
             `;
       }
 
-
-      let ans1 = await getWithPagination(
-        shop,
-        access_token,
-        query,
-        "products"
-      );
+      let ans1 = await getWithPagination(shop, access_token, query, "products");
       console.log("ans1", ans1);
 
       let ans = ans1.products.edges;
@@ -224,7 +229,7 @@ const allProducts = async (req, res) => {
             endCursorFromApi,
             hasNextPageFromApi,
             hasPreviousPageFromApi,
-            startCursorFromApi
+            startCursorFromApi,
           };
           return finalAns;
         }
@@ -232,12 +237,12 @@ const allProducts = async (req, res) => {
     }
 
     //call first time
-    const resProducts = await recursion_products(JSON.stringify(hasNextPageCursor));
+    const resProducts = await recursion_products(
+      JSON.stringify(hasNextPageCursor)
+    );
     console.log("resProducts: " + resProducts);
 
     res.status(200).send(resProducts);
-
-
   } catch (error) {
     console.log("error", error);
     return res.status(500).send("Internal server error!!");
@@ -247,7 +252,6 @@ const allProducts = async (req, res) => {
 const getWithPagination = async (shop, token, query, name, value, cursor) => {
   return new Promise(async (resolve, reject) => {
     try {
-
       const response = await PostApiGraphql(shop, token, query);
 
       if (
@@ -272,14 +276,12 @@ const getWithPagination = async (shop, token, query, name, value, cursor) => {
 };
 
 const getVariants = async (req, res) => {
-
   const shop = req.headers.shop;
 
-
-  console.log("==>1")
+  console.log("==>1");
 
   const { productId } = req.body;
-  console.log("==>2", req.body)
+  console.log("==>2", req.body);
 
   var access_token;
 
@@ -289,7 +291,7 @@ const getVariants = async (req, res) => {
     access_token = shopData.access_token;
   }
 
-  console.log("==>3")
+  console.log("==>3");
   try {
     let query = `query product {
         product(id: "${productId}") {
@@ -329,32 +331,46 @@ const getVariants = async (req, res) => {
           variantTitle: info.title,
           variantPrice: info.price,
           variantComparePrice: info.compareAtPrice,
-          featuredImage: ans1.data.product.featuredImage ? ans1.data.product.featuredImage.src : "",
-          productTitle: ans1.data.product.title
-        })
+          featuredImage: ans1.data.product.featuredImage
+            ? ans1.data.product.featuredImage.src
+            : "",
+          productTitle: ans1.data.product.title,
+        });
       }
 
-      console.log("New Array", products)
+      console.log("New Array", products);
 
       res.status(200).json({
         data: products,
         success: true,
-        status: 200
-      })
+        status: 200,
+      });
     }
   } catch (error) {
     console.log("error", error);
   }
 };
 
-
 const createDuplicateProduct = async (req, res) => {
   try {
-
     const shop = req.headers.shop;
 
-    var { productId, productTitle, featuredImage, productPrice, currency, objectToBeSent, handle, trafficSplit, fullProductId, testCases, status } = req.body;
-    console.log("==>2", handle)
+    var {
+      productId,
+      productTitle,
+      featuredImage,
+      productPrice,
+      currency,
+      objectToBeSent,
+      handle,
+      trafficSplit,
+      fullProductId,
+      testCases,
+      status,
+      mongoId
+    } = req.body;
+    console.log("mongoId", mongoId);
+    console.log("==>2", handle);
     console.log("objectToBeSent.variants", objectToBeSent);
     var access_token;
     let newObjectToBeSent;
@@ -365,11 +381,40 @@ const createDuplicateProduct = async (req, res) => {
     if (shopData && shopData.access_token) {
       access_token = shopData.access_token;
     }
-    console.log("==>3")
+    console.log("==>3");
     const duplicateProductId = [];
     let originalProductTags = [];
     let duplicateVariantsIds = [];
+
+    var cost = 1000;
+
+
+    //  if (cost - 1000 < 0) {
+    //         await delay(Math.ceil((1000 - cost) / 50) * 1000);
+    //  }
     for (let i = 0; i < objectToBeSent?.testCases.length; i++) {
+    
+      console.log(
+        "objectToBeSent?.testCases[i].variants.length",
+        objectToBeSent?.testCases[i]?.variants.length
+      );
+      if (objectToBeSent?.testCases[i]) {
+        // for (let k = 0; k < objectToBeSent?.testCases[i]?.variants.length; k++) {
+        console.log("objectToBeSent?.testCases[i].variants[0].duplicateProductId", objectToBeSent?.testCases[i].variants[0].duplicateProductId)
+        if (objectToBeSent?.testCases[i].variants[0].duplicateProductId) {
+          const query = `mutation {
+                productDelete(input: {id: "${objectToBeSent?.testCases[i]?.variants[0]?.duplicateProductId}"}) {
+                  deletedProductId
+                }
+              }`;
+          console.log("delete query", query);
+          let deletedProduct = await PostApiGraphql(shop, access_token, query);
+          console.log("deletedProduct", deletedProduct);
+        }
+
+        // }
+      }
+
       var query = `mutation {
       productDuplicate(productId: "gid://shopify/Product/${productId}",
         newTitle: "${productTitle}",
@@ -399,36 +444,44 @@ const createDuplicateProduct = async (req, res) => {
       }
     }
     `;
+
+    if (cost - 1000 < 0) {
+      console.log("got in cost");
+      await delay(Math.ceil((1000 - cost) / 50) * 1000);
+    }
+
       let NewRes = await PostApiGraphql(shop, access_token, query);
+console.log("New res++++.: " + JSON.stringify(NewRes));
+      cost = NewRes.extensions.cost.throttleStatus.currentlyAvailable &&
+      NewRes.extensions.cost.throttleStatus.currentlyAvailable;
 
       let newMakeArr = NewRes.data.productDuplicate.newProduct.variants.nodes;
       let duplicateVariantId = NewRes.data.productDuplicate.newProduct.id;
 
-      duplicateProductId.push(NewRes.data.productDuplicate.newProduct.id)
+      duplicateProductId.push(NewRes.data.productDuplicate.newProduct.id);
       console.log("duplicateProductId", duplicateProductId);
 
-
-
       newMakeArr.map((i) => {
-        duplicateVariantsIds.push(i.id)
-      })
+        duplicateVariantsIds.push(i.id);
+      });
 
-      NewRes?.data?.productDuplicate?.newProduct?.tags
-      console.log("variants array loop i=", i);
-
+      NewRes?.data?.productDuplicate?.newProduct?.tags;
+      // console.log("variants array loop i=", i);
 
       for (j = 0; j < newMakeArr.length; j++) {
+        // console.log("j =", j, objectToBeSent?.testCases[i]);
+        // console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
 
-        console.log("j =", j, objectToBeSent?.testCases[i]);
-        console.log("product id:", duplicateVariantId, "var id:", newMakeArr[j].id)
-
-        var query_var = '';
-        console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice", objectToBeSent?.testCases[i].variants[j].abVariantComparePrice);
+        var query_var = "";
+        // console.log("objectToBeSent?.testCases[i].variants[j].abVariantComparePrice", objectToBeSent?.testCases[i].variants[j].abVariantComparePrice);
         // console.log(objectToBeSent?.testCases[i].variants[j], 'umi');
 
-        if (objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice != null) {
+        if (
+          objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice !=
+          null
+        ) {
           console.log("****************************************************************");
-          console.log("object tests", objectToBeSent.testCases);
+          // console.log("object tests", objectToBeSent.testCases);
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(
@@ -436,7 +489,6 @@ const createDuplicateProduct = async (req, res) => {
             id: "${newMakeArr[j].id}",
             price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
             compareAtPrice: "${objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice}"
-          
         }
         ) {
             productVariant {
@@ -457,18 +509,14 @@ const createDuplicateProduct = async (req, res) => {
             }
           }
         }
-        `
-
-        }
-        else {
-
+        `;
+        } else {
           query_var = `
         mutation productVariantUpdate {
           productVariantUpdate(
           input: {
             id: "${newMakeArr[j].id}",
-            price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
-          
+            price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}"
         }
         ) {
             productVariant {
@@ -489,41 +537,50 @@ const createDuplicateProduct = async (req, res) => {
             }
           }
         }
-        `
+        `;
         }
 
-        console.log(query_var, 'query_var');
+        
+        const NewPriceAtDuplicateProduct = await PostApiGraphql(
+          shop,
+          access_token,
+          query_var
+          );
+          console.log("NewPriceAtDuplicateProduct",JSON.stringify(NewPriceAtDuplicateProduct));
 
-        const NewPriceAtDuplicateProduct = await PostApiGraphql(shop, access_token, query_var);
+        objectToBeSent.testCases[i].variants[j].duplicateProductId =  NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
+        objectToBeSent.testCases[i].variants[j].duplicateVariantId =  NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
+
+        console.log("NewPriceAtDuplicateProduct33333", JSON.stringify(NewPriceAtDuplicateProduct))
 
 
-        objectToBeSent.testCases[i].variants[j].duplicateProductId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
-        objectToBeSent.testCases[i].variants[j].duplicateVariantId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
-
-
-        console.log("NewPriceAtDuplicateProduct33333", NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id)
-
-        newObjectToBeSent = { ...objectToBeSent.testCases[i].variants[j], "duplicateVariantId": newMakeArr[j].id }
-        console.log("newObjectToBeSent2222", newObjectToBeSent);
-        newDuplicateVariantsArray.push(newObjectToBeSent)
+        newObjectToBeSent = {
+          ...objectToBeSent.testCases[i].variants[j],
+          duplicateVariantId: newMakeArr[j].id,
+        };
+        // console.log("newObjectToBeSent2222", newObjectToBeSent);
+        newDuplicateVariantsArray.push(newObjectToBeSent);
       }
-      console.log("newDuplicateVariantsArray", newDuplicateVariantsArray);
-      newObjectToBeSent = { ...objectToBeSent.testCases[i] }
-      objectToBeSentCreated.push(newObjectToBeSent)
-      console.log("newObjectToBeSent", newObjectToBeSent);
+      // console.log("newDuplicateVariantsArray", newDuplicateVariantsArray);
+      newObjectToBeSent = { ...objectToBeSent.testCases[i] };
+      objectToBeSentCreated.push(newObjectToBeSent);
+      // console.log("newObjectToBeSent", newObjectToBeSent);
 
     }
+    // async function delay(delayInMS) {
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, delayInMS);
+    //   });
+    // }
+    originalProductTags.push("price_perfect_duplicate", `handle|${handle}`);
 
-
-    originalProductTags.push('price_perfect_duplicate', `handle|${handle}`)
-
-    console.log("originalProductTags", originalProductTags)
+    // console.log("originalProductTags", originalProductTags)
 
     console.log("duplicateVariantsIds", duplicateVariantsIds)
 
-
     duplicateProductId.map(async (i) => {
-
       let addTagsInDuplicateProduct = `mutation {
           productUpdate(input: {id: "${i}", tags: "${originalProductTags}"}) { 
             product {
@@ -533,11 +590,13 @@ const createDuplicateProduct = async (req, res) => {
             }
           }
         }
-        `
-      let TagRes = await PostApiGraphql(shop, access_token, addTagsInDuplicateProduct);
-
-    })
-
+        `;
+      let TagRes = await PostApiGraphql(
+        shop,
+        access_token,
+        addTagsInDuplicateProduct
+      );
+    });
 
     duplicateProductId.map(async (i) => {
       const addMetaFieldQuery = `mutation{
@@ -565,39 +624,88 @@ const createDuplicateProduct = async (req, res) => {
     }
   }
 }
-`
+`;
 
-      let metafieldResponse = await PostApiGraphql(shop, access_token, addMetaFieldQuery);
-
-    })
-    console.log("objectToBeSentCreated", JSON.stringify(objectToBeSentCreated));
+      let metafieldResponse = await PostApiGraphql(
+        shop,
+        access_token,
+        addMetaFieldQuery
+      );
+    });
+    // console.log("objectToBeSentCreated", JSON.stringify(objectToBeSentCreated));
 
     //Db API
     console.log("==>22", req.body);
+    console.log('mongoId', mongoId)
+    if (mongoId) {
+
+      // const productExists = await createTestModal.findOne({_id: mongoose.Types.ObjectId(`${mongoId}`)})
+      // console.log("productExists",productExists);
+      // if (productExists) {
+
+      const updateProduct = await createTestModal.findByIdAndUpdate(mongoose.Types.ObjectId(mongoId), {
+        currency: objectToBeSent.currency,
+        trafficSplit,
+        handle: `https://${shop}/products/${handle}`,
+        testCases: objectToBeSentCreated,
+        productId: "gid://shopify/Product/" + productId,
+        status,
+        productPrice,
+        featuredImage,
+        productTitle,
+        shop,
+      }, { new: true, multi: true })
+      console.log('updateProduct', updateProduct)
 
 
-    let createTestData = await createTestModal.create({ currency: objectToBeSent.currency, trafficSplit, handle: `https://${shop}/products/${handle}`, testCases: objectToBeSentCreated, productId: 'gid://shopify/Product/' + productId, status, productPrice, featuredImage, productTitle, shop })
-
-    if (!createTestData) {
-      return res.json("Create Test case error...!")
+      // if (!deleteProduct) {
+      //   return res.json("Create Test case error...!");
+      // }
+      console.log("currency", objectToBeSent.currency);
+      res.status(200).json({
+        data: updateProduct,
+        handle,
+        currency: objectToBeSent.currency,
+        success: true,
+        status: 200,
+      });
     }
-    console.log("currency", objectToBeSent.currency);
-    res.status(200).json({
-      data: createTestData,
-      handle,
-      currency: objectToBeSent.currency,
-      success: true,
-      status: 200
-    })
+    else {
+
+      let createTestData = await createTestModal.create({
+        currency: objectToBeSent.currency,
+        trafficSplit,
+        handle: `https://${shop}/products/${handle}`,
+        testCases: objectToBeSentCreated,
+        productId: "gid://shopify/Product/" + productId,
+        status,
+        productPrice,
+        featuredImage,
+        productTitle,
+        shop,
+      });
+
+      if (!createTestData) {
+        return res.json("Create Test case error...!");
+      }
+      console.log("currency", objectToBeSent.currency);
+      res.status(200).json({
+        data: createTestData,
+        handle,
+        currency: objectToBeSent.currency,
+        success: true,
+        status: 200,
+      });
+
+    }
   } catch (error) {
     console.log("Error for duplicate product", error);
   }
-}
+};
 const updateDuplicateProduct = async (req, res) => {
-
   const shop = req.headers.shop;
   let access_token;
-  const updatedDuplicateVariants = []
+  const updatedDuplicateVariants = [];
   const shopData = await Shop.findOne({ shop }).select(["access_token"]);
 
   if (shopData && shopData.access_token) {
@@ -610,9 +718,15 @@ const updateDuplicateProduct = async (req, res) => {
     if (testCases) {
       for (let j = 0; j < testCases.length; j++) {
         for (let i = 0; i < testCases[j]?.variants?.length; i++) {
-          console.log("duplicateVariantId",testCases[j]?.variants[i]?.duplicateVariantId);
-          console.log("abVariantPrice",testCases[j]?.variants[i]?.abVariantPrice);
-          
+          console.log(
+            "duplicateVariantId",
+            testCases[j]?.variants[i]?.duplicateVariantId
+          );
+          console.log(
+            "abVariantPrice",
+            testCases[j]?.variants[i]?.abVariantPrice
+          );
+
           if (testCases[j]?.variants[i]?.abVariantComparePrice != null) {
             query = `mutation{
               productVariantUpdate(input:{
@@ -634,7 +748,10 @@ const updateDuplicateProduct = async (req, res) => {
             }
             `;
           } else {
-            console.log("abVariantComparePrice", testCases[j]?.variants[i]?.abVariantComparePrice);
+            console.log(
+              "abVariantComparePrice",
+              testCases[j]?.variants[i]?.abVariantComparePrice
+            );
             query = `mutation{
             productVariantUpdate(input:{
               id:"${testCases[j]?.variants[i]?.duplicateVariantId}",
@@ -658,38 +775,61 @@ const updateDuplicateProduct = async (req, res) => {
           console.log("query: " + query);
           let NewRes = await PostApiGraphql(shop, access_token, query);
           console.log("new res: " + JSON.stringify(NewRes));
-  
         }
-
       }
-  
 
-      const dbDataUpdate = await createTestModal.findOneAndUpdate({ _id: mongoose.Types.ObjectId(databaseId) }, {
-        testCases: testCases
-      })
+      const dbDataUpdate = await createTestModal.findOneAndUpdate(
+        { _id: mongoose.Types.ObjectId(databaseId) },
+        {
+          testCases: testCases,
+        }
+      );
       console.log("dbDataUpdate", dbDataUpdate);
     } else {
-      res.status(200).json({ success: false, message: "Update failed!" })
+      res.status(200).json({ success: false, message: "Update failed!" });
     }
 
-    res.status(200).json({ success: true, data: updatedDuplicateVariants, message: "Test case updated " })
-
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: updatedDuplicateVariants,
+        message: "Test case updated ",
+      });
   } catch (error) {
     console.log("error", error);
-    res.status(200).json({ success: false, error, message: "Update failed!" })
-
+    res.status(200).json({ success: false, error, message: "Update failed!" });
   }
-}
+};
 
-const addNewTestCase = async (req, res) => {
+const deleteOneTestCase = async (req, res) => {
   const shop = req.headers.shop;
   const shopData = await Shop.findOne({ shop }).select(["access_token"]);
 
   if (shopData && shopData.access_token) {
     access_token = shopData.access_token;
   }
-}
+
+  const { id } = req.params;
+  try {
+    console.log("deleting  test case id", id);
+    const query = `mutation {
+      productDelete(input: {id: "gid://shopify/Product/${id}"}) {
+        deletedProductId
+      }
+    }`;
+    let NewRes = await PostApiGraphql(shop, access_token, query);
+    res.status(200).json({ message: "Test case deleted", success: true, NewRes })
+  } catch (error) {
+    res.status(200).json({ message: "Delete testcase failed", success: false, error })
+
+  }
+};
+
 module.exports = {
   allProducts,
-  getVariants, createDuplicateProduct, updateDuplicateProduct, addNewTestCase
-}
+  getVariants,
+  createDuplicateProduct,
+  updateDuplicateProduct,
+  deleteOneTestCase,
+};

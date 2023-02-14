@@ -67,7 +67,7 @@ const HomeDashboard = () => {
                     <>
                         <div className='tableImages'>
                             <div>
-                            {params.row.featuredImage ?<img src={params.row.featuredImage} alt='' />:<HideImageOutlinedIcon />}
+                                {params.row.featuredImage ? <img src={params.row.featuredImage} alt='' /> : <HideImageOutlinedIcon />}
                             </div>
                         </div>
                         <p className='productID'>
@@ -113,7 +113,7 @@ const HomeDashboard = () => {
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
-                        <><img src={EyeIcon} alt="" onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} /></>
+                        <><img src={EyeIcon} alt="" onClick={(e) => { e.stopPropagation(); navigate('/managetest', { state: { id: params.row.action } }) }} /></>
                         {/* <div onClick={(e) => {e.stopPropagation(); navigate('/managetest', {state:{id:params.row.action}} ) }} ><img src={EyeIcon} alt="" /></div> */}
                     </div>
                 )
@@ -130,7 +130,7 @@ const HomeDashboard = () => {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
                 'shop': cookieReader('shop'),
-                "Authorization":"Bearer " + cookieReader('token')
+                "Authorization": "Bearer " + cookieReader('token')
             },
         })
             .then(async (res) => {
@@ -142,8 +142,8 @@ const HomeDashboard = () => {
             })
             .catch((error) => {
                 setOpens(true)
-            setSnackbarColor('red')
-            setsnackbar_msg("Internal Server Error")
+                setSnackbarColor('red')
+                setsnackbar_msg("Internal Server Error")
                 setLoading(false)
                 console.log("Error", error)
             })
@@ -162,8 +162,8 @@ const HomeDashboard = () => {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
                 'shop': cookieReader('shop'),
-                "Authorization":"Bearer " + cookieReader('token')
-            
+                "Authorization": "Bearer " + cookieReader('token')
+
             }
         }).then(async (res) => {
             const apiRes = await res.json();
@@ -317,7 +317,7 @@ const HomeDashboard = () => {
                             </Card>
                         </div>
                         <div className='analyticsSection'>
-                
+
                             <Card className='testAnalytics'>
                                 <div>
                                     <Typography variant='h5'>Test Analytics</Typography>
@@ -344,19 +344,18 @@ const HomeDashboard = () => {
                                                 rowsPerPageOptions={[10]}
                                                 disableColumnMenu
                                                 hideFooterSelectedRowCount
-                                                onRowClick={(params) => navigate(`/managetest`, {state:{id:params.row.action}})}
-                                    
+                                                onRowClick={(params) => navigate(`/managetest`, { state: { id: params.row.action } })}
+                                                className='pagenate-page'
                                                 sx={{
-                                        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
-                                        {
-                                            outline: "none",
-                                        },
-                                    }}
-                                    
+                                                    [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                                    {
+                                                        outline: "none",
+                                                    },
+                                                    [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                                    {
+                                                        outline: "none",
+                                                    },
+                                                }}
                                             />
                                         </>)}
 
@@ -373,7 +372,7 @@ const HomeDashboard = () => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                    
+
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Are you sure you want to delete this test case?..
                         </Typography>

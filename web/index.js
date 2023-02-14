@@ -5,11 +5,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookie = require("cookie");
-const corsOption = {
-  origin: [process.env.HOST],
-}
+// const corsOption = {
+//   origin: [process.env.HOST],
+// }
 
-app.use(cors(corsOption));
+app.use(cors());
 const path = require("path");
 const PORT = process.env.PORT || 8081;
 const bodyParser = require("body-parser");
