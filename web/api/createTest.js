@@ -1,5 +1,5 @@
 const { default: mongoose } = require('mongoose');
-const { DeleteApiRest } = require('../controllers/shopify_api');
+const { DeleteApiRest, PostApiGraphql } = require('../controllers/shopify_api');
 const createTestModal = require('../models/createTestModal');
 const Shop = require("../models/Shop");
 
@@ -28,6 +28,14 @@ const createTestCaseApi = async (req, res) => {
 
 const getSingleTestCase = async (req, res) => {
     try {
+        const shop = req.headers.shop;
+        var access_token;
+
+        const shopData = await Shop.findOne({ shop }).select(["access_token"]);
+
+        if (shopData && shopData.access_token) {
+            access_token = shopData.access_token;
+        }
         const getSingleTest = await createTestModal.findById(req.params.id)
 
         console.log("getSingleTest", getSingleTest);
@@ -36,8 +44,90 @@ const getSingleTestCase = async (req, res) => {
             return res.json("filed to single test case error...!");
         }
 
+
+        let query = `query product {
+                product(id: "${getSingleTest?.productId}") {
+                  id
+                  title
+                  handle
+                  featuredImage {
+        
+                    src
+        
+                  }
+                  variants(first: 100) {
+                    edges {
+                      node {
+                        id
+                        title
+                        price
+                        compareAtPrice
+                      
+                      }
+                    }
+                  }
+                }
+              }
+            `;
+
+        let ans1 = await PostApiGraphql(shop, access_token, query);
+        var products = [];
+        console.log("ans1", ans1);
+        if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
+            for (let resProduct of ans1.data.product.variants.edges) {
+                const info = resProduct.node;
+
+                console.log("ans1.data.product.handle", ans1.data.product.handle);
+                products.push({
+                    id: info.id,
+                    variantTitle: info.title,
+                    variantPrice: info.price,
+                    variantComparePrice: info.compareAtPrice,
+                    featuredImage: ans1.data.product.featuredImage
+                        ? ans1.data.product.featuredImage.src
+                        : "",
+                    productTitle: ans1.data.product.title,
+                });
+            }
+
+            console.log("New Array", products);
+
+            // res.status(200).json({
+            //   data: products,
+            //   success: true,
+            //   status: 200,
+            // });
+        }
+        // if (ans1.data && ans1.data.product && ans1.data.product.variants.edges) {
+        //     for (let resProduct of ans1.data.product.variants.edges) {
+        //       const info = resProduct.node;
+
+        //       console.log("ans1.data.product.handle", ans1.data.product.handle);
+        //       products.push({
+        //         id: info.id,
+        //         variantTitle: info.title,
+        //         variantPrice: info.price,
+        //         variantComparePrice: info.compareAtPrice,
+        //         featuredImage: ans1.data.product.featuredImage
+        //           ? ans1.data.product.featuredImage.src
+        //           : "",
+        //         productTitle: ans1.data.product.title,
+        //       });
+        //     }
+
+        //     console.log("New Array", products);
+
+        //     // res.status(200).json({
+        //     //   data: products,
+        //     //   success: true,
+        //     //   status: 200,
+        //     // });
+        //   }
+        // console.log("Origianl product", ans1)
+
         res.status(200).json({
             data: getSingleTest,
+            controlVariants:products,
             success: true,
             status: 200
         })
@@ -90,7 +180,7 @@ const getTestCase = async (req, res) => {
 
 const deleteTestCaseData = async (req, res) => {
     try {
-
+        var cost = 1000;
         let responseShopData;
         var shop = req.headers.shop;
         let access_token;
@@ -110,12 +200,19 @@ const deleteTestCaseData = async (req, res) => {
             if (getSingleDuplicateProductIds) {
 
                 try {
+                    if (cost - 1000 < 0) {
+                        console.log("got in cost");
+                        await delay(Math.ceil((1000 - cost) / 50) * 1000);
+                    }
+
                     responseShopData = await DeleteApiRest(
                         `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/products/${Number(getSingleDuplicateProductIds)}.json`,
                         access_token
                     );
 
                     console.log("responseShopData", responseShopData)
+                    cost = responseShopData.extensions.cost.throttleStatus.currentlyAvailable &&
+                        responseShopData.extensions.cost.throttleStatus.currentlyAvailable;
 
 
                 } catch (error) {

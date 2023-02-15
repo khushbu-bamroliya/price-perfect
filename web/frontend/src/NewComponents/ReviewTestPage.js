@@ -260,8 +260,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                         <div className='p-25'>
                             <Navbar />
                             <Card className='mt-34 pt-24 pb-74 py-40 border-radius-14'>
-                                <div className='arrowWrapper'>
-                                    <img src={rightArrow} />
+                                <div className='arrowWrapper' onClick={() => navigate('/yourtests')}>
+                                    <img src={rightArrow}  />
                                 </div>
                                 <div className='flex-row gap-70 align-items-unset flex-crea'>
                                     {!created ? <Loader size={40} /> : (<>

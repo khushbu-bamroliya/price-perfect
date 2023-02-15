@@ -209,7 +209,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
-                    return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
+                    return { ...item, "abVariantComparePrice": Number(item.variantComparePrice), "abVariantPrice": Number(item.variantPrice) }
 
                 })
                 console.log("location.state.testCases", location?.state?.testCases)
@@ -247,11 +247,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                 if (index === objectIndex) {
                     if (params.field === "abVariantComparePrice") {
 
-                        return { ...item, "abVariantComparePrice": event.target.value }
+                        return { ...item, "abVariantComparePrice": Number(event.target.value) }
                     }
                     if (params.field === "abVariantPrice") {
 
-                        return { ...item, "abVariantPrice": event.target.value }
+                        return { ...item, "abVariantPrice": Number(event.target.value) }
 
                     }
                 }
@@ -304,6 +304,9 @@ const CreateTestStep2 = ({ objectSent }) => {
             editable: false,
             minWidth: 80,
             flex: 0.3,
+            type: 'number',
+            align:'left',
+            headerAlign:'left',
             sortable: false,
         },
         {
@@ -311,6 +314,9 @@ const CreateTestStep2 = ({ objectSent }) => {
             headerName: "Price",
             minWidth: 120,
             flex: 0.3,
+            type: 'number',
+            align:'left',
+            headerAlign:'left',
             editable: true,
             sortable: false,
         },
@@ -319,6 +325,9 @@ const CreateTestStep2 = ({ objectSent }) => {
             headerName: "CompareAtPrice",
             minWidth: 100,
             flex: 0.4,
+            type: 'number',
+            align:'left',
+            headerAlign:'left',
             editable: true,
             sortable: false,
         }
@@ -335,7 +344,9 @@ const CreateTestStep2 = ({ objectSent }) => {
         {
             field: "abVariantPrice",
             headerName: "Price",
-
+            type: 'number',
+            align:'left',
+            headerAlign:'left',
             minWidth: 120,
             flex: 0.3,
             editable: true,
@@ -345,12 +356,15 @@ const CreateTestStep2 = ({ objectSent }) => {
             field: "abVariantComparePrice",
             headerName: "CompareAtPrice",
             minWidth: 100,
+            type: 'number',
+            align:'left',
+            headerAlign:'left',
             flex: 0.4,
             editable: true,
             sortable: false,
         }
     ];
-    const deleteTestCase = (e,id) => {
+    const deleteTestCase = (e, id) => {
         e.stopPropagation();
         // tempTestArr.filter(j => j !== id)
         // console.log("deleteTestCase", id);
@@ -536,16 +550,45 @@ const CreateTestStep2 = ({ objectSent }) => {
                             console.log("Here we go");
                             let tempArr = [...productVariants]
                             console.log("tempArr = " + tempArr);
-
+                            // const regex = /[a-z]/;
+                            // let match2;
+                            // match2 = null
+                            // let match1;
+                            // match1 = null
                             const updatedArray = tempArr?.map((item, index) => {
                                 console.log("updatedArray item", item);
                                 console.log("updatedArray index", index);
                                 if (index === objectIndex) {
-                                    console.log("hello inside object");
+                                    // if (user?.abVariantPrice) {
+                                    //     console.log("user?.abVariantPrice", user?.abVariantPrice);
+                                    //     console.log("user?.abVariantComparePrice", user?.abVariantComparePrice);
 
-                                    console.log("item", user.abVariantComparePrice);
+                                    //     match2 = user?.abVariantPrice.match(regex)
+                                    //     console.log("hello inside object", match2);
+                                    //     if (!match2) {
+                                    //         return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+                                    //     } else {
+                                    //         console.log("MATCH FOUND");
+                                    //         return item
+                                    //     }
 
-                                    return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+                                    // } else {
+                                    //     // if (user?.abVariantComparePrice) {
+                                    //     console.log('user?.abVariantComparePrice', user?.abVariantComparePrice);
+
+                                    //     match1 = user?.abVariantComparePrice.match(regex)
+                                    //     console.log("hello inside object2222", match1);
+                                    //     if (!match1) {
+                                    //         return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+
+                                    //     } else {
+                                    //         console.log("MATCH FOUND");
+                                    //         return item
+                                    //     }
+                                    // }
+                                    // console.log("item", user.abVariantComparePrice);
+
+                                    return { ...item, "abVariantComparePrice": Number(user.abVariantComparePrice) , "variantComparePrice": Number(user.variantComparePrice) , "abVariantPrice": Number( user.abVariantPrice), "variantPrice": Number(user.variantPrice)  }
 
                                 }
                                 return item;
@@ -639,6 +682,10 @@ const CreateTestStep2 = ({ objectSent }) => {
     const rangeSliderValuetext = (value) => {
         return `${value}°C`;
     }
+    function isValidNumber(number) {
+        return /^\d+$/.test(number);
+    }
+
     useEffect(() => {
         if (!location?.state?.currency || !location?.state?.handle || !location?.state?.title || !location?.state?.id) {
             navigate('/createtest')
@@ -665,7 +712,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                             {loading.variants ? <Loader size={40} /> : (<>
                                 {variantRes && variantRes?.data?.length > 1 ? (<>
-                                    <div className='-1 center-vwbtn'>
+                                    <div className='padding-1 center-vwbtn'>
                                         <button className='viewPricing mt-40' onClick={handleOpenControlSettings}>View Pricing</button>
                                     </div>
                                 </>) : (<div className='mt-22 padding-1'>
@@ -706,7 +753,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                                 <span className='ComparePrice d-block'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
                                             </div>
                                         </>}
-                                        <img src={trash} alt="" onClick={(e) => deleteTestCase(e,item.id)} />
+                                        <img src={trash} alt="" onClick={(e) => deleteTestCase(e, item.id)} />
                                     </div>
                                 </div>
                             </>
@@ -737,8 +784,6 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div>
                 </Card>
             </div>
-
-
             {/* Configure test  */}
             <Modal
                 open={openConfigureTest1}
@@ -880,7 +925,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                 <DataGrid
                                     rows={productVariants && productVariants}
                                     columns={originalVariantColumnTest}
-                                    pageSize={6}
+                                    // pageSize={6}
                                     rowsPerPageOptions={[6]}
                                     // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
                                     disableColumnMenu

@@ -160,7 +160,7 @@ const ProfileSettingsTab = () => {
                     </div>
                 </>)}
             </div>
-            <Button onClick={() => updateUser()}>Save</Button>
+            <Button onClick={() => updateUser()} className='profile-save-btn '>Save</Button>
             <div>{errorfunction()}</div>
         </>
     )

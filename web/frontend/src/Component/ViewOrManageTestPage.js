@@ -25,7 +25,7 @@ import GreyImg from './Images/Grey.svg';
 import OrangeImg from './Images/Orange.svg';
 import PurpleImg from './Images/Purple.svg';
 import YellowImg from './Images/Yellow.svg';
-import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
+import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -35,8 +35,9 @@ import {
     Title,
     Tooltip as chartTooltip,
     Legend,
-  } from 'chart.js';
-  import { Line } from 'react-chartjs-2';
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 //   import faker from 'faker';
 
 const ViewOrManageTestPage = () => {
@@ -50,7 +51,12 @@ const ViewOrManageTestPage = () => {
     console.log("Testcases", testCases);
     const [testIdState, setTestIdState] = useState(0);
     console.log("location: " + JSON.stringify(location?.state));
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState({
+        delete: false,
+        update: false,
+        singleTest: false,
+        editTest: false
+    });
     const [opens, setOpens] = useState(false);
     const [openTestStatusModal, setOpenTestStatusModal] = useState(false);
 
@@ -59,6 +65,7 @@ const ViewOrManageTestPage = () => {
     const [singleTest, setSingleTest] = useState()
     const [copiedTooltip, setCopiedTooltip] = useState(false)
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [openViewAnalyticsModal, setOpenViewAnalyticsModal] = React.useState(false);
     const navigate = useNavigate();
     // const { id } = useParams();
     const style = {
@@ -72,8 +79,16 @@ const ViewOrManageTestPage = () => {
         boxShadow: 24,
         p: 4,
     };
+    const style2 = {
+        maxWidth: '741px',
+        background: '#FFFFFF',
+        borderRadius: '14px',
+        padding: '44px 44px 70px 44px',
+        outline: 'none',
+        position: 'relative',
+    };
     const getSingleTest = () => {
-
+        setLoading({ singleTest: true })
         fetch(getApiUrl + `/api/get-single-testcase/${location?.state?.id}`, {
             method: 'GET',
             headers: {
@@ -97,6 +112,7 @@ const ViewOrManageTestPage = () => {
                     }
                 }
                 setActiveTests(temp)
+                setLoading({ singleTest: false })
                 console.log("apiRes.data", apiRes);
                 setSingleTest(apiRes)
                 setTestCases(apiRes.data.testCases)
@@ -106,11 +122,11 @@ const ViewOrManageTestPage = () => {
                 setOpens(true)
                 setSnackbarColor('red')
                 setsnackbar_msg("Internal Server Error")
-                setLoading(false)
+                setLoading({ singleTest: false })
             })
     }
     const deleteTestCase = (id) => {
-        setLoading(true)
+        setLoading({ delete: true })
         console.log("deleting");
         fetch(getApiUrl + `/api/deleteTestCase/${id}`, {
             method: 'DELETE',
@@ -123,9 +139,9 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Deleted", apiRes);
-            setLoading(false)
+            setLoading({ delete: false })
             setOpens(true)
-            setSnackbarColor('#325240')
+            setSnackbarColor('#F1F8F5')
             setsnackbar_msg("Test deleted successfully.")
             setOpenDeleteModal(false)
             navigate('/yourtests', { state: { message: "Test deleted successfully" } });
@@ -135,13 +151,17 @@ const ViewOrManageTestPage = () => {
             setSnackbarColor('red')
             setsnackbar_msg("Error while deleting Test")
             console.log("Error", err);
-            setLoading(false)
+            setLoading({ delete: false })
         })
     }
     const handleOpenDeleteModal = () => {
         setOpenDeleteModal(true)
     };
+    const handleViewAnalyticsModal = () => {
+        setOpenViewAnalyticsModal(true)
+    };
     const handleCloseDeleteModal = () => setOpenDeleteModal(false);
+    const handleCloseViewAnalyticsModal = () => setOpenViewAnalyticsModal(false);
     const handleTestStatusModal = () => setOpenTestStatusModal(false);
     const rows2 = [
         { id: 1, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "56 USD" },
@@ -238,7 +258,7 @@ const ViewOrManageTestPage = () => {
     }
 
     const updateTestStatus = () => {
-        setLoading(true)
+        setLoading({ update: true })
         fetch(getApiUrl + `/api/updatealltests?` + new URLSearchParams({
             id: location?.state?.id,
         }), {
@@ -254,7 +274,7 @@ const ViewOrManageTestPage = () => {
         }).then(async (res) => {
             const apiRes = await res.json();
             console.log("Status changes", apiRes);
-            setLoading(false)
+            setLoading({ update: false })
             setOpenTestStatusModal(false)
             setOpens(true)
             setSnackbarColor('#325240')
@@ -266,7 +286,7 @@ const ViewOrManageTestPage = () => {
             setSnackbarColor('red')
             setsnackbar_msg("Error while updating status.")
             console.log("Error", err);
-            setLoading(false)
+            setLoading({ update: false })
         })
     }
     const handleClose = () => {
@@ -276,15 +296,18 @@ const ViewOrManageTestPage = () => {
         return (<div>
             <Snackbar
                 open={opens}
-                sx={{ width: "50%" }}
+                // sx={{ width: "50%" }}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 autoHideDuration={3000}
                 onClose={handleClose}
+                className="snack-bar"
             >
                 <Alert
+                className="snack-bar"
                     variant="filled"
                     onClose={handleClose}
-                    sx={{ width: "50%", bgcolor: snackbarColor }}
+                    // sx={{ bgcolor: '#FFF4F4', color:'#000000', border:'1px solid #E0B3B2' }}
+                    sx={{  bgcolor: snackbarColor, color:'#000000', border:'1px solid #95C9B4' }}
                 >
                     {snackbar_msg}
                 </Alert>
@@ -325,88 +348,49 @@ const ViewOrManageTestPage = () => {
         };
     }
 
-    function Row(props) {
+    function RowDiv(props) {
         const { row } = props;
         const [open, setOpen] = React.useState(false);
 
         return (
             <React.Fragment>
-                <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                    <TableCell className='img-flex'>
-                        <IconButton
-                            aria-label="expand row"
-                            size="small"
-                            onClick={() => setOpen(!open)}
-                        >
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
+                <div className='cursor controlTest pa-28' onClick={() => setOpen(!open)}>
+                    <div className={`arrowIcon ${open ? "openIcon" : "closeIcon"}`}>
+                        <ArrowForwardIosIcon fontSize='large' />
+                    </div>
+                    <div className='flex-row flex-55 p-11'>
                         <img src={testCaseImages[row.id - 1]} alt="" />
-                        {row.color ? row.color + " Test" : row.id}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                        {/* { row.color ? row.color + " Test" : row.id} */}
-                    </TableCell>
-                    {/* <TableCell  >{row.calories}</TableCell> */}
-                    <TableCell>{row.price}</TableCell>
-                    <TableCell>{row.compareAtPrice}</TableCell>
-                    {/* <TableCell  >{row.protein}</TableCell> */}
-                    
-                    <TableCell>
-                        {row.status === 'active' ?<img src={pauseIcon} className='cursor' alt="" onClick={() => { updateOneTestStatus(row.id) }} /> : <PlayArrowOutlinedIcon onClick={() => { updateOneTestStatus(row.id) }} /> }
-                        {/* <img src={pauseIcon} alt="" onClick={() => { updateOneTestStatus(row.id) }} /> */}
-                        <img src={editIcon} className='cursor' alt="" onClick={() => handleEditTest(row.id)} />
-                    </TableCell>
+                        <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color ? row.color + " Test" : row.id}</div>
+                    </div>
+                    <div className={`nameTitle py-10 text-left ${open ? "openW" : "closew"}`}></div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{row.price}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{row.compareAtPrice}</div>
+                    <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
+                        {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
+                        <img src={editIcon} className='cursor ml-10' alt="" onClick={() => handleEditTest(row.id)} />
+                    </div>
 
-                </TableRow>
-                <TableRow>
-                    <TableCell  className='no_pad-collapse' style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box sx={{ margin: 1 }}  className='no_mar-collapse'>
-                                {/* <Typography variant="h6" gutterBottom component="div">
-                      History
-                    </Typography> */}
-                                <Table>
-                                    {/* <TableHead>
-                        <TableRow>
-                          <TableCell></TableCell>
-                          <TableCell>Customer</TableCell>
-                          <TableCell  >Amount</TableCell>
-                          <TableCell  >Total price ($)</TableCell>
-                        </TableRow>
-                      </TableHead> */}
-                                    <TableBody  className='evn-od-style'>
-                                        {row.variants.map((i) => (
-                                            <TableRow key={i.id} className='pad-516p'>
-                                                <TableCell component="th" scope="row" className='table-width-1' >
-
-                                                </TableCell>
-                                                <TableCell component="th" scope="row" className={row?.variants.length > 1 ? 'table-width-2' : 'table-width-3'} >
-                                                    {/* <TableCell component="th" scope="row" className='table-width-2' > */}
-                                                    {i.variantTitle}
-                                                </TableCell>
-                                                <TableCell component="th" scope="row" className={row?.variants.length > 1 ? 'table-price' : 'table-price-2'}>
-                                                    {singleTest?.data?.currency} {i.abVariantPrice}
-                                                </TableCell>
-                                                <TableCell component="th" scope="row"  >
-                                                    {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
-                                                </TableCell>
-                                                <TableCell component="th" scope="row"  >
-
-                                                </TableCell>
-
-                                                {/* <TableCell>{historyRow.customerId}</TableCell>
-                            <TableCell  >{historyRow.amount}</TableCell>
-                            <TableCell  >
-                              {Math.round(historyRow.amount * row.price * 100) / 100}
-                            </TableCell> */}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
+                </div>
+                <div>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        {row.variants.map((i) => (
+                            <div className='variantId' key={i.id}>
+                                <div className='variantDeatils flex-55 text-left'></div>
+                                <div className='variantDeatils text-left'>
+                                    {i.variantTitle}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                    {singleTest?.data?.currency} {i.abVariantPrice}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                    {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                </div>
+                            </div>
+                        ))}
+                    </Collapse>
+                </div>
             </React.Fragment>
         );
     }
@@ -479,7 +463,7 @@ const ViewOrManageTestPage = () => {
         setOpenEditTrafficSplit(false)
     };
     const onConfirmEdit = () => {
-
+        setLoading({ editTest: true });
         const newItems = [...testCases];
         const object = newItems.find(i => i.id === testIdState);
         console.log("object: " + object);
@@ -507,9 +491,10 @@ const ViewOrManageTestPage = () => {
                 setOpens(true)
                 setSnackbarColor('#325240')
                 setsnackbar_msg(`${res.message}`)
+                setLoading({ editTest: false })
             }
             if (res.success === false) {
-
+                setLoading({ editTest: false })
                 setOpens(true)
                 setSnackbarColor('#325240')
                 setsnackbar_msg(`${res.message}`)
@@ -520,6 +505,7 @@ const ViewOrManageTestPage = () => {
             setOpens(true)
             setSnackbarColor('red')
             setsnackbar_msg("Internal Server Error")
+            setLoading({ editTest: false })
 
         })
 
@@ -599,6 +585,9 @@ const ViewOrManageTestPage = () => {
             headerName: "Price",
             minWidth: 120,
             flex: 1,
+            type: 'number',
+            align: 'left',
+            headerAlign: 'left',
             editable: true,
             sortable: false,
         },
@@ -607,6 +596,9 @@ const ViewOrManageTestPage = () => {
             headerName: "CompareAtPrice",
             minWidth: 100,
             flex: 1,
+            type: 'number',
+            align: 'left',
+            headerAlign: 'left',
             editable: true,
             sortable: false,
         },
@@ -631,7 +623,9 @@ const ViewOrManageTestPage = () => {
         })
     }
 
-    const updateOneTestStatus = (id) => {
+    const updateOneTestStatus = (e,id) => {
+        e.stopPropagation();
+
         console.log("id", id);
         const config = {
             method: 'PUT',
@@ -647,7 +641,7 @@ const ViewOrManageTestPage = () => {
         }).then(res => {
             console.log("Test status updated", res);
             setOpens(true)
-            setSnackbarColor('#325240')
+            setSnackbarColor('#F1F8F5')
             setsnackbar_msg("Test status updated.")
             getSingleTest()
         }).catch((error) => {
@@ -719,44 +713,44 @@ const ViewOrManageTestPage = () => {
     }
 
     ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  chartTooltip,
-  Legend
-);
+        CategoryScale,
+        LinearScale,
+        PointElement,
+        LineElement,
+        Title,
+        chartTooltip,
+        Legend
+    );
 
- const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'bottom' ,
-    },
-    
-  },
-};
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+            },
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+        },
+    };
 
- const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data:  [21,32,744,55,656,235,1006],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: [568,786,365,454,210,102,42,56,580],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: 'Dataset 1',
+                data: [21, 32, 744, 55, 656, 235, 1006],
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                label: 'Dataset 2',
+                data: [568, 786, 365, 454, 210, 102, 42, 56, 580],
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+        ],
+    };
 
     useEffect(() => {
         if (!location?.state?.id) {
@@ -780,35 +774,37 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                 <Card className='viewormanage-testItem'>
                                     <Typography variant='h5'>{singleTest?.data.productTitle} </Typography>
                                     <div className='viewormanage-flex-div'>
-                                        <div className='viewormanage-testItemImage'>
-                                            {singleTest?.data?.featuredImage ? <div className='imageWrapper'><img src={singleTest?.data?.featuredImage} alt="" /> </div> : <div className='imageWrapper'><HideImageOutlinedIcon /></div>}
-                                        </div>
-                                        <div className='viewormanage-testItemData'>
-                                            {/* <Typography variant='h5'>{singleTest?.data.productTitle} </Typography> */}
-                                            <Typography variant='caption' className='testItemData-head'>Details</Typography>
-                                            <div className='border-top mt-8 pt-2'>
-                                                <div className='viewormanage-status'>
-                                                    <Typography variant='caption'>Status</Typography>
-                                                    <Chip label={`${singleTest.data.status}`} className={`chip_${singleTest.data.status}`} />
-                                                </div>
-                                                <div className='viewormanage-product'>
-                                                    <Typography variant='caption'>Product</Typography>
-                                                    <Typography variant='p'>{singleTest?.data?.productTitle}</Typography>
-                                                </div>
-                                                <div className='viewormanage-product'>
-                                                    <Typography variant='caption'>Active Tests</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">{activeTests && activeTests}</Typography>
-                                                </div>
-                                                <div className='viewormanage-product'>
-                                                    <Typography variant='caption'>Control RPM</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.currency} 15.98 (static)</Typography>
-                                                </div>
-                                                <div className='viewormanage-product'>
-                                                    <Typography variant='caption'>Traffic Split</Typography>
-                                                    <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.trafficSplit * singleTest?.data?.testCases?.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
-                                                </div>
+                                        {loading.singleTest ? <Loader size={40} /> : <>
+
+                                            <div className='viewormanage-testItemImage'>
+                                                {singleTest?.data?.featuredImage ? <div className='imageWrapper'><img src={singleTest?.data?.featuredImage} alt="" /> </div> : <div className='imageWrapper'><HideImageOutlinedIcon /></div>}
                                             </div>
-                                            {/* <Tooltip arrow title={copiedTooltip ? "copied" : null} >
+                                            <div className='viewormanage-testItemData'>
+                                                {/* <Typography variant='h5'>{singleTest?.data.productTitle} </Typography> */}
+                                                <Typography variant='caption' className='testItemData-head'>Details</Typography>
+                                                <div className='border-top mt-8 pt-2'>
+                                                    <div className='viewormanage-status'>
+                                                        <Typography variant='caption'>Status</Typography>
+                                                        <Chip label={`${singleTest.data.status}`} className={`chip_${singleTest.data.status}`} />
+                                                    </div>
+                                                    <div className='viewormanage-product'>
+                                                        <Typography variant='caption'>Product</Typography>
+                                                        <Typography variant='p'>{singleTest?.data?.productTitle}</Typography>
+                                                    </div>
+                                                    <div className='viewormanage-product'>
+                                                        <Typography variant='caption'>Active Tests</Typography>
+                                                        <Typography variant='p' className="viewormanage-product-pink-f">{activeTests && activeTests}</Typography>
+                                                    </div>
+                                                    <div className='viewormanage-product'>
+                                                        <Typography variant='caption'>Control RPM</Typography>
+                                                        <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.currency} 15.98 {/*(static)*/}</Typography>
+                                                    </div>
+                                                    <div className='viewormanage-product'>
+                                                        <Typography variant='caption'>Traffic Split</Typography>
+                                                        <Typography variant='p' className="viewormanage-product-pink-f">{singleTest?.data?.trafficSplit * singleTest?.data?.testCases?.length}/{100 - singleTest.data.trafficSplit * singleTest.data.testCases.length}</Typography>
+                                                    </div>
+                                                </div>
+                                                {/* <Tooltip arrow title={copiedTooltip ? "copied" : null} >
 
                                             <Button onClick={(e) => {
                                                 navigator.clipboard.writeText(singleTest && singleTest?.data.handle)
@@ -819,7 +815,8 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                             }}>Copy Link <img src={LinkIcon} alt="" /></Button>
                                         </Tooltip> */}
 
-                                        </div>
+                                            </div>
+                                        </>}
                                     </div>
                                     <div className='viewormanage-flex-div flex-justify-content align-items-center'>
                                         <Tooltip arrow title={copiedTooltip ? "copied" : null} >
@@ -868,9 +865,9 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                         <Card className='viewormanage-testAnalytics'>
                             <div>
                                 <Typography variant='h5'>Test Analytics</Typography>
-                                <Button variant="outlined" className='cursor'>Expand</Button>
+                                <Button variant="outlined" className='cursor' onClick={handleViewAnalyticsModal} >Expand</Button>
                             </div>
-                            <Line  options={options} data={data} className={` ${singleTest?.data?.featuredImage ? 'graph-h50' :'graph-h25'}`}/>
+                            <Line options={options} data={data} className={` ${singleTest?.data?.featuredImage ? 'graph-h50' : 'graph-h25'}`} />
                         </Card>
                     </div>
                     <Card className='funnelBreakdown'>
@@ -885,27 +882,22 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                     </svg>
                                     Create New Test
                                 </Button>
-                                <Button  className='secondaryBtn cursor' onClick={() => setOpenTestStatusModal(true)}><span>{singleTest?.data?.status === "pending" ? "Resume" : "Pause"} All Tests</span> </Button>
+                                <Button className='secondaryBtn cursor' onClick={() => setOpenTestStatusModal(true)}><span>{singleTest?.data?.status === "pending" ? "Resume" : "Pause"} All Tests</span> </Button>
                             </div>
                         </div>
-                        <div className='funnelBreakdownTable' style={{ width: '100%' }}>
-                            <Table aria-label="collapsible table">
-                                <TableHead>
-                                    <TableRow className='table-row-cells'>
-                                        <TableCell>Title</TableCell>
-                                        <TableCell>Variant</TableCell>
-                                        <TableCell  >Price</TableCell>
-                                        <TableCell  >Compare at price</TableCell>
-                                        <TableCell  >Actions</TableCell>
-
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody className='table-body-row'>
-                                    {rows.map((row) => (
-                                        <Row key={row.id} row={row} />
-                                    ))}
-                                </TableBody>
-                            </Table>
+                        <div className='mobileTitle mt-14'>
+                            <div className='testCasesWrapper'>
+                                <div className='testCasesTitle text-left flex-55'>Title</div>
+                                <div className='testCasesTitle text-left'>Variant</div>
+                                <div className='testCasesTitle flex-55'>Price</div>
+                                <div className='testCasesTitle flex-55'>Compare at price</div>
+                                <div className='testCasesTitle flex-55'>Actions</div>
+                            </div>
+                            <div className='width-fit'>
+                                {rows.map((row) => (
+                                    <RowDiv key={row.name} row={row} />
+                                ))}
+                            </div>
                         </div>
 
 
@@ -986,6 +978,25 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                         <TableCell>C</TableCell>
                                         <TableCell>D</TableCell> */}
                 {/* </TableRow> */}
+                {/* // View analytics modal */}
+                <Modal
+                    open={openViewAnalyticsModal}
+                    onClose={handleCloseViewAnalyticsModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    className='modalWrapper'
+                >
+                    <Box sx={style2} className="">
+                        <div className='close-icon'>
+                            <img src={closeIcon} alt="" onClick={handleCloseViewAnalyticsModal} />
+                        </div>
+                        <Line options={options} data={data} />
+
+
+                    </Box>
+                </Modal>
+
+
                 {/* // Delete test modal */}
                 <Modal
                     open={openDeleteModal}
@@ -1001,7 +1012,7 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             Are you sure you want to delete this test case?..
                         </Typography>
-                        <Button className='deleteTestCaseBtn cursor' onClick={() => deleteTestCase(location?.state?.id)}> {loading ? <Loader size={20} /> : "Delete"} </Button>
+                        <Button className='deleteTestCaseBtn cursor' onClick={() => deleteTestCase(location?.state?.id)}> {loading.delete ? <Loader size={20} /> : "Delete"} </Button>
                     </Box>
                 </Modal>
 
@@ -1022,12 +1033,12 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                             Are you sure you want to update this test case?..
                         </Typography>
 
-                        <Button className='deleteTestCaseBtn cursor' onClick={() => updateTestStatus()}> {loading ? <Loader size={20} /> : singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
+                        <Button className='deleteTestCaseBtn cursor' onClick={() => updateTestStatus()}> {loading.update ? <Loader size={20} /> : singleTest?.data?.status === "pending" ? "Resume" : "Pause"} </Button>
                     </Box>
                 </Modal>
 
                 {/* Edit test cases  */}
-                <Modal
+                {/* <Modal
                     open={openEditTest}
                     //onClose={handleCloseEditTest}
                     aria-labelledby="modal-modal-title"
@@ -1074,12 +1085,59 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                             <Button className='cursor' onClick={onConfirmEdit}>Confirm</Button>
                         </div>
                     </Box>
+                </Modal> */}
+
+                {/*  */}
+
+                <Modal
+                    open={openEditTest}
+                    //onClose={handleCloseEditTest}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    className='modalWrapper'>
+                    <Box sx={style2}>
+                        <img src={closeIcon} alt="" className='absolutes cursor' onClick={() => handleCloseEditTest()} />
+                        <h2 className='configureHeading' id="modal-modal-title">Test Settings</h2>
+                        <span className='subProductTitle mb-34' id="modal-modal-description">
+                            Set a percentage to adjust all variant prices by.
+                        </span>
+                        <Card className='MuiPaper-root-modal four-col'>
+                            <Box style={{ height: 320, width: 'auto' }}>
+                                {!testCases ? <Loader size={40} /> : (<>
+                                    <DataGrid
+                                        rows={productVariants && productVariants}
+                                        columns={originalVariantColumn}
+                                        pageSize={6}
+                                        rowsPerPageOptions={[6]}
+                                        // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
+                                        disableColumnMenu
+                                        hideFooter={true}
+                                        processRowUpdate={createTestProcessRowUpdate}
+                                        onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
+                                        experimentalFeatures={{ newEditingApi: true }}
+                                        sx={{
+                                            [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
+                                            {
+                                                outline: "none",
+                                            },
+                                            [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+                                            {
+                                                outline: "none",
+                                            },
+                                        }}
+                                    />
+                                </>)}
+                            </Box>
+                        </Card>
+                        <div className='flex justify-content-center align-items-center mt-53'>
+                            <button className='reviewLaunchBtn min-240 cursor' onClick={onConfirmEdit}> {loading.editTest ? <Loader size={20} /> : 'Confirm'}  </button>
+                        </div>
+                    </Box>
                 </Modal>
 
-
-
+                {/*  */}
                 {/* Edit traffic split  */}
-                <Modal
+                {/* <Modal
                     open={openEditTrafficSplit}
                     //onClose={handleCloseEditTest}
                     aria-labelledby="modal-modal-title"
@@ -1090,16 +1148,16 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                         <Typography id="modal-modal-title" variant="h5" component="h2">
                             Test Settings
                         </Typography>
-                        {/* <Typography id="modal-modal-description" variant='p'>
+                     <Typography id="modal-modal-description" variant='p'>
                             Set a percentage to adjust all variant prices by.
-                        </Typography> */}
+                        </Typography> 
                         <Slider valueLabelDisplay='auto' className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={rangevalue} onChange={handleChangeSlider} />
 
                         <div className='confirmBtn'>
                             <Button className='cursor' onClick={onConfirmTrafficSplit}>Confirm</Button>
                         </div>
                     </Box>
-                </Modal>
+                </Modal> */}
                 <div>{errorfunction()}</div>
             </Card>
 

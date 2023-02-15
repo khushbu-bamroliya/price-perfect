@@ -709,7 +709,7 @@
     font-size: 14px !important;
     line-height: 19px !important;
     text-align: center;
-
+    /* border: 1px solid transparent; */
     color: #FFFFFF !important;
 }
 
@@ -828,7 +828,7 @@
 
 .editTest,
 .controlSettings {
-    width: 45vw;
+    width: 50% !important;
     /* height: 627px; */
     height: max-content !important;
     border: 0 !important;
@@ -1840,12 +1840,12 @@
 }
 
 .viewormanage-testAnalytics>div>h5 {
-    font-family: 'Product Sans';
-font-style: normal;
-font-weight: 700;
-font-size: 22px;
-line-height: 27px;
-color: #151515;
+    font-family: 'Product Sans' !important;	
+    font-style: normal;	
+    font-weight: 400;	
+    font-size: 16px;	
+    line-height: 19px;	
+    color: #151515;
 
 }
 
@@ -1945,7 +1945,7 @@ color: #151515;
         margin: 0 !important;
         margin-top: 24px !important;
         padding: 0;
-        /* min-height: 600px; */
+        min-height: 600px;
     }
 
     .viewormanageBlock {
@@ -3243,6 +3243,10 @@ html {
     font-family: 'Product Sans';
     text-transform: capitalize;
     box-shadow: none;
+    /* font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF; */
 }
 
 .tableImages div img {
@@ -3520,7 +3524,7 @@ html {
     font-size: 14px;
     line-height: 17px;
     color: #8492A7;
-    padding: 0 !important;
+    padding: 0;
     min-width: unset;
     margin: 0 36px;
 }
@@ -4300,4 +4304,42 @@ html {
 }
 .funnelBreakdownTable div {
     border: none;
+}
+
+.pad-016p {
+    padding: 0 16px 16px 16px;
+}
+
+.profile-save-btn {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 8px !important;
+    width: auto !important;
+    font-family: 'Product Sans' !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    line-height: 19px !important;
+    text-align: center !important;
+    color: #FFFFFF !important;
+    padding: 10px 20px !important;
+    margin-left: 0 !important;
+    text-transform: capitalize !important;
+}
+.pad-016p {
+    padding: 0 16px 16px 16px;
+}
+.profile-save-btn {
+    background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
+    border-radius: 8px !important;
+    width: auto !important;
+    font-family: 'Product Sans' !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    line-height: 19px !important;
+    text-align: center !important;
+    color: #FFFFFF !important;
+    padding: 10px 20px !important;
+    margin-left: 0 !important;
+    text-transform: capitalize !important;
 }

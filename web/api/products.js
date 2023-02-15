@@ -393,7 +393,7 @@ const createDuplicateProduct = async (req, res) => {
     //         await delay(Math.ceil((1000 - cost) / 50) * 1000);
     //  }
     for (let i = 0; i < objectToBeSent?.testCases.length; i++) {
-    
+
       console.log(
         "objectToBeSent?.testCases[i].variants.length",
         objectToBeSent?.testCases[i]?.variants.length
@@ -416,44 +416,44 @@ const createDuplicateProduct = async (req, res) => {
       }
 
       var query = `mutation {
-      productDuplicate(productId: "gid://shopify/Product/${productId}",
-        newTitle: "${productTitle}",
-        includeImages: true,
-        newStatus: ACTIVE) {
-        newProduct {
-          id
-          title
-          tags
-          vendor
-          productType
-          variants(first: 100) {
-            nodes {
-              id
-              title
+        productDuplicate(productId: "gid://shopify/Product/${productId}",
+          newTitle: "${productTitle}",
+          includeImages: true,
+          newStatus: ACTIVE) {
+          newProduct {
+            id
+            title
+            tags
+            vendor
+            productType
+            variants(first: 100) {
+              nodes {
+                id
+                title
+              }
             }
           }
-        }
-        imageJob {
-          id
-          done
-        }
-        userErrors {
-          field
-          message
+          imageJob {
+            id
+            done
+          }
+          userErrors {
+            field
+            message
+          }
         }
       }
-    }
-    `;
+      `;
 
-    if (cost - 1000 < 0) {
-      console.log("got in cost");
-      await delay(Math.ceil((1000 - cost) / 50) * 1000);
-    }
+      if (cost - 1000 < 0) {
+        console.log("got in cost");
+        await delay(Math.ceil((1000 - cost) / 50) * 1000);
+      }
 
       let NewRes = await PostApiGraphql(shop, access_token, query);
-console.log("New res++++.: " + JSON.stringify(NewRes));
+      console.log("New res++++.: " + JSON.stringify(NewRes));
       cost = NewRes.extensions.cost.throttleStatus.currentlyAvailable &&
-      NewRes.extensions.cost.throttleStatus.currentlyAvailable;
+        NewRes.extensions.cost.throttleStatus.currentlyAvailable;
 
       let newMakeArr = NewRes.data.productDuplicate.newProduct.variants.nodes;
       let duplicateVariantId = NewRes.data.productDuplicate.newProduct.id;
@@ -483,33 +483,33 @@ console.log("New res++++.: " + JSON.stringify(NewRes));
           console.log("****************************************************************");
           // console.log("object tests", objectToBeSent.testCases);
           query_var = `
-        mutation productVariantUpdate {
-          productVariantUpdate(
-          input: {
-            id: "${newMakeArr[j].id}",
-            price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
-            compareAtPrice: "${objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice}"
-        }
-        ) {
-            productVariant {
-              id
-              title
-              inventoryPolicy
-              inventoryQuantity
-              price
-              compareAtPrice
-              product
-              {
-                id
+            mutation productVariantUpdate {
+              productVariantUpdate(
+              input: {
+                id: "${newMakeArr[j].id}",
+                price: "${objectToBeSent?.testCases[i].variants[j].abVariantPrice}",
+                compareAtPrice: "${objectToBeSent?.testCases[i]?.variants[j]?.abVariantComparePrice}"
+            }
+            ) {
+                productVariant {
+                  id
+                  title
+                  inventoryPolicy
+                  inventoryQuantity
+                  price
+                  compareAtPrice
+                  product
+                  {
+                    id
+                  }
+                }
+                userErrors {
+                  field
+                  message
+                }
               }
             }
-            userErrors {
-              field
-              message
-            }
-          }
-        }
-        `;
+            `;
         } else {
           query_var = `
         mutation productVariantUpdate {
@@ -540,16 +540,16 @@ console.log("New res++++.: " + JSON.stringify(NewRes));
         `;
         }
 
-        
+
         const NewPriceAtDuplicateProduct = await PostApiGraphql(
           shop,
           access_token,
           query_var
-          );
-          console.log("NewPriceAtDuplicateProduct",JSON.stringify(NewPriceAtDuplicateProduct));
+        );
+        console.log("NewPriceAtDuplicateProduct", JSON.stringify(NewPriceAtDuplicateProduct));
 
-        objectToBeSent.testCases[i].variants[j].duplicateProductId =  NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
-        objectToBeSent.testCases[i].variants[j].duplicateVariantId =  NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
+        objectToBeSent.testCases[i].variants[j].duplicateProductId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.product.id;
+        objectToBeSent.testCases[i].variants[j].duplicateVariantId = NewPriceAtDuplicateProduct.data.productVariantUpdate.productVariant.id;
 
         console.log("NewPriceAtDuplicateProduct33333", JSON.stringify(NewPriceAtDuplicateProduct))
 
@@ -714,18 +714,15 @@ const updateDuplicateProduct = async (req, res) => {
   const { testCases, databaseId } = req.body;
   console.log("req.body", req.body);
   let query;
+  
+  var cost = 1000;
   try {
     if (testCases) {
+ 
       for (let j = 0; j < testCases.length; j++) {
         for (let i = 0; i < testCases[j]?.variants?.length; i++) {
-          console.log(
-            "duplicateVariantId",
-            testCases[j]?.variants[i]?.duplicateVariantId
-          );
-          console.log(
-            "abVariantPrice",
-            testCases[j]?.variants[i]?.abVariantPrice
-          );
+          console.log("duplicateVariantId",  testCases[j]?.variants[i]?.duplicateVariantId);
+          console.log(  "abVariantPrice",  testCases[j]?.variants[i]?.abVariantPrice);
 
           if (testCases[j]?.variants[i]?.abVariantComparePrice != null) {
             query = `mutation{
@@ -748,10 +745,7 @@ const updateDuplicateProduct = async (req, res) => {
             }
             `;
           } else {
-            console.log(
-              "abVariantComparePrice",
-              testCases[j]?.variants[i]?.abVariantComparePrice
-            );
+            console.log("abVariantComparePrice",  testCases[j]?.variants[i]?.abVariantComparePrice);
             query = `mutation{
             productVariantUpdate(input:{
               id:"${testCases[j]?.variants[i]?.duplicateVariantId}",
@@ -773,8 +767,14 @@ const updateDuplicateProduct = async (req, res) => {
           `;
           }
           console.log("query: " + query);
+          if (cost - 1000 < 0) {
+            console.log("got in cost");
+            await delay(Math.ceil((1000 - cost) / 50) * 1000);
+          }
           let NewRes = await PostApiGraphql(shop, access_token, query);
-          console.log("new res: " + JSON.stringify(NewRes));
+          cost = NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable &&
+          NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
+          console.log("updateDuplicateProduct response" + JSON.stringify(NewRes));
         }
       }
 
@@ -805,7 +805,7 @@ const updateDuplicateProduct = async (req, res) => {
 const deleteOneTestCase = async (req, res) => {
   const shop = req.headers.shop;
   const shopData = await Shop.findOne({ shop }).select(["access_token"]);
-
+  var cost = 1000;
   if (shopData && shopData.access_token) {
     access_token = shopData.access_token;
   }
@@ -818,7 +818,13 @@ const deleteOneTestCase = async (req, res) => {
         deletedProductId
       }
     }`;
+    if (cost - 1000 < 0) {
+      console.log("got in cost");
+      await delay(Math.ceil((1000 - cost) / 50) * 1000);
+    }
     let NewRes = await PostApiGraphql(shop, access_token, query);
+    cost = NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable &&
+    NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
     res.status(200).json({ message: "Test case deleted", success: true, NewRes })
   } catch (error) {
     res.status(200).json({ message: "Delete testcase failed", success: false, error })

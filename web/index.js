@@ -490,7 +490,6 @@ app.get("/auth/callback", validateHmac, async (req, res) => {
         console.log("Registered products delete webhook successfully...");
       }
 
-
       const registerOrderCreateWebhook = await PostApiRest(
         `https://${shop}/admin/api/${process.env.SHOPIFY_API_VERSION}/webhooks.json`,
         access_token,
