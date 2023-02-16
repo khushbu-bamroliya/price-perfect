@@ -47,6 +47,7 @@ const ViewOrManageTestPage = () => {
     const [rangevalue, setRangeValue] = useState(10);
     let [activeTests, setActiveTests] = useState(0);
     const [testCases, setTestCases] = useState([]);
+    const [control, setControlData] = useState([]);
     const [productVariants, setProductsVariants] = useState([]);
     console.log("Testcases", testCases);
     const [testIdState, setTestIdState] = useState(0);
@@ -114,6 +115,7 @@ const ViewOrManageTestPage = () => {
                 setActiveTests(temp)
                 setLoading({ singleTest: false })
                 console.log("apiRes.data", apiRes);
+                setControlData(apiRes.controlVariants)
                 setSingleTest(apiRes)
                 setTestCases(apiRes.data.testCases)
             })
@@ -380,7 +382,7 @@ const ViewOrManageTestPage = () => {
                                     {i.variantTitle}
                                 </div>
                                 <div className='variantDeatils flex-55'>
-                                    {singleTest?.data?.currency} {i.abVariantPrice}
+                                    {singleTest?.data?.currency} {i.abVariantPrice || i.variantPrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
@@ -419,8 +421,8 @@ const ViewOrManageTestPage = () => {
     //     createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
     //     createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
     //   ];
+    let rows = testCases.map(i => (
 
-    const rows = testCases.map(i => (
         createData(
             i.testId,
             i.variants,
@@ -437,6 +439,33 @@ const ViewOrManageTestPage = () => {
 
         )
     ))
+
+console.log("rows", rows)
+const addControlData = () => {
+    const item = control && createData(
+        'Control Test',
+         control,
+         control.length > 1 ?
+                singleTest?.data?.currency + Math.min(...control.map(j => j.variantPrice)) + ' - ' + singleTest?.data?.currency + Math.max(...control.map(j => j.variantPrice))
+                : control.map(j => j.variantPrice)
+            ,
+            control.length > 1 ?
+            singleTest?.data?.currency + Math.min(...control.map(j => j.variantComparePrice)) + ' - ' + singleTest?.data?.currency + Math.max(...control.map(j => j.variantComparePrice))
+            : control.map(j => j.variantComparePrice)
+        ,
+        "Control",
+        'active'
+         )
+    // setMyArray([item, ...myArray]);
+    rows.unshift(item)
+console.log("control item", item)
+}
+if (testCases.length > 0) {
+    addControlData()
+}
+console.log("control row added", rows)
+console.log('ControlData', control);
+const rows3 = [];
     // console.log("rows: " + JSON.stringify(rows));
     //   console.log("newTestArray: " + JSON.stringify(newTestArray));
     // const rows = testCases && testCases?.map((i)=>([
