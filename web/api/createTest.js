@@ -127,7 +127,7 @@ const getSingleTestCase = async (req, res) => {
 
         res.status(200).json({
             data: getSingleTest,
-            controlVariants:products,
+            controlVariants: products,
             success: true,
             status: 200
         })
@@ -158,11 +158,24 @@ const getTestCase = async (req, res) => {
 
             getCase = await createTestModal.find({ shop: shop })
         }
+    
+        getCase=JSON.parse(JSON.stringify(getCase))
+        getCase.map((e)=>{
+            
+            let cnt=0;
+            e.testCases.map((it)=>{
+                if(it.status === 'active'){
+                   cnt++;
+                }   
+            })
+            e.activeTests = cnt; 
+            return
 
+        })
         if (!getCase) {
             return res.json("Fetch get test case filed...!")
         }
-
+        console.log('getCases', getCase)
         res.status(200).json({
             data: getCase,
             status: 200,
@@ -360,11 +373,30 @@ const updateTestStatus = async (req, res) => {
     }
 }
 
+const checkTest = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+
+        const productFound = await createTestModal.findOne({ productId: `gid://shopify/Product/${id}` });
+        console.log("Product found", productFound);
+        if (productFound) {
+            res.status(200).json({ success: false, message: "This product already has testcases." })
+        } else {
+            res.status(200).json({ success: true, message: "No testcases found." })
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal Server Error." })
+        console.log("error", error);
+    }
+}
+
 module.exports = {
     createTestCaseApi,
     getSingleTestCase,
     getTestCase,
     deleteTestCaseData,
     updateTestStatus,
-    updateSingleTestStatus
+    updateSingleTestStatus,
+    checkTest
 }

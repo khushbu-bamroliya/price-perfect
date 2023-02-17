@@ -222,8 +222,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                         <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color} Test</div>
                     </div>
                     <div className='nameTitle'>{/* {row.name} */}</div>
-                    <div className='nameTitle'>{row.price}</div>
-                    <div className='nameTitle'>{row.compareAtPrice}</div>
+                    <div className='nameTitle'>{created.apiRes.currency + ' ' +row.price}</div>
+                    <div className='nameTitle'>{created.apiRes.currency + ' ' +row.compareAtPrice}</div>
                 </div>
                 <div>
                     <Collapse in={open} timeout="auto" unmountOnExit>
@@ -231,8 +231,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                             <div className='variantId' key={i.id}>
                                 <div className='variantDeatils'></div>
                                 <div className='variantDeatils after'>{i.variantTitle}</div>
-                                <div className='variantDeatils bold'>{i.abVariantPrice}</div>
-                                <div className='variantDeatils'>{!i.abVariantComparePrice ? i.abVariantComparePrice : i.abVariantComparePrice}</div>
+                                <div className='variantDeatils bold'>{created.apiRes.currency + ' ' +i.abVariantPrice}</div>
+                                <div className='variantDeatils'>{!i.abVariantComparePrice ? created.apiRes.currency + ' ' +i.abVariantComparePrice : created.apiRes.currency + ' ' +i.abVariantComparePrice}</div>
                             </div>
                         ))}
                     </Collapse>

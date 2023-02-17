@@ -43,7 +43,7 @@ const Navbar = () => {
                 <img className='absolute' src={Task} />
                 <img className='stroke' src={TaskStroke} />
             </div>
-            <span>Your Tests</span></NavLink></div>,
+            <span>Tests By Product</span></NavLink></div>,
         <div className='navIcons'><NavLink to="/createtest">
             <div className='colored'>
                 <img className='absolute' src={Note} />

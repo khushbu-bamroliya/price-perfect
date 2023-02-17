@@ -25,6 +25,7 @@ import GreyImg from './Images/Grey.svg';
 import OrangeImg from './Images/Orange.svg';
 import PurpleImg from './Images/Purple.svg';
 import YellowImg from './Images/Yellow.svg';
+import ArrowIcon from "./Images/Arrow.png";
 import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
 import {
     Chart as ChartJS,
@@ -365,8 +366,8 @@ const ViewOrManageTestPage = () => {
                         <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color ? row.color + " Test" : row.id}</div>
                     </div>
                     <div className={`nameTitle py-10 text-left ${open ? "openW" : "closew"}`}></div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{row.price}</div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{row.compareAtPrice}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.price}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.compareAtPrice}</div>
                     <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
                         {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
                         <img src={editIcon} className='cursor ml-10' alt="" onClick={() => handleEditTest(row.id)} />
@@ -385,7 +386,56 @@ const ViewOrManageTestPage = () => {
                                     {singleTest?.data?.currency} {i.abVariantPrice || i.variantPrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
-                                    {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
+                                    {/* {!i.variantComparePrice ? i.variantComparePrice : singleTest?.data?.currency + i.variantComparePrice} */}
+                                    {!i.abVariantComparePrice ? singleTest?.data?.currency + i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                </div>
+                            </div>
+                        ))}
+                    </Collapse>
+                </div>
+            </React.Fragment>
+        );
+    }
+    function ControlRowDiv(props) {
+        const { row } = props;
+        const [open, setOpen] = React.useState(false);
+
+        return (
+            <React.Fragment>
+                <div className='cursor controlTest pa-28' onClick={() => setOpen(!open)}>
+            
+                    <div className={`arrowIcon ${open ? "openIcon" : "closeIcon"}`}>
+                        <ArrowForwardIosIcon fontSize='large' />
+                    </div>
+                    <div className='flex-row flex-55 p-11'>
+                        <img src={ArrowIcon} alt="" />
+                        <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color ? row.color + " Test" : row.id}</div>
+                    </div>
+                    <div className={`nameTitle py-10 text-left ${open ? "openW" : "closew"}`}></div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.price}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.compareAtPrice}</div>
+                    <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
+                        {/* {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
+                        <img src={editIcon} className='cursor ml-10' alt="" onClick={() => handleEditTest(row.id)} /> */}
+                    </div>
+
+                </div>
+                <div>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        {row.variants.map((i) => (
+                            <div className='variantId' key={i.id}>
+                                <div className='variantDeatils flex-55 text-left'></div>
+                                <div className='variantDeatils text-left'>
+                                    {i.variantTitle}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                    {singleTest?.data?.currency} { i.variantPrice}
+                                </div>
+                                <div className='variantDeatils flex-55'>
+                                    {!i.variantComparePrice ? i.variantComparePrice : singleTest?.data?.currency + i.variantComparePrice}
+                                    {/* {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice} */}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                 </div>
@@ -441,8 +491,8 @@ const ViewOrManageTestPage = () => {
     ))
 
 console.log("rows", rows)
-const addControlData = () => {
-    const item = control && createData(
+// const addControlData = () => {
+    const controlRowData = control && createData(
         'Control Test',
          control,
          control.length > 1 ?
@@ -457,12 +507,12 @@ const addControlData = () => {
         'active'
          )
     // setMyArray([item, ...myArray]);
-    rows.unshift(item)
-console.log("control item", item)
-}
-if (testCases.length > 0) {
-    addControlData()
-}
+    // rows.unshift(controlRowData)
+console.log("control item", controlRowData)
+// }
+// if (testCases.length > 0) {
+//     addControlData()
+// }
 console.log("control row added", rows)
 console.log('ControlData', control);
 const rows3 = [];
@@ -789,7 +839,7 @@ const rows3 = [];
 
         getSingleTest()
         // countActiveTests();
-    }, [activeTests])
+    }, [])
     return (
         <>
 
@@ -896,7 +946,10 @@ const rows3 = [];
                                 <Typography variant='h5'>Test Analytics</Typography>
                                 <Button variant="outlined" className='cursor' onClick={handleViewAnalyticsModal} >Expand</Button>
                             </div>
+                            {loading.singleTest ? <Loader size={40}/>:<>
+
                             <Line options={options} data={data} className={` ${singleTest?.data?.featuredImage ? 'graph-h50' : 'graph-h25'}`} />
+                            </>}
                         </Card>
                     </div>
                     <Card className='funnelBreakdown'>
@@ -923,9 +976,13 @@ const rows3 = [];
                                 <div className='testCasesTitle flex-55'>Actions</div>
                             </div>
                             <div className='width-fit'>
+                            {loading.singleTest ?<Loader size={40}/>:<>
+
+                            <ControlRowDiv row={controlRowData} />
                                 {rows.map((row) => (
                                     <RowDiv key={row.name} row={row} />
                                 ))}
+                            </>}
                             </div>
                         </div>
 

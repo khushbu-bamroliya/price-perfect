@@ -4,7 +4,7 @@ const { allProducts, getVariants, createDuplicateProduct, updateDuplicateProduct
 const { SignUpUserDetails,manualSignIn } = require("../api/users")
 const  googleUserFound  = require("../api/googleUserCheck.js");
 const { createTestCaseApi, getTestCase,  
-    deleteTestCaseData,getSingleTestCase, updateTestStatus, updateSingleTestStatus } = require("../api/createTest");
+    deleteTestCaseData,getSingleTestCase, updateTestStatus, updateSingleTestStatus, checkTest } = require("../api/createTest");
 const { createProfile,
         getSingleProfile,
         getSingleProfileandUpdateById} = require("../api/profile");
@@ -52,6 +52,7 @@ router.get("/get-single-testcase/:id", verifyToken,getSingleTestCase)
 router.get('/signin', manualSignIn);
 
 router.get("/enable-disable", enableDisableApp);
+router.get("/checktest/:id", checkTest);
 
 
 

@@ -33,6 +33,7 @@ const YourTests = () => {
     const location = useLocation()
     const navigate = useNavigate()
 
+    // const [activeTests, setActiveTests] = useState(false);
     const [opens, setOpens] = useState(false);
     const [snackbar_msg, setsnackbar_msg] = useState("");
     const [snackbarColor, setSnackbarColor] = useState("#325240");
@@ -62,7 +63,7 @@ const YourTests = () => {
     const columns = [
         {
             field: 'featuredImage',
-            headerName: 'Image',
+            headerName: 'Product',
             width: 250,
             sortable: false,
             flex: 0.3,
@@ -75,36 +76,65 @@ const YourTests = () => {
                             </div>
                         </div>
                         <p className='productID'>
+                        {params.row.product}
                         </p>
                     </>
                 )
             }
         },
         {
-            field: 'product',
-            headerName: 'Test Product',
+            field: 'activeTests',
+            headerName: 'Active Tests',
             width: 500,
             sortable: false,
             flex: 0.3
         },
         {
-            field: 'status',
-            headerName: 'Status',
-            width: 250,
+            field: 'controlRPM',
+            headerName: 'ControlRPM',
+            width: 500,
             sortable: false,
-            flex: 0.2,
-            renderCell: (params) => (<>
-                <Chip className={`chip_${params.row.status}`} label={params.row.status} />
-            </>)
+            flex: 0.3
         },
         {
-            field: 'duration',
-            headerName: 'Price',
-            width: 250,
+            field: 'bestRPM',
+            headerName: 'BestRPM',
+            width: 500,
             sortable: false,
-            flex: 0.2,
-
+            flex: 0.3
         },
+        {
+            field: 'bestvscontrol',
+            headerName: 'BestRPM vs Control',
+            width: 500,
+            sortable: false,
+            flex: 0.3
+        },
+        // {
+        //     field: 'product',
+        //     headerName: 'Test Product',
+        //     width: 500,
+        //     sortable: false,
+        //     flex: 0.3
+        // },
+        // {
+        //     field: 'status',
+        //     headerName: 'Status',
+        //     width: 250,
+        //     sortable: false,
+        //     flex: 0.2,
+        //     renderCell: (params) => (<>
+        //         <Chip className={`chip_${params.row.status}`} label={params.row.status} />
+        //     </>)
+        // },
+        // {
+        //     field: 'duration',
+        //     headerName: 'Price',
+        //     width: 250,
+        //     sortable: false,
+        //     flex: 0.2,
+
+        // },
         {
             field: 'action',
             headerName: 'Action',
@@ -150,7 +180,11 @@ const YourTests = () => {
             action: i._id,
             product: i.productTitle,
             featuredImage: i.featuredImage,
-            handle: i.handle
+            handle: i.handle,
+            activeTests:i.activeTests,
+            bestRPM:'-',
+            controlRPM:'-',
+            bestvscontrol:'-',
         })
     }
 
@@ -173,6 +207,21 @@ const YourTests = () => {
                 const apiRes = await res.json()
                 console.log("apiRes.data", apiRes);
                 setAllTests(apiRes)
+
+                // var temp = 0;
+                // for (let i = 0; i < apiRes?.data.length; i++) {
+                    
+                    // for (let j = 0; j < apiRes?.data[i]?.testCases.length; j++) {
+                    //     // console.log("Hello........", j);
+                    //     // for (let j = 0; j < apiRes?.data?.testCases[i].variants.length; j++) {
+                    //     if (apiRes?.data[i]?.testCases[i]?.status == 'active') {
+                    //         temp = temp + 1
+                    //         console.log("temp", temp);
+                    //     }
+                    // }
+                //     setActiveTests(temp)
+                // }
+
             })
             .catch((error) => {
                 console.log("Error", error)
@@ -253,7 +302,7 @@ const YourTests = () => {
                     <Card className='yourTestBlock'>
                         <div>
                             <div className='yourTest-Block1'>
-                                <Typography variant='h5'>Your Tests</Typography>
+                                <Typography variant='h5'>Tests By Product</Typography>
                                 <Typography variant='p'>Manage your current and past tests </Typography>
                             </div>
 

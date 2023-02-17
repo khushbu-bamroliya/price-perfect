@@ -33,13 +33,16 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 id: item.id,
                 images: item.image,
                 title: item.title,
-                description: item.description && item.description,
+                activeTests: item.activeTests,
+                // description: item.description && item.description,
                 price: item.currency + " " + item.price,
-                handle: item.handle
+                handle: item.handle,
+                compareAtPrice: item.compareAtPrice ? item.currency + " " + item.compareAtPrice : "-"
             });
         });
 
     const createTestStep1Completed = (id, title, handle, imgSrc) => {
+        console.log("asdasdasd id++++++++++++++++", id)
         const productId = id.split('/').pop();
         console.log("title link", title);
         const productHandle = handle.split('/').pop();
@@ -47,14 +50,30 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         const productTitle = title.split('/').pop();
         console.log("productId: " + productId);
         getProductImage(imgSrc)
-        navigate(`/createtest/step2`, { 
-            state: { 
-                currency: productsData.products[0].currency,
-                handle:productHandle,
-                title: productTitle,
-                id:productId
-            } 
+
+        fetch(getApiUrl + `/api/checktest/${productId}` ).then((res) => {
+            return res.json();
+        }).then((res) => {
+            console.log("res from checktest", res);
+            if (res && !res?.success) {
+                setOpens(true)
+                setsnackbar_msg(res.message)
+                setSnackbarColor('red')
+            } else {
+                
+                navigate(`/createtest/step2`, {
+                    state: {
+                        currency: productsData.products[0].currency,
+                        handle: productHandle,
+                        title: productTitle,
+                        id: productId
+                    }
+                })
+            }
+        }).catch((error) => {
+            console.log("error", error)
         })
+
     }
     const columns = [
         {
@@ -80,8 +99,15 @@ const CreateTestPage = ({ shop, getProductImage }) => {
             }
         },
         {
-            field: 'description',
-            headerName: 'Description',
+            field: 'totalVariants',
+            headerName: 'Number of variants',
+            width: 500,
+            sortable: false,
+            flex: 0.4
+        },
+        {
+            field: 'activeTests',
+            headerName: 'Active Tests',
             width: 500,
             sortable: false,
             flex: 0.4
@@ -89,6 +115,14 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         {
             field: 'price',
             headerName: 'Price',
+            width: 250,
+            sortable: false,
+            flex: 0.3,
+
+        },
+        {
+            field: 'compareAtPrice',
+            headerName: 'Compare at Price',
             width: 250,
             sortable: false,
             flex: 0.3,
@@ -146,8 +180,6 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 setsnackbar_msg("Internal Server Error")
                 setSnackbarColor('red')
             })
-
-
     }
 
     const nextPageFunc = () => {
@@ -162,29 +194,28 @@ const CreateTestPage = ({ shop, getProductImage }) => {
     }
     const handleClose = () => {
         setOpens(false);
-      };
-      const errorfunction = () => {
+    };
+    const errorfunction = () => {
         return (<div>
-          <Snackbar
-            open={opens}
-            sx={{ width: "50%" }}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            autoHideDuration={3000}
-            onClose={handleClose}
-          >
-            <Alert
-              variant="filled"
-              onClose={handleClose}
-              sx={{ width: "50%", bgcolor: snackbarColor }}
+            <Snackbar
+                open={opens}
+                sx={{ width: "50%" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                autoHideDuration={3000}
+                onClose={handleClose}
             >
-              {snackbar_msg}
-            </Alert>
-          </Snackbar>
+                <Alert
+                    variant="filled"
+                    onClose={handleClose}
+                    sx={{ width: "50%", bgcolor: snackbarColor }}
+                >
+                    {snackbar_msg}
+                </Alert>
+            </Snackbar>
         </div>)
-    
-      };
+    };
     useEffect(() => {
-    
+
         getAllProductsApi(sendBody)
     }, [searchProduct, nextPageCursor, prevPageCursor])
     return (
@@ -201,11 +232,11 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                             <div className='createTest-Block2'>
                                 <img src={searchIcon} alt="" />
                                 <TextField id="outlined-basic" placeholder="search" variant="outlined" value={searchProduct} onChange={(e) => setSearchProduct(e.target.value)} />
-                            
+
                             </div>
                         </div>
                         <div className='createTestTable' style={{ height: 600, width: '100%' }}>
-                        
+
                             {loading ? <Loader size={40} /> : (<>
 
                                 <DataGrid

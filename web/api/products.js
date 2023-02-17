@@ -19,14 +19,12 @@ const in_array = (array, id) => {
 const allProducts = async (req, res) => {
   try {
     const shop = req.headers.shop;
-    console.log("shop", shop);
-    console.log("req.headers", req.headers);
+
     const item_per_page = 10;
 
     var access_token = "";
     var currency = "";
 
-    console.log("shop", shop);
     if (shop) {
       const shopData = await Shop.findOne({ shop }).select([
         "access_token",
@@ -38,9 +36,9 @@ const allProducts = async (req, res) => {
     }
 
     const { search, hasNextPageCursor, hasPreviousPageCursor } = req.body;
-    console.log("hasPreviousPageCursor", hasPreviousPageCursor);
+
     const endCursor = null;
-    console.log(req.body, "search");
+
     let query;
 
     async function recursion_products(endCursor) {
@@ -78,6 +76,7 @@ const allProducts = async (req, res) => {
                                 edges{
                                   node{
                                     price
+                                    compareAtPrice
                                   }
                                 }
                               }
@@ -92,7 +91,7 @@ const allProducts = async (req, res) => {
                 }
               }
           `;
-        console.log("query: " + query);
+
       } else {
         console.log("first time and searching");
         query = `query products{
@@ -117,6 +116,7 @@ const allProducts = async (req, res) => {
                                 node{
                                   id
                                   price
+                                  compareAtPrice
                                 }
                               }
                             }
@@ -133,7 +133,7 @@ const allProducts = async (req, res) => {
       }
 
       let ans1 = await getWithPagination(shop, access_token, query, "products");
-      console.log("ans1", ans1);
+
 
       let ans = ans1.products.edges;
 
@@ -159,20 +159,29 @@ const allProducts = async (req, res) => {
         }
 
         var tempArr1 = [];
+        var productIds = [];
 
         for (let index = 0; index < ans.length; index++) {
           if (index + 1 == ans.length) {
             endCursorFromApi = ans[index].cursor;
           }
-
           //create arr for Db
           const node = ans[index] && ans[index].node && ans[index].node;
 
+          // const teststatus = await createTestModal.findOne({ productId: node.id }, { testCases: 1 });
+          // console.log("teststatus", teststatus)
+          // var activeTests = 0;
+          // for (let j = 0; j < teststatus?.testCases.length; j++) {
+          //   if (teststatus.testCases[j].status === 'active') {
+          //     activeTests++
+          //   }
+          // }
+          // console.log('activeTests', activeTests)
           if (node) {
             if (node.id) {
               tempArr1.push(node.id);
             }
-
+            productIds.push(node.id)
             products = [
               ...products,
               {
@@ -184,13 +193,21 @@ const allProducts = async (req, res) => {
                 title: node.title ? node.title : "",
                 currency: currency,
                 description: node.description ? node.description : "-",
-                variant_title: "",
+                // variant_title: "",
+                // activeTests,
                 price:
                   node.variants &&
                     node.variants.edges &&
                     node.variants.edges[0] &&
                     node.variants.edges[0].node.price
                     ? node.variants.edges[0].node.price
+                    : "",
+                compareAtPrice:
+                  node.variants &&
+                    node.variants.edges &&
+                    node.variants.edges[0] &&
+                    node.variants.edges[0].node.compareAtPrice
+                    ? node.variants.edges[0].node.compareAtPrice
                     : "",
                 cursor: ans[index].cursor,
                 productId: node.id ? node.id : "",
@@ -201,6 +218,48 @@ const allProducts = async (req, res) => {
             ];
           }
         }
+        var modifiedProductsArrays = [];
+        // console.log("productIds", productIds)
+        var getTestCases = await createTestModal.find({
+          productId: { $in: productIds },
+        });
+
+        for (const value of products) {
+          const productFoundInDB = getTestCases.find((j) => j.productId === value.id);
+          var activeTests = 0;
+          if (productFoundInDB) {
+
+            for (let j = 0; j < productFoundInDB?.testCases.length; j++) {
+              if (productFoundInDB.testCases[j].status === 'active') {
+                activeTests++
+              }
+            }
+          }
+          value.activeTests = activeTests;
+        }
+
+        console.log("products", products);
+
+
+        // for (let i = 0; i < productIds.length; i++) {
+
+        //   const productFoundInDB = getTestCases.find((j) => j.productId === productIds[i]);
+        //   console.log("new productIds", productFoundInDB)
+        //   if (productFoundInDB) {
+        //     var activeTests = 0;
+        //     for (let j = 0; j < productFoundInDB?.testCases.length; j++) {
+        //       if (productFoundInDB.testCases[j].status === 'active') {
+        //         activeTests++
+        //       }
+        //     }
+        //     console.log('activeTests', activeTests)
+        //     let foundProduct = products.find((j) => j.id === productFoundInDB.productId)
+        //     foundProduct = {...foundProduct, 'activeTests':activeTests}
+        //     console.log("found product", foundProduct);
+        //   }
+
+        // }
+        // console.log("getTestCases", getTestCases)
 
         //match temp1 arr products with DB
         const getDbProducts = await Product.find({
@@ -210,10 +269,10 @@ const allProducts = async (req, res) => {
 
         if (getDbProducts && getDbProducts.length > 0) {
           var pro = products.filter(function (value) {
-            console.log(
-              "in_array(getDbProducts,value.id)",
-              in_array(getDbProducts, value.id)
-            );
+            // console.log(
+            //   "in_array(getDbProducts,value.id)",
+            //   in_array(getDbProducts, value.id)
+            // );
             return in_array(getDbProducts, value.id) == false;
           });
         } else {
@@ -240,7 +299,7 @@ const allProducts = async (req, res) => {
     const resProducts = await recursion_products(
       JSON.stringify(hasNextPageCursor)
     );
-    console.log("resProducts: " + resProducts);
+    // console.log("resProducts: " + resProducts);
 
     res.status(200).send(resProducts);
   } catch (error) {
@@ -714,15 +773,15 @@ const updateDuplicateProduct = async (req, res) => {
   const { testCases, databaseId } = req.body;
   console.log("req.body", req.body);
   let query;
-  
+
   var cost = 1000;
   try {
     if (testCases) {
- 
+
       for (let j = 0; j < testCases.length; j++) {
         for (let i = 0; i < testCases[j]?.variants?.length; i++) {
-          console.log("duplicateVariantId",  testCases[j]?.variants[i]?.duplicateVariantId);
-          console.log(  "abVariantPrice",  testCases[j]?.variants[i]?.abVariantPrice);
+          console.log("duplicateVariantId", testCases[j]?.variants[i]?.duplicateVariantId);
+          console.log("abVariantPrice", testCases[j]?.variants[i]?.abVariantPrice);
 
           if (testCases[j]?.variants[i]?.abVariantComparePrice != null) {
             query = `mutation{
@@ -745,7 +804,7 @@ const updateDuplicateProduct = async (req, res) => {
             }
             `;
           } else {
-            console.log("abVariantComparePrice",  testCases[j]?.variants[i]?.abVariantComparePrice);
+            console.log("abVariantComparePrice", testCases[j]?.variants[i]?.abVariantComparePrice);
             query = `mutation{
             productVariantUpdate(input:{
               id:"${testCases[j]?.variants[i]?.duplicateVariantId}",
@@ -773,7 +832,7 @@ const updateDuplicateProduct = async (req, res) => {
           }
           let NewRes = await PostApiGraphql(shop, access_token, query);
           cost = NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable &&
-          NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
+            NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
           console.log("updateDuplicateProduct response" + JSON.stringify(NewRes));
         }
       }
@@ -824,7 +883,7 @@ const deleteOneTestCase = async (req, res) => {
     }
     let NewRes = await PostApiGraphql(shop, access_token, query);
     cost = NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable &&
-    NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
+      NewRes?.extensions?.cost?.throttleStatus?.currentlyAvailable;
     res.status(200).json({ message: "Test case deleted", success: true, NewRes })
   } catch (error) {
     res.status(200).json({ message: "Delete testcase failed", success: false, error })
