@@ -397,7 +397,7 @@ const YourTests = () => {
                                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                                     Are you sure you want to delete this test case?
                                 </Typography>
-                                <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> {loading ? <Loader size={30} /> : "Delete"} </Button>
+                                <Button className='deleteTestCaseBtn' onClick={() => deleteTestCase(testId)}> {loading ? <Loader size={20} /> : "Delete"} </Button>
 
                             </Box>
                         </Modal>

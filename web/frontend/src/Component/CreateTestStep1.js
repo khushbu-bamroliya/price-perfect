@@ -34,7 +34,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 images: item.image,
                 title: item.title,
                 activeTests: item.activeTests,
-                // description: item.description && item.description,
+                description: item.description && item.description,
                 price: item.currency + " " + item.price,
                 handle: item.handle,
                 compareAtPrice: item.compareAtPrice ? item.currency + " " + item.compareAtPrice : "-"
@@ -51,7 +51,7 @@ const CreateTestPage = ({ shop, getProductImage }) => {
         console.log("productId: " + productId);
         getProductImage(imgSrc)
 
-        fetch(getApiUrl + `/api/checktest/${productId}` ).then((res) => {
+        fetch(getApiUrl + `/api/checktest/${productId}`).then((res) => {
             return res.json();
         }).then((res) => {
             console.log("res from checktest", res);
@@ -60,13 +60,14 @@ const CreateTestPage = ({ shop, getProductImage }) => {
                 setsnackbar_msg(res.message)
                 setSnackbarColor('red')
             } else {
-                
+
                 navigate(`/createtest/step2`, {
                     state: {
                         currency: productsData.products[0].currency,
                         handle: productHandle,
                         title: productTitle,
-                        id: productId
+                        id: productId,
+                        description: productsData.products[0].description
                     }
                 })
             }
@@ -86,8 +87,8 @@ const CreateTestPage = ({ shop, getProductImage }) => {
 
                 return (
                     <>
-                        <div className='tableImages'>
-                            <div>
+                        <div className={`tableImages ${params.row.images ? "imagesIcon" : "HideIcon"}`}>
+                            <div className={`${params.row.images ? "imageParams" : "hideIconParams"}`}>
                                 {params.row.images ? <img src={params.row.images} alt='' /> : <HideImageOutlinedIcon />}
                             </div>
                         </div>

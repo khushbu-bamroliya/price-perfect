@@ -10,6 +10,9 @@
 .min-240{
     min-width: 240px;
 }
+.mt-0{
+    margin-top: 0 !important;
+}
 .p-25{
     padding: 25px;
 }
@@ -27,6 +30,9 @@
 }
 .mb-0{
     margin-bottom: 0 !important;
+}
+.mb-36{
+    margin-bottom: 36px !important;
 }
 .mb-20{
     margin-bottom: 20px !important;
@@ -109,12 +115,14 @@ margin-left: 50px;
     line-height: 39px;
     color: #151515;
     margin: 0 0 10px 0;
+    font-family: 'Product Sans';
 }
 .subHeadingTitle{
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
     color: #8492A7;
+    font-family: 'Product Sans';
 }
 .flex-row{
     display: flex;
@@ -129,6 +137,7 @@ margin-left: 50px;
 .wrapperControl{
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     border-radius: 14px;
+    font-family: 'Product Sans';
 }
 .imgWrapper{
     background: #FFFFFF;
@@ -206,9 +215,16 @@ margin-left: 50px;
     margin-top: 16px;
     display: block;
     text-align: center;
+    font-family: 'Product Sans';
 }
 .align-items-unset{
     align-items: unset;
+}
+.align-items-start{
+    align-items: flex-start;
+}
+.p-100{
+    padding: 100px 0;
 }
 .align-items-center{
     align-items: center;
@@ -226,6 +242,7 @@ margin-left: 50px;
     color: #536780;
     top: 16px;
     transform: translateX(0%);
+    font-family: 'Inter';
 }
 .rootSlider .MuiSlider-markLabelActive{
     color: #FE6E98;
@@ -266,6 +283,10 @@ margin-left: 50px;
     line-height: 24px;
     letter-spacing: 0.01em;
     color: #8492A7;
+    font-family: 'Inter';
+}
+.MuiPaper-root-modal .MuiDataGrid-columnHeadersInner, .MuiPaper-root-modal .MuiDataGrid-columnHeadersInner>div{
+    width: 100% !important;
 }
 .reviewLaunchBtn{
     outline: none;
@@ -708,8 +729,6 @@ margin-left: 50px;
 }
 }
 
-
-
 .MuiPaper-root-modal{
     background: linear-gradient(123.05deg, #F6F8FF 3.63%, #FCE9F5 116.93%);
     border-radius: 12px;
@@ -888,6 +907,7 @@ margin-left: 50px;
     color: #536780;
     display: block;
     margin-bottom: 6px;
+    white-space: nowrap;
 }
 .ControlHeading{
     font-family: 'Product Sans';
@@ -906,6 +926,7 @@ margin-left: 50px;
     font-size: 18px;
     line-height: 22px;
     color: #F42272;
+    white-space: nowrap;
 }
 .border-Traffic{
     border-left: 1px solid #E9E9E9;
@@ -1212,7 +1233,7 @@ margin-left: 50px;
 .variantDeatils.after{
     position: relative;
 }
-.variantDeatils.after::after{
+/* .variantDeatils.after::after{
     position: absolute;
     content: "";
     left: 0%;
@@ -1222,7 +1243,7 @@ margin-left: 50px;
     height: 4px;
     border-radius: 100%;
     background-color: #536780;
-}
+} */
 .w-full{
     width: 100% !important;
 }
@@ -1633,6 +1654,10 @@ margin-left: 50px;
     width: 100% !important;
 }
 
+.MuiDataGrid-virtualScroller{
+    margin-top: 0 !important;
+}
+
 @media only screen and (min-width: 1900px) {
 .graph-h50 {
     height: 22vh;
@@ -1643,11 +1668,137 @@ margin-left: 50px;
     height: 22vh;
     max-height: 18vh;
 }
-
-.dashboardTable{
-    height: 700px !important;
-} 
 }
 .dashboardTable{
-    height: 360px;
+    height: 100% !important;
+}
+.HideIcon{
+    min-width: 91px;
+    max-width: 91px;
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hideIconParams{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.yourTestsTitle{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #151515;
+    margin: 0 0 14px 21px;
+}
+.homeTitle{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #151515;
+    margin: 0;
+}
+.dashboardTable .MuiDataGrid-root--densityStandard{
+    border: 0;
+}
+.dashboardTable .MuiDataGrid-columnHeaders,.dashboardTable .MuiDataGrid-columnHeader{
+    max-height: unset !important;
+    min-height: unset !important;
+    line-height: unset !important;
+    position: unset !important;
+    height: unset !important;
+    border-bottom: 0 !important;
+}
+.createTestTable .MuiDataGrid-columnHeaders,.viewormanage-main .MuiDataGrid-columnHeaders{
+    position: unset !important;
+}
+.dashboardTable .MuiDataGrid-columnHeadersInner{
+    border-bottom: 1px solid #E9E9E9;
+}
+.dashboardTable .MuiDataGrid-columnHeader{
+    padding: 14px 24px !important;
+}
+.dashboardTable .MuiDataGrid-columnHeaders .MuiDataGrid-columnHeaderTitle{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #8492A7;
+}
+.createTestTable.dashboardTable .MuiDataGrid-main>div:nth-child(2){
+    height: 100% !important;
+    width: 100% !important;
+}
+.createTestTable.dashboardTable .MuiDataGrid-virtualScroller{
+    margin-top: 0 !important;
+    height: 100% !important;
+}
+.createTestTable.dashboardTable .MuiDataGrid-virtualScrollerContent{
+    height: 100% !important;
+}
+.createTestTable.dashboardTable .MuiDataGrid-virtualScrollerRenderZone{
+    position: unset !important;
+}
+.createTestTable.dashboardTable .MuiDataGrid-row{
+    padding: 0 !important;
+}
+.createTestTable.dashboardTable .MuiDataGrid-cell{
+    height: unset !important;
+    min-height: unset !important;
+    max-height: unset !important;
+    padding: 10px 24px !important;
+}
+.HideIcontable{
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.imagesIcontable{
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+.tableImages .hideIconParamstable img{
+    min-width: 60px;
+    max-width: 60px;
+    max-height: 36px;
+}
+.hideIconParams{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.MuiDataGrid-columnHeadersInner, .MuiDataGrid-columnHeadersInner>div{
+    width: auto !important;
+}
+@media only screen and (max-width: 2400px) {
+.createTestTable.dashboardTable .MuiDataGrid-main>div:nth-child(2){
+    height: 400px !important;
+}
+}
+.createTestPage-main .createTestTable .MuiDataGrid-cell:last-child, .createTestPage-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(3){
+    justify-content: flex-start !important;
+}
+.createTestPage-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(1),.createTestPage-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(2){
+    justify-content: center !important;
+}
+.yourTests-main .createTestTable .MuiDataGrid-cell:last-child, .yourTests-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(3){
+    justify-content: flex-start !important;    
+}
+.yourTests-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(1),.yourTests-main .createTestTable .MuiDataGrid-cell:nth-last-of-type(2){
+    justify-content: flex-end !important;
+}
+button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium:hover{
+    background-color: transparent !important;
 }

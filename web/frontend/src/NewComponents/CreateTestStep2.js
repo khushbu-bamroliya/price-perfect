@@ -3,7 +3,15 @@ import { Box } from '@mui/system';
 import React, { useCallback } from 'react'
 import Navbar from './Navbar'
 import closeIcon from "./Images/close-circle.png"
-import { DataGrid, gridClasses, GridCellEditStopReasons } from '@mui/x-data-grid';
+import {
+    GridColumns,
+    GridCellParams,
+    GridRowsProp,
+    gridClasses,
+    DataGrid,
+    GridCellModesModel,
+    GridCellModes
+} from '@mui/x-data-grid';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import getApiUrl from "../controller/utils.js";
@@ -298,25 +306,25 @@ const CreateTestStep2 = ({ objectSent }) => {
             flex: 1,
             sortable: false,
         },
-        {
-            field: "sku",
-            headerName: "sku",
-            editable: false,
-            minWidth: 80,
-            flex: 0.3,
-            type: 'number',
-            align:'left',
-            headerAlign:'left',
-            sortable: false,
-        },
+        // {
+        //     field: "sku",
+        //     headerName: "sku",
+        //     editable: false,
+        //     minWidth: 80,
+        //     flex: 0.3,
+        //     type: 'number',
+        //     align: 'left',
+        //     headerAlign: 'left',
+        //     sortable: false,
+        // },
         {
             field: "abVariantPrice",
             headerName: "Price",
             minWidth: 120,
             flex: 0.3,
             type: 'number',
-            align:'left',
-            headerAlign:'left',
+            align: 'left',
+            headerAlign: 'left',
             editable: true,
             sortable: false,
         },
@@ -326,8 +334,8 @@ const CreateTestStep2 = ({ objectSent }) => {
             minWidth: 100,
             flex: 0.4,
             type: 'number',
-            align:'left',
-            headerAlign:'left',
+            align: 'left',
+            headerAlign: 'left',
             editable: true,
             sortable: false,
         }
@@ -345,8 +353,8 @@ const CreateTestStep2 = ({ objectSent }) => {
             field: "abVariantPrice",
             headerName: "Price",
             type: 'number',
-            align:'left',
-            headerAlign:'left',
+            align: 'left',
+            headerAlign: 'left',
             minWidth: 120,
             flex: 0.3,
             editable: true,
@@ -357,8 +365,8 @@ const CreateTestStep2 = ({ objectSent }) => {
             headerName: "CompareAtPrice",
             minWidth: 100,
             type: 'number',
-            align:'left',
-            headerAlign:'left',
+            align: 'left',
+            headerAlign: 'left',
             flex: 0.4,
             editable: true,
             sortable: false,
@@ -412,9 +420,9 @@ const CreateTestStep2 = ({ objectSent }) => {
             setDisabled(false)
 
         }
-        setOpens(true)
-        setSnackbarColor('red')
-        setsnackbar_msg("TestCase deleted")
+        // setOpens(true)
+        // setSnackbarColor('red')
+        // setsnackbar_msg("TestCase deleted")
         console.log('deleteTestCase', displayTestCasesArray)
     };
 
@@ -459,7 +467,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setOpens(true)
                 setSnackbarColor('#325240')
                 setsnackbar_msg("Test created successfully")
-                navigate(`/reviewtest`, { state: { message: "Test created successfully" } })
+                navigate(`/reviewtest`, {
+                    state: {
+                        message: "Test created successfully",
+                        description: location?.state?.description,
+                    }
+                })
             })
             .catch((error) => {
                 setOpens(true)
@@ -472,7 +485,7 @@ const CreateTestStep2 = ({ objectSent }) => {
     const percentagePrices = [
         "2%", "3%", "5%", "10%"
     ]
-
+    console.log("description: ", location?.state?.description)
     const onConfirmByPercentage = () => {
 
         const updatedArray = variantRes && variantRes?.data.map(item => {
@@ -488,12 +501,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 console.log("final number is:", variantComparePriceFinal);
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00" }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00" }
 
             }
             return item
@@ -588,7 +601,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                     // }
                                     // console.log("item", user.abVariantComparePrice);
 
-                                    return { ...item, "abVariantComparePrice": Number(user.abVariantComparePrice) , "variantComparePrice": Number(user.variantComparePrice) , "abVariantPrice": Number( user.abVariantPrice), "variantPrice": Number(user.variantPrice)  }
+                                    return { ...item, "abVariantComparePrice": Number(user.abVariantComparePrice), "variantComparePrice": Number(user.variantComparePrice), "abVariantPrice": Number(user.abVariantPrice), "variantPrice": Number(user.variantPrice) }
 
                                 }
                                 return item;
@@ -670,14 +683,14 @@ const CreateTestStep2 = ({ objectSent }) => {
                 </svg>
                 <span>50%</span></div>,
         },
-        {
-            value: 75,
-            label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-                </svg>
-                <span>75%</span></div>,
-        },
+        // {
+        //     value: 75,
+        //     label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+        //         <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        //             <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+        //         </svg>
+        //         <span>75%</span></div>,
+        // },
     ];
     const rangeSliderValuetext = (value) => {
         return `${value}°C`;
@@ -692,6 +705,44 @@ const CreateTestStep2 = ({ objectSent }) => {
         }
         handleVariants()
     }, [])
+
+    // for one click data grid
+    const [cellModesModel, setCellModesModel] = useState  ({});
+
+    const handleCellClick = useCallback((params) => {
+        console.log("params",params)
+        setCellModesModel((prevModel) => {
+            return {
+                // Revert the mode of the other cells from other rows
+                ...Object.keys(prevModel).reduce(
+                    (acc, id) => ({
+                        ...acc,
+                        [id]: Object.keys(prevModel[id]).reduce(
+                            (acc2, field) => ({
+                                ...acc2,
+                                [field]: { mode: GridCellModes.View }
+                            }),
+                            {}
+                        )
+                    }),
+                    {}
+                ),
+                [params.id]: {
+                    // Revert the mode of other cells in the same row
+                    ...Object.keys(prevModel[params.id] || {}).reduce(
+                        (acc, field) => ({ ...acc, [field]: { mode: GridCellModes.View } }),
+                        {}
+                    ),
+                    [params.field]: { mode: GridCellModes.Edit }
+                }
+            };
+        });
+    }, []);
+
+    const handleCellModesModelChange = useCallback((newModel) => {
+        console.log("newModel",newModel)
+        setCellModesModel(newModel);
+    }, []);
 
     return (
         <div className='bg-linear-gradient'>
@@ -774,7 +825,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div>
                     <div className='mt-52'>
                         <span className='subHeadingTitle mb-22 d-block'> 2. Set your traffic split </span>
-                        <Slider valueLabelDisplay='auto' step={null} className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={90} aria-label="Volume" value={value} onChange={handleChange} />
+                        <Slider valueLabelDisplay='auto' step={null} className='rootSlider' marks={rangeSliderMarks} getAriaValueText={rangeSliderValuetext} min={10} max={75} aria-label="Volume" value={value} onChange={handleChange} />
 
                         <span className='trafficControl'>{displayTestCasesArray.length ? `${value}% of visiting traffic will be split evenly between your ${displayTestCasesArray.length} tests. The remaining ${100 - value}% will be sent to the control.` : `${value}% of visiting traffic will be split evenly between your tests. The remaining  ${100 - value}% will be sent to the control.`}</span>
                         <div className='flex justify-content-center align-items-center mt-153 mb-43'>
@@ -796,7 +847,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <div className=''>
                         <img className='absolutes cursor' src={closeIcon} alt="" onClick={handleCloseConfigureTest1} />
                         <h2 className='configureHeading' id="modal-modal-title">
-                            Configure Test 1
+                            Configure 
                         </h2>
                         {/* {!variantRes?.data ? <Loader /> : ( */}
                         <>
@@ -828,7 +879,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                 <Box sx={style}>
                     <img className='absolutes cursor' src={closeIcon} alt="" onClick={handleCloseManualModal} />
                     <h2 className='configureHeading' id="modal-modal-title">
-                        Configure Test 1
+                        Configure 
                     </h2>
                     <span className='subProductTitle mb-34' id="modal-modal-description">
                         Set the price and compare at prices for each of your variants below
@@ -877,7 +928,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                 <Box sx={style}>
                     <img className='absolutes' src={closeIcon} alt="" onClick={handleCloseByPercentageModal} />
                     <h2 className='configureHeading' id="modal-modal-title">
-                        Configure Test 1
+                         Configure 
                     </h2>
                     <span className='subProductTitle mb-27' id="modal-modal-description">
                         Set a percentage to adjust all variant prices by.
@@ -905,6 +956,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     </div>
                 </Box>
             </Modal>
+
             {/* Control edit test  modal  */}
             <Modal
                 open={openEditTest}
@@ -930,9 +982,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                                     // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
                                     disableColumnMenu
                                     hideFooter={true}
-                                    processRowUpdate={createTestProcessRowUpdate}
+                                    // processRowUpdate={createTestProcessRowUpdate}
                                     onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
-                                    experimentalFeatures={{ newEditingApi: true }}
+                                    experimentalFeatures={{ newEditingApi: true }}      // one click edit
+                                    cellModesModel={cellModesModel}
+                                    onCellModesModelChange={handleCellModesModelChange}
+                                    onCellClick={handleCellClick}
                                     sx={{
                                         [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
                                         {

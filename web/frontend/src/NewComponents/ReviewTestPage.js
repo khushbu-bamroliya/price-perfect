@@ -240,6 +240,24 @@ const ReviewTestPage = ({ created, productImage }) => {
             </React.Fragment>
         );
     }
+    const backtoCreateTest = () => {
+        const productId = created && created.apiRes?.data?.productId.split('/').pop();
+
+        const productHandle = created && created.apiRes?.data?.handle.split('/').pop();
+
+        navigate('/createtest/step2', {
+            state: {
+                currency: created && created.apiRes?.data?.currency,
+                handle: productHandle,
+                title: created && created.apiRes?.data?.productTitle,
+                id: productId,
+                testCases: testCases && testCases,
+                mongoId: created && created.apiRes?.data?._id,
+                trafficSplit: created && created.apiRes?.data?.trafficSplit * created.apiRes?.data?.testCases.length,
+                description:location?.state?.description
+            }
+        })
+    }
     useEffect(() => {
         if (location?.state?.message) {
             setOpens(true)
@@ -260,12 +278,12 @@ const ReviewTestPage = ({ created, productImage }) => {
                         <div className='p-25'>
                             <Navbar />
                             <Card className='mt-34 pt-24 pb-74 py-40 border-radius-14'>
-                                <div className='arrowWrapper' onClick={() => navigate('/yourtests')}>
+                                <div className='arrowWrapper' onClick={backtoCreateTest}>
                                     <img src={rightArrow}  />
                                 </div>
-                                <div className='flex-row gap-70 align-items-unset flex-crea'>
+                                <div className='flex-row gap-70 align-items-start flex-crea'>
                                     {!created ? <Loader size={40} /> : (<>
-                                        <div className='createdImgWrapper w-50'>
+                                        <div className='createdImgWrapper w-50 p-100'>
                                             {created && created.apiRes.data.featuredImage ? <img src={created && created.apiRes.data.featuredImage} alt="product_image_not_found" /> : <HideImageOutlinedIcon />}
                                         </div>
                                         <div className={`w-50 ${testCases && testCases.length > 1 ? "w-full" : ""}`}>
@@ -279,6 +297,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                     <div className='flex-row'>
                                                         <span className='pricingHeading mb-0 mr-9'>Traffic Split:</span>
                                                         <div>
+                                                        {console.log("000000",created.apiRes.data.trafficSplit,created.apiRes.data.testCases.length,created.apiRes.data)}
                                                             {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
                                                         </div>
                                                     </div>
@@ -288,7 +307,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                             {testCases && testCases.length > 1 ? (<>
                                                 <div className='mobileTitle'>
                                                     <div className='testCasesWrapper'>
-                                                        <div className='testCasesTitle'>Title</div>
+                                                        <div className='testCasesTitle'>Test</div>
                                                         <div className='testCasesTitle'>Variant</div>
                                                         <div className='testCasesTitle'>Price</div>
                                                         <div className='testCasesTitle'>Compare at price</div>
@@ -301,7 +320,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                 </div>
                                                 <div className='mt-76 flex-row justify-content-around'>
                                                     <button className='launchBtn cursor min-192' onClick={() => launchTest()}>Launch</button>
-                                                    <button className='secondaryBtn cursor scheduleBtn min-183'><span>Schedule</span></button>
+                                                    {/* <button className='secondaryBtn cursor scheduleBtn min-183'><span>Schedule</span></button> */}
 
                                                 </div>
                                             </>) : (<>
@@ -314,7 +333,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                                 <h5 className='ControlHeading'>Control</h5>
                                                                 <h6 className='ControlPrice'>{created.apiRes.currency} {created && created.apiRes.data.productPrice}</h6>
                                                             </div>
-                                                            <div className='ml-16 flex-row variations'>
+                                                            <div className='ml-16 flex-row variations flex-wrap'>
                                                                 <h5 className='ControlHeading'>Variations</h5>
                                                                 {created && created.apiRes.data.testCases.map(i => i.variants.map(j => (<h6 className='ControlPrice'>{created.apiRes.currency} {j.abVariantPrice}</h6>)))}
                                                             </div>
@@ -332,11 +351,10 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                     </div>
                                                 </div>
                                                 <p className='simplyPara'>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                                                </p>
+                                                {location?.state?.description}</p>
                                                 <div className='mt-76'>
                                                     <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
-                                                    <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button>
+                                                    {/* <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button> */}
                                                 </div>
                                                 {/* changing  */}
                                             </>)}

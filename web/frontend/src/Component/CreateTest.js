@@ -8,15 +8,15 @@ import addTestCases from "../../src/Component/Images/add-square.png"
 
 const CreateTest = () => {
     const rows = [
-        { id: 1, images: "#987546", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: "56 USD" },
-        { id: 2, images: "#987546", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: "56 USD" },
-        { id: 3, images: "#987546", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: "56 USD" },
-        { id: 4, images: "#987546", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: "56 USD" },
-        { id: 5, images: "#987546", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: "56 USD" },
-        { id: 6, images: "#987546", Description: 'Lorem ipsum ', Product: null, action: 150, price: "56 USD" },
-        { id: 7, images: "#987546", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: "56 USD" },
-        { id: 8, images: "#987546", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: "56 USD" },
-        { id: 9, images: "#987546", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: "56 USD" },
+        { id: 1, images: "#987546", Description: 'Lorem ipsum ', Product: 'Jon', action: 35, price: " Rs.56" },
+        { id: 2, images: "#987546", Description: 'Lorem ipsum ', Product: 'Cersei', action: 42, price: " Rs.56" },
+        { id: 3, images: "#987546", Description: 'Lorem ipsum ', Product: 'Jaime', action: 45, price: " Rs.56" },
+        { id: 4, images: "#987546", Description: 'Lorem ipsum ', Product: 'Arya', action: 16, price: " Rs.56" },
+        { id: 5, images: "#987546", Description: 'Lorem ipsum ', Product: 'Daenerys', action: null, price: " Rs.56" },
+        { id: 6, images: "#987546", Description: 'Lorem ipsum ', Product: null, action: 150, price: " Rs.56" },
+        { id: 7, images: "#987546", Description: 'Lorem ipsum ', Product: 'Ferrara', action: 44, price: " Rs.56" },
+        { id: 8, images: "#987546", Description: 'Lorem ipsum ', Product: 'Rossini', action: 36, price: " Rs.56" },
+        { id: 9, images: "#987546", Description: 'Lorem ipsum ', Product: 'Harvey', action: 65, price: " Rs.56" },
     ];
     const columns = [
         {

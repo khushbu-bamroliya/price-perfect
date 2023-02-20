@@ -167,15 +167,15 @@ const ViewOrManageTestPage = () => {
     const handleCloseViewAnalyticsModal = () => setOpenViewAnalyticsModal(false);
     const handleTestStatusModal = () => setOpenTestStatusModal(false);
     const rows2 = [
-        { id: 1, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "56 USD" },
-        { id: 2, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Cersei', Purchases: 42, price: "56 USD" },
-        { id: 3, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Jaime', Purchases: 45, price: "56 USD" },
-        { id: 4, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Arya', Purchases: 16, price: "56 USD" },
-        { id: 5, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Daenerys', Purchases: null, price: "56 USD" },
-        { id: 6, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: null, Purchases: 150, price: "56 USD" },
-        { id: 7, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Ferrara', Purchases: 44, price: "56 USD" },
-        { id: 8, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Rossini', Purchases: 36, price: "56 USD" },
-        { id: 9, test: "Test 1", visitors: "2500 USD", addToCart: 'Lorem ipsum ', revPerVisitor: "$203.34 ", initiateCheckout: 'Harvey', Purchases: 65, price: "56 USD" },
+        { id: 1, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Jon', Purchases: 35, price: "Rs.56" },
+        { id: 2, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Cersei', Purchases: 42, price: "Rs.56" },
+        { id: 3, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Jaime', Purchases: 45, price: "Rs.56" },
+        { id: 4, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Arya', Purchases: 16, price: "Rs.56" },
+        { id: 5, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Daenerys', Purchases: null, price: "Rs.56" },
+        { id: 6, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: null, Purchases: 150, price: "Rs.56" },
+        { id: 7, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Ferrara', Purchases: 44, price: "Rs.56" },
+        { id: 8, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Rossini', Purchases: 36, price: "Rs.56" },
+        { id: 9, test: "Test 1", visitors: " Rs.2500", addToCart: 'Lorem ipsum ', revPerVisitor: "Rs.203.34 ", initiateCheckout: 'Harvey', Purchases: 65, price: "Rs.56" },
     ];
     const columns = [
         {
@@ -257,6 +257,7 @@ const ViewOrManageTestPage = () => {
         setTestIdState(testId);
         setOpenEditTest(true)
         const findTest = testCases.find(i => i.testId === testId);
+        console.log("findTest.variants",findTest.variants)
         setProductsVariants(findTest.variants)
     }
 
@@ -365,12 +366,19 @@ const ViewOrManageTestPage = () => {
                         <img src={testCaseImages[row.id - 1]} alt="" />
                         <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color ? row.color + " Test" : row.id}</div>
                     </div>
+
                     <div className={`nameTitle py-10 text-left ${open ? "openW" : "closew"}`}></div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.price}</div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.compareAtPrice}</div>
+                    {/* <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.status}</div> */}
+{console.log("row.price",row.price)}
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.price}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.compareAtPrice}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.status?row.status:"-"}</div>
+
                     <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
                         {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
-                        <img src={editIcon} className='cursor ml-10' alt="" onClick={() => handleEditTest(row.id)} />
+                        <img src={editIcon} className='cursor ml-10' alt="" onClick={() =>{
+                            console.log("clickkk")
+                             handleEditTest(row.id)}} />
                     </div>
 
                 </div>
@@ -380,14 +388,14 @@ const ViewOrManageTestPage = () => {
                             <div className='variantId' key={i.id}>
                                 <div className='variantDeatils flex-55 text-left'></div>
                                 <div className='variantDeatils text-left'>
-                                    {i.variantTitle}
+                                    {i.variantTitle?i.variantTitle:"Dyanmic Test"}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     {singleTest?.data?.currency} {i.abVariantPrice || i.variantPrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     {/* {!i.variantComparePrice ? i.variantComparePrice : singleTest?.data?.currency + i.variantComparePrice} */}
-                                    {!i.abVariantComparePrice ? singleTest?.data?.currency + i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice}
+                                    {!i.abVariantComparePrice ?singleTest?.data?.currency +"0.00" :  i.abVariantComparePrice===null?"0.00":singleTest?.data?.currency +i.abVariantComparePrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                 </div>
@@ -414,8 +422,10 @@ const ViewOrManageTestPage = () => {
                         <div className={`reviewHeading ${open ? "openText" : "closeText"}`}>{row.color ? row.color + " Test" : row.id}</div>
                     </div>
                     <div className={`nameTitle py-10 text-left ${open ? "openW" : "closew"}`}></div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.price}</div>
-                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{singleTest?.data?.currency + row.compareAtPrice}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.price}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.compareAtPrice}</div>
+                    <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.satus?row.satus:"-"}</div>
+
                     <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
                         {/* {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
                         <img src={editIcon} className='cursor ml-10' alt="" onClick={() => handleEditTest(row.id)} /> */}
@@ -428,13 +438,17 @@ const ViewOrManageTestPage = () => {
                             <div className='variantId' key={i.id}>
                                 <div className='variantDeatils flex-55 text-left'></div>
                                 <div className='variantDeatils text-left'>
-                                    {i.variantTitle}
+                                {i.variantTitle?i.variantTitle:"Dyanmic Test"}
                                 </div>
                                 <div className='variantDeatils flex-55'>
-                                    {singleTest?.data?.currency} { i.variantPrice}
+                                    { i.status}
                                 </div>
                                 <div className='variantDeatils flex-55'>
-                                    {!i.variantComparePrice ? i.variantComparePrice : singleTest?.data?.currency + i.variantComparePrice}
+                                    {singleTest?.data?.currency} { i.variantPrice?i.variantPrice:"0.00"}
+                                </div>
+                                {console.log("i.variantComparePrice",i.variantComparePrice===null?"0.00":i.variantComparePrice)}
+                                <div className='variantDeatils flex-55'>
+                                    {!i.variantComparePrice ?singleTest?.data?.currency +"0.00" :  i.variantComparePrice===null?"0.00":singleTest?.data?.currency +i.variantComparePrice}
                                     {/* {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice} */}
                                 </div>
                                 <div className='variantDeatils flex-55'>
@@ -615,8 +629,9 @@ const rows3 = [];
                                     console.log("hello inside object");
 
                                     console.log("item", user.abVariantComparePrice);
+                                    console.log("*****", user)
 
-                                    return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
+                                    return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice===null?"0.00": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
 
                                 }
                                 return item;
@@ -653,7 +668,7 @@ const rows3 = [];
     const originalVariantColumn = [
         {
             field: "variantTitle",
-            headerName: "Title",
+            headerName: "Test",
             minWidth: 80,
             flex: 1,
             editable: false,
@@ -971,8 +986,10 @@ const rows3 = [];
                             <div className='testCasesWrapper'>
                                 <div className='testCasesTitle text-left flex-55'>Title</div>
                                 <div className='testCasesTitle text-left'>Variant</div>
+                               
                                 <div className='testCasesTitle flex-55'>Price</div>
                                 <div className='testCasesTitle flex-55'>Compare at price</div>
+                                <div className='testCasesTitle flex-55'>Status</div>
                                 <div className='testCasesTitle flex-55'>Actions</div>
                             </div>
                             <div className='width-fit'>
@@ -1012,7 +1029,7 @@ const rows3 = [];
                                         <TableRow>
 
                                             <TableCell onClick={(e) => handleCollapse(e, i.testId)}>Test {i.testId}</TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell></rows2TableCell>
                                             <TableCell></TableCell>
                                             <TableCell></TableCell>
                                             <TableCell></TableCell>

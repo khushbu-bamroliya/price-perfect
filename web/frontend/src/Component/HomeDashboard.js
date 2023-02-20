@@ -62,7 +62,7 @@ const HomeDashboard = () => {
         rows2.push({
             id: i._id,
             status: i.status,
-            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}USD`,
+            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}Rs`,
             action: i._id,
             product: i.productTitle,
             featuredImage: i.featuredImage
@@ -78,13 +78,11 @@ const HomeDashboard = () => {
             renderCell: (params) => {
                 return (
                     <>
-                        <div className='tableImages'>
-                            <div>
+                        <div className={`tableImages ${params.row.images ? "imagesIcontable" : "HideIcontable"}`}>
+                            <div className={`${params.row.images ? "imageParamstable" : "hideIconParamstable"}`}>
                                 {params.row.featuredImage ? <img src={params.row.featuredImage} alt='' /> : <HideImageOutlinedIcon />}
                             </div>
                         </div>
-                        <p className='productID'>
-                        </p>
                     </>
                 )
             }
@@ -99,22 +97,26 @@ const HomeDashboard = () => {
             flex: 0.3
         },
         {
+            field: 'duration',
+            headerName: 'Rev. Per 100 Visitors',
+            width: 250,
+            sortable: false,
+            flex: 0.2,
+            align:'center',
+            headerAlign:'center'
+
+        },
+        {
             field: 'status',
             headerName: 'Status',
             width: 250,
             sortable: false,
             flex: 0.2,
+            align:'center',
+            headerAlign:'center',
             renderCell: (params) => (<>
                 <Chip className={`chip_${params.row.status}`} label={params.row.status} />
             </>)
-        },
-        {
-            field: 'duration',
-            headerName: 'Price',
-            width: 250,
-            sortable: false,
-            flex: 0.2,
-
         },
         {
             field: 'action',
@@ -123,6 +125,8 @@ const HomeDashboard = () => {
             width: 150,
             sortable: false,
             flex: 0.2,
+            align:'center',
+            headerAlign:'center',
             renderCell: (params) => {
                 return (
                     <div className='actionIcon'>
@@ -275,16 +279,15 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
                     <div className='dashboardBlock' >
                         <div className='dashboardTitle'>
-                            <Typography className='' variant='p'>
+                            <h2 className='homeTitle'>
                                 Your Dashboard
-                            </Typography>
+                            </h2>
                         </div>
                         <div className="dailyStats">
                             <Card>
                                 <div className='dailyStatsBlock1'>
                                     <div>
                                         <Card>
-
                                             <img src={statIcon3} alt="" width='50px' />
                                         </Card>
                                         <Typography variant='p'>Today’s <span>Visitors</span></Typography>
@@ -369,10 +372,9 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                             </Card>
                         </div>
                         <div className='analyticsSection'>
-
                             <Card className='testAnalytics'>
                                 <div>
-                                    <Typography variant='h5'>Test Analytics</Typography>
+                                    <h4 className='yourTestsTitle mb-36 ml-0'>Test Analytics</h4>
                                     <Line options={options} data={data} />
                                     <div className='analyticsBtnGroup'>
                                         <Button><img src={TestAnalyticsIcon1} alt="" /> <p>Lorem ipsum</p></Button>
@@ -383,13 +385,10 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                 </div>
                             </Card>
                             <Card className='yourTests'>
+                                    <h4 className='yourTestsTitle'>Your Tests:</h4>
                                 <div>
-                                    <Typography variant='h5'>Your Tests</Typography>
-                                </div>
-                                <div>
-                                    <div className='createTestTable dashboardTable' style={{ width: '100%' }}>
+                                    <div className='createTestTable dashboardTable mt-0'>
                                         {loading ? <Loader size={40} /> : (<>
-
                                             <DataGrid
                                                 rows={rows2}
                                                 columns={columns}
@@ -411,7 +410,6 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                                 }}
                                             />
                                         </>)}
-
                                     </div>
                                 </div>
                             </Card>

@@ -101,18 +101,18 @@ const YourTest = () => {
 
 
     const rows = [
-        { id: 1, images: "#897456",duration:"2500 USD", Description: 'Snow', Product: 'Jon',  status: "Active" },
-        { id: 2, images: "#897456",duration:"2500 USD", Description: 'Lannister', Product: 'Cersei',  status: "Ended" },
-        { id: 3, images: "#897456",duration:"2500 USD", Description: 'Lannister', Product: 'Jaime',  status: "Active" },
-        { id: 4, images: "#897456",duration:"2500 USD", Description: 'Stark', Product: 'Arya',  status: "Active" },
-        { id: 5, images: "#897456",duration:"2500 USD", Description: 'Targaryen', Product: 'Daenerys',  status: "Active" },
-        { id: 6, images: "#897456",duration:"2500 USD", Description: 'Melisandre', Product: null,  status: "Active" },
-        { id: 7, images: "#897456",duration:"2500 USD", Description: 'Clifford', Product: 'Ferrara',  status: "Active" },
-        { id: 8, images: "#897456",duration:"2500 USD", Description: 'Frances', Product: 'Rossini',  status: "Active" },
-        { id: 9, images: "#897456",duration:"2500 USD", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
-        { id: 10, images: "#897456",duration:"2500 USD", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
-        { id: 11, images: "#897456",duration:"2500 USD", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
-        { id: 12, images: "#897456",duration:"2500 USD", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
+        { id: 1, images: "#897456",duration:"Rs.2500 ", Description: 'Snow', Product: 'Jon',  status: "Active" },
+        { id: 2, images: "#897456",duration:"Rs.2500 ", Description: 'Lannister', Product: 'Cersei',  status: "Ended" },
+        { id: 3, images: "#897456",duration:"Rs.2500 ", Description: 'Lannister', Product: 'Jaime',  status: "Active" },
+        { id: 4, images: "#897456",duration:"Rs.2500 ", Description: 'Stark', Product: 'Arya',  status: "Active" },
+        { id: 5, images: "#897456",duration:"Rs.2500 ", Description: 'Targaryen', Product: 'Daenerys',  status: "Active" },
+        { id: 6, images: "#897456",duration:"Rs.2500 ", Description: 'Melisandre', Product: null,  status: "Active" },
+        { id: 7, images: "#897456",duration:"Rs.2500 ", Description: 'Clifford', Product: 'Ferrara',  status: "Active" },
+        { id: 8, images: "#897456",duration:"Rs.2500 ", Description: 'Frances', Product: 'Rossini',  status: "Active" },
+        { id: 9, images: "#897456",duration:"Rs.2500 ", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
+        { id: 10, images: "#897456",duration:"Rs.2500 ", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
+        { id: 11, images: "#897456",duration:"Rs.2500 ", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
+        { id: 12, images: "#897456",duration:"Rs.2500 ", Description: 'Roxie', Product: 'Harvey',  status: "Active" },
     ];
     return (
         <>
