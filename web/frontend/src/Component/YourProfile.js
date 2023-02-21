@@ -116,7 +116,7 @@ const YourProfile = () => {
                     label="My Details"
                     {...a11yProps(0)}
                   />
-                  <Tab
+                  {/* <Tab
                     className="singleTab"
                     label="Profile"
                     {...a11yProps(1)}
@@ -141,7 +141,7 @@ const YourProfile = () => {
                     label="Integration"
                     {...a11yProps(5)}
                   />
-                  <Tab className="singleTab" label="API" {...a11yProps(6)} />
+                  <Tab className="singleTab" label="API" {...a11yProps(6)} /> */}
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>

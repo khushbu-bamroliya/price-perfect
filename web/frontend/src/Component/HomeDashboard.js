@@ -62,7 +62,7 @@ const HomeDashboard = () => {
         rows2.push({
             id: i._id,
             status: i.status,
-            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}Rs`,
+            duration: `${i?.testCases[0]?.variants[0]?.variantPrice}${" "+i?.currency}`,
             action: i._id,
             product: i.productTitle,
             featuredImage: i.featuredImage
@@ -327,7 +327,7 @@ const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
                                 </div>
                                 <div className="dailyStatsBlock2 ">
                                     <div className='dailyStatsBlock2-sub1 revenue'>
-                                        <Typography variant='h4'>  $3,401.89 </Typography>
+                                        <Typography variant='h4'>  Rs. 3,401.89 </Typography>
                                     </div>
                                     <hr />
                                     <div className='dailyStatsBlock2-sub2'>

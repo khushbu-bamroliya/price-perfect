@@ -259,6 +259,13 @@ const ViewOrManageTestPage = () => {
         const findTest = testCases.find(i => i.testId === testId);
         console.log("findTest.variants",findTest.variants)
         setProductsVariants(findTest.variants)
+
+        // const updatedArray = findTest.variants.map((item, index) => {
+        //     return { ...item, "abVariantPrice":singleTest?.data?.currency+" "+ Number(item.variantPrice), "abVariantComparePrice":singleTest?.data?.currency+" "+ Number(item.variantComparePrice) }
+        // })
+        // console.log("&*&*&*",updatedArray,findTest.variants)
+        // setProductsVariants(updatedArray)
+
     }
 
     const updateTestStatus = () => {
@@ -375,7 +382,7 @@ const ViewOrManageTestPage = () => {
                     <div className={`flex-55 py-10 nameTitle ${open ? "openW" : "closew"}`}>{ row.status?row.status:"-"}</div>
 
                     <div className='flex-55 py-10 nameTitle flex-row justify-content-center svg-color'>
-                        {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />}
+                        {/* {row.status === 'active' ? <img src={pauseIcon} className='cursor' alt="" onClick={(e) => { updateOneTestStatus(e,row.id) }} /> : <PlayCircleOutlinedIcon onClick={(e) => { updateOneTestStatus(e,row.id) }} />} */}
                         <img src={editIcon} className='cursor ml-10' alt="" onClick={() =>{
                             console.log("clickkk")
                              handleEditTest(row.id)}} />
@@ -388,14 +395,14 @@ const ViewOrManageTestPage = () => {
                             <div className='variantId' key={i.id}>
                                 <div className='variantDeatils flex-55 text-left'></div>
                                 <div className='variantDeatils text-left'>
-                                    {i.variantTitle?i.variantTitle:"Dyanmic Test"}
+                                    {i.variantTitle}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     {singleTest?.data?.currency} {i.abVariantPrice || i.variantPrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     {/* {!i.variantComparePrice ? i.variantComparePrice : singleTest?.data?.currency + i.variantComparePrice} */}
-                                    {!i.abVariantComparePrice ?singleTest?.data?.currency +"0.00" :  i.abVariantComparePrice===null?"0.00":singleTest?.data?.currency +i.abVariantComparePrice}
+                                    {!i.abVariantComparePrice ?"N/A" :  i.abVariantComparePrice===null?"N/A":singleTest?.data?.currency +i.abVariantComparePrice}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                 </div>
@@ -438,17 +445,16 @@ const ViewOrManageTestPage = () => {
                             <div className='variantId' key={i.id}>
                                 <div className='variantDeatils flex-55 text-left'></div>
                                 <div className='variantDeatils text-left'>
-                                {i.variantTitle?i.variantTitle:"Dyanmic Test"}
+                                {i.variantTitle}
                                 </div>
                                 <div className='variantDeatils flex-55'>
                                     { i.status}
                                 </div>
                                 <div className='variantDeatils flex-55'>
-                                    {singleTest?.data?.currency} { i.variantPrice?i.variantPrice:"0.00"}
+                                    {singleTest?.data?.currency} { i.variantPrice}
                                 </div>
-                                {console.log("i.variantComparePrice",i.variantComparePrice===null?"0.00":i.variantComparePrice)}
                                 <div className='variantDeatils flex-55'>
-                                    {!i.variantComparePrice ?singleTest?.data?.currency +"0.00" :  i.variantComparePrice===null?"0.00":singleTest?.data?.currency +i.variantComparePrice}
+                                    {!i.variantComparePrice ?"N/A" :  i.variantComparePrice===null?"N/A":singleTest?.data?.currency +i.variantComparePrice}
                                     {/* {!i.abVariantComparePrice ? i.abVariantComparePrice : singleTest?.data?.currency + i.abVariantComparePrice} */}
                                 </div>
                                 <div className='variantDeatils flex-55'>
@@ -629,7 +635,7 @@ const rows3 = [];
                                     console.log("hello inside object");
 
                                     console.log("item", user.abVariantComparePrice);
-                                    console.log("*****", user)
+                                    console.log("*****", user,singleTest?.data?.currency)
 
                                     return { ...item, "abVariantComparePrice": user.abVariantComparePrice, "variantComparePrice": user.variantComparePrice===null?"0.00": user.variantComparePrice, "abVariantPrice": user.abVariantPrice, "variantPrice": user.variantPrice }
 

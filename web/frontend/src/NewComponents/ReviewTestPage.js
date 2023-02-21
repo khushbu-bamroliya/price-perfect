@@ -232,7 +232,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                 <div className='variantDeatils'></div>
                                 <div className='variantDeatils after'>{i.variantTitle}</div>
                                 <div className='variantDeatils bold'>{created.apiRes.currency + ' ' +i.abVariantPrice}</div>
-                                <div className='variantDeatils'>{!i.abVariantComparePrice ? created.apiRes.currency + ' ' +i.abVariantComparePrice : created.apiRes.currency + ' ' +i.abVariantComparePrice}</div>
+                                <div className='variantDeatils'>{!i.abVariantComparePrice ? "N/A": i.abVariantComparePrice===null?"N/A":created.apiRes.currency+" "+i.abVariantComparePrice}</div>
                             </div>
                         ))}
                     </Collapse>
@@ -299,6 +299,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                         <div>
                                                         {console.log("000000",created.apiRes.data.trafficSplit,created.apiRes.data.testCases.length,created.apiRes.data)}
                                                             {created && (<><h6 className='ControlPrice ml-0'>{created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length)}</h6></>)}
+                                                            {/* created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length}/{100 - (created.apiRes.data.trafficSplit * created.apiRes.data.testCases.length) */}
                                                         </div>
                                                     </div>
                                                 </>)}

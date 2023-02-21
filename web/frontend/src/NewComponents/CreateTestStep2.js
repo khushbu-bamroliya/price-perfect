@@ -88,7 +88,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
         const updatedArray = variantRes.data.map((item, index) => {
 
-            return { ...item, "abVariantComparePrice": item.variantComparePrice, "abVariantPrice": item.variantPrice }
+            return { ...item, "abVariantComparePrice":location?.state?.currency+" "+  item.variantComparePrice, "abVariantPrice":location?.state?.currency+" "+  item.variantPrice }
             return item;
         })
 
@@ -217,7 +217,7 @@ const CreateTestStep2 = ({ objectSent }) => {
 
                 const updatedArray = apiRes.data.map((item, index) => {
 
-                    return { ...item, "abVariantComparePrice": Number(item.variantComparePrice), "abVariantPrice": Number(item.variantPrice) }
+                    return { ...item, "abVariantComparePrice":location?.state?.currency+" "+ Number(item.variantComparePrice), "abVariantPrice":location?.state?.currency+" "+ Number(item.variantPrice) }
 
                 })
                 console.log("location.state.testCases", location?.state?.testCases)
@@ -232,7 +232,13 @@ const CreateTestStep2 = ({ objectSent }) => {
                 setVariantPriceData(apiRes.data[0].variantPrice)
                 setVariantCompareAtPriceData(apiRes.data[0].variantComparePrice)
                 setProductsVariants(updatedArray)
-                setVariantRes(apiRes)
+                const updatedArray2 = apiRes.data.map((item, index) => {
+console.log("location?.state?.currency",location?.state?.currency)
+                    return { ...item, "variantPrice":location?.state?.currency+" "+ Number(item.variantPrice), "variantComparePrice":location?.state?.currency+" "+ Number(item.variantComparePrice) }
+
+                })
+                console.log("&*&*&*",apiRes,updatedArray2)
+                setVariantRes(updatedArray2)
                 setLoading({ variants: false })
             })
             .catch((error) => {
@@ -255,11 +261,11 @@ const CreateTestStep2 = ({ objectSent }) => {
                 if (index === objectIndex) {
                     if (params.field === "abVariantComparePrice") {
 
-                        return { ...item, "abVariantComparePrice": Number(event.target.value) }
+                        return { ...item, "abVariantComparePrice":location?.state?.currency+" "+ Number(event.target.value) }
                     }
                     if (params.field === "abVariantPrice") {
 
-                        return { ...item, "abVariantPrice": Number(event.target.value) }
+                        return { ...item, "abVariantPrice":location?.state?.currency+" "+ Number(event.target.value) }
 
                     }
                 }
@@ -425,7 +431,6 @@ const CreateTestStep2 = ({ objectSent }) => {
         // setsnackbar_msg("TestCase deleted")
         console.log('deleteTestCase', displayTestCasesArray)
     };
-
     const reviewAndLaunchBtnFunc = () => {
         setLoading({ testCases: true })
         setDisabled(true)
@@ -501,12 +506,12 @@ const CreateTestStep2 = ({ objectSent }) => {
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 console.log("final number is:", variantComparePriceFinal);
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00" }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00" }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null : variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null : variantComparePriceFinal+".00" }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00" }
 
             }
             return item
@@ -601,7 +606,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                                     // }
                                     // console.log("item", user.abVariantComparePrice);
 
-                                    return { ...item, "abVariantComparePrice": Number(user.abVariantComparePrice), "variantComparePrice": Number(user.variantComparePrice), "abVariantPrice": Number(user.abVariantPrice), "variantPrice": Number(user.variantPrice) }
+                                    return { ...item, "abVariantComparePrice":location?.state?.currency+" "+ Number(user.abVariantComparePrice), "variantComparePrice":location?.state?.currency+" "+ Number(user.variantComparePrice), "abVariantPrice":location?.state?.currency+" "+ Number(user.abVariantPrice), "variantPrice":location?.state?.currency+" "+ Number(user.variantPrice) }
 
                                 }
                                 return item;
@@ -1026,7 +1031,7 @@ const CreateTestStep2 = ({ objectSent }) => {
                     <Card className='MuiPaper-root-modal four-col'>
                         <Box style={{ height: 320, width: '100%' }}>
                             <DataGrid
-                                rows={variantRes && variantRes.data}
+                                rows={variantRes && variantRes}
                                 columns={controlColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}
