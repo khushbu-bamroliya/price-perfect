@@ -54,11 +54,8 @@ const Navbar = () => {
     ];
 
     const settings = [
-
-        <Button> <NavLink to="/profile">Profile</NavLink> </Button>,
-        <Button onClick={() => handleGoogleLogout()}> <NavLink to="#">Logout</NavLink> </Button>,
-
-
+        <Button className='navLinkButon'><NavLink className="navLinkButon" to="/profile">Profile</NavLink></Button>,
+        <Button className='navLinkButon' onClick={() => handleGoogleLogout()}><NavLink className="navLinkButon" to="#">Logout</NavLink></Button>,
     ];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);

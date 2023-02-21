@@ -288,8 +288,8 @@ const ReviewTestPage = ({ created, productImage }) => {
                                         </div>
                                         <div className={`w-50 ${testCases && testCases.length > 1 ? "w-full" : ""}`}>
                                             <h2 className='configureHeading'>Review Test</h2>
-                                            <span className='subProductTitle mb-34'>Confirm test configuration</span>
-                                            <div className='flex-row justify-content-between-dk mb-20'>
+                                            <span className='subProductTitle mb-24'>Confirm test configuration</span>
+                                            <div className='flex-row justify-content-between-dk mb-18'>
                                                 <h3 className='catTitle'>{created && created.apiRes.data.productTitle}</h3>
 
                                                 {created && created?.apiRes?.data?.testCases.length > 1 && (<>
@@ -319,7 +319,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className='mt-76 flex-row justify-content-around'>
+                                                <div className='mt-30 flex-row justify-content-around'>
                                                     <button className='launchBtn cursor min-192' onClick={() => launchTest()}>Launch</button>
                                                     {/* <button className='secondaryBtn cursor scheduleBtn min-183'><span>Schedule</span></button> */}
 
@@ -355,7 +355,7 @@ const ReviewTestPage = ({ created, productImage }) => {
                                                 {location?.state?.description}</p>
                                                 <div className='mt-76'>
                                                     <button className='launchBtn cursor' onClick={() => launchTest()}>Launch</button>
-                                                    {/* <button className='secondaryBtn cursor scheduleBtn'><span>Schedule</span></button> */}
+                                                    {/* <button className='secondaryBtn cursor scheduleBtn py-14 px-13'><span>Schedule</span></button> */}
                                                 </div>
                                                 {/* changing  */}
                                             </>)}

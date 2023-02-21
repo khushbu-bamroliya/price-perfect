@@ -28,6 +28,9 @@
 .mt-53{
     margin-top: 53px !important;
 }
+.mt-30{
+    margin-top: 30px !important;
+}
 .mb-0{
     margin-bottom: 0 !important;
 }
@@ -36,6 +39,9 @@
 }
 .mb-20{
     margin-bottom: 20px !important;
+}
+.mb-18{
+    margin-bottom: 18px !important;
 }
 .mb-27{
     margin-bottom: 27px;
@@ -60,6 +66,9 @@
 }
 .mb-22{
     margin-bottom: 22px;
+}
+.mb-24{
+    margin-bottom: 24px;
 }
 .mt-52{
     margin-top: 52px;
@@ -96,6 +105,14 @@ margin-left: 50px;
 }
 .pl-42{
     padding-left: 42px;
+}
+.py-14{
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+}
+.px-13{
+    padding-top: 13px !important;
+    padding-bottom: 13px !important;
 }
 .p-40{
     padding: 40px;
@@ -247,6 +264,15 @@ margin-left: 50px;
 .rootSlider .MuiSlider-markLabelActive{
     color: #FE6E98;
 }
+.rootSlider .MuiSlider-markLabel:nth-child(1){
+    left: 18.4% !important;
+}
+.rootSlider .MuiSlider-markLabel:nth-child(2){
+    left: 49.6% !important;
+}
+.rootSlider .MuiSlider-markLabel:nth-child(3){
+    left: 80.9% !important;
+}
 .rootSlider .MuiSlider-mark{
     display: none;
 }
@@ -274,6 +300,7 @@ margin-left: 50px;
 .rootSlider .MuiSlider-thumb{
     width: 25px;
     height: 25px;
+    transform: translate(-20%, -50%) !important;
 }
 .trafficControl{
     margin-top: 10px;
@@ -291,6 +318,7 @@ margin-left: 50px;
 .reviewLaunchBtn{
     outline: none;
     border: 0;
+    cursor: pointer;
     padding: 13px 30px;
     font-weight: 700;
     font-size: 16px;
@@ -1345,12 +1373,29 @@ margin-left: 50px;
 .copy-link-img {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .copy-link-img img {
     padding: 12px;
     background: linear-gradient(100.47deg, #FF8FD2 -24.72%, #F42272 113.36%);
     border-radius: 8px;
+}
+
+.MuiDataGrid-cell:focus{
+    outline: none !important;
+}
+
+.MuiDataGrid-row.Mui-selected:nth-child(odd){
+    background-color: #F9F8FE !important;
+}
+
+.MuiDataGrid-row:nth-child(even){
+    background-color: #fff !important;
+}
+
+.funnelBreakdown .MuiDataGrid-cell:empty{
+    display: none;
 }
 
 .copy-link-img a {
@@ -1463,11 +1508,12 @@ margin-left: 50px;
 .two-buttons button:nth-child(2) {
     background: linear-gradient(270deg, #FADDEE 0%, #F8E7F6 100%);
     border-radius: 8px;
+    border: 1px solid transparent;	
 }
 
 .two-buttons button:nth-child(2):hover{	
     background: transparent;	
-    border: 1px solid red;	
+    border: 1px solid #F42272;
 }
 
 .two-buttons button:nth-child(2) span {
@@ -1747,12 +1793,17 @@ margin-left: 50px;
 }
 .createTestTable.dashboardTable .MuiDataGrid-row{
     padding: 0 !important;
+    cursor: pointer;
+}
+.funnelBreakdownTable  .MuiDataGrid-row{
+    cursor: pointer;
 }
 .createTestTable.dashboardTable .MuiDataGrid-cell{
     height: unset !important;
     min-height: unset !important;
     max-height: unset !important;
     padding: 10px 24px !important;
+    cursor: pointer;
 }
 .HideIcontable{
     min-width: 60px;
@@ -1801,4 +1852,7 @@ margin-left: 50px;
 }
 button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium:hover{
     background-color: transparent !important;
+}
+.navLinkButon{
+    font-family: 'Product Sans' !important;
 }

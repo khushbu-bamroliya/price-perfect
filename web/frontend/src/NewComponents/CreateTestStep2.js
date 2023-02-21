@@ -229,16 +229,17 @@ const CreateTestStep2 = ({ objectSent }) => {
                     })
                     setDisabled(false)
                 }
+                console.log("ooooo",apiRes)
                 setVariantPriceData(apiRes.data[0].variantPrice)
                 setVariantCompareAtPriceData(apiRes.data[0].variantComparePrice)
                 setProductsVariants(updatedArray)
-                const updatedArray2 = apiRes.data.map((item, index) => {
-console.log("location?.state?.currency",location?.state?.currency)
-                    return { ...item, "variantPrice":location?.state?.currency+" "+ Number(item.variantPrice), "variantComparePrice":location?.state?.currency+" "+ Number(item.variantComparePrice) }
-
-                })
-                console.log("&*&*&*",apiRes,updatedArray2)
-                setVariantRes(updatedArray2)
+//                 const updatedArray2 = apiRes.data.map((item, index) => {
+// console.log("location?.state?.currency",location?.state?.currency)
+//                     return { ...item, "variantPrice":location?.state?.currency+" "+ Number(item.variantPrice), "variantComparePrice":location?.state?.currency+" "+ Number(item.variantComparePrice) }
+//                 })
+//                 console.log("&*&*&*",apiRes,updatedArray2)
+//                 setVariantRes(updatedArray2)
+                setVariantRes(apiRes)
                 setLoading({ variants: false })
             })
             .catch((error) => {
@@ -506,12 +507,12 @@ console.log("location?.state?.currency",location?.state?.currency)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) + variantComparePriceTemp).toFixed(2)
                 console.log("final number is:", variantComparePriceFinal);
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00" }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null : location?.state?.currency+" "+variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal }
             } else {
                 const variantPriceTempFinal = (Number(item.variantPrice) - variantPriceTemp).toFixed(2)
                 const variantComparePriceFinal = (Number(item.variantComparePrice) - variantComparePriceTemp).toFixed(2)
 
-                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal+".00", "variantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00", "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal+".00" }
+                return { ...item, "variantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal, "abVariantPrice": variantPriceTempFinal === '0.00' ? null :location?.state?.currency+" "+ variantPriceTempFinal, "variantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal, "abVariantComparePrice": variantComparePriceFinal === '0.00' ? null :location?.state?.currency+" "+ variantComparePriceFinal }
 
             }
             return item
@@ -667,33 +668,61 @@ console.log("location?.state?.currency",location?.state?.currency)
         {
             value: 10,
             label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+              <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_625_2407)">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_625_2407">
+                    <rect width="14" height="9" fill="white"/>
+                    </clipPath>
+                    </defs>
                 </svg>
                 <span>10%</span></div>,
         },
         {
             value: 25,
             label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                 <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_625_2407)">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_625_2407">
+                    <rect width="14" height="9" fill="white"/>
+                    </clipPath>
+                    </defs>
                 </svg>
                 <span>25%</span></div>,
         },
         {
             value: 50,
             label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
+                              <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_625_2407)">
+                    <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_625_2407">
+                    <rect width="14" height="9" fill="white"/>
+                    </clipPath>
+                    </defs>
                 </svg>
                 <span>50%</span></div>,
         },
         // {
         //     value: 75,
         //     label: <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-        //         <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        //             <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED" />
-        //         </svg>
+        //         <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //     <g clip-path="url(#clip0_625_2407)">
+    //     <path d="M7 0L13.9282 9H0.0717969L7 0Z" fill="#F0D9ED"/>
+    //     </g>
+    //     <defs>
+    //     <clipPath id="clip0_625_2407">
+    //     <rect width="14" height="9" fill="white"/>
+    //     </clipPath>
+    //     </defs>
+    // </svg>
         //         <span>75%</span></div>,
         // },
     ];
@@ -711,43 +740,42 @@ console.log("location?.state?.currency",location?.state?.currency)
         handleVariants()
     }, [])
 
-    // for one click data grid
-    const [cellModesModel, setCellModesModel] = useState  ({});
+        // for one click data grid
+        const [cellModesModel, setCellModesModel] = useState  ({});
 
-    const handleCellClick = useCallback((params) => {
-        console.log("params",params)
-        setCellModesModel((prevModel) => {
-            return {
-                // Revert the mode of the other cells from other rows
-                ...Object.keys(prevModel).reduce(
-                    (acc, id) => ({
-                        ...acc,
-                        [id]: Object.keys(prevModel[id]).reduce(
-                            (acc2, field) => ({
-                                ...acc2,
-                                [field]: { mode: GridCellModes.View }
-                            }),
-                            {}
-                        )
-                    }),
-                    {}
-                ),
-                [params.id]: {
-                    // Revert the mode of other cells in the same row
-                    ...Object.keys(prevModel[params.id] || {}).reduce(
-                        (acc, field) => ({ ...acc, [field]: { mode: GridCellModes.View } }),
+        const handleCellClick = useCallback((params) => {
+            console.log("params",params)
+            setCellModesModel((prevModel) => {
+                return {
+                    // Revert the mode of the other cells from other rows
+                    ...Object.keys(prevModel).reduce(
+                        (acc, id) => ({
+                            ...acc,
+                            [id]: Object.keys(prevModel[id]).reduce(
+                                (acc2, field) => ({
+                                    ...acc2,
+                                    [field]: { mode: GridCellModes.View }
+                                }),
+                                {}
+                            )
+                        }),
                         {}
                     ),
-                    [params.field]: { mode: GridCellModes.Edit }
-                }
-            };
-        });
-    }, []);
-
-    const handleCellModesModelChange = useCallback((newModel) => {
-        console.log("newModel",newModel)
-        setCellModesModel(newModel);
-    }, []);
+                    [params.id]: {
+                        // Revert the mode of other cells in the same row
+                        ...Object.keys(prevModel[params.id] || {}).reduce(
+                            (acc, field) => ({ ...acc, [field]: { mode: GridCellModes.View } }),
+                            {}
+                        ),
+                        [params.field]: { mode: GridCellModes.Edit }
+                    }
+                };
+            });
+        }, []);
+    
+        const handleCellModesModelChange = useCallback((newModel) => {
+            setCellModesModel(newModel);
+        }, []);
 
     return (
         <div className='bg-linear-gradient'>
@@ -772,7 +800,8 @@ console.log("location?.state?.currency",location?.state?.currency)
                                         <button className='viewPricing mt-40' onClick={handleOpenControlSettings}>View Pricing</button>
                                     </div>
                                 </>) : (<div className='mt-22 padding-1'>
-                                    <span className='CompareAtPriceData d-block'>{variantCompareAtPriceData && <>{location?.state?.currency} {variantCompareAtPriceData}</>}</span>
+                                {console.log("pppp",variantCompareAtPriceData)}
+                                    <span className='CompareAtPriceData d-block'>{location?.state?.currency} {variantCompareAtPriceData}</span>
                                     <span className='ComparePrice d-block'>{location?.state?.currency} {variantPriceData}</span>
                                 </div>)}
                             </>)}
@@ -809,7 +838,7 @@ console.log("location?.state?.currency",location?.state?.currency)
                                                 <span className='ComparePrice d-block'>{location?.state?.currency} {Math.min(...item.variants.map(j => j.abVariantPrice))}</span>
                                             </div>
                                         </>}
-                                        <img src={trash} alt="" onClick={(e) => deleteTestCase(e, item.id)} />
+                                        <img src={trash} className='cursor' alt="" onClick={(e) => deleteTestCase(e, item.id)} />
                                     </div>
                                 </div>
                             </>
@@ -893,7 +922,7 @@ console.log("location?.state?.currency",location?.state?.currency)
                         <Box style={{ height: 320, width: '100%' }}>
                             {!productVariants ? <Loader size={40} /> : (
                                 <>
-                                    <DataGrid
+                                <DataGrid
                                         rows={productVariants && productVariants}
                                         columns={originalVariantColumn}
                                         // onCellEditStop={(params, event) => { cellEditStopManualModal(params, event) }}
@@ -901,7 +930,7 @@ console.log("location?.state?.currency",location?.state?.currency)
                                         hideFooter={true}
                                         processRowUpdate={createTestProcessRowUpdate}
                                         onProcessRowUpdateError={createTestHandleProcessRowUpdateError}
-                                        experimentalFeatures={{ newEditingApi: true }}
+                                        // experimentalFeatures={{ newEditingApi: true }}
                                         sx={{
                                             [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]:
                                             {
@@ -912,6 +941,10 @@ console.log("location?.state?.currency",location?.state?.currency)
                                                 outline: "none",
                                             },
                                         }}
+                                        experimentalFeatures={{ newEditingApi: true }}      // one click edit
+                                        cellModesModel={cellModesModel}
+                                        onCellModesModelChange={handleCellModesModelChange}
+                                        onCellClick={handleCellClick}
                                     />
                                 </>
                             )}
@@ -1031,7 +1064,7 @@ console.log("location?.state?.currency",location?.state?.currency)
                     <Card className='MuiPaper-root-modal four-col'>
                         <Box style={{ height: 320, width: '100%' }}>
                             <DataGrid
-                                rows={variantRes && variantRes}
+                                rows={variantRes && variantRes.data}
                                 columns={controlColumn}
                                 pageSize={6}
                                 rowsPerPageOptions={[6]}

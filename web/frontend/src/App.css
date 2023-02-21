@@ -251,13 +251,21 @@
 
 }
 
-.dailyStatsBlock2-sub2>div {
-    display: flex;
+.dailyStatsBlock2 .hr {
+    height: 100% !important;
+    min-height: 78px;
+    max-height: 78px;
+    border: 1px solid #E9E9E9;
+    margin: 0;
 }
 
-.dailyStatsBlock2>hr {
-    height: 78px !important;
-    border: 1px solid #E9E9E9;
+.dailyRevenue{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 42px;
+    line-height: 51px;
+    color: #151515;
     margin: 0;
 }
 
@@ -267,6 +275,7 @@
     margin-top: 14px;
     align-items: center;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .moreIcon>img:hover {
@@ -278,71 +287,60 @@
     height: 24px;
 }
 
-.dailyStatsBlock2-sub1 {
-    font-family: 'Product Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 52px;
-    line-height: 63px;
-    /* identical to box height */
-    color: #F42272;
-}
-
-.dailyStatsBlock2-sub1 h4,
-.dailyStatsBlock2-sub2>div h4 {
-    font-size: 42px;
-    line-height: auto;
-    letter-spacing: unset;
-    font-weight: 700;
-}
-
-.dailyStatsBlock2-sub2>div>img {
-    width: 22px;
-    height: 22px;
-    margin: auto;
-}
-
-.dailyStatsBlock2-sub2>span {
-    width: 82px;
-    height: 17px;
-    font-family: 'Product Sans';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    /* identical to box height */
-    color: #8492A7;
-
-}
-
-.dailyStatsBlock2-sub2>div {
-    font-family: 'Product Sans';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 30px;
-    line-height: 36px;
-    text-align: right;
-    color: #1BC78A;
-    margin-top: 8px;
-}
-
 .downArrow {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
     line-height: 36px;
-    text-align: right;
-
+    margin: 0 0 0 8px;
     color: #F42254;
 }
 
-.revenue>h4 {
-    color: #151515 !important;
+.changeRevenue{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 63px;
+    color: #1BC78A;
+    margin: 0;
 }
 
-.changeRevenue>h4 {
-    color: #1BC78A !important;
+.dailyStatsBlockHeading{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 63px;
+    color: #F42272;
+    margin: 0;
+}
+
+.dailyStatsSubHeading{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #8492A7;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.dailyStatsPrice{
+    font-family: 'Product Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    color: #1BC78A;
+    margin: 0 0 0 8px;
+}
+
+.dailyStatsWrapper{
+    display: flex;
+    flex-direction: column;
 }
 
 .analyticsSection>div {
@@ -376,9 +374,7 @@
 
 .yourTests {
     margin-left: 12px;
-    width: 589px;
     padding: 29px 12px 29px 12px !important;
-    /* height: 414px; */
 }
 
 .analyticsBtnGroup>button>img {
@@ -2224,19 +2220,6 @@
         margin-top: 15px;
     }
 
-    .dailyStatsBlock2-sub1>h4 {
-        border-bottom: 1px solid #E9E9E9;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        /* margin-top: 15px; */
-        font-size: 30px;
-    }
-
-    .dailyStatsBlock2-sub1 h4,
-    .dailyStatsBlock2-sub2>div h4 {
-        font-size: 30px;
-    }
-
     .dailyStatsBlock1>div>span {
         font-size: 18px;
     }
@@ -2246,7 +2229,7 @@
         text-align: center;
     }
 
-    .dailyStatsBlock2>hr {
+    .dailyStatsBlock2 .hr {
         display: none !important;
     }
 
@@ -3372,7 +3355,7 @@ html {
 }
 
 .MuiDataGrid-row:nth-child(odd) {
-    background: #F9F8FE;
+    background-color: #F9F8FE;
 
 }
 
@@ -3550,6 +3533,7 @@ html {
     max-width: 100%;
     width: 100% !important;
     padding: 8px 0;
+    cursor: pointer;
     /* justify-content: space-between !important; */
 }
 
@@ -3778,6 +3762,7 @@ html {
     background: rgba(27, 199, 138, 0.1) !important;
     border-radius: 6px !important;
     height: auto !important;
+    cursor: pointer !important;
 }
 
 .chip_active span {
@@ -3795,6 +3780,7 @@ html {
     background: hsl(22deg 29% 78% / 30%) !important;
     border-radius: 6px !important;
     height: auto !important;
+    cursor: pointer !important;
 }
 
 .chip_pending span {

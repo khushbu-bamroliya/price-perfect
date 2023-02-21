@@ -928,7 +928,7 @@ const rows3 = [];
                                                 }, 2000)
                                             }}>
                                                 <img src={LinkIcon} />
-                                                <a href="#">Copy Link</a>
+                                                <a>Copy Link</a>
                                             </div>
                                         </Tooltip>
                                         <div className='viewormanage-flex-button'>
